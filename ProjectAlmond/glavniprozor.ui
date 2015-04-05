@@ -27,14 +27,15 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionTest"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>900</width>
-      <height>650</height>
+      <x>453</x>
+      <y>82</y>
+      <width>156</width>
+      <height>46</height>
      </rect>
     </property>
     <property name="title">
@@ -49,10 +50,15 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionTest">
+   <property name="text">
+    <string>Test</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
