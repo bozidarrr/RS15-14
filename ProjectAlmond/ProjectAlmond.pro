@@ -13,8 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        glavniprozor.cpp
+        glavniprozor.cpp \
+    datum.cpp
 
-HEADERS  += glavniprozor.h
+HEADERS  += glavniprozor.h \
+    osoba.h \
+    datum.h
 
 FORMS    += glavniprozor.ui
