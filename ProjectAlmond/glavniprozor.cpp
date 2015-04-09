@@ -8,10 +8,10 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     ui(new Ui::GlavniProzor)
 {
     ui->setupUi(this);
-    QPixmap osobapix("../Ellipse-tool-icon.png");
-      QPixmap mzpix("../heart.png");
-      QPixmap bspix("../children.png");
-       QPixmap rdpix("../index.jpeg");
+    QPixmap osobapix("Ellipse-tool-icon.png");
+      QPixmap mzpix("heart.png");
+      QPixmap bspix("children.png");
+       QPixmap rdpix("index.jpeg");
 
       QToolBar *toolbar= addToolBar("main toolbar");
       toolbar->addAction(QIcon(osobapix), "Osoba", ui->Stablo,"");
