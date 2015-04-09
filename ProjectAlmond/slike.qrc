@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>images/children.png</file>
+        <file>images/Ellipse-tool-icon.png</file>
+        <file>images/heart.png</file>
+        <file>images/index.jpeg</file>
+    </qresource>
+</RCC>

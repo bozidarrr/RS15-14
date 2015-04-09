@@ -24,3 +24,6 @@ HEADERS  += glavniprozor.h \
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui
+
+RESOURCES += \
+    slike.qrc
