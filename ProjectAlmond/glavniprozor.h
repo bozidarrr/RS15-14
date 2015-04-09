@@ -2,6 +2,9 @@
 #define GLAVNIPROZOR_H
 
 #include <QMainWindow>
+#include <QToolBar>
+#include <QAction>
+#include <QIcon>
 
 namespace Ui {
 class GlavniProzor;
@@ -14,6 +17,7 @@ class GlavniProzor : public QMainWindow
 public:
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
+
 
 private:
     Ui::GlavniProzor *ui;
