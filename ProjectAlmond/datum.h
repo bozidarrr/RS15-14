@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <regex>
+#include <cstdlib>
 
 using namespace std;
 

@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ProjectAlmond
@@ -14,10 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         glavniprozor.cpp \
-    datum.cpp
+    datum.cpp \
+    unetiosobu.cpp
 
 HEADERS  += glavniprozor.h \
     osoba.h \
-    datum.h
+    datum.h \
+    unetiosobu.h
 
-FORMS    += glavniprozor.ui
+FORMS    += glavniprozor.ui \
+    unetiosobu.ui

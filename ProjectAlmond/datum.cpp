@@ -23,23 +23,23 @@ void greska(string poruka)
 
         if (s.size() == 11)
         {
-            _dan = stoi( s.substr(0, 2) );
-            _mesec = stoi( s.substr(3, 2) );
-            _godina = stoi( s.substr(6, 4) );
+            _dan = atoi( s.substr(0, 2).c_str() );
+            _mesec = atoi( s.substr(3, 2).c_str() );
+            _godina = atoi( s.substr(6, 4).c_str() );
         }
 
         else if (s.size() == 8)
             {
                 _dan = 0;
-                _mesec = stoi( s.substr(0, 2) );
-                _godina = stoi( s.substr(3, 4) );
+                _mesec = atoi( s.substr(0, 2).c_str() );
+                _godina = atoi( s.substr(3, 4).c_str() );
             }
 
             else    if (s.size() == 5)
                     {
                         _dan = 0;
                         _mesec = 0;
-                        _godina = stoi( s.substr(0, 4) );
+                        _godina = atoi( s.substr(0, 4).c_str() );
                     }
                     else
                         greska("Inicjalizacija datuma nije uspela!");               
@@ -64,23 +64,23 @@ void greska(string poruka)
 
         if (s.size() == 11)
         {
-            dan = stoi( s.substr(0, 2) );
-            mesec = stoi( s.substr(3, 2) );
-            godina = stoi( s.substr(6, 4) );
+            dan = atoi( s.substr(0, 2).c_str() );
+            mesec = atoi( s.substr(3, 2).c_str() );
+            godina = atoi( s.substr(6, 4).c_str() );
         }
 
         else if (s.size() == 8)
             {
                 dan = 0;
-                mesec = stoi( s.substr(0, 2) );
-                godina = stoi( s.substr(3, 4) );
+                mesec = atoi( s.substr(0, 2).c_str() );
+                godina = atoi( s.substr(3, 4).c_str() );
             }
 
             else    if (s.size() == 5)
                     {
                         dan = 0;
                         mesec = 0;
-                        godina = stoi( s.substr(0, 4) );
+                        godina = atoi( s.substr(0, 4).c_str() );
                     }
                     else
                         //greska("Format stringa nije dobar!");
