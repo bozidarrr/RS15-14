@@ -1,5 +1,5 @@
 #ifndef DATUM
-#define DATUM
+#define DATUM 1
 
 #include <string>
 #include <iostream>
@@ -9,16 +9,7 @@
 using namespace std;
 
 
-/**
- * @brief greska
- * @param poruka
- * ispisuje poruku i prekida program
- */
-void greska(string & poruka)
-{
-    cerr << poruka << endl;
-    exit(EXIT_FAILURE);
-}
+
 
 /**
  * @brief The Datum class
@@ -58,7 +49,7 @@ class Datum
      * @param s string koji predstavlja datum
      * @return true ako je dat datum u dobrom obliku
      */
-    static bool KorektanDatum(const string & s, bool kreiraj = false);
+    static bool KorektanDatum(const string & s);
 
     /**
      * @brief rodjendan
@@ -78,28 +69,12 @@ class Datum
     /* mozda i da se napravi toString umesto ovoga */
     friend ostream & operator<<(ostream & ostr, const Datum & d);
 
-    int _godina;
-    int _mesec;
-    int _dan;
-};
 
-ostream & operator<<(ostream & ostr, const Datum & d)
-{
-    if (d._dan > 0)
-    {
-        if (d._dan < 10)
-            ostr << 0;
-        ostr << d._dan << '.';
-    }
-    if (d._mesec > 0)
-    {
-        if (d._mesec < 10)
-            ostr << 0;
-        ostr << d._mesec << '.';
-    }
-    ostr << d._godina << '.';
-    return ostr;
-}
+    int _dan;
+    int _mesec;
+    int _godina;
+
+};
 
 #endif // DATUM_H
 

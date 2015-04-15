@@ -15,13 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         glavniprozor.cpp \
     datum.cpp \
-    unetiosobu.cpp
+    unetiosobu.cpp \
+    supruznik.cpp \
+    osoba.cpp
 
 HEADERS  += glavniprozor.h \
     osoba.h \
     datum.h \
     unetiosobu.h \
-    WidgetDrag.h
+    WidgetDrag.h \
+    relacija.h \
+    supruznik.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui

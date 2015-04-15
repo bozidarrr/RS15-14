@@ -5,59 +5,35 @@
 #include <list>
 #include <string>
 #include "datum.h"
+#include "relacija.h"
+#include "supruznik.h"
 
-using namespace std;
 
 class Osoba
 {
 public:
-Osoba(string ime, string prezime, 
-        string datum_rodjenja, string datum_smrti = NULL)
-	: _ime(ime), _prezime(prezime), 
-	_datum_rodjenja(datum_rodjenja), _datum_smrti(datum_smrti)
-	{
-		/* inicijalizacija listi veza */
-	}
-
+Osoba(std::string ime, std::string prezime,
+        std::string datum_rodjenja, std::string datum_smrti = "");
 
 /* provera ispravnosti podataka? reg.exp? */
 
-const string& Ime() const
-{
-	return _ime;
-} 
+const std::string& Ime() const;
 
-const string& Prezime() const
-{
-	return _prezime;
-} 
+const std::string& Prezime() const;
 
-const Datum& DatumRodjenja() const
-{
-	return _datum_rodjenja;
-} 
+const Datum& DatumRodjenja() const;
 
-const Datum& DatumSmrti() const
-{
-	return _datum_smrti;
-} 
+const Datum& DatumSmrti() const;
 
-const char Pol() const
-{
-	return _pol;
-} 
+char Pol() const;
 
 /*
-string& PronadjiVezu(const Osoba & o)
-{
-
-
-}
+string& PronadjiVezu(const Osoba & o)const;
 */
 
 private:
-string _ime;
-string _prezime;
+std::string _ime;
+std::string _prezime;
 Datum _datum_rodjenja;
 Datum _datum_smrti;
 char _pol;

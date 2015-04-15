@@ -4,11 +4,7 @@
 
 using namespace std;
 
-void greska(string poruka)
-{
-    cerr << poruka << endl;
-    exit(EXIT_FAILURE);
-}
+
 
     /**
     Konstruktor preko stringa.
@@ -16,8 +12,8 @@ void greska(string poruka)
     **/
     Datum::Datum(const string &s)
     {
-        if (!KorektanDatum(s, true))
-            greska("Nije korektan datum dat stringom, formiranje datuma neuspesno!");
+        if (!KorektanDatum(s))
+            throw "Nije korektan datum dat stringom, formiranje datuma neuspesno!";
 
         /* s = dd.mm.gggg. ili mm.gggg. ili gggg. */
 
@@ -42,7 +38,7 @@ void greska(string poruka)
                         _godina = atoi( s.substr(0, 4).c_str() );
                     }
                     else
-                        greska("Inicjalizacija datuma nije uspela!");               
+                        throw "Inicjalizacija datuma nije uspela!";
     }
 
     /**
@@ -58,7 +54,7 @@ void greska(string poruka)
     /**
         A i ovo
     **/
-    bool Datum::KorektanDatum(const string & s, bool formiraj)
+    bool Datum::KorektanDatum(const string & s)
     {
         int dan, mesec, godina;
 
@@ -111,8 +107,7 @@ void greska(string poruka)
         default: return false;
         }
 
-        /*if (formiraj)
-            Datum(dan, mesec, godina);*/
+
     }
 
 bool Datum::rodjendan(const Datum & danas) const
@@ -128,6 +123,26 @@ bool Datum::rodjendan(const Datum & danas) const
         return true;
     return false;
 }
+
+
+ostream & operator<<(ostream & ostr, const Datum & d)
+{
+    if (d._dan > 0)
+    {
+        if (d._dan < 10)
+            ostr << 0;
+        ostr << d._dan << '.';
+    }
+    if (d._mesec > 0)
+    {
+        if (d._mesec < 10)
+            ostr << 0;
+        ostr << d._mesec << '.';
+    }
+    ostr << d._godina << '.';
+    return ostr;
+}
+
 
 /* testiranje...
 int main(int argc, char ** argv)

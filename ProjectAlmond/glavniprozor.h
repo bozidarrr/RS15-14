@@ -1,5 +1,5 @@
 #ifndef GLAVNIPROZOR_H
-#define GLAVNIPROZOR_H
+#define GLAVNIPROZOR_H 1
 
 #include <QMainWindow>
 #include <QToolBar>
