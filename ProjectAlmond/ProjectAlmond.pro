@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets
 CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +20,8 @@ SOURCES += main.cpp\
 HEADERS  += glavniprozor.h \
     osoba.h \
     datum.h \
-    unetiosobu.h
+    unetiosobu.h \
+    WidgetDrag.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui
