@@ -3,13 +3,6 @@
 
 #include <string>
 #include <iostream>
-#include <regex>
-#include <cstdlib>
-
-using namespace std;
-
-
-
 
 /**
  * @brief The Datum class
@@ -19,11 +12,18 @@ using namespace std;
 class Datum
 {
   public:
+
+    /**
+     * Prazan konstruktor koji postavlja negativan dan, mesec i godinu, onda kada je podatak o datumu zapravo nepoznat
+     * @brief Datum
+     */
+    Datum();
+
     /**
     Konstruktor preko stringa.
     Racuna se da se u unosu preko GUI-a vrsi provera formata datuma!
     **/
-    Datum(const string & s);
+    Datum(const std::string & s);
 
     /**
      * @brief Datum
@@ -45,11 +45,17 @@ class Datum
     {}
 
     /**
+     * @brief NepoznatDatum
+     * @return true ako je vrednost datuma nepoznata, ili false, ako je korektna (posto inace dozvoljavamo samo ili korektan unos, ili nepoznate vrednosti)
+     */
+    bool NepoznatDatum() const;
+
+    /**
      * @brief KorektanDatum
      * @param s string koji predstavlja datum
      * @return true ako je dat datum u dobrom obliku
      */
-    static bool KorektanDatum(const string & s);
+    static bool KorektanDatum(const std::string & s);
 
     /**
      * @brief rodjendan
@@ -65,10 +71,14 @@ class Datum
      */
     static bool PrestupnaGodina(int godina);
 
+
+
+
   private:
     /* mozda i da se napravi toString umesto ovoga */
-    friend ostream & operator<<(ostream & ostr, const Datum & d);
+    friend std::ostream & operator<<(std::ostream & ostr, const Datum & d);
 
+    void PostaviNepoznat();
 
     int _dan;
     int _mesec;
