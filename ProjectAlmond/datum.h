@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 /**
  * @brief The Datum class
@@ -62,7 +63,7 @@ class Datum
      * @param danas
      * @return true ako se poklapaju dan i mesec
      */
-    bool rodjendan(const Datum & danas) const;
+    bool Rodjendan(const Datum & danas) const;
 
     /**
      * @brief PrestupnaGodina
@@ -70,6 +71,13 @@ class Datum
      * @return true ako je godina prestupna
      */
     static bool PrestupnaGodina(int godina);
+
+    bool operator >(const Datum& d) const;
+    bool operator <(const Datum& d) const;
+    bool operator >=(const Datum& d) const;
+    bool operator <=(const Datum& d) const;
+    bool operator ==(const Datum& d) const;
+    bool operator !=(const Datum& d) const;
 
 
 

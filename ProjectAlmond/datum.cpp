@@ -84,7 +84,6 @@ bool Datum::KorektanDatum(const std::string & s)
         godina = atoi( s.substr(0, 4).c_str() );
     }
     else
-        //greska("Format stringa nije dobar!");
         return false;
 
 
@@ -93,29 +92,34 @@ bool Datum::KorektanDatum(const std::string & s)
 
     switch (mesec)
     {
-    case 0: return dan == 0;
+    case 0:
+        return dan == 0;
     case 1:
     case 3:
     case 5:
     case 7:
     case 8:
     case 10:
-    case 12: return dan <= 31;
+    case 12:
+        return dan <= 31;
     case 4:
     case 6:
     case 9:
-    case 11: return dan <= 30;
-    case 2: if (PrestupnaGodina(godina))
+    case 11:
+        return dan <= 30;
+    case 2:
+        if (PrestupnaGodina(godina))
             return dan <= 29;
         else
             return dan <= 28;
-    default: return false;
+    default:
+        return false;
     }
 
 
 }
 
-bool Datum::rodjendan(const Datum & danas) const
+bool Datum::Rodjendan(const Datum & danas) const
 {
     if (_mesec == 0 || _dan == 0)
         return false;
@@ -132,17 +136,23 @@ bool Datum::rodjendan(const Datum & danas) const
 
 std::ostream & operator<<(std::ostream & ostr, const Datum & d)
 {
+    if (d.NepoznatDatum())
+    {
+        ostr << "--.--.----.";
+        return ostr;
+    }
+
     if (d._dan > 0)
     {
-        if (d._dan < 10)
-            ostr << 0;
-        ostr << d._dan << '.';
+        //if (d._dan < 10)
+            //ostr << 0;
+        ostr << std::setfill('0') << std::setw(2) << d._dan << '.';
     }
     if (d._mesec > 0)
     {
-        if (d._mesec < 10)
-            ostr << 0;
-        ostr << d._mesec << '.';
+        //if (d._mesec < 10)
+        //    ostr << 0;
+        ostr << std::setfill('0') << std::setw(2) << d._mesec << '.';
     }
     ostr << d._godina << '.';
     return ostr;
@@ -155,17 +165,45 @@ void Datum::PostaviNepoznat()
     _godina=-1;
 }
 
-/*
-int main()
+bool Datum::operator <(const Datum& datum) const
 {
-    std::cout << Datum("11.04.2011.") << std::endl;
-    Datum d = Datum("12.2015.");
-    std::cout << d << std::endl;
-    d = Datum("2013.");
-        std::cout << d << std::endl;
-    d = Datum("01.04.1999.");
-    std::cout << d << std::endl;
-
-    return 0;
+    if (this->_godina < datum._godina)
+        return true;
+    if (this->_godina > datum._godina)
+        return false;
+    if (this->_mesec < datum._mesec)
+        return true;
+    if (this->_mesec > datum._mesec)
+        return false;
+    if (this->_dan > datum._mesec)
+        return true;
+    return false;
 }
-*/
+
+bool Datum::operator >(const Datum& datum) const
+{
+    return datum < *this;
+}
+
+bool Datum::operator ==(const Datum& datum) const
+{
+    return datum._godina == this->_godina &&
+            datum._mesec == this->_mesec &&
+            datum._dan == this->_dan;
+}
+
+bool Datum::operator !=(const Datum& datum) const
+{
+    return !(*this == datum);
+}
+
+bool Datum::operator >=(const Datum& datum) const
+{
+    return !(*this < datum);
+}
+
+bool Datum::operator <=(const Datum& datum) const
+{
+    return !(*this > datum);
+}
+
