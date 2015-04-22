@@ -24,14 +24,26 @@ public:
 
 private:
     QPoint m_ptDragPos;
+    QPoint m_pomocna;
     Ui::GlavniProzor *ui;
-    void startDrag(QToolButton * dugme);
+    void startDrag();
     QToolButton * tbOsoba;
        QToolButton * tbBS;
        QToolButton * tbMZ;
        QToolButton * tbRD;
        QGraphicsScene* scena;
        QDrag *drag;
+       int ind=-1;
+       bool postavi=0;
+private slots:
+       void postavi_na_0(){ind=0;};
+       void postavi_na_1(){ind=1;};
+       void postavi_na_2(){ind=2;};
+       void postavi_na_3(){ind=3;};
+       void napravi_Osobu();
+       void poveziMZ();
+       void poveziBS();
+       void poveziRD();
 protected:
     virtual void mouseMoveEvent(QMouseEvent* pe);
     virtual void dragEnterEvent(QDragEnterEvent* pe);
