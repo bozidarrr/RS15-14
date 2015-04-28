@@ -2,6 +2,7 @@
 #define UNETIOSOBU_H
 
 #include <QDialog>
+#include "osoba.h"
 
 namespace Ui {
 class Unetiosobu;
@@ -14,9 +15,12 @@ class Unetiosobu : public QDialog
 public:
     explicit Unetiosobu(QWidget *parent = 0);
     ~Unetiosobu();
-  //  void NapraviOsobu(Osoba & novaO);
+private Q_SLOTS:
+  void NapraviOsobu();
+  void Odustani();
 private:
     Ui::Unetiosobu *ui;
+    //Osoba novaO;
 };
 
 #endif // UNETIOSOBU_H
