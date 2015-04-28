@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include "WidgetDrag.h"
 #include "unetiosobu.h"
+#include <vector>
 namespace Ui {
 class GlavniProzor;
 }
@@ -46,6 +47,8 @@ private:
           void poveziMZ();
           void poveziBS();
           void poveziRD();
+           //vector <QPoint,QPushButton*> m_osobePoz;
+
 private Q_SLOTS:
        void postavi_na_0(){ind=0;};
        void postavi_na_1(){ind=1;};
