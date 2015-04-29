@@ -9,26 +9,34 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 {
      setAcceptDrops(true);
     ui->setupUi(this);
-    QPixmap osobapix(":/images/images/Ellipse-tool-icon.png");
-      QPixmap mzpix(":/images/images/heart.png");
-      QPixmap bspix(":/images/images/children.png");
-       QPixmap rdpix(":/images/images/index.jpeg");
+    osobapix=QPixmap(":/images/images/Ellipse-tool-icon.png");
+
+     mzpix=QPixmap(":/images/images/heart.png");
+
+      bspix=QPixmap(":/images/images/children.png");
+
+       rdpix=QPixmap(":/images/images/index.jpeg");
+
 
       QToolBar *toolbar= addToolBar("main toolbar");
      // QToolBar *toolbar= addToolBar("main toolbar");
-           toolbar->addSeparator();
+
            tbOsoba=new QToolButton();
           tbOsoba->setIcon(QIcon(osobapix));
             toolbar->addWidget(tbOsoba);
+            toolbar->addSeparator();
            tbMZ=new QToolButton();
           tbMZ->setIcon(QIcon(mzpix));
           toolbar->addWidget(tbMZ);
+          toolbar->addSeparator();
           tbBS=new QToolButton();
           tbBS->setIcon(QIcon(bspix));
           toolbar->addWidget(tbBS);
+          toolbar->addSeparator();
          tbRD=new QToolButton();
           tbRD->setIcon(QIcon(rdpix));
           toolbar->addWidget(tbRD);
+          toolbar->addSeparator();
 
 
          // toolbar->addAction(QIcon(osobapix), "Osoba", ui->Stablo,"");
@@ -38,47 +46,55 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
           //toolbar->addSeparator();
           scena=new QGraphicsScene();
+
           ui->Stablo->setScene(scena);
 
+          connect(tbOsoba,SIGNAL(pressed()),this,SLOT(postavi_na_0()));
+          connect(tbMZ,SIGNAL(pressed()),this,SLOT(postavi_na_1()));
+          connect(tbBS,SIGNAL(pressed()),this,SLOT(postavi_na_2()));
+          connect(tbRD,SIGNAL(pressed()),this,SLOT(postavi_na_3()));
 
+          //connect(tbOsoba,SIGNAL(released()),this,SLOT(napravi_Osobu()));
+          //connect(tbMZ,SIGNAL(released()),this,SLOT(poveziMZ()));
+          //connect(tbBS,SIGNAL(released()),this,SLOT(poveziBS()));
+          //connect(tbRD,SIGNAL(released()),this,SLOT(poveziRD()));
       //toolbar->addSeparator();
 }
 
-void GlavniProzor::startDrag(QToolButton * dugme)
+void GlavniProzor::startDrag()
 
 {
-
-    WidgetDrag* pDrag = new WidgetDrag (dugme);
-    pDrag->setWidget(dugme);
+    WidgetDrag* pDrag;
+    if(ind == 0){
+        pDrag = new WidgetDrag (tbOsoba);
+        pDrag->setWidget(tbOsoba);
+        pDrag->setPixmap(osobapix);
+        }
+        else if(ind == 1){
+            pDrag = new WidgetDrag (tbMZ);
+            pDrag->setWidget(tbMZ);
+            pDrag->setPixmap(mzpix);
+            }
+        else if(ind == 2){
+            pDrag = new WidgetDrag (tbBS);
+            pDrag->setWidget(tbBS);
+            pDrag->setPixmap(bspix);
+            }
+        else if(ind == 3){
+            pDrag = new WidgetDrag (tbRD);
+            pDrag->setWidget(tbRD);
+            pDrag->setPixmap(rdpix);
+            }
     pDrag->exec(Qt::MoveAction);
 }
 
 void GlavniProzor::mousePressEvent(QMouseEvent *pe)
 {
-    if ((pe->buttons() & Qt::LeftButton)&& pe->pos()==tbOsoba->pos())
+    if ((pe->buttons() & Qt::LeftButton))
     {
 
-        startDrag(tbOsoba);
+        startDrag();
 
-    }
-
-    if ((pe->buttons() & Qt::LeftButton) && pe->pos()==tbRD->pos())
-    {
-       // int distance = (pe->pos() - m_ptDragPos).manhattanLength();
-        //if (distance >= QApplication::startDragDistance())
-            startDrag(tbRD);
-    }
-    if ((pe->buttons() & Qt::LeftButton) && pe->pos()==tbMZ->pos())
-    {
-        //int distance = (pe->pos() - m_ptDragPos).manhattanLength();
-        //if (distance >= QApplication::startDragDistance())
-           startDrag(tbMZ);
-    }
-    if ((pe->buttons() & Qt::LeftButton) && pe->pos()==tbBS->pos())
-    {
-        //int distance = (pe->pos() - m_ptDragPos).manhattanLength();
-        //if (distance >= QApplication::startDragDistance())
-            startDrag(tbBS);
     }
 
     QWidget::mousePressEvent(pe);
@@ -89,24 +105,8 @@ void GlavniProzor::mouseMoveEvent(QMouseEvent *pe)
 {
     if ((pe->buttons() & Qt::LeftButton) )
     {
-        int distance = (pe->pos() - tbOsoba->pos()).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-            startDrag(tbOsoba);
-    else
-    {
-         distance = (pe->pos() - tbRD->pos()).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-            startDrag(tbRD);
-    else{
-         distance = (pe->pos() - tbMZ->pos()).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-            startDrag(tbMZ);
-    else
-        distance = (pe->pos() - tbBS->pos()).manhattanLength();
-        if (distance >= QApplication::startDragDistance())
-            startDrag(tbBS);
-    }
-        }
+         startDrag();
+
     }
     QWidget::mouseMoveEvent(pe);
 }
@@ -126,11 +126,156 @@ void GlavniProzor::dropEvent(QDropEvent* pe)
     if (pmmd)
     {
         QToolButton* pwgt = pmmd->widget();
-        QString str("Widget is dropped\n ObjectName:%l");
-        scena->addEllipse(pe->pos().x(),pe->pos().y(),20,50);
-        scena->addText(str.arg(pwgt->objectName()));
+        //QString str("Widget is dropped\n ObjectName: %l ");
+       // scena->addText(str.arg(pwgt->objectName()));
+        m_ptDragPos=pe->pos();
+        if(ind==0)
+            napravi_Osobu();
+        else if(ind==1)
+            poveziMZ();
+        else if (ind==2)
+            poveziBS();
+        else if(ind==3)
+            poveziRD();
+
     }
 }
+void GlavniProzor::napravi_Osobu(){
+
+
+    u.show();
+/*
+    while(u.m_ime==""){
+        continue;
+    }
+    QString Ime(u.m_ime+u.m_prezime);
+    QPushButton Pomocno(Ime);
+
+    scena->addWidget(Pomocno);
+    */
+
+   //m_osobePoz.push_back(m_ptDragPos,&Pomocno);
+
+}
+void GlavniProzor::poveziMZ(){
+    if(postavi==0){
+        tbRD->setDisabled(true);
+        tbBS->setDisabled(true);
+        postavi=1;
+        m_pomocna=m_ptDragPos;
+    }
+    else
+    {
+        tbRD->setDisabled(false);
+        tbBS->setDisabled(false);
+        postavi=0;
+/*
+        int x1,x2,y1,y2;
+        QPushButton S1,S2;
+        for (int i=0;i<m_osobePoz.length();i++){
+            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
+                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
+            {
+                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                S1=m_osobePoz[i][1];
+                continue;
+            }
+            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
+                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
+            {
+                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                S2=m_osobePoz[i][1];
+                continue;
+            }
+
+        }
+        scena->addLine(x1,y1,x2,y2);
+        */
+        //signaliziram da se uspostavila veza izmedju supruznika
+
+    }
+}
+void GlavniProzor::poveziBS(){
+    if(postavi==0){
+        tbMZ->setDisabled(true);
+        tbRD->setDisabled(true);
+        postavi=1;
+        m_pomocna=m_ptDragPos;
+    }
+    else
+    {
+        tbRD->setDisabled(false);
+        tbMZ->setDisabled(false);
+        postavi=0;
+        /*
+        int x1,x2,y1,y2;
+        QPushButton B1,B2;
+        for (int i=0;i<m_osobePoz.length();i++){
+            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
+                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
+            {
+                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                B1=m_osobePoz[i][1];
+                continue;
+            }
+            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
+                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
+            {
+                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                B2=m_osobePoz[i][1];
+                continue;
+            }
+
+        }
+        scena->addLine(x1,y1,x2,y2);
+        */
+        //signaliziram da se uspostavila veza izmedju brace i sestre
+    }
+}
+void GlavniProzor::poveziRD(){
+    if(postavi==0){
+        tbMZ->setDisabled(true);
+        tbBS->setDisabled(true);
+        postavi=1;
+        m_pomocna=m_ptDragPos;
+    }
+    else
+    {
+        tbMZ->setDisabled(false);
+        tbBS->setDisabled(false);
+        postavi=0;
+        /*
+        int x1,x2,y1,y2;
+        QPushButton R,D;
+        for (int i=0;i<m_osobePoz.length();i++){
+            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
+                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
+            {
+                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                R=m_osobePoz[i][1];
+                continue;
+            }
+            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
+                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
+            {
+                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
+                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
+                D=m_osobePoz[i][1];
+                continue;
+            }
+
+        }
+        scena->addLine(x1,y1,x2,y2);
+        */
+        //signaliziram da se uspostavila veza izmedju roditelja i deteta
+    }
+}
+
 GlavniProzor::~GlavniProzor()
 {
     delete ui;
