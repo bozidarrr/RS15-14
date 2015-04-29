@@ -54,26 +54,6 @@ Osoba& Supruznik::Zena() const
 
 
 
-void Supruznik::PoveziSe(Osoba * prva, Osoba * druga)
-{
-    if(prva!=nullptr && druga!=nullptr){
-        _prva=prva;
-        _druga=druga;
-    }
-}
-
-
-std::string Supruznik::UpisiUString()const
-{
-    return "";
-}
-
-void Supruznik::UcitajIzStringa(const std::string& unos)
-{
-    std::cout<<std::endl<<unos<<std::endl;
-    return;
-}
-
 //jer ako je muz inicijator, onda zena treba da ga obrise i obratno
 void Supruznik::UkloniSe(const Osoba *inicijator=nullptr)
 {

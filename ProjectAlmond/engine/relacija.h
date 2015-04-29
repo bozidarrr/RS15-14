@@ -1,19 +1,20 @@
 #ifndef RELACIJA_H
 #define RELACIJA_H 1
 #include<string>
-#include<sys/types.h>
 #include"engine/osoba.h"
 class Relacija
 {
 public:
-    Relacija(const std::string & trivija=""):_trivija(trivija),_prva(nullptr),_druga(nullptr){}
+    Relacija(const std::string & trivija=""):_trivija(trivija),_prva(nullptr),_druga(nullptr),_sifra(_MinSifra++){}
     virtual ~Relacija(){}
 
-    //za sad nista ne rade pametno, trebace nam za ispis, a mozda i ne, kao neki toString, mozda zatreba posle
-    //----------------------------------------------------------------------------------------------
-    virtual std::string UpisiUString()const=0;
-    virtual void UcitajIzStringa(const std::string& unos)=0;
-    //----------------------------------------------------------------------------------------------
+    void PoveziSe(Osoba * prva, Osoba * druga)
+    {
+        if(prva!=nullptr && druga!=nullptr){
+            _prva=prva;
+            _druga=druga;
+        }
+    }
 
     /**
      * @brief UkloniSe obavestava drugu osobu u vezi, da ce biti obrisana, te da vezu treba ukloniti iz spiska veza, ali bez dealokacije
@@ -24,6 +25,10 @@ protected:
     std::string _trivija;
     Osoba *_prva;
     Osoba *_druga;
+    static short int _MinSifra;
+    short int _sifra;
 };
+
+short int Relacija::_MinSifra=0;
 
 #endif // RELACIJA_H

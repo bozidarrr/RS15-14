@@ -72,6 +72,8 @@ class Datum
      */
     static bool PrestupnaGodina(int godina);
 
+    int redniBroj()const;
+
     bool operator >(const Datum& d) const;
     bool operator <(const Datum& d) const;
     bool operator >=(const Datum& d) const;

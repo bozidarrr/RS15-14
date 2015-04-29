@@ -15,22 +15,25 @@ class Osoba
 public:
 
     Osoba(std::string ime, std::string prezime,
-          std::string datum_rodjenja, std::string datum_smrti = "");
+          std::string datum_rodjenja, std::string datum_smrti = "");//pri kreiranju, osoba dobija jedinstvenu sifru. Prepostavljamo da nece biti u okviru stabla kreirano previse osoba
 
-    //vidi destruktor sto je lep, dok jos znam da objasnim sta radi
-    ~Osoba();
 
-    short Sifra()const;
+    ~Osoba();//ovo sam nekada znao sta radi
 
-    const std::string& Ime() const;
+    //Osoba(const Osoba& nova);
+    //Osoba& operator=(const Osoba& nova);
 
-    const std::string& Prezime() const;
+    short Sifra()const;//vraca sifru
 
-    const Datum& DatumRodjenja() const;
+    const std::string& Ime() const;//vraca ime
 
-    const Datum& DatumSmrti() const;
+    const std::string& Prezime() const;//vraca prezime
 
-    char Pol() const;
+    const Datum& DatumRodjenja() const;//vraca datum rodjenja
+
+    const Datum& DatumSmrti() const;//vraca datum smrti
+
+    char Pol() const;//vraca pol
 
     /**
      * @brief UkloniSupruznika uklanja dati element iz liste supruznika, jer je njegova dealokacija u toku (te stoga ni ne zahteva njegovu dealokaciju)
@@ -44,17 +47,12 @@ public:
      */
     bool ProveriPodatke()const;
 
-    /**
-     * @brief PronadjiVezu pronalazi tip srodstva izmedju aktivne osobe i neke druge prosledjene po referenci
-     * @param o Osoba sa kojom se trazi stepen srodstva
-     * @return string sa (lokalizovanim) nazivom srodstva ako je moguce ili "rodjak"
-     */
-    std::string PronadjiVezu(const Osoba & o)const;
+   
 
 
 private:
 
-    static short int _MinSifra;
+    static short int _MinSifra;//staticko polje koje zapravo odredjuje sledecu sifru koja ce biti dodeljena
     std::string _ime;
     std::string _prezime;
     Datum _datum_rodjenja;
@@ -64,7 +62,7 @@ private:
     //list<Relacija> roditelji;
     //list<Relacija> deca;
     //list<Relacija> bracaIsestre;
-    std::vector<Supruznik*> _supruznici;
+    std::vector<Supruznik*> _supruznici;//lista koja sadrzi pokazivace na objekte relacije tipa supruznik
     short int _sifra;
 
 };

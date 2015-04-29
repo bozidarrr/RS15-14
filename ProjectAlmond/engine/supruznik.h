@@ -30,12 +30,7 @@ public:
     Osoba& Muz()const;
     Osoba& Zena()const;
 
-    void PoveziSe(Osoba *prva, Osoba *druga);
 
-    //implementacije jos uvek beskorisnih metoda
-    std::string UpisiUString()const override;
-    void UcitajIzStringa(const std::string& unos)override;
-//------------------------------------------------------------
 
 
     /**

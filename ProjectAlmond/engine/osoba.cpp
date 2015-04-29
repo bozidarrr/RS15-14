@@ -32,7 +32,16 @@ Osoba::~Osoba()
     //roditelje
 
 }
+/*
+Osoba::Osoba(const Osoba& nova){
 
+//todo
+}
+
+
+Osoba& Osoba::operator=(const Osoba& nova){
+
+}*/
 
 /* provera ispravnosti podataka? reg.exp? */
 
