@@ -5,8 +5,8 @@ class Supruznik;
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "datum.h"
-#include "supruznik.h"
+#include "alati/datum.h"
+#include "engine/supruznik.h"
 /**
  * @brief The Osoba class Sluzi za cuvanje podatka o jednoj Osobi u porodicnom stablu
  */

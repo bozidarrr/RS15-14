@@ -1,4 +1,4 @@
-#include"osoba.h"
+#include"engine/osoba.h"
 
 Osoba::Osoba(std::string ime, std::string prezime,
              std::string datum_rodjenja, std::string datum_smrti)
@@ -76,7 +76,7 @@ return "rodjak";
 
 
 //ovde koristim neko zlo, takozvani erase-remove idiom: procitajte na netu
-void Osoba::UkloniSupruznika(Supruznik* inicijator){
+void Osoba::UkloniSupruznika(Supruznik* inicijator){    
     _supruznici.erase(std::remove(_supruznici.begin(), _supruznici.end(), inicijator), _supruznici.end());
 }
 

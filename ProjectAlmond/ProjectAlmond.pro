@@ -13,19 +13,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        glavniprozor.cpp \
-    datum.cpp \
-    unetiosobu.cpp \
-    supruznik.cpp \
-    osoba.cpp
+    alati/datum.cpp \
+    GUI/glavniprozor.cpp \
+    engine/osoba.cpp \
+    engine/supruznik.cpp \
+    GUI/unetiosobu.cpp
 
-HEADERS  += glavniprozor.h \
-    osoba.h \
-    datum.h \
-    unetiosobu.h \
-    WidgetDrag.h \
-    relacija.h \
-    supruznik.h
+HEADERS  += \
+    alati/datum.h \
+    engine/osoba.h \
+    engine/relacija.h \
+    engine/supruznik.h \
+    GUI/glavniprozor.h \
+    GUI/unetiosobu.h \
+    GUI/WidgetDrag.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui
