@@ -1,4 +1,4 @@
-#include "supruznik.h"
+#include "engine/supruznik.h"
 
 Supruznik::Supruznik(const std::string& datumVencanja, const std::string& datumUpoznavanja, const std::string& datumRazvoda, const std::string &trivija)
     :Relacija(trivija),_datumVencanja(datumVencanja),_datumUpoznavanja(datumUpoznavanja),_datumRazvoda(datumRazvoda)
@@ -7,11 +7,9 @@ Supruznik::Supruznik(const std::string& datumVencanja, const std::string& datumU
 
 Supruznik::~Supruznik()
 {
-    _zena->UkloniSupruznika(this);
-    _muz->UkloniSupruznika(this);
+    Zena().UkloniSupruznika(this);
+    Muz().UkloniSupruznika(this);
 }
-
-
 
 Datum Supruznik::DatumVencanja() const
 {
@@ -42,18 +40,17 @@ bool Supruznik::Rastavljeni() const
 {
     return !DatumRazvoda().NepoznatDatum();
 }
-//proveriti da li ovo ima smisla uopste u sledeca dva, nisam siguran da li se dobija ono sto hocu
-const Osoba& Supruznik::Muz() const
+
+//dva metoda koja samo sluze da bih lakse nazivao specificne operacije
+Osoba& Supruznik::Muz()
 {
-    return  (Osoba&)(*_muz);
+    return  (Osoba&)(*_prva);
 }
 
-const Osoba& Supruznik::Zena() const
+Osoba& Supruznik::Zena()
 {
-    return  (Osoba&)(*_zena);
+    return  (Osoba&)(*_druga);
 }
-
-
 
 
 
@@ -67,8 +64,9 @@ void Supruznik::UcitajIzStringa(const std::string& unos)
     std::cout<<std::endl<<unos<<std::endl;
     return;
 }
+
 //jer ako je muz inicijator, onda zena treba da ga obrise i obratno
 void Supruznik::UkloniSe(const Osoba *inicijator=nullptr)
 {
-    inicijator==_muz?_zena->UkloniSupruznika(this):_muz->UkloniSupruznika(this);//todo
+    (inicijator==&Muz())?Zena().UkloniSupruznika(this):Muz().UkloniSupruznika(this);//todo
 }

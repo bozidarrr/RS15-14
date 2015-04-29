@@ -6,7 +6,7 @@
 #include <QToolButton>
 #include <QDrag>
 #include <QLabel>
-#include "glavniprozor.h"
+#include "GUI/glavniprozor.h"
 
 class WidgetMimeData : public QMimeData
 {

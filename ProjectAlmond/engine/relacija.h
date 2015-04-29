@@ -2,11 +2,11 @@
 #define RELACIJA_H 1
 #include<string>
 #include<sys/types.h>
-#include"osoba.h"
+#include"engine/osoba.h"
 class Relacija
 {
 public:
-    Relacija(const std::string & trivija=""):_trivija(trivija){}
+    Relacija(const std::string & trivija=""):_trivija(trivija),_prva(nullptr),_druga(nullptr){}
     virtual ~Relacija(){}
 
     //za sad nista ne rade pametno, trebace nam za ispis, a mozda i ne, kao neki toString, mozda zatreba posle
@@ -20,8 +20,10 @@ public:
      * @param inicijator Osoba koja se trenutno brise sa spiska, tj koja je pozvala ovaj metod
      */
     virtual void UkloniSe(const Osoba* inicijator)=0;
-private:
+protected:
     std::string _trivija;
+    Osoba *_prva;
+    Osoba *_druga;
 };
 
 #endif // RELACIJA_H
