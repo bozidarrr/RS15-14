@@ -13,11 +13,14 @@ class Supruznik;
 class Osoba
 {
 public:
+
     Osoba(std::string ime, std::string prezime,
           std::string datum_rodjenja, std::string datum_smrti = "");
 
     //vidi destruktor sto je lep, dok jos znam da objasnim sta radi
     ~Osoba();
+
+    short Sifra()const;
 
     const std::string& Ime() const;
 
@@ -50,6 +53,8 @@ public:
 
 
 private:
+
+    static short int _MinSifra;
     std::string _ime;
     std::string _prezime;
     Datum _datum_rodjenja;
@@ -60,7 +65,7 @@ private:
     //list<Relacija> deca;
     //list<Relacija> bracaIsestre;
     std::vector<Supruznik*> _supruznici;
-
+    short int _sifra;
 
 };
 

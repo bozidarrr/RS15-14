@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     GUI/glavniprozor.cpp \
     engine/osoba.cpp \
     engine/supruznik.cpp \
-    GUI/unetiosobu.cpp
+    GUI/unetiosobu.cpp \
+    engine/porodicnostablo.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     engine/supruznik.h \
     GUI/glavniprozor.h \
     GUI/unetiosobu.h \
-    GUI/WidgetDrag.h
+    GUI/WidgetDrag.h \
+    engine/porodicnostablo.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui

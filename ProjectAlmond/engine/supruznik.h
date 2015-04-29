@@ -27,8 +27,10 @@ public:
     bool UBraku() const;
     bool Rastavljeni() const;
 
-    Osoba& Muz();
-    Osoba& Zena();
+    Osoba& Muz()const;
+    Osoba& Zena()const;
+
+    void PoveziSe(Osoba *prva, Osoba *druga);
 
     //implementacije jos uvek beskorisnih metoda
     std::string UpisiUString()const override;

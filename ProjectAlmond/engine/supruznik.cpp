@@ -42,16 +42,25 @@ bool Supruznik::Rastavljeni() const
 }
 
 //dva metoda koja samo sluze da bih lakse nazivao specificne operacije
-Osoba& Supruznik::Muz()
+Osoba& Supruznik::Muz() const
 {
     return  (Osoba&)(*_prva);
 }
 
-Osoba& Supruznik::Zena()
+Osoba& Supruznik::Zena() const
 {
     return  (Osoba&)(*_druga);
 }
 
+
+
+void Supruznik::PoveziSe(Osoba * prva, Osoba * druga)
+{
+    if(prva!=nullptr && druga!=nullptr){
+        _prva=prva;
+        _druga=druga;
+    }
+}
 
 
 std::string Supruznik::UpisiUString()const
