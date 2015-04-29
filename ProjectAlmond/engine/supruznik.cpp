@@ -42,28 +42,17 @@ bool Supruznik::Rastavljeni() const
 }
 
 //dva metoda koja samo sluze da bih lakse nazivao specificne operacije
-Osoba& Supruznik::Muz()
+Osoba& Supruznik::Muz() const
 {
     return  (Osoba&)(*_prva);
 }
 
-Osoba& Supruznik::Zena()
+Osoba& Supruznik::Zena() const
 {
     return  (Osoba&)(*_druga);
 }
 
 
-
-std::string Supruznik::UpisiUString()const
-{
-    return "";
-}
-
-void Supruznik::UcitajIzStringa(const std::string& unos)
-{
-    std::cout<<std::endl<<unos<<std::endl;
-    return;
-}
 
 //jer ako je muz inicijator, onda zena treba da ga obrise i obratno
 void Supruznik::UkloniSe(const Osoba *inicijator=nullptr)

@@ -27,13 +27,10 @@ public:
     bool UBraku() const;
     bool Rastavljeni() const;
 
-    Osoba& Muz();
-    Osoba& Zena();
+    Osoba& Muz()const;
+    Osoba& Zena()const;
 
-    //implementacije jos uvek beskorisnih metoda
-    std::string UpisiUString()const override;
-    void UcitajIzStringa(const std::string& unos)override;
-//------------------------------------------------------------
+
 
 
     /**
