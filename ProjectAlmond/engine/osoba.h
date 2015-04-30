@@ -16,16 +16,16 @@ class Osoba
 {
 public:
 
-    Osoba(std::string ime, std::string prezime,
-          std::string datum_rodjenja, std::string datum_smrti = "");//pri kreiranju, osoba dobija jedinstvenu sifru. Prepostavljamo da nece biti u okviru stabla kreirano previse osoba
+    Osoba(const std::string ime, const std::string prezime,const char pol,
+          const std::string datum_rodjenja, const std::string datum_smrti = "");//pri kreiranju, osoba dobija jedinstvenu sifru. Prepostavljamo da nece biti u okviru stabla kreirano previse osoba
 
 
     ~Osoba();//ovo sam nekada znao sta radi
 
-    //Osoba(const Osoba& nova);
-    //Osoba& operator=(const Osoba& nova);
+    Osoba(const Osoba& nova);
+    Osoba& operator=(Osoba& nova);
 
-    short Sifra()const;//vraca sifru
+    short int Sifra()const;//vraca sifru
 
     const std::string& Ime() const;//vraca ime
 
@@ -49,17 +49,17 @@ public:
      */
     bool ProveriPodatke()const;
 
-   
 
+    std::vector<Supruznik*> &Supruznici();
 
 private:
 
     static short int _MinSifra;//staticko polje koje zapravo odredjuje sledecu sifru koja ce biti dodeljena
     std::string _ime;
     std::string _prezime;
+    char _pol;
     Datum _datum_rodjenja;
     Datum _datum_smrti;
-    char _pol;
 
     //list<Relacija> roditelji;
     //list<Relacija> deca;
