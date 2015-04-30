@@ -1,10 +1,8 @@
 #ifndef SUPRUZNIK_H
 #define SUPRUZNIK_H 1
-class Osoba;
-#include"engine/relacija.h"
-#include"alati/datum.h"
-#include"engine/osoba.h"
-
+#include "engine/relacija.h"
+#include "alati/datum.h"
+#include "engine/osoba.h"
 /**
  * @brief The Supruznik class obezbedjuje pamcenje podataka o braku ili vezi izmedju dve osobe
  */

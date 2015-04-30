@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     engine/osoba.cpp \
     engine/supruznik.cpp \
     GUI/unetiosobu.cpp \
-    engine/porodicnostablo.cpp
+    engine/porodicnostablo.cpp \
+    engine/relacija.cpp
 
 HEADERS  += \
     alati/datum.h \

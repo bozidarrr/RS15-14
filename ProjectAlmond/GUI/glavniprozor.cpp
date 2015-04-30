@@ -114,7 +114,7 @@ void GlavniProzor::mouseMoveEvent(QMouseEvent *pe)
 void GlavniProzor::dragEnterEvent(QDragEnterEvent* pe)
 {
     if (pe->mimeData()->hasFormat(WidgetMimeData::mimeType()))
-    {
+    {https://github.com/bozidarrr/RS15-14.git
         pe->acceptProposedAction();
     }
     QWidget::dragEnterEvent(pe);
