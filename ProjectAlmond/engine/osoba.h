@@ -1,12 +1,14 @@
 #ifndef _OSOBA_H_
 #define _OSOBA_H_ 1
-class Supruznik;
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include "alati/datum.h"
 #include "engine/supruznik.h"
+class Supruznik;
+
 /**
  * @brief The Osoba class Sluzi za cuvanje podatka o jednoj Osobi u porodicnom stablu
  */
