@@ -2,6 +2,7 @@
 #define PORODICNOSTABLO_H
 #include<vector>
 #include<map>
+#include<algorithm>
 #include"engine/osoba.h"
 #include"engine/supruznik.h"
 
@@ -13,28 +14,34 @@ enum Odnos{RODITELJ,DETE,BRAT_SESTRA,SUPRUZNIK};
 class PorodicnoStablo
 {
 public:
-    PorodicnoStablo(std::string ime, std::string prezime, std::string datum_rodjenja, std::string datum_smrti="");
+    PorodicnoStablo(std::string ime, std::string prezime, char pol, std::string datum_rodjenja, std::string datum_smrti="");
     ~PorodicnoStablo();
-  //  PorodicnoStablo(const PorodicnoStablo& drugo);
-  //  PorodicnoStablo& operator=(const PorodicnoStablo& drugo);
+    //  PorodicnoStablo(const PorodicnoStablo& drugo);
+    //  PorodicnoStablo& operator=(const PorodicnoStablo& drugo);
 
-//vraca sifru novokreirane osobe, ili -1 ako operacija nije uspesna iz nekog razloga
-    short int DodajOsobu(std::string ime, std::string prezime,std::string datum_rodjenja, std::string datum_smrti = "");
+    //OVO SU METODI ZA POZIVANJE IZ GUI-a, bice ih jos, ali ovo je za sada dovoljno--------------------------------------------------
 
-//povezuje dve odabrane osobe, u srodstvo koje se kreira, a vraca sifru kreirane relacije ili -1 u slucaju neuspeha
+    //vraca sifru novokreirane osobe, ili -1 ako operacija nije uspesna iz nekog razloga
+    short int DodajOsobu(std::string ime, std::string prezime, char pol, std::string datum_rodjenja, std::string datum_smrti = "");
+
+    //povezuje dve odabrane osobe, u srodstvo koje se kreira, a vraca sifru kreirane relacije ili -1 u slucaju neuspeha
     short int PoveziOsobe(const short sifra1,const short sifra2,Odnos srodstvo);
-    short int PoveziOsobe(const Osoba* prva,const Osoba * druga,Odnos srodstvo);
 
-//vraca pokazivac na osobu, na osnovu njene sifre
+
+    //vraca pokazivac na osobu, na osnovu njene sifre zarad trazenja ostalih podataka
     Osoba* nadjiOsobuPoSifri(const short sifra);
 
+    //ispituje da li je stablo povezano, radi omogucenja/onemogucenja odredjenih operacija
+    bool stabloJePovezano()const;
 
-//vraca odnos u porodicnom stablu izmedju dve date osobe
+    //vraca pokazivac na kljucnu osobu stabla, da bi njene informacije mogle biti ispisane u donjem levom uglu ekrana
+    Osoba * KljucnaOsoba();
+
+
+    //vraca odnos u porodicnom stablu izmedju dve date osobe NIJE JOS NAPRAVLJENO!!!
     std::string PronadjiOdnos(const short sifra1,const short sifra2);
-    std::string PronadjiOdnos(const Osoba* prva,const Osoba* druga);
 
-//ispituje da li je stablo povezano, radi omogucenja/onemogucenja odredjenih operacija
-    bool stabloJePovezano();
+    //-----------------------------------------------------------------------------------------------------------------------------------
 
 
 private:
@@ -47,8 +54,9 @@ private:
     std::map<int, std::vector<Osoba*> > _indeksPoRodjendanu;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
 
 
-
-
+    bool osobaJeNepovezana(short int sifra)const;
+    std::string PronadjiOdnos(const Osoba* prva,const Osoba* druga);
+    short int PoveziOsobe(Osoba *prva, Osoba *druga, Odnos srodstvo);
 };
 
 #endif // PORODICNOSTABLO_H

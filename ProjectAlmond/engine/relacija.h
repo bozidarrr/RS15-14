@@ -16,6 +16,9 @@ public:
      * @param inicijator Osoba koja se trenutno brise sa spiska, tj koja je pozvala ovaj metod
      */
     virtual void UkloniSe(const Osoba* inicijator)=0;
+
+    short int Sifra()const;
+
 protected:
     std::string _trivija;
     Osoba *_prva;

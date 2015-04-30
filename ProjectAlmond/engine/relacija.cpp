@@ -16,3 +16,7 @@ void Relacija::PoveziSe(Osoba * prva, Osoba * druga)
 
 short int Relacija::_MinSifra=0;
 
+short int Relacija::Sifra()const{
+
+    return _sifra;
+}

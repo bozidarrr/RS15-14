@@ -1,15 +1,7 @@
 #include "porodicnostablo.h"
-/*
-Osoba* _kljucnaOsoba;//osoba koja je okosnica ovog porodicnog stabla tj na kojoj je fokus naseg stabla (svi njeni rodjaci i supruznici su prikazani, ostali su redukovani do na prvi stepen)
-std::vector<Osoba*> _sveOsobe;//vektor sa pokazivacima na sve osobe
-std::vector<Osoba*> _nepovezane;//vektor koji sadrzi pokazivace na novokreirane, jos nepovezane osobe
-std::vector<Relacija*> _sveRelacije;//vektor koji sadrzi pokazivace na objekte relacije
-std::map<std::string, std::vector<Osoba*> > _indeksPoImenu;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
-std::map<Datum, std::vector<Osoba*> > _indeksPoDatumu;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
-std::map<int, std::vector<Osoba*> > _indeksPoRodjendanu;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
-*/
-PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,std::string datum_rodjenja,std::string datum_smrti)
-    :_kljucnaOsoba(ime,prezime,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),_sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu()
+
+PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,char pol,std::string datum_rodjenja,std::string datum_smrti)
+    :_kljucnaOsoba(ime,prezime,pol,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),_sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu()
 {
     _sveOsobe.push_back(&_kljucnaOsoba);
     _indeksPoImenu[_kljucnaOsoba.Ime()]=std::vector<Osoba *>();
@@ -24,13 +16,22 @@ PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,std::string
 
 PorodicnoStablo::~PorodicnoStablo()
 {
-    //todo
+    _sveRelacije.clear();
+    _indeksPoRodjendanu.clear();
+    _indeksPoDatumu.clear();
+    _indeksPoImenu.clear();
+    std::vector<Osoba*>::iterator b=_nepovezane.begin();
+    std::vector<Osoba*>::iterator e=_nepovezane.end();
+    for(;b!=e;b++)delete *b;
+    b=_sveOsobe.begin();
+    e=_sveOsobe.end();
+    for(;b!=e;b++)delete *b;
 }
 
 
-short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime,std::string datum_rodjenja, std::string datum_smrti)
+short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime,char pol,std::string datum_rodjenja, std::string datum_smrti)
 {
-    Osoba* tren=new Osoba(ime,prezime,datum_rodjenja,datum_smrti);
+    Osoba* tren=new Osoba(ime,prezime,pol,datum_rodjenja,datum_smrti);
     _nepovezane.push_back(tren);
     if(_indeksPoImenu.find(tren->Ime())==_indeksPoImenu.end())_indeksPoImenu[tren->Ime()]=std::vector<Osoba*>();
     _indeksPoImenu[tren->Ime()].push_back(tren);
@@ -43,23 +44,70 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime,std::
     return tren->Sifra();
 }
 
+
+short int PorodicnoStablo::PoveziOsobe(const short sifra1,const short sifra2,Odnos srodstvo)
+{
+    Osoba* prva=nadjiOsobuPoSifri(sifra1);
+    Osoba* druga=nadjiOsobuPoSifri(sifra2);
+    return PorodicnoStablo::PoveziOsobe(prva,druga,srodstvo);
+
+}
+
+short int PorodicnoStablo::PoveziOsobe(Osoba *prva,  Osoba *druga, Odnos srodstvo)
+{
+
+    if(prva==nullptr || druga==nullptr)
+        throw "Jedna osoba ne postoji";
+
+    //refaktorisi----------------------
+    if(osobaJeNepovezana(prva->Sifra())){
+        _nepovezane.erase(std::remove(_nepovezane.begin(), _nepovezane.end(), prva), _nepovezane.end());
+        _sveOsobe.push_back(prva);
+    }
+    if(osobaJeNepovezana(druga->Sifra())){
+        _nepovezane.erase(std::remove(_nepovezane.begin(), _nepovezane.end(), druga), _nepovezane.end());
+        _sveOsobe.push_back(druga);
+    }
+    //---------------------------------
+
+    switch(srodstvo){
+    case BRAT_SESTRA:
+    case RODITELJ:
+    case DETE:
+    case SUPRUZNIK:
+        Supruznik *nov=new Supruznik;
+        prva->Supruznici().push_back(nov);
+        druga->Supruznici().push_back(nov);
+        return nov->Sifra();
+        break;
+    }
+    return -1;
+
+}
+
+
+
+
+Osoba* PorodicnoStablo::nadjiOsobuPoSifri(const short sifra)
+{
+    std::vector<Osoba *>::iterator nadjena=std::find_if(_nepovezane.begin(),_nepovezane.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;});
+    if(nadjena!=_nepovezane.end())return *nadjena;
+
+    nadjena=std::find_if(_sveOsobe.begin(),_sveOsobe.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;});
+    if(nadjena!=_sveOsobe.end())return *nadjena;
+
+    return nullptr;
+
+}
+
+
+bool PorodicnoStablo::osobaJeNepovezana(short sifra) const
+{
+    return std::find_if(_nepovezane.begin(),_nepovezane.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;})!=_nepovezane.end();
+}
+
+
 /*
-short int PoveziOsobe(const short sifra1,const short sifra2,Odnos srodstvo)
-{
-
-
-}
-short int PoveziOsobe(const Osoba* prva,const Osoba * druga,Odnos srodstvo)
-{
-
-
-}
-
-Osoba* nadjiOsobuPoSifri(const short sifra)
-{
-
-}
-
 std::string PronadjiOdnos(const short sifra1,const short sifra2)
 {
     return "rodjak";
@@ -70,10 +118,57 @@ std::string PronadjiOdnos(const Osoba* prva,const Osoba* druga)
 
 }
 */
-bool PorodicnoStablo::stabloJePovezano()
+bool PorodicnoStablo::stabloJePovezano()const
 {
-return _nepovezane.size()==0;
+    return _nepovezane.size()==0;
 }
+
+
+
+Osoba * PorodicnoStablo::KljucnaOsoba(){
+    return &_kljucnaOsoba;
+}
+
+
+
+/*
+Osoba* _kljucnaOsoba;//osoba koja je okosnica ovog porodicnog stabla tj na kojoj je fokus naseg stabla (svi njeni rodjaci i supruznici su prikazani, ostali su redukovani do na prvi stepen)
+std::vector<Osoba*> _sveOsobe;//vektor sa pokazivacima na sve osobe
+std::vector<Osoba*> _nepovezane;//vektor koji sadrzi pokazivace na novokreirane, jos nepovezane osobe
+std::vector<Relacija*> _sveRelacije;//vektor koji sadrzi pokazivace na objekte relacije
+std::map<std::string, std::vector<Osoba*> > _indeksPoImenu;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
+std::map<Datum, std::vector<Osoba*> > _indeksPoDatumu;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
+std::map<int, std::vector<Osoba*> > _indeksPoRodjendanu;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
