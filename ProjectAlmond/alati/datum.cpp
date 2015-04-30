@@ -207,3 +207,21 @@ bool Datum::operator <=(const Datum& datum) const
     return !(*this > datum);
 }
 
+int Datum::redniBroj()const{
+ int broj=_dan;
+ if(_mesec>=2)broj+=31;//prosao ceo januar
+ if(_mesec>=3)broj+=29;//prosao ceo februar (uvek numerisem kao da je prestupna)
+ if(_mesec>=4)broj+=31;//prosao ceo mart
+ if(_mesec>=5)broj+=30;//prosao ceo april
+ if(_mesec>=6)broj+=31;//prosao ceo maj
+ if(_mesec>=7)broj+=30;//prosao ceo jun
+ if(_mesec>=8)broj+=31;//prosao ceo jul
+ if(_mesec>=9)broj+=31;//prosao ceo avgust
+ if(_mesec>=10)broj+=30;//prosao ceo septembar
+ if(_mesec>=11)broj+=31;//prosao ceo oktobar
+ if(_mesec==12)broj+=30;//prosao ceo novembar
+
+ return broj;
+
+}
+

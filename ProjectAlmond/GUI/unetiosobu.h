@@ -13,10 +13,19 @@ class Unetiosobu : public QDialog
     
 public:
     explicit Unetiosobu(QWidget *parent = 0);
+   QString m_ime;
+   QString m_prezime;
+   QString m_datRdoj;
+   QString m_datSmrti;
+   void Ponisti();
+   bool pol;
     ~Unetiosobu();
-  //  void NapraviOsobu(Osoba & novaO);
+private Q_SLOTS:
+  void Procitaj();
+  void Odustani();
 private:
     Ui::Unetiosobu *ui;
+    //Osoba novaO;
 };
 
 #endif // UNETIOSOBU_H

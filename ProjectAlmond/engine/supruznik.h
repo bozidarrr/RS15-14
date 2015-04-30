@@ -1,9 +1,9 @@
 #ifndef SUPRUZNIK_H
 #define SUPRUZNIK_H 1
 class Osoba;
-#include"relacija.h"
-#include"datum.h"
-#include"osoba.h"
+#include"engine/relacija.h"
+#include"alati/datum.h"
+#include"engine/osoba.h"
 
 /**
  * @brief The Supruznik class obezbedjuje pamcenje podataka o braku ili vezi izmedju dve osobe
@@ -27,13 +27,10 @@ public:
     bool UBraku() const;
     bool Rastavljeni() const;
 
-    const Osoba& Muz() const;
-    const Osoba& Zena() const;
+    Osoba& Muz()const;
+    Osoba& Zena()const;
 
-    //implementacije jos uvek beskorisnih metoda
-    std::string UpisiUString()const override;
-    void UcitajIzStringa(const std::string& unos)override;
-//------------------------------------------------------------
+
 
 
     /**
@@ -47,8 +44,7 @@ private:
     Datum _datumVencanja;
     Datum _datumUpoznavanja;
     Datum _datumRazvoda;
-    Osoba *_muz;
-    Osoba *_zena;
+
 
 
 };

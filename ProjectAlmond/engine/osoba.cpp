@@ -1,4 +1,6 @@
-#include"osoba.h"
+#include"engine/osoba.h"
+
+short int Osoba::_MinSifra=0;
 
 Osoba::Osoba(std::string ime, std::string prezime,
              std::string datum_rodjenja, std::string datum_smrti)
@@ -6,8 +8,9 @@ Osoba::Osoba(std::string ime, std::string prezime,
       _datum_rodjenja(datum_rodjenja),
       _datum_smrti(datum_smrti),
       _supruznici(2)
-{
 
+{
+    _sifra=_MinSifra++;
 }
 
 //kada osobu uklanjamo iz stabla, sve njene veze moraju biti pobrisane, ali moraju obavestiti i objekte sa kojima su vezane da vise ne postoje
@@ -29,9 +32,23 @@ Osoba::~Osoba()
     //roditelje
 
 }
+/*
+Osoba::Osoba(const Osoba& nova){
 
+//todo
+}
+
+
+Osoba& Osoba::operator=(const Osoba& nova){
+
+}*/
 
 /* provera ispravnosti podataka? reg.exp? */
+
+short int Osoba::Sifra()const
+{
+    return _sifra;
+}
 
 const std::string& Osoba::Ime() const
 {
@@ -65,18 +82,8 @@ bool Osoba::ProveriPodatke()const
 }
 
 
-std::string Osoba::PronadjiVezu(const Osoba & o)const
-{
-//todo nema veze sa mozgom, samo izbegavam warninge za sada
-if(o.ProveriPodatke())
-return "rodjak";
-return "rodjak";
-}
-
-
-
 //ovde koristim neko zlo, takozvani erase-remove idiom: procitajte na netu
-void Osoba::UkloniSupruznika(Supruznik* inicijator){
+void Osoba::UkloniSupruznika(Supruznik* inicijator){    
     _supruznici.erase(std::remove(_supruznici.begin(), _supruznici.end(), inicijator), _supruznici.end());
 }
 

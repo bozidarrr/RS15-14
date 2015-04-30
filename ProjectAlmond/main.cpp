@@ -1,4 +1,4 @@
-#include "glavniprozor.h"
+#include "GUI/glavniprozor.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
