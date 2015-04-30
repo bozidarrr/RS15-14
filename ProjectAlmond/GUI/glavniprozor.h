@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QMouseEvent>
 #include <QPixmap>
+#include <QGraphicsSceneDragDropEvent>
 #include "WidgetDrag.h"
 #include "unetiosobu.h"
 #include <vector>
@@ -47,18 +48,21 @@ private:
           void poveziMZ();
           void poveziBS();
           void poveziRD();
-           //vector <QPoint,QPushButton*> m_osobePoz;
+           //vector <QPoint*,int> m_osobePoz; //cuva poziciju i identifikator osobe
 
 private Q_SLOTS:
        void postavi_na_0(){ind=0;};
        void postavi_na_1(){ind=1;};
        void postavi_na_2(){ind=2;};
        void postavi_na_3(){ind=3;};
+       void uspostavljanje_veze();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent* pe);
     virtual void dragEnterEvent(QDragEnterEvent* pe);
-    virtual void dropEvent(QDropEvent* pe);
+    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *pe);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent* pe);
     virtual void mousePressEvent(QMouseEvent *pe);
 };
 
