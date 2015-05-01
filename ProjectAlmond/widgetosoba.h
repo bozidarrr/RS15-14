@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <string>
 #include <QString>
+#include "GUI/glavniprozor.h"
 
 namespace Ui {
 class WidgetOsoba;
@@ -28,10 +29,12 @@ private slots:
 
     void on_btnOsoba_released();
 
+    void on_btnOsoba_toggled(bool checked);
+
 private:
     Ui::WidgetOsoba *ui;
 
-    QPushButton *btnOsoba;
+    //QPushButton *btnOsoba;
 
     short int _sifra;
 

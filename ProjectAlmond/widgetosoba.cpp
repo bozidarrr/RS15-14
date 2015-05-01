@@ -1,5 +1,7 @@
 #include "widgetosoba.h"
 #include "ui_widgetosoba.h"
+#include "GUI/glavniprozor.h"
+#include <iostream>
 
 WidgetOsoba::WidgetOsoba(short int sifra, QWidget *parent) :
     QWidget(parent),
@@ -59,4 +61,15 @@ void WidgetOsoba::on_btnOsoba_released()
     //a on vraca podatke i poziva iscrtavanje relacije
 
     //recimo
+}
+
+void WidgetOsoba::on_btnOsoba_toggled(bool checked)
+{
+    if (checked)
+        GlavniProzor::promeniSelektovanu(_sifra);
+    else
+        GlavniProzor::promeniSelektovanu(-1);
+
+    GlavniProzor::popuniInformacije();
+        //std::cout<<"Radi"<<std::endl;
 }
