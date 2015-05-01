@@ -13,12 +13,12 @@ class Unetiosobu : public QDialog
     
 public:
     explicit Unetiosobu(QWidget *parent = 0);
-   QString m_ime;
-   QString m_prezime;
-   QString m_datRdoj;
-   QString m_datSmrti;
-   void Ponisti();
-   bool pol;
+    QString m_ime;
+    QString m_prezime;
+    QString m_datRodj;
+    QString m_datSmrti;
+    void Ponisti();
+    bool pol;
     ~Unetiosobu();
 private Q_SLOTS:
   void Procitaj();

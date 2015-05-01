@@ -64,7 +64,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     ui->Stablo->setScene(scena);
 
 
-    connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
+    //connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
     connect(tbOsoba,SIGNAL(pressed()),this,SLOT(postavi_na_0()));
     connect(tbMZ,SIGNAL(pressed()),this,SLOT(postavi_na_1()));
     connect(tbBS,SIGNAL(pressed()),this,SLOT(postavi_na_2()));
