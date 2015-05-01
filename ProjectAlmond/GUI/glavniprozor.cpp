@@ -8,6 +8,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GlavniProzor)
 {
+    //selektovana_sifra = -1;
+
     setAcceptDrops(true);
     ui->setupUi(this);
     osobapix=QPixmap(":/images/images/Ellipse-tool-icon.png");
@@ -36,6 +38,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     toolbar->addWidget(rbMuzZena);
     toolbar->addWidget(rbBratSestra);
     toolbar->addWidget(rbRoditeljDete);
+
+    //grpOsobe = new QButtonGroup(scena);
 
 
 
@@ -75,6 +79,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     //connect(tbBS,SIGNAL(released()),this,SLOT(poveziBS()));
     //connect(tbRD,SIGNAL(released()),this,SLOT(poveziRD()));
     //toolbar->addSeparator();
+
 }
 
 void GlavniProzor::startDrag()
@@ -308,6 +313,8 @@ void GlavniProzor::dodajNovuOsobu()
     WidgetOsoba *novaOsoba = new WidgetOsoba(123);
     novaOsoba->postaviImePrezime("Pera Peric");
 
+    //grpOsobe->addButton(novaOsoba);
+
     scena->addWidget(novaOsoba);
 
 }
@@ -316,3 +323,26 @@ GlavniProzor::~GlavniProzor()
 {
     delete ui;
 }
+
+void GlavniProzor::promeniSelektovanu(short novaSifra)
+{
+    //if sifra ok...
+    selektovana_sifra = novaSifra;
+}
+
+void GlavniProzor::popuniInformacije()
+{
+    /*e mozda ovako nekako
+        da mi preko selektovane sifre engine vraca informacije koje cu da ispisujem
+    */
+    //if (Osoba *s = prekoSifre(selektovana sifra) != nullptr) ...
+
+    if (selektovana_sifra > 0)
+        //ui->osobaInfo->setText("Ovo je neka stvarna osoba");
+        std::cout<<"postoji"<<std::endl;
+    else
+        //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
+        std::cout<<"ne postoji"<<std::endl;
+}
+
+short int GlavniProzor::selektovana_sifra = -1;

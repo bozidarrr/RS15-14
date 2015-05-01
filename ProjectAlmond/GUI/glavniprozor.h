@@ -16,6 +16,9 @@
 #include "unetiosobu.h"
 #include "widgetosoba.h"
 #include <vector>
+#include <iostream>
+
+
 namespace Ui {
 class GlavniProzor;
 }
@@ -27,6 +30,10 @@ class GlavniProzor : public QMainWindow
 public:
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
+
+    static void promeniSelektovanu(short int novaSifra);
+
+    static void popuniInformacije();
 
 
 private:
@@ -43,6 +50,8 @@ private:
     QButtonGroup *grpRelacije;
     QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditeljDete;
 
+    //QButtonGroup *grpOsobe;
+
     QTextBrowser *_osobaInfo;
 
     QGraphicsScene* scena;
@@ -55,6 +64,8 @@ private:
     QPixmap rdpix;
 
     Unetiosobu u;
+
+    static short int selektovana_sifra;
 
     void startDrag();
     void napravi_Osobu();

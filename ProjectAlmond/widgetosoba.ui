@@ -28,6 +28,9 @@
    <property name="text">
     <string>Ime Prezime</string>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="flat">
     <bool>true</bool>
    </property>
