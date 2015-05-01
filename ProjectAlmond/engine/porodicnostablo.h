@@ -52,7 +52,8 @@ private:
     std::map<std::string, std::vector<Osoba*> > _indeksPoImenu;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
     std::map<Datum, std::vector<Osoba*> > _indeksPoDatumu;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
     std::map<int, std::vector<Osoba*> > _indeksPoRodjendanu;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
-
+    std::map<short int, Osoba* > _indeksPoSifriOsoba;//mapa koja vezuje sifru osobe za tu osobu
+    std::map<short int, Relacija* > _indeksPoSifriRelacija;//mapa koja vezuje sifru relacije za tu relaciju
 
     bool osobaJeNepovezana(short int sifra)const;
     std::string PronadjiOdnos(const Osoba* prva,const Osoba* druga);
