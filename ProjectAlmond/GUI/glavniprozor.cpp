@@ -1,7 +1,7 @@
 #include "glavniprozor.h"
 #include "ui_glavniprozor.h"
 #include "unetiosobu.h"
-//#include "widgetosoba.h"
+#include "widgetosoba.h"
 #include <QGraphicsScene>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
@@ -64,7 +64,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     ui->Stablo->setScene(scena);
 
 
-    //connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
+    connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
     connect(tbOsoba,SIGNAL(pressed()),this,SLOT(postavi_na_0()));
     connect(tbMZ,SIGNAL(pressed()),this,SLOT(postavi_na_1()));
     connect(tbBS,SIGNAL(pressed()),this,SLOT(postavi_na_2()));
@@ -160,6 +160,13 @@ void GlavniProzor::napravi_Osobu(){
 
 
     u.show();
+/*
+    WidgetOsoba *novaOsoba = new WidgetOsoba(123);
+    novaOsoba->postaviImePrezime("Pera Peric");
+
+    scena->addWidget(novaOsoba);*/
+
+
 /*
     while(u.m_ime==""){
         continue;
@@ -297,6 +304,11 @@ void GlavniProzor::dodajNovuOsobu()
     //u.show();
     //bice na drag&drop, ne ovako, samo da smislim sve do kraja...
     //scena->addWidget(new WidgetOsoba(123));
+
+    WidgetOsoba *novaOsoba = new WidgetOsoba(123);
+    novaOsoba->postaviImePrezime("Pera Peric");
+
+    scena->addWidget(novaOsoba);
 
 }
 

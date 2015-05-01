@@ -14,7 +14,7 @@
 #include "WidgetDrag.h"
 #include <QTextBrowser>
 #include "unetiosobu.h"
-//#include "widgetosoba.h"
+#include "widgetosoba.h"
 #include <vector>
 namespace Ui {
 class GlavniProzor;
