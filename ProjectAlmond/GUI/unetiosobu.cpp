@@ -13,7 +13,7 @@ Unetiosobu::Unetiosobu(QWidget *parent) :
 void Unetiosobu::Procitaj(){
     m_ime=ui->ImeTF->text();
     m_prezime= ui->PrezimeTF->text();
-    m_datRdoj=ui->DatR->text();
+    m_datRodj=ui->DatR->text();
     m_datSmrti=ui->DatS->text();
     pol=ui->Muski->isChecked();
 
@@ -25,17 +25,17 @@ void Unetiosobu::Procitaj(){
 void Unetiosobu::Odustani(){
     m_ime=QString("");
     m_prezime= QString("");
-    m_datRdoj=QString("");
+    m_datRodj=QString("");
     m_datSmrti=QString("");
     pol=false;
     this->hide();
     ui->ImeTF->setText(QString(""));
-     ui->PrezimeTF->setText(QString(""));
+    ui->PrezimeTF->setText(QString(""));
 }
 void Unetiosobu::Ponisti(){
     m_ime=QString("");
     m_prezime= QString("");
-    m_datRdoj=QString("");
+    m_datRodj=QString("");
     m_datSmrti=QString("");
     pol=false;
 }
