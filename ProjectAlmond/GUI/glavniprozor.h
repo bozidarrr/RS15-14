@@ -17,6 +17,7 @@
 #include "widgetosoba.h"
 #include <vector>
 #include <iostream>
+#include <engine/porodicnostablo.h>
 
 
 namespace Ui {
@@ -52,7 +53,7 @@ private:
     QToolButton * tbRD;
 
     QButtonGroup *grpRelacije;
-    QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditeljDete;
+    QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
 
     QGraphicsScene* scena;
     QDrag *drag;
@@ -68,6 +69,8 @@ private:
     short int sifra1, sifra2;
 
     static short int selektovana_sifra;
+
+    PorodicnoStablo *stablo;
 
     void startDrag();
     void napravi_Osobu();

@@ -3,17 +3,19 @@
 #include "unetiosobu.h"
 #include "widgetosoba.h"
 #include <QGraphicsScene>
-#include <QHBoxLayout>
+#include <engine/porodicnostablo.h>
 
-#include <QLabel>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GlavniProzor)
 {
-    //selektovana_sifra = -1;
     sifra1 = -1;
     sifra2 = -1;
+
+    //i ovo cemo menjati, pravi se kad se unese prva osoba
+    stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
+
 
     setAcceptDrops(true);
     ui->setupUi(this);
@@ -35,14 +37,22 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     toolbar->addSeparator();
 
     grpRelacije = new QButtonGroup(toolbar);
-    rbMuzZena = new QRadioButton("Muz/Zena");
+    rbMuzZena = new QRadioButton("Supruznik");
     rbMuzZena->setChecked(true);
     rbBratSestra = new QRadioButton("Brat/Sestra");
-    rbRoditeljDete = new QRadioButton("Roditelj/Dete");
+    rbRoditelj = new QRadioButton("Roditelj");
+    rbDete = new QRadioButton("Dete");
+
+    grpRelacije->addButton(rbMuzZena);
+    grpRelacije->addButton(rbBratSestra);
+    grpRelacije->addButton(rbRoditelj);
+    grpRelacije->addButton(rbDete);
+
 
     toolbar->addWidget(rbMuzZena);
     toolbar->addWidget(rbBratSestra);
-    toolbar->addWidget(rbRoditeljDete);
+    toolbar->addWidget(rbRoditelj);
+    toolbar->addWidget(rbDete);
 
     tbMZ=new QToolButton();
     tbMZ->setIcon(QIcon(mzpix));
@@ -310,13 +320,18 @@ void GlavniProzor::dodajNovuOsobu()
 {
     //u.show();
     //bice na drag&drop, ne ovako, samo da smislim sve do kraja...
-    //scena->addWidget(new WidgetOsoba(123));
+
+    //iscitamo podatke preko onog dijaloga ili kako vec
+    // -> ime, prezime, pol, datume
+
+    // short int sifra = stablo->DodajOsobu(...);
+
+    //onda
+    //Widget *novaOsoba = new WidgetOsoba(sifra, this)
+    //i negde je smestimo xD
 
     WidgetOsoba *novaOsoba = new WidgetOsoba(1, this);
-    novaOsoba->setGeometry(0,0,120,40);
     novaOsoba->postaviImePrezime("Pera Peric");
-
-    //grpOsobe->addButton(novaOsoba);
 
     ui->gridStablo->addWidget(novaOsoba,0,0);
     ui->gridStablo->addWidget(new WidgetOsoba(2, this),1,1);
@@ -338,23 +353,20 @@ void GlavniProzor::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor::popuniInformacije()
 {
-    /*e mozda ovako nekako
-        da mi preko selektovane sifre engine vraca informacije koje cu da ispisujem
-    */
-    //if (Osoba *s = prekoSifre(selektovana sifra) != nullptr) ...
-
     if (selektovana_sifra > 0)
-        //ui->osobaInfo->setText("Ovo je neka stvarna osoba");
         std::cout<<selektovana_sifra<<std::endl;
     else
         //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
         std::cout<<"ne postoji"<<std::endl;
 
-    ui->lineImePrezime->setText("Pera Peric");
-    QString proba = QString::fromStdString(std::to_string(selektovana_sifra));
-    ui->lineKontakt->setText(proba);
+    //Osoba* osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
+    // if  == nullptr greska
+    //inace pisemo
+    //QString tmp = QString::fromStdString(osoba->Ime());
+    ui->lineImePrezime->setText("nesto");
+    ui->lineRodj->setText("nesto drugo");
+    ui->lineSmrt->setText("ubicu se ja sad...");
 
-    //ui->osobaInfo->addWidget(new QLabel("Informacije"));
 }
 
 void GlavniProzor::postaviSifru1(short nova)
@@ -374,6 +386,10 @@ void GlavniProzor::povezi()
     //za sifra1, sifra2
     //ako je sve ok
     //iscrtava se i ta relacija
+
+    //short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, Odnos::SUPRUZNIK);
 }
 
 short int GlavniProzor::selektovana_sifra = -1;
+
+
