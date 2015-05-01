@@ -27,6 +27,14 @@ public:
     //povezuje dve odabrane osobe, u srodstvo koje se kreira, a vraca sifru kreirane relacije ili -1 u slucaju neuspeha
     short int PoveziOsobe(const short sifra1,const short sifra2,Odnos srodstvo);
 
+    //uklanja datu osobu, ali uklanja i sve veze koje je ona imala, posle ovoga je neophodno uraditi ponovno iscrtavanje celog stabla, ne samo ukloniti
+    //iz crteza ono sto ste zahtevali da bude obrisano, posto ne znate unapred iz svoje pozicije, koje su sve relacije morale biti uklonjene.
+    //Metod vraca true ako je sve ok ili false, ako je naisao na neki problem, ne znam ni ja kakav
+    bool UkloniOsobuPoSifri(const short sifra);
+
+    //uklanja datu relaciju, moguce je odmah po ovom metodu ukloniti iz spiska elemenata koji se iscrtavaju datu relaciju, bez dalje provere (naravno, ukoliko je vratila true)
+    bool UkloniRelacijuPoSifri(const short sifra);
+
 
     //vraca pokazivac na osobu, na osnovu njene sifre zarad trazenja ostalih podataka
     Osoba* nadjiOsobuPoSifri(const short sifra);
@@ -36,6 +44,9 @@ public:
 
     //vraca pokazivac na kljucnu osobu stabla, da bi njene informacije mogle biti ispisane u donjem levom uglu ekrana
     Osoba * KljucnaOsoba();
+
+    //vraca pokazivac na relaciju, na osnovu njene sifre, zarad trazenja ostalih podataka
+    Relacija* nadjiRelacijuPoSifri(const short sifra);
 
 
     //vraca odnos u porodicnom stablu izmedju dve date osobe NIJE JOS NAPRAVLJENO!!!

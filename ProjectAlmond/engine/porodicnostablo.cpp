@@ -141,6 +141,51 @@ Osoba * PorodicnoStablo::KljucnaOsoba(){
 
 
 
+bool PorodicnoStablo::UkloniOsobuPoSifri(const short sifra)
+{
+    Osoba *obrisiMe=nadjiOsobuPoSifri(sifra);
+    if(obrisiMe==nullptr)return false;
+
+    std::vector<Supruznik*>::iterator b=obrisiMe->Supruznici().begin();
+    std::vector<Supruznik*>::iterator e=obrisiMe->Supruznici().end();
+    for(;b!=e;b++){
+
+        _sveRelacije.erase(std::remove(_sveRelacije.begin(), _sveRelacije.end(), *b), _sveRelacije.end());
+        _indeksPoSifriRelacija.erase((*b)->Sifra());
+
+    }
+
+    _sveOsobe.erase(std::remove(_sveOsobe.begin(), _sveOsobe.end(), obrisiMe), _sveOsobe.end());
+    _nepovezane.erase(std::remove(_nepovezane.begin(), _nepovezane.end(), obrisiMe), _nepovezane.end());
+
+    _indeksPoImenu[obrisiMe->Ime()].erase(std::remove(_indeksPoImenu[obrisiMe->Ime()].begin(), _indeksPoImenu[obrisiMe->Ime()].end(), obrisiMe), _indeksPoImenu[obrisiMe->Ime()].end());
+    _indeksPoDatumu[obrisiMe->DatumRodjenja()].erase(std::remove(_indeksPoDatumu[obrisiMe->DatumRodjenja()].begin(),_indeksPoDatumu[obrisiMe->DatumRodjenja()].end(), obrisiMe),_indeksPoDatumu[obrisiMe->DatumRodjenja()].end());
+    _indeksPoRodjendanu[obrisiMe->DatumRodjenja().redniBroj()].erase(std::remove(_indeksPoRodjendanu[obrisiMe->DatumRodjenja().redniBroj()].begin(),_indeksPoDatumu[obrisiMe->DatumRodjenja()].end(), obrisiMe),_indeksPoRodjendanu[obrisiMe->DatumRodjenja().redniBroj()].end());
+    _indeksPoSifriOsoba.erase(obrisiMe->Sifra());
+
+    //ovo ce pozvati destruktor za osobu, koji ce potom pozvati destruktore svih relacija koje su vezane sa tom osobom, kao i izvrisiti uklanjanje internih veza iz osobe
+    delete obrisiMe;
+
+    return true;
+}
+
+bool PorodicnoStablo::UkloniRelacijuPoSifri(const short sifra)
+{
+    Relacija* obrisiMe=nadjiRelacijuPoSifri(sifra);
+    if(obrisiMe==nullptr)return false;
+    _sveRelacije.erase(std::remove(_sveRelacije.begin(), _sveRelacije.end(), obrisiMe), _sveRelacije.end());
+    _indeksPoSifriRelacija.erase(obrisiMe->Sifra());
+    delete obrisiMe;
+    return true;
+}
+
+Relacija* PorodicnoStablo::nadjiRelacijuPoSifri(const short sifra){
+
+    if(_indeksPoSifriRelacija.find(sifra)==_indeksPoSifriRelacija.end())
+        return nullptr;//onda nema te relacije
+    else return _indeksPoSifriRelacija[sifra];
+}
+
 /*
 Osoba* _kljucnaOsoba;//osoba koja je okosnica ovog porodicnog stabla tj na kojoj je fokus naseg stabla (svi njeni rodjaci i supruznici su prikazani, ostali su redukovani do na prvi stepen)
 std::vector<Osoba*> _sveOsobe;//vektor sa pokazivacima na sve osobe
@@ -149,6 +194,8 @@ std::vector<Relacija*> _sveRelacije;//vektor koji sadrzi pokazivace na objekte r
 std::map<std::string, std::vector<Osoba*> > _indeksPoImenu;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
 std::map<Datum, std::vector<Osoba*> > _indeksPoDatumu;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
 std::map<int, std::vector<Osoba*> > _indeksPoRodjendanu;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
+std::map<short int,Osoba*> _indeksPoSifriOsobe
+std::map<short int, Relacija*> _indeksPoSifriRelacije
 */
 
 
