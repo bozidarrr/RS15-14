@@ -1,7 +1,7 @@
 #include "porodicnostablo.h"
 
 PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,char pol,std::string datum_rodjenja,std::string datum_smrti)
-    :_kljucnaOsoba(ime,prezime,pol,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),_sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu()
+    :_kljucnaOsoba(ime,prezime,pol,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),_sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu(),_indeksPoSifriOsoba(),_indeksPoSifriRelacija()
 {
     _sveOsobe.push_back(&_kljucnaOsoba);
     _indeksPoImenu[_kljucnaOsoba.Ime()]=std::vector<Osoba *>();
@@ -10,6 +10,7 @@ PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,char pol,st
     _indeksPoDatumu[_kljucnaOsoba.DatumRodjenja()].push_back(&_kljucnaOsoba);
     _indeksPoRodjendanu[_kljucnaOsoba.DatumRodjenja().redniBroj()]=std::vector<Osoba *>();
     _indeksPoRodjendanu[_kljucnaOsoba.DatumRodjenja().redniBroj()].push_back(&_kljucnaOsoba);
+    _indeksPoSifriOsoba[_kljucnaOsoba.Sifra()]=&_kljucnaOsoba;
 
 }
 
@@ -20,6 +21,8 @@ PorodicnoStablo::~PorodicnoStablo()
     _indeksPoRodjendanu.clear();
     _indeksPoDatumu.clear();
     _indeksPoImenu.clear();
+    _indeksPoSifriOsoba.clear();
+    _indeksPoSifriRelacija.clear();
     std::vector<Osoba*>::iterator b=_nepovezane.begin();
     std::vector<Osoba*>::iterator e=_nepovezane.end();
     for(;b!=e;b++)delete *b;
@@ -40,6 +43,9 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime,char 
     int rbroj=tren->DatumRodjenja().redniBroj();
     if(_indeksPoRodjendanu.find(rbroj)==_indeksPoRodjendanu.end())_indeksPoRodjendanu[rbroj]=std::vector<Osoba*>();
     _indeksPoRodjendanu[rbroj].push_back(tren);
+
+    if(_indeksPoSifriOsoba.find(tren->Sifra())==_indeksPoSifriOsoba.end())_indeksPoSifriOsoba[tren->Sifra()]=tren;
+    else {delete tren; return -1;}//jer je neki problem nastao, dodajemo dve osobe sa istom sifrom!
 
     return tren->Sifra();
 }
@@ -78,6 +84,8 @@ short int PorodicnoStablo::PoveziOsobe(Osoba *prva,  Osoba *druga, Odnos srodstv
         Supruznik *nov=new Supruznik;
         prva->Supruznici().push_back(nov);
         druga->Supruznici().push_back(nov);
+        if(_indeksPoSifriRelacija.find(nov->Sifra())==_indeksPoSifriRelacija.end())_indeksPoSifriRelacija[nov->Sifra()]=nov;
+        else {delete nov; return -1;}
         return nov->Sifra();
         break;
     }
@@ -90,13 +98,15 @@ short int PorodicnoStablo::PoveziOsobe(Osoba *prva,  Osoba *druga, Odnos srodstv
 
 Osoba* PorodicnoStablo::nadjiOsobuPoSifri(const short sifra)
 {
-    std::vector<Osoba *>::iterator nadjena=std::find_if(_nepovezane.begin(),_nepovezane.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;});
+    /*    std::vector<Osoba *>::iterator nadjena=std::find_if(_nepovezane.begin(),_nepovezane.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;});
     if(nadjena!=_nepovezane.end())return *nadjena;
 
     nadjena=std::find_if(_sveOsobe.begin(),_sveOsobe.end(),[sifra](Osoba* ova){return (ova->Sifra())==sifra;});
     if(nadjena!=_sveOsobe.end())return *nadjena;
-
-    return nullptr;
+*/
+    if(_indeksPoSifriOsoba.find(sifra)==_indeksPoSifriOsoba.end())
+        return nullptr;//onda nema te osobe
+    else return _indeksPoSifriOsoba[sifra];
 
 }
 
