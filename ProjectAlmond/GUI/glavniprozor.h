@@ -31,9 +31,13 @@ public:
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
 
-    static void promeniSelektovanu(short int novaSifra);
+    void promeniSelektovanu(short int novaSifra);
 
-    static void popuniInformacije();
+    void popuniInformacije();
+
+    void postaviSifru1(short int nova);
+    void postaviSifru2(short int nova);
+    void povezi();
 
 
 private:
@@ -50,10 +54,6 @@ private:
     QButtonGroup *grpRelacije;
     QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditeljDete;
 
-    //QButtonGroup *grpOsobe;
-
-    QTextBrowser *_osobaInfo;
-
     QGraphicsScene* scena;
     QDrag *drag;
     int ind=-1;
@@ -64,6 +64,8 @@ private:
     QPixmap rdpix;
 
     Unetiosobu u;
+
+    short int sifra1, sifra2;
 
     static short int selektovana_sifra;
 

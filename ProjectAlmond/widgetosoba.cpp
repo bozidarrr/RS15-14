@@ -3,25 +3,12 @@
 #include "GUI/glavniprozor.h"
 #include <iostream>
 
-WidgetOsoba::WidgetOsoba(short int sifra, QWidget *parent) :
+WidgetOsoba::WidgetOsoba(short int sifra, GlavniProzor *gp, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetOsoba),
-    _sifra(sifra)
+    _sifra(sifra),
+    w(gp)
 {
-    /*
-    btnOsoba = new QPushButton(this);
-
-    btnOsoba->setFlat(true);
-    btnOsoba->setGeometry(this->geometry().x(), this->geometry().y(),
-                          this->geometry().width(), this->geometry().height());
-    btnOsoba->setText("");
-
-    //connect(tbOsoba,SIGNAL(pressed()),this,SLOT(postavi_na_0()));
-
-    connect(btnOsoba, SIGNAL(clicked()),this,SLOT(on_btnOsoba_clicked()));
-    connect(btnOsoba, SIGNAL(pressed()),this,SLOT(on_btnOsoba_pressed()));
-    connect(btnOsoba, SIGNAL(released()),this,SLOT(on_btnOsoba_released()));*/
-
 
     ui->setupUi(this);
 }
@@ -34,8 +21,7 @@ WidgetOsoba::~WidgetOsoba()
 void WidgetOsoba::postaviImePrezime(const std::string &ip)
 {
     QString q_ip = QString::fromStdString(ip);
-    //btnOsoba->setText(q_ip);
-    //btnOsoba->show();
+    ui->btnOsoba->setText(q_ip);
 }
 
 
@@ -46,12 +32,15 @@ void WidgetOsoba::on_btnOsoba_clicked()
     //samo kako da odavde uticem na parent-a? Biso javljaj ako znas!
 
     //iz engina - nesto ovako : Osoba* poSifri(_sifra) ---> dobijemo podatke
+    w->promeniSelektovanu(_sifra);
+    w->popuniInformacije();
     this->setToolTip("Ili da ovako ispisemo detalje?");
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()
 {
     //pocinjemo povezivanje sa drugom osobom - tj kreiranje relacije u zavisnosti od radio buttona
+    w->postaviSifru1(_sifra);
 }
 
 void WidgetOsoba::on_btnOsoba_released()
@@ -61,8 +50,11 @@ void WidgetOsoba::on_btnOsoba_released()
     //a on vraca podatke i poziva iscrtavanje relacije
 
     //recimo
-}
 
+    w->postaviSifru2(_sifra);
+    w->povezi();
+}
+/*
 void WidgetOsoba::on_btnOsoba_toggled(bool checked)
 {
     if (checked)
@@ -73,3 +65,4 @@ void WidgetOsoba::on_btnOsoba_toggled(bool checked)
     GlavniProzor::popuniInformacije();
         //std::cout<<"Radi"<<std::endl;
 }
+*/

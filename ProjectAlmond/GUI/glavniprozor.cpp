@@ -3,12 +3,17 @@
 #include "unetiosobu.h"
 #include "widgetosoba.h"
 #include <QGraphicsScene>
+#include <QHBoxLayout>
+
+#include <QLabel>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GlavniProzor)
 {
     //selektovana_sifra = -1;
+    sifra1 = -1;
+    sifra2 = -1;
 
     setAcceptDrops(true);
     ui->setupUi(this);
@@ -39,22 +44,18 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     toolbar->addWidget(rbBratSestra);
     toolbar->addWidget(rbRoditeljDete);
 
-    //grpOsobe = new QButtonGroup(scena);
-
-
-
     tbMZ=new QToolButton();
     tbMZ->setIcon(QIcon(mzpix));
-    toolbar->addWidget(tbMZ);
-    toolbar->addSeparator();
+    //toolbar->addWidget(tbMZ);
+    //toolbar->addSeparator();
     tbBS=new QToolButton();
     tbBS->setIcon(QIcon(bspix));
-    toolbar->addWidget(tbBS);
-    toolbar->addSeparator();
+    //toolbar->addWidget(tbBS);
+    //toolbar->addSeparator();
     tbRD=new QToolButton();
     tbRD->setIcon(QIcon(rdpix));
-    toolbar->addWidget(tbRD);
-    toolbar->addSeparator();
+    //toolbar->addWidget(tbRD);
+    //toolbar->addSeparator();
 
 
     // toolbar->addAction(QIcon(osobapix), "Osoba", ui->Stablo,"");
@@ -161,6 +162,7 @@ void GlavniProzor::dropEvent(QDropEvent* pe)
 
     }
 }
+
 void GlavniProzor::napravi_Osobu(){
 
 
@@ -310,12 +312,16 @@ void GlavniProzor::dodajNovuOsobu()
     //bice na drag&drop, ne ovako, samo da smislim sve do kraja...
     //scena->addWidget(new WidgetOsoba(123));
 
-    WidgetOsoba *novaOsoba = new WidgetOsoba(123);
+    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this);
+    novaOsoba->setGeometry(0,0,120,40);
     novaOsoba->postaviImePrezime("Pera Peric");
 
     //grpOsobe->addButton(novaOsoba);
 
-    scena->addWidget(novaOsoba);
+    ui->gridStablo->addWidget(novaOsoba,0,0);
+    ui->gridStablo->addWidget(new WidgetOsoba(2, this),1,1);
+    ui->gridStablo->addWidget(new WidgetOsoba(3, this),3,6);
+
 
 }
 
@@ -339,10 +345,35 @@ void GlavniProzor::popuniInformacije()
 
     if (selektovana_sifra > 0)
         //ui->osobaInfo->setText("Ovo je neka stvarna osoba");
-        std::cout<<"postoji"<<std::endl;
+        std::cout<<selektovana_sifra<<std::endl;
     else
         //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
         std::cout<<"ne postoji"<<std::endl;
+
+    ui->lineImePrezime->setText("Pera Peric");
+    QString proba = QString::fromStdString(std::to_string(selektovana_sifra));
+    ui->lineKontakt->setText(proba);
+
+    //ui->osobaInfo->addWidget(new QLabel("Informacije"));
+}
+
+void GlavniProzor::postaviSifru1(short nova)
+{
+    sifra1 = nova;
+}
+
+void GlavniProzor::postaviSifru2(short nova)
+{
+    sifra2 = nova;
+}
+
+void GlavniProzor::povezi()
+{
+    //ovde pozivamo konstruktor za relaciju
+    //prema radio buttonu
+    //za sifra1, sifra2
+    //ako je sve ok
+    //iscrtava se i ta relacija
 }
 
 short int GlavniProzor::selektovana_sifra = -1;
