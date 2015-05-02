@@ -20,9 +20,9 @@ SOURCES += main.cpp\
     GUI/unetiosobu.cpp \
     engine/porodicnostablo.cpp \
     engine/relacija.cpp \
-    widgetosoba.cpp \
     GUI/glavniprozor2.cpp \
-    GUI/dialognovaosoba.cpp
+    GUI/dialognovaosoba.cpp \
+    GUI/widgetosoba.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -33,9 +33,9 @@ HEADERS  += \
     GUI/unetiosobu.h \
     GUI/WidgetDrag.h \
     engine/porodicnostablo.h \
-    widgetosoba.h \
     GUI/glavniprozor2.h \
-    GUI/dialognovaosoba.h
+    GUI/dialognovaosoba.h \
+    GUI/widgetosoba.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui \
@@ -45,3 +45,5 @@ FORMS    += glavniprozor.ui \
 
 RESOURCES += \
     slike.qrc
+
+OTHER_FILES +=

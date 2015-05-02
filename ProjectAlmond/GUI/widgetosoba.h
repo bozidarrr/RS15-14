@@ -21,11 +21,15 @@ class WidgetOsoba : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetOsoba(short int sifra, const QString &ime, const QString &prezime,
+    explicit WidgetOsoba(short int sifra, int x, int y,const QString &ime, const QString &prezime,
                          GlavniProzor2 *gp, QWidget *parent = 0);
     ~WidgetOsoba();
 
     void postaviImePrezime(const std::string &ip);
+
+    int X()const;
+
+    int Y()const;
 
 private slots:
     void on_btnOsoba_clicked();
@@ -36,10 +40,13 @@ private slots:
 
     //void on_btnOsoba_toggled(bool checked);
 
+
 private:
     Ui::WidgetOsoba *ui;
 
     short int _sifra;
+    int _x;
+    int _y;
     //GlavniProzor *w;
     GlavniProzor2 *w;
 };

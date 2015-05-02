@@ -8,8 +8,12 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    sifra1 = -1;
-    sifra2 = -1;
+    _sifra1 = -1;
+    _sifra2 = -1;
+
+    QIcon icon(":images/ProjectAlmond.ico");
+    this->setWindowIcon(icon);
+    this->setWindowTitle("Project Almond");
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
@@ -30,13 +34,13 @@ GlavniProzor2::~GlavniProzor2()
 
 void GlavniProzor2::promeniSelektovanu(short novaSifra)
 {
-    selektovana_sifra = novaSifra;
+    _selektovanaSifra = novaSifra;
 }
 
 void GlavniProzor2::popuniInformacije()
 {
-    Osoba *osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
-    ui->label->setText(QString::fromStdString(osoba->Ime()));//i sve ostalo
+    Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
+    ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
 }
 
 void GlavniProzor2::kreirajOpcije()
@@ -46,44 +50,65 @@ void GlavniProzor2::kreirajOpcije()
 
 void GlavniProzor2::kreirajToolbar()
 {
+
     toolbar = addToolBar(tr("Alati"));
+
+    grpToolBar=new QButtonGroup();
     tbOsoba = new QToolButton();
+    tbOsoba->setCheckable(true);
+    tbOsoba->setText("Nova osoba");
+    tbOsoba->setToolTip(tr("Kreirajte novu osobu"));
+    tbOsoba->setFocusPolicy(Qt::NoFocus);
     //tbOsoba->setIcon(ikonica); za sad je tekst
     //tbOsoba->setShortcut();
-    //tbOsoba->setCheckable(true);
-    tbOsoba->setText("Nova osoba");
-    toolbar->addWidget(tbOsoba);
 
-    toolbar->addSeparator();
-//<RadioButton Style="{StaticResource {x:Type ToggleButton}}" />
-    grpRelacije = new QButtonGroup();
-    rbMuzZena = new QRadioButton("Supruznik");
-    rbMuzZena->setChecked(true);
-    rbBratSestra = new QRadioButton("Brat/Sestra");
-    rbRoditelj = new QRadioButton("Roditelj");
-    rbDete = new QRadioButton("Dete");
-    grpRelacije->addButton(rbMuzZena);
-    grpRelacije->addButton(rbBratSestra);
-    grpRelacije->addButton(rbRoditelj);
-    grpRelacije->addButton(rbDete);
+    tbMuzZena = new QToolButton();
+    tbMuzZena->setText("Supruznik");
+    tbMuzZena->setCheckable(true);
+    tbMuzZena->setToolTip(tr("Kreirajte novi odnos dva supruznika"));
+    tbMuzZena->setFocusPolicy(Qt::NoFocus);
 
-    toolbar->addWidget(rbMuzZena);
-    toolbar->addWidget(rbBratSestra);
-    toolbar->addWidget(rbRoditelj);
-    toolbar->addWidget(rbDete);
+    tbBratSestra = new QToolButton();
+    tbBratSestra->setText("Brat/Sestra");
+    tbBratSestra->setCheckable(true);
+    tbBratSestra->setToolTip(tr("Kreirajte novi odnos dvoje brace/sestara"));
+    tbBratSestra->setFocusPolicy(Qt::NoFocus);
 
-    toolbar->addSeparator();
+    tbRoditeljDete = new QToolButton();
+    tbRoditeljDete->setText("Roditelj/Dete");
+    tbRoditeljDete->setCheckable(true);
+    tbRoditeljDete->setToolTip(tr("Kreirajte novi odnos tipa roditelj-dete"));
+    tbRoditeljDete->setFocusPolicy(Qt::NoFocus);
 
     tbPomeranje = new QToolButton();
     tbPomeranje->setText("Pomeri");
-    tbPomeranje->setToolTip("Sluzice za pomeranje stvari nakon sto su smestene");
-    //stavicemo slicicu
-    tbDetalji = new QToolButton();
-    tbDetalji->setText("?");
-    tbDetalji->setToolTip("Jasno valjda, da ispise detalje o onome na sta se posle klikne");
+    tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
+    tbPomeranje->setCheckable(true);
+    tbPomeranje->setFocusPolicy(Qt::NoFocus);
 
+    tbDetalji = new QToolButton();
+    tbDetalji->setText("Detalji");
+    tbDetalji->setCheckable(true);
+    tbDetalji->setToolTip(tr("Detalji o odabranoj osobi"));
+    tbDetalji->setFocusPolicy(Qt::NoFocus);
+
+    grpToolBar->addButton(tbMuzZena);
+    grpToolBar->addButton(tbBratSestra);
+    grpToolBar->addButton(tbRoditeljDete);
+    grpToolBar->addButton(tbOsoba);
+    grpToolBar->addButton(tbPomeranje);
+    grpToolBar->addButton(tbDetalji);
+
+    toolbar->addWidget(tbOsoba);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbMuzZena);
+    toolbar->addWidget(tbBratSestra);
+    toolbar->addWidget(tbRoditeljDete);
+    toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbDetalji);
+
+
 
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);//i recimo
@@ -151,10 +176,10 @@ void GlavniProzor2::dodajNovuOsobu()
         else
             ui->label->setText("Uspelo");
 
-        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra, ime, prezime, this, ui->stabloOkvir);
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,123,123, ime, prezime, this, ui->stabloOkvir);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
-        novaOsoba->move(123,123);//ovde ce se prosledjivati point koji je dobijen klikom
+        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());//ovde ce se prosledjivati point koji je dobijen klikom
         novaOsoba->show();
     }
 
@@ -163,12 +188,12 @@ void GlavniProzor2::dodajNovuOsobu()
 
 void GlavniProzor2::postaviSifru1(short nova)
 {
-    sifra1 = nova;
+    _sifra1 = nova;
 }
 
 void GlavniProzor2::postaviSifru2(short nova)
 {
-    sifra2 = nova;
+    _sifra2 = nova;
 }
 
 void GlavniProzor2::poveziOsobe()
@@ -182,4 +207,4 @@ void GlavniProzor2::poveziOsobe()
     //short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, Odnos::SUPRUZNIK);
 }
 
-short int GlavniProzor2::selektovana_sifra = -1;
+short int GlavniProzor2::_selektovanaSifra = -1;

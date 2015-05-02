@@ -49,18 +49,19 @@ public:
 private:
     Ui::GlavniProzor2 *ui;
 
+    QButtonGroup *grpToolBar;
     QToolButton *tbOsoba;
-    QButtonGroup *grpRelacije;
-    QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
+    QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
     QToolButton *tbPomeranje, *tbDetalji;
     QToolBar *toolbar;
 
-
-
     PorodicnoStablo *stablo;
 
-    short int sifra1, sifra2;
-    static short int selektovana_sifra;
+
+
+    short int _sifra1, _sifra2;
+    static short int _selektovanaSifra;
+
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
