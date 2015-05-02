@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QPushButton>
+#include <QDate>
+#include <QString>
+#include <QChar>
 
 namespace Ui {
 class DialogNovaOsoba;
@@ -16,6 +19,7 @@ public:
     explicit DialogNovaOsoba(QWidget *parent = 0);
     ~DialogNovaOsoba();
 
+    void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
 private slots:
     void promenaUnosa();
 

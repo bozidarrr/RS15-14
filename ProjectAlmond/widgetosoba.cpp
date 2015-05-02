@@ -3,13 +3,16 @@
 #include "GUI/glavniprozor.h"
 #include <iostream>
 
-WidgetOsoba::WidgetOsoba(short int sifra, GlavniProzor2 *gp, QWidget *parent) :
+WidgetOsoba::WidgetOsoba(short int sifra, const QString &ime, const QString &prezime, GlavniProzor2 *gp, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetOsoba),
     _sifra(sifra),
     w(gp)
 {
-
+    //QString tmp(ime);
+    //tmp.append(" ");
+    //tmp.append(prezime);
+    //ui->btnOsoba->setText(ime);
     ui->setupUi(this);
 }
 

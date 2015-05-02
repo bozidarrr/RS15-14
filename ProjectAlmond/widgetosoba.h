@@ -21,7 +21,8 @@ class WidgetOsoba : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetOsoba(short int sifra, GlavniProzor2 *gp, QWidget *parent = 0);
+    explicit WidgetOsoba(short int sifra, const QString &ime, const QString &prezime,
+                         GlavniProzor2 *gp, QWidget *parent = 0);
     ~WidgetOsoba();
 
     void postaviImePrezime(const std::string &ip);
