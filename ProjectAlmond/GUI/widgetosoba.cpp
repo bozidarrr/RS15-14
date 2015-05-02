@@ -3,10 +3,10 @@
 #include "GUI/glavniprozor.h"
 #include <iostream>
 
-WidgetOsoba::WidgetOsoba(short int sifra, const QString &ime, const QString &prezime, GlavniProzor2 *gp, QWidget *parent) :
+WidgetOsoba::WidgetOsoba(short int sifra, int x, int y, const QString &ime, const QString &prezime, GlavniProzor2 *gp, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetOsoba),
-    _sifra(sifra),
+    _sifra(sifra),_x(x),_y(y),
     w(gp)
 {
     //QString tmp(ime);
@@ -19,6 +19,15 @@ WidgetOsoba::WidgetOsoba(short int sifra, const QString &ime, const QString &pre
 WidgetOsoba::~WidgetOsoba()
 {
     delete ui;
+}
+
+int WidgetOsoba::X()const{
+    return _x;
+}
+
+int WidgetOsoba::Y()const
+{
+    return _y;
 }
 
 void WidgetOsoba::postaviImePrezime(const std::string &ip)

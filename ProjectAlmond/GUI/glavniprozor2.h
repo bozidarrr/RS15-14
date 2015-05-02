@@ -11,14 +11,14 @@
 #include "widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
 #include <string>
-
 #include <iostream>
-
+#include "ui_glavniprozor2.h"
+#include "okvirstabla.h"
 namespace Ui {
 class GlavniProzor2;
 }
 
-class GlavniProzor2 : public QMainWindow
+class GlavniProzor2 : public QMainWindow, private Ui::GlavniProzor2
 {
     Q_OBJECT
 
@@ -43,30 +43,32 @@ public:
     void kreirajOpcije();
     void kreirajToolbar();
     void krerajMestoZaInfo();
-
+    void kreirajPlatnoZaCrtanje();
 
 
 private:
     Ui::GlavniProzor2 *ui;
 
+    QButtonGroup *grpToolBar;
     QToolButton *tbOsoba;
-    QButtonGroup *grpRelacije;
-    QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
+    QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
     QToolButton *tbPomeranje, *tbDetalji;
     QToolBar *toolbar;
 
-
-
     PorodicnoStablo *stablo;
 
-    short int sifra1, sifra2;
-    static short int selektovana_sifra;
+    okvirStabla *stabloOkvir;
+
+    short int _sifra1, _sifra2;
+    static short int _selektovanaSifra;
+
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
 public slots:
-    void dodajNovuOsobu();
+    void dodajNovuOsobu(int x, int y);
+    void izvrsiAkciju();
 };
 
 #endif // GLAVNIPROZOR2_H
