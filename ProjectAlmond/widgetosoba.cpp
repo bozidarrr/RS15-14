@@ -27,11 +27,6 @@ void WidgetOsoba::postaviImePrezime(const std::string &ip)
 
 void WidgetOsoba::on_btnOsoba_clicked()
 {
-    //ispisujemo informacije u osobi tamo sa leve strane
-
-    //samo kako da odavde uticem na parent-a? Biso javljaj ako znas!
-
-    //iz engina - nesto ovako : Osoba* poSifri(_sifra) ---> dobijemo podatke
     w->promeniSelektovanu(_sifra);
     w->popuniInformacije();
     //this->setToolTip("Ili da ovako ispisemo detalje?");
@@ -40,6 +35,7 @@ void WidgetOsoba::on_btnOsoba_clicked()
 void WidgetOsoba::on_btnOsoba_pressed()
 {
     //pocinjemo povezivanje sa drugom osobom - tj kreiranje relacije u zavisnosti od radio buttona
+    //nece moci ovako jer se ovo desava i na clicked :P
     w->postaviSifru1(_sifra);
 }
 
