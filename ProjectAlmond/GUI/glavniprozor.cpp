@@ -343,15 +343,15 @@ void GlavniProzor::dodajNovuOsobu()
     //Widget *novaOsoba = new WidgetOsoba(sifra, this)
     //i negde je smestimo xD
 
-    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->okvirZaStablo);
-    novaOsoba->postaviImePrezime("Pera Peric");
+    //WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->okvirZaStablo);
+    //novaOsoba->postaviImePrezime("Pera Peric");
 
     //WidgetOsoba *nova = new WidgetOsoba(2, this, ui->okvirZaStablo);
     //novaOsoba->postaviImePrezime("Zika Dinastija");
 
-    novaOsoba->show();
+    //novaOsoba->show();
     //nova->show();
-    ui->okvirZaStablo->repaint();
+    //ui->okvirZaStablo->repaint();
 
 
 }

@@ -8,6 +8,7 @@
 #include <QToolButton>
 #include <QRadioButton>
 #include <QDockWidget>
+#include "widgetosoba.h"
 
 namespace Ui {
 class GlavniProzor2;
@@ -54,6 +55,8 @@ private:
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
+public slots:
+    void dodajNovuOsobu();
 };
 
 #endif // GLAVNIPROZOR2_H

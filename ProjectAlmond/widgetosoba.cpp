@@ -3,7 +3,7 @@
 #include "GUI/glavniprozor.h"
 #include <iostream>
 
-WidgetOsoba::WidgetOsoba(short int sifra, GlavniProzor *gp, QWidget *parent) :
+WidgetOsoba::WidgetOsoba(short int sifra, GlavniProzor2 *gp, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetOsoba),
     _sifra(sifra),
@@ -48,7 +48,7 @@ void WidgetOsoba::on_btnOsoba_released()
     //recimo
 
     w->postaviSifru2(_sifra);
-    w->povezi();
+    w->poveziOsobe();
 }
 /*
 void WidgetOsoba::on_btnOsoba_toggled(bool checked)

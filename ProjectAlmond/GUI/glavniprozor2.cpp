@@ -15,6 +15,8 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 
     kreirajToolbar();
 
+    connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
+
     //kreirajOpcije();
 
 }
@@ -98,6 +100,24 @@ void GlavniProzor2::krerajMestoZaInfo()
     info->setAllowedAreas(Qt::RightDockWidgetArea
                                       | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
+}
+
+void GlavniProzor2::dodajNovuOsobu()
+{
+    //iscitamo podatke preko onog dijaloga ili kako vec
+    // -> ime, prezime, pol, datume
+
+    // short int sifra = stablo->DodajOsobu(...);
+
+    //onda
+    //Widget *novaOsoba = new WidgetOsoba(sifra, this)
+    //i negde je smestimo xD
+
+    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->stabloOkvir);
+    novaOsoba->postaviImePrezime("Pera Peric");
+
+    novaOsoba->show();
+    ui->stabloOkvir->repaint();
 }
 
 void GlavniProzor2::postaviSifru1(short nova)
