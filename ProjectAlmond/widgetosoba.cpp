@@ -34,7 +34,7 @@ void WidgetOsoba::on_btnOsoba_clicked()
     //iz engina - nesto ovako : Osoba* poSifri(_sifra) ---> dobijemo podatke
     w->promeniSelektovanu(_sifra);
     w->popuniInformacije();
-    this->setToolTip("Ili da ovako ispisemo detalje?");
+    //this->setToolTip("Ili da ovako ispisemo detalje?");
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()
