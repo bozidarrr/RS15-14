@@ -38,9 +38,6 @@ private:
 
     short int _sifra;
     GlavniProzor *w;
-
-
-
 };
 
 #endif // WIDGETOSOBA_H

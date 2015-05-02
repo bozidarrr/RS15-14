@@ -52,6 +52,9 @@ private:
     QToolButton * tbMZ;
     QToolButton * tbRD;
 
+    QToolButton *tbPomeranje;
+    QToolButton *tbDetalji;
+
     QButtonGroup *grpRelacije;
     QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
 
@@ -78,6 +81,10 @@ private:
     void poveziBS();
     void poveziRD();
            //vector <QPoint,QPushButton*> m_osobePoz;
+
+    //DODATI!!!
+    //vector<sifra_osobe, pozicija_osobe>
+    //vector<sifra_relacije, pozicija_relacije>
 
 private Q_SLOTS:
        void postavi_na_0(){ind=0;}

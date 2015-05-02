@@ -54,6 +54,19 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     toolbar->addWidget(rbRoditelj);
     toolbar->addWidget(rbDete);
 
+    toolbar->addSeparator();
+
+    tbPomeranje = new QToolButton();
+    tbPomeranje->setText("Pomeri");
+    tbPomeranje->setToolTip("Sluzice za pomeranje stvari nakon sto su smestene");
+    //stavicemo slicicu
+    tbDetalji = new QToolButton();
+    tbDetalji->setText("?");
+    tbDetalji->setToolTip("Jasno valjda, da ispise detalje o onome na sta se posle klikne");
+
+    toolbar->addWidget(tbPomeranje);
+    toolbar->addWidget(tbDetalji);
+
     tbMZ=new QToolButton();
     tbMZ->setIcon(QIcon(mzpix));
     //toolbar->addWidget(tbMZ);
@@ -330,12 +343,15 @@ void GlavniProzor::dodajNovuOsobu()
     //Widget *novaOsoba = new WidgetOsoba(sifra, this)
     //i negde je smestimo xD
 
-    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this);
+    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->okvirZaStablo);
     novaOsoba->postaviImePrezime("Pera Peric");
 
-    ui->gridStablo->addWidget(novaOsoba,0,0);
-    ui->gridStablo->addWidget(new WidgetOsoba(2, this),1,1);
-    ui->gridStablo->addWidget(new WidgetOsoba(3, this),3,6);
+    //WidgetOsoba *nova = new WidgetOsoba(2, this, ui->okvirZaStablo);
+    //novaOsoba->postaviImePrezime("Zika Dinastija");
+
+    novaOsoba->show();
+    //nova->show();
+    ui->okvirZaStablo->repaint();
 
 
 }
@@ -353,11 +369,11 @@ void GlavniProzor::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor::popuniInformacije()
 {
-    if (selektovana_sifra > 0)
-        std::cout<<selektovana_sifra<<std::endl;
-    else
-        //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
-        std::cout<<"ne postoji"<<std::endl;
+//    if (selektovana_sifra > 0)
+//        std::cout<<selektovana_sifra<<std::endl;
+//    else
+//        //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
+//        std::cout<<"ne postoji"<<std::endl;
 
     //Osoba* osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
     // if  == nullptr greska
@@ -391,5 +407,4 @@ void GlavniProzor::povezi()
 }
 
 short int GlavniProzor::selektovana_sifra = -1;
-
 
