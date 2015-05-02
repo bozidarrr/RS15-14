@@ -1,5 +1,6 @@
 #include "GUI/glavniprozor2.h"
 #include "ui_glavniprozor2.h"
+#include "GUI/dialognovaosoba.h"
 
 GlavniProzor2::GlavniProzor2(QWidget *parent) :
     QMainWindow(parent),
@@ -113,11 +114,31 @@ void GlavniProzor2::dodajNovuOsobu()
     //Widget *novaOsoba = new WidgetOsoba(sifra, this)
     //i negde je smestimo xD
 
-    WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->stabloOkvir);
-    novaOsoba->postaviImePrezime("Pera Peric");
+    //WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->stabloOkvir);
+    //novaOsoba->postaviImePrezime("Pera Peric");
 
-    novaOsoba->show();
-    ui->stabloOkvir->repaint();
+    //novaOsoba->show();
+    //ui->stabloOkvir->repaint();
+    DialogNovaOsoba *d = new DialogNovaOsoba(this);
+    if (d->exec())
+    {/*citamo*/
+
+        /*
+            u knjizi pristupa direktno lineEditu, to je malo bzvz
+
+            saljemo enginu
+
+            pamtimo vracenu sifru osobe
+
+            kreiramo widget osobu
+
+            tj zahtevamo klik na panel gde cemo je smestiti
+        */
+
+
+    }
+
+    delete d;
 }
 
 void GlavniProzor2::postaviSifru1(short nova)

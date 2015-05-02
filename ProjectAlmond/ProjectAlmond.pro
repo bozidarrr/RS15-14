@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     engine/porodicnostablo.cpp \
     engine/relacija.cpp \
     widgetosoba.cpp \
-    GUI/glavniprozor2.cpp
+    GUI/glavniprozor2.cpp \
+    GUI/dialognovaosoba.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -33,12 +34,14 @@ HEADERS  += \
     GUI/WidgetDrag.h \
     engine/porodicnostablo.h \
     widgetosoba.h \
-    GUI/glavniprozor2.h
+    GUI/glavniprozor2.h \
+    GUI/dialognovaosoba.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui \
     widgetosoba.ui \
-    glavniprozor2.ui
+    glavniprozor2.ui \
+    dialognovaosoba.ui
 
 RESOURCES += \
     slike.qrc

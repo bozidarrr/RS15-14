@@ -9,6 +9,7 @@
 #include <QRadioButton>
 #include <QDockWidget>
 #include "widgetosoba.h"
+#include "GUI/dialognovaosoba.h"
 
 namespace Ui {
 class GlavniProzor2;
@@ -45,6 +46,7 @@ private:
     QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
     QToolButton *tbPomeranje, *tbDetalji;
     QToolBar *toolbar;
+
 
 
     PorodicnoStablo *stablo;
