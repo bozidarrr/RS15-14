@@ -18,12 +18,13 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
 
+
     kreirajToolbar();
     krerajMestoZaInfo();
-
-    connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
-
+    kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
+
+
 
 }
 
@@ -43,9 +44,22 @@ void GlavniProzor2::popuniInformacije()
     ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
 }
 
+void GlavniProzor2::kreirajPlatnoZaCrtanje()
+{
+    stabloOkvir=new okvirStabla(ui->stabloFrame);
+
+    connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(izvrsiAkciju()));
+
+}
+
 void GlavniProzor2::kreirajOpcije()
 {
-    //snimi, otvori, sve sto treba
+
+
+
+
+
+
 }
 
 void GlavniProzor2::kreirajToolbar()
@@ -127,7 +141,33 @@ void GlavniProzor2::krerajMestoZaInfo()
     addDockWidget(Qt::LeftDockWidgetArea, info);
 }
 
-void GlavniProzor2::dodajNovuOsobu()
+void GlavniProzor2::izvrsiAkciju()
+{
+
+
+    if(tbOsoba->isChecked()){
+        dodajNovuOsobu(stabloOkvir->X1(),stabloOkvir->Y1());
+    }
+    else if(tbBratSestra->isChecked()){
+
+
+    }
+    else if(tbMuzZena->isChecked()){
+
+    }
+    else if(tbRoditeljDete->isChecked()){
+
+    }
+    else if(tbDetalji->isChecked()){
+
+    }
+    else if(tbPomeranje->isChecked()){
+
+    }
+
+}
+
+void GlavniProzor2::dodajNovuOsobu(int x,int y)
 {
     //iscitamo podatke preko onog dijaloga ili kako vec
     // -> ime, prezime, pol, datume
@@ -176,7 +216,7 @@ void GlavniProzor2::dodajNovuOsobu()
         else
             ui->label->setText("Uspelo");
 
-        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,123,123, ime, prezime, this, ui->stabloOkvir);
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, ime, prezime, this, ui->stabloFrame);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
         novaOsoba->move(novaOsoba->X(),novaOsoba->Y());//ovde ce se prosledjivati point koji je dobijen klikom

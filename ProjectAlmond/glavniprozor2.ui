@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="stabloOkvir">
+   <widget class="QFrame" name="stabloFrame">
     <property name="geometry">
      <rect>
       <x>230</x>
