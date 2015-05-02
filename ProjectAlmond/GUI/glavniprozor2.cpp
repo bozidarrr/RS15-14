@@ -15,6 +15,7 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
 
     kreirajToolbar();
+    krerajMestoZaInfo();
 
     connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
 
@@ -34,11 +35,8 @@ void GlavniProzor2::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor2::popuniInformacije()
 {
-    //Osoba* osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
-    // if  == nullptr greska
-    //inace pisemo
-    //QString tmp = QString::fromStdString(osoba->Ime());
-    //pisemo u neki QLabel, QTextBrowser?
+    Osoba *osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
+    ui->label->setText(QString::fromStdString(osoba->Ime()));//i sve ostalo
 }
 
 void GlavniProzor2::kreirajOpcije()
@@ -98,6 +96,7 @@ void GlavniProzor2::krerajMestoZaInfo()
 {
     QDockWidget *info = new QDockWidget(tr("Informacije"));
     info->setWidget(ui->label);//i recimo
+    ui->label->setToolTip("Sredicu ovo :)");
     info->setAllowedAreas(Qt::RightDockWidgetArea
                                       | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
