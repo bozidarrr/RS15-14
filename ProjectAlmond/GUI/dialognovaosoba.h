@@ -19,6 +19,8 @@ public:
 private slots:
     void promenaUnosa();
 
+    void on_chkSmrt_stateChanged(int arg1);
+
 private:
     Ui::DialogNovaOsoba *ui;
 

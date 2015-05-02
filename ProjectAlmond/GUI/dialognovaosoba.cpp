@@ -10,7 +10,8 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
     ui->setupUi(this);
     setModal(true);
 
-
+    popuniDugmice();
+    postaviProvere();
 
 }
 
@@ -29,6 +30,7 @@ void DialogNovaOsoba::promenaUnosa()
 void DialogNovaOsoba::popuniDugmice()
 {
     ok = new QPushButton(tr("OK"));
+    ok->setEnabled(false);
     cancel = new QPushButton(tr("Ponisti"));
 
     ui->buttonBox->addButton(ok, QDialogButtonBox::AcceptRole);
@@ -36,6 +38,9 @@ void DialogNovaOsoba::popuniDugmice()
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    ok->show();
+    cancel->show();
 }
 
 void DialogNovaOsoba::postaviProvere()
@@ -50,4 +55,9 @@ void DialogNovaOsoba::postaviProvere()
     connect(ui->unosIme,SIGNAL(textChanged(QString)),this,SLOT(promenaUnosa()));
     connect(ui->unosPrezime,SIGNAL(textChanged(QString)),this,SLOT(promenaUnosa()));
     connect(ui->unosPol,SIGNAL(textChanged(QString)),this,SLOT(promenaUnosa()));
+}
+
+void DialogNovaOsoba::on_chkSmrt_stateChanged(int arg1)
+{
+    ui->UnosSmrt->setEnabled(ui->chkSmrt->checkState());
 }
