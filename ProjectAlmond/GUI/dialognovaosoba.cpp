@@ -20,6 +20,27 @@ DialogNovaOsoba::~DialogNovaOsoba()
     delete ui;
 }
 
+void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
+{
+//    ime = new QString(ui->unosIme->text());
+//    prezime = new QString(ui->unosPrezime->text());
+//    pol = new QString(ui->unosPol->text());
+//    rodjenje = new QDate(ui->unosRodjenje->date());
+//    if (ui->chkSmrt->checkState())
+//        smrt = new QDate(ui->UnosSmrt->date());
+//    else
+//        smrt = nullptr;
+    ime = ui->unosIme->text();
+    prezime = ui->unosPrezime->text();
+    pol = ui->unosPol->text();
+    rodjenje = ui->unosRodjenje->date();
+    if (ui->chkSmrt->checkState())
+           smrt = ui->UnosSmrt->date();
+//      else
+//           smrt = NULL;
+
+}
+
 void DialogNovaOsoba::promenaUnosa()
 {
     ok->setEnabled(ui->unosIme->hasAcceptableInput() &&

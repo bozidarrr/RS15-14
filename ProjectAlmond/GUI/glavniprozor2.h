@@ -10,6 +10,9 @@
 #include <QDockWidget>
 #include "widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
+#include <string>
+
+#include <iostream>
 
 namespace Ui {
 class GlavniProzor2;

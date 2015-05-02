@@ -134,8 +134,29 @@ void GlavniProzor2::dodajNovuOsobu()
 
             tj zahtevamo klik na panel gde cemo je smestiti
         */
+        QString ime, prezime;
+        QString pol; // Kako pretvoriti u char -- TO DO
+        QDate rodjenje, smrt;
+        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
+        std::string r = rodjenje.toString("dd.MM.yyyy.").toStdString();
+        std::string d;
+        if (smrt.isValid())
+            d = "";
+        else
+            d = smrt.toString("dd.MM.yyyy.").toStdString();
+        short int novaSifra = stablo->DodajOsobu(ime.toStdString(),
+                                                 prezime.toStdString(), 'm', r, d); //POL!
+        if (novaSifra < 0)
+            //nastao problem, obavestavamo korisnika, nece biti ovako naravno
+            ui->label->setText("Neuspelo dodavanje");
+        else
+            ui->label->setText("Uspelo");
 
-
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra, ime, prezime, this, ui->stabloOkvir);
+        std::string tmp = ime.toStdString() + " " + prezime.toStdString();
+        novaOsoba->postaviImePrezime(tmp);
+        novaOsoba->move(123,123);//ovde ce se prosledjivati point koji je dobijen klikom
+        novaOsoba->show();
     }
 
     delete d;
