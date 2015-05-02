@@ -32,7 +32,6 @@ void WidgetOsoba::on_btnOsoba_clicked()
 {
     w->promeniSelektovanu(_sifra);
     w->popuniInformacije();
-    //this->setToolTip("Ili da ovako ispisemo detalje?");
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()

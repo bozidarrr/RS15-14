@@ -35,11 +35,8 @@ void GlavniProzor2::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor2::popuniInformacije()
 {
-    //Osoba* osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
-    // if  == nullptr greska
-    //inace pisemo
-    //QString tmp = QString::fromStdString(osoba->Ime());
-    //pisemo u neki QLabel, QTextBrowser?
+    Osoba *osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
+    ui->label->setText(QString::fromStdString(osoba->Ime()));//i sve ostalo
 }
 
 void GlavniProzor2::kreirajOpcije()
