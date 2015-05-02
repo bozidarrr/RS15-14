@@ -34,7 +34,12 @@ public:
     void postaviSifru2(short int nova);
 
     void poveziOsobe();
-
+    /**
+     * @brief kreirajOpcije
+     * treba dodati sve opcije, tipa save, cancel, open, recently opened, bla bla
+     * sto ce ici u meni
+     * pocetak knjige :)
+     */
     void kreirajOpcije();
     void kreirajToolbar();
     void krerajMestoZaInfo();
