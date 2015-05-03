@@ -35,7 +35,7 @@ public:
     bool sadrziTacku(int x, int y);
     //bool operator ==(const WidgetOsoba& druga)const;
 
-private Q_SLOTS:
+private slots:
     void on_btnOsoba_clicked();
 
     void on_btnOsoba_pressed();
