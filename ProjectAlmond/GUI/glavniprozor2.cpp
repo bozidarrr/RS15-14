@@ -34,16 +34,8 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 
 GlavniProzor2::~GlavniProzor2()
 {
-//    delete ui;
-//    delete stablo;
-//       delete stabloOkvir;
-//       delete grpToolBar;
-//       delete tbOsoba;
-//       delete tbMuzZena;
-//       delete tbBratSestra;
-//       delete tbRoditeljDete;
-//       delete tbPomeranje;
-//       delete tbDetalji;
+    delete ui;
+
 }
 
 void GlavniProzor2::promeniSelektovanu(short novaSifra)
@@ -86,53 +78,70 @@ void GlavniProzor2::kreirajToolbar()
     grpToolBar=new QButtonGroup();
     tbOsoba = new QToolButton();
     tbOsoba->setCheckable(true);
-    tbOsoba->setText("Nova osoba");
     tbOsoba->setToolTip(tr("Kreirajte novu osobu"));
     tbOsoba->setFocusPolicy(Qt::NoFocus);
-    //tbOsoba->setIcon(ikonica); za sad je tekst
-    //tbOsoba->setShortcut();
+    tbOsoba->setIcon(QIcon(":/images/images/NovaOsoba.ico"));
+    tbOsoba->adjustSize();
+    tbOsoba->setShortcut(tr("ALT+N"));
 
     tbMuzZena = new QToolButton();
-    tbMuzZena->setText("Supruznik");
     tbMuzZena->setCheckable(true);
     tbMuzZena->setToolTip(tr("Kreirajte novi odnos dva supruznika"));
     tbMuzZena->setFocusPolicy(Qt::NoFocus);
+    tbMuzZena->setIcon(QIcon(":/images/images/RelacijaSupruznici.ico"));
+    tbMuzZena->adjustSize();
+    tbMuzZena->setShortcut(tr("ALT+V"));
 
     tbBratSestra = new QToolButton();
-    tbBratSestra->setText("Brat/Sestra");
     tbBratSestra->setCheckable(true);
     tbBratSestra->setToolTip(tr("Kreirajte novi odnos dvoje brace/sestara"));
     tbBratSestra->setFocusPolicy(Qt::NoFocus);
+    tbBratSestra->setIcon(QIcon(":/images/images/RelacijaBratSestra.ico"));
+    tbBratSestra->adjustSize();
+    tbBratSestra->setShortcut(tr("ALT+B"));
 
     tbRoditeljDete = new QToolButton();
-    tbRoditeljDete->setText("Roditelj/Dete");
     tbRoditeljDete->setCheckable(true);
     tbRoditeljDete->setToolTip(tr("Kreirajte novi odnos tipa roditelj-dete"));
     tbRoditeljDete->setFocusPolicy(Qt::NoFocus);
+    tbRoditeljDete->setIcon(QIcon(":/images/images/RelacijaDete.ico"));
+    tbRoditeljDete->adjustSize();
+    tbRoditeljDete->setShortcut(tr("ALT+M"));
 
     tbPomeranje = new QToolButton();
-    tbPomeranje->setText("Pomeri");
     tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
     tbPomeranje->setCheckable(true);
     tbPomeranje->setFocusPolicy(Qt::NoFocus);
+    tbPomeranje->setIcon(QIcon(":/images/images/Pomeri.ico"));
+    tbPomeranje->adjustSize();
+    tbPomeranje->setShortcut(tr("ALT+P"));
 
     tbDetalji = new QToolButton();
-    tbDetalji->setText("Detalji");
     tbDetalji->setCheckable(true);
     tbDetalji->setToolTip(tr("Detalji o odabranoj osobi"));
     tbDetalji->setFocusPolicy(Qt::NoFocus);
+    tbDetalji->setIcon(QIcon(":/images/images/Informacija.ico"));
+    tbDetalji->adjustSize();
+    tbDetalji->setShortcut(tr("ALT+I"));
 
     tbMenjaj = new QToolButton();
-    tbMenjaj->setText("Promeni");
     tbMenjaj->setCheckable(true);
+    tbMenjaj->setText("M");
     tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili relaciji"));
     tbMenjaj->setFocusPolicy(Qt::NoFocus);
+   // tbMenjaj->setIcon(QIcon(":/images/images/Menjaj.ico"));
+    tbMenjaj->adjustSize();
+    tbMenjaj->setShortcut(tr("ALT+U"));
+
 
     tbBrisi = new QToolButton();
-    tbBrisi->setText("Obrisi");
     tbBrisi->setCheckable(true);
     tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
     tbBrisi->setFocusPolicy(Qt::NoFocus);
+    tbBrisi->setIcon(QIcon(":/images/images/Ukloni.ico"));
+    tbBrisi->adjustSize();
+    tbBrisi->setShortcut(tr("ALT+R"));
+
 
     grpToolBar->addButton(tbMuzZena);
     grpToolBar->addButton(tbBratSestra);
