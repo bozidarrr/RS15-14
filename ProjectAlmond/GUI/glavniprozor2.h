@@ -38,6 +38,8 @@ public:
     short Sifra1() const;
     short Sifra2() const;
 
+    bool Povezivati() const;
+
     void poveziOsobe();
     /**
      * @brief kreirajOpcije
@@ -67,7 +69,6 @@ private:
 
     short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
-
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>

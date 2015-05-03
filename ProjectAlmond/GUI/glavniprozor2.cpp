@@ -165,15 +165,12 @@ void GlavniProzor2::izvrsiAkciju()
 
     }
     else if(tbBratSestra->isChecked()){
-
     }
     else if(tbMuzZena->isChecked()){
         //poveziOsobe();
 
-
     }
     else if(tbRoditeljDete->isChecked()){
-
 
     }
     else if(tbDetalji->isChecked()){
@@ -182,7 +179,6 @@ void GlavniProzor2::izvrsiAkciju()
 
     }
     else if(tbPomeranje->isChecked()){
-
 
     }
 
@@ -272,33 +268,36 @@ short GlavniProzor2::Sifra2() const
     return _sifra2;
 }
 
+bool GlavniProzor2::Povezivati() const
+{
+    return tbBratSestra->isChecked() || tbRoditeljDete->isChecked()
+            || tbMuzZena->isChecked();
+}
+
 void GlavniProzor2::poveziOsobe()
 {
-//    //za sifra1 sifra2
-//    //ako je sve ok
-//    //iscrtava se i ta relacija
-//    std::cout<<"poceo"<<std::endl;
-//    for (WidgetOsoba *o : _osobe)
-//    {
-//        std::cout<<"trazi"<<std::endl;
-//        //ovo nam ne radi ovako jer se zapravo klikne na dugme, a ne na okvir
-//   //    if (o->sadrziTacku(stabloOkvir->X1(), stabloOkvir->Y1()))
-//     //   {
-//            //_sifra1=o->Sifra();
-//       //     std::cout<<"nasao 1"<<std::endl;
-//        //}
-//        if (o->sadrziTacku(stabloOkvir->X2(), stabloOkvir->Y2()))
-//        {
-//            //_sifra2=o->Sifra();
-//            _sifra2 = o->Sifra();
-//            std::cout<<"nasao 2"<<std::endl;
-//        }
-//    }
+    //mislim da ovo moze mnogo bolje da se uradi ali da probamo ovako
     std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
     if (_sifra1 > 0 && _sifra2 > 0 && _sifra1 != _sifra2)
+    {
         std::cout<<"Povezuje 2 osobe"<<std::endl;
+        //short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
+    }
     else
-        std::cout<<"nesto ne valja"<<std::endl;
+        std::cout<<"nesto ne valja"<<std::endl;//neki dijalog da nije kako treba
+
+    //zapravo bice dovoljno samo
+    /*
+        short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
+        odnos cemo naci lako koji je
+        if sifraRelacije < 0 greska
+        else
+        cuvamo u vektor,
+        pravimo widget za relaciju i iscrtavamo ga na sredini
+        tu negde pozivamo i dijalog za relaciju
+    */
+
+    //na kraju resetujemo sifre na -1
     _sifra1 = -1;
     _sifra2 = -1;
 

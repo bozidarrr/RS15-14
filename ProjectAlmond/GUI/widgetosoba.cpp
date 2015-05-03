@@ -64,22 +64,23 @@ void WidgetOsoba::postaviImePrezime(const std::string &ip)
 
 void WidgetOsoba::on_btnOsoba_clicked()
 {
-    w->promeniSelektovanu(_sifra);
-    w->popuniInformacije();
-//    if (w->Sifra1()<0)
-//    {
-//        std::cout<<w->Sifra1()<<std::endl;
-//        w->postaviSifru1(_sifra);
-//        std::cout<<w->Sifra1()<<std::endl;
-//    }
-//    else
-//        if(w->Sifra1() > 0 && w->Sifra2()<0)
-//        {
-//            std::cout<<"drugi if"<<std::endl;
-//            std::cout<<w->Sifra2()<<std::endl;
-//            w->postaviSifru2(_sifra);
-//            w->poveziOsobe();
-//        }
+    if (w->Povezivati())
+    {
+        //std::cout<<"ovo znaci da treba oznaciti prvu i drugu"<<std::endl;
+        if (w->Sifra1() > 0 && w->Sifra1() != _sifra && w->Sifra2() < 0)
+        {
+            std::cout<<"if"<<std::endl;
+            w->postaviSifru2(_sifra);
+            w->poveziOsobe();
+        }
+        if (w->Sifra1() < 0)
+            w->postaviSifru1(_sifra);
+    }
+    else
+    {
+        w->promeniSelektovanu(_sifra);
+        w->popuniInformacije();
+    }
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()
