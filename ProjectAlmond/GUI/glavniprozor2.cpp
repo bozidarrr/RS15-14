@@ -11,6 +11,7 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     _sifra1 = -1;
     _sifra2 = -1;
 
+
     QIcon icon(":images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond");
@@ -40,8 +41,11 @@ void GlavniProzor2::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor2::popuniInformacije()
 {
-    Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
-    ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    if (_selektovanaSifra > 0)
+    {
+        Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
+        ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    }
 }
 
 void GlavniProzor2::kreirajPlatnoZaCrtanje()
@@ -153,13 +157,14 @@ void GlavniProzor2::izvrsiAkciju()
 
     }
     else if(tbMuzZena->isChecked()){
-
+        poveziOsobe();
     }
     else if(tbRoditeljDete->isChecked()){
 
     }
     else if(tbDetalji->isChecked()){
-
+        //std::cout<<"sto ne pise"<<std::endl;
+        //popuniInformacije();
     }
     else if(tbPomeranje->isChecked()){
 
@@ -219,8 +224,9 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
         WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, ime, prezime, this, ui->stabloFrame);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
-        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());//ovde ce se prosledjivati point koji je dobijen klikom
+        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
         novaOsoba->show();
+        _osobe.push_back(novaOsoba);
     }
 
     delete d;
@@ -238,11 +244,30 @@ void GlavniProzor2::postaviSifru2(short nova)
 
 void GlavniProzor2::poveziOsobe()
 {
-    //ovde pozivamo konstruktor za relaciju
-    //prema radio buttonu
     //za sifra1, sifra2
     //ako je sve ok
     //iscrtava se i ta relacija
+    std::cout<<"poceo"<<std::endl;
+    for (WidgetOsoba *o : _osobe)
+    {
+        std::cout<<"trazi"<<std::endl;
+        //ovo nam ne radi ovako jer se zapravo klikne na dugme, a ne na okvir
+//        if (o->sadrziTacku(stabloOkvir->X1(), stabloOkvir->Y1()))
+//        {
+//            std::cout<<"nasao 1"<<std::endl;
+//        }
+        if (o->sadrziTacku(stabloOkvir->X2(), stabloOkvir->Y2()))
+        {
+            std::cout<<"nasao 2"<<std::endl;
+        }
+    }
+
+    if (_sifra1 > 0 && _sifra2 > 0 && _sifra1 != _sifra2)
+        std::cout<<"Povezuje 2 osobe"<<std::endl;
+    else
+        std::cout<<"nesto ne valja"<<std::endl;
+    _sifra1 = -1;
+    _sifra2 = -1;
 
     //short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, Odnos::SUPRUZNIK);
 }

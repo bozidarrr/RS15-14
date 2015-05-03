@@ -31,6 +31,8 @@ public:
 
     int Y()const;
 
+    bool sadrziTacku(int x, int y);
+
 private slots:
     void on_btnOsoba_clicked();
 

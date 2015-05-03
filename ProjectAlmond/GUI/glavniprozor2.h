@@ -8,12 +8,14 @@
 #include <QToolButton>
 #include <QRadioButton>
 #include <QDockWidget>
-#include "widgetosoba.h"
+#include "GUI/widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
 #include <string>
 #include <iostream>
 #include "ui_glavniprozor2.h"
 #include "okvirstabla.h"
+#include <vector>
+class WidgetOsoba;
 namespace Ui {
 class GlavniProzor2;
 }
@@ -66,6 +68,7 @@ private:
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
+    std::vector< WidgetOsoba* > _osobe;
 public slots:
     void dodajNovuOsobu(int x, int y);
     void izvrsiAkciju();

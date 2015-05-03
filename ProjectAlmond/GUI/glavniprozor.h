@@ -86,6 +86,7 @@ private:
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
 
+
 private Q_SLOTS:
        void postavi_na_0(){ind=0;}
        void postavi_na_1(){ind=1;}
