@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     GUI/glavniprozor2.cpp \
     GUI/dialognovaosoba.cpp \
     GUI/widgetosoba.cpp \
-    GUI/okvirstabla.cpp
+    GUI/okvirstabla.cpp \
+    alati/filterobject.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -37,7 +38,8 @@ HEADERS  += \
     GUI/glavniprozor2.h \
     GUI/dialognovaosoba.h \
     GUI/widgetosoba.h \
-    GUI/okvirstabla.h
+    GUI/okvirstabla.h \
+    alati/filterobject.h
 
 FORMS    += glavniprozor.ui \
     unetiosobu.ui \
