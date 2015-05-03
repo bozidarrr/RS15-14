@@ -6,33 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>120</width>
-    <height>40</height>
+    <width>124</width>
+    <height>45</height>
    </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="btnOsoba">
+  <widget class="QLabel" name="ImeOsobe">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>120</width>
-     <height>40</height>
+     <x>10</x>
+     <y>10</y>
+     <width>101</width>
+     <height>31</height>
     </rect>
    </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
-   </property>
    <property name="text">
-    <string>Ime Prezime</string>
-   </property>
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
+    <string>TextLabel</string>
    </property>
   </widget>
  </widget>

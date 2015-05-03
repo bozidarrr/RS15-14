@@ -53,6 +53,7 @@ public:
     void kreirajToolbar();
     void krerajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
+      void otpustenaOsoba();
     //void ukloniOsobu(WidgetOsoba* o);
 
 
@@ -79,7 +80,10 @@ private:
     std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
 public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
-    void izvrsiAkciju();
+    void kliknutoPlatno();
+ //   void stisnutaOsoba(int sifra);
+
+    void kliknutaRelacija();
 };
 
 #endif // GLAVNIPROZOR2_H

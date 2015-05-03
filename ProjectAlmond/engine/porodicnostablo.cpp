@@ -86,6 +86,7 @@ short int PorodicnoStablo::PoveziOsobe(Osoba *prva,  Osoba *druga, Odnos srodstv
         druga->Supruznici().push_back(nov);
         if(_indeksPoSifriRelacija.find(nov->Sifra())==_indeksPoSifriRelacija.end())_indeksPoSifriRelacija[nov->Sifra()]=nov;
         else {delete nov; return -1;}
+        std::cout<<"Uspesno povezao"<<std::endl;
         return nov->Sifra();
         break;
     }

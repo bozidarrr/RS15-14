@@ -1,15 +1,15 @@
 #include "GUI/glavniprozor2.h"
 #include "ui_glavniprozor2.h"
 #include "GUI/dialognovaosoba.h"
-
+#include <algorithm>
 GlavniProzor2::GlavniProzor2(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GlavniProzor2)
 {
     ui->setupUi(this);
 
-//    _sifra1 = -1;
-//    _sifra2 = -1;
+    //    _sifra1 = -1;
+    //    _sifra2 = -1;
 
 
     QIcon icon(":images/ProjectAlmond.ico");
@@ -24,10 +24,10 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     krerajMestoZaInfo();
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
-//    FilterObject *f = new FilterObject();
-//    QPushButton *b = new QPushButton("dugem");
-//    b->installEventFilter(f);
-//    b->show();
+    //    FilterObject *f = new FilterObject();
+    //    QPushButton *b = new QPushButton("dugem");
+    //    b->installEventFilter(f);
+    //    b->show();
 
 
 }
@@ -56,7 +56,7 @@ void GlavniProzor2::kreirajPlatnoZaCrtanje()
 {
     stabloOkvir=new okvirStabla(ui->stabloFrame);
 
-    connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(izvrsiAkciju()));
+    connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(kliknutoPlatno()));
 
 }
 
@@ -129,7 +129,7 @@ void GlavniProzor2::kreirajToolbar()
     tbMenjaj->setText("M");
     tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili relaciji"));
     tbMenjaj->setFocusPolicy(Qt::NoFocus);
-   // tbMenjaj->setIcon(QIcon(":/images/images/Menjaj.ico"));
+    // tbMenjaj->setIcon(QIcon(":/images/images/Menjaj.ico"));
     tbMenjaj->adjustSize();
     tbMenjaj->setShortcut(tr("ALT+U"));
 
@@ -182,7 +182,7 @@ void GlavniProzor2::krerajMestoZaInfo()
     //delete info;
 }
 
-void GlavniProzor2::izvrsiAkciju()
+void GlavniProzor2::kliknutoPlatno()
 {
 
 
@@ -214,35 +214,9 @@ void GlavniProzor2::izvrsiAkciju()
 
 void GlavniProzor2::dodajNovuOsobu(int x,int y)
 {
-    //iscitamo podatke preko onog dijaloga ili kako vec
-    // -> ime, prezime, pol, datume
-
-    // short int sifra = stablo->DodajOsobu(...);
-
-    //onda
-    //Widget *novaOsoba = new WidgetOsoba(sifra, this)
-    //i negde je smestimo xD
-
-    //WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->stabloOkvir);
-    //novaOsoba->postaviImePrezime("Pera Peric");
-
-    //novaOsoba->show();
-    //ui->stabloOkvir->repaint();
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
-    {/*citamo*/
-
-        /*
-            u knjizi pristupa direktno lineEditu, to je malo bzvz
-
-            saljemo enginu
-
-            pamtimo vracenu sifru osobe
-
-            kreiramo widget osobu
-
-            tj zahtevamo klik na panel gde cemo je smestiti
-        */
+    {
         QString ime, prezime;
         QString pol;
         char p=pol.toStdString().c_str()[0];//konvertovala sam string u nisku karaktera i uzela prvi karakter
@@ -258,23 +232,58 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
                                                  prezime.toStdString(), p, r, s); //Ubacila sam prvi karakter iz QStringa za pol
         if (novaSifra < 0)
             //nastao problem, obavestavamo korisnika, nece biti ovako naravno
-            ui->label->setText("Neuspelo dodavanje");
+            ui->label->setText("Neuspelo dodavanje");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
         else
             ui->label->setText("Uspelo");
 
-        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, ime, prezime, this, ui->stabloFrame);
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, ui->stabloFrame);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
         novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
+
+  //      connect(novaOsoba,SIGNAL(stisnut(int)),this,SLOT(stisnutaOsoba(int)));
+   //     connect(novaOsoba,SIGNAL(otpusten()),this,SLOT(otpustenaOsoba()));
+
         novaOsoba->show();
         _osobe.push_back(novaOsoba);
 
         _sifra1 = -1;
         _sifra2 = -1;
+
     }
 
     delete d;
 }
+
+//ovde se ispituju akcije kada je stisnut mis na nekoj osobi. osoba kada je pritisnuta odaje svoju sifru (kao i inace u zivotu :P)
+/*void GlavniProzor2::stisnutaOsoba(int sifra)
+{
+    // std::cout<<"mhm stisnut"<<stablo->nadjiOsobuPoSifri(sifra)->Ime()<<std::endl;
+    if(tbMuzZena->isChecked())
+        postaviSifru1(sifra);
+    else
+        postaviSifru1(-1);
+}*/
+
+void GlavniProzor2::otpustenaOsoba()
+{
+    if(tbMuzZena->isChecked() && !(_sifra1<0)&&!(_sifra2<0)){
+         std::cout<<"prva sifra: "<<_sifra1<<std::endl<<"druga sifra: "<<_sifra2<<std::endl;
+        if(_sifra1!=_sifra2){//std::cout<<"Pravim novu relaciju"<<std::endl;
+            short novaRelacija=stablo->PoveziOsobe(_sifra1,_sifra2,Odnos::SUPRUZNIK);
+            std::cout<<"Sifra nove relacije je "<< novaRelacija <<std::endl;
+        }
+    }
+    postaviSifru1(-1);
+    postaviSifru2(-1);
+
+}
+
+void GlavniProzor2::kliknutaRelacija()
+{
+
+}
+
 
 void GlavniProzor2::postaviSifru1(short nova)
 {
@@ -328,7 +337,7 @@ void GlavniProzor2::poveziOsobe()
     //na kraju resetujemo sifre na -1
     _sifra1 = -1;
     _sifra2 = -1;
-        std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
+    std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
 }
 
 //void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){

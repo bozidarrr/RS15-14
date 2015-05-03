@@ -7,10 +7,12 @@ Osoba::Osoba(const std::string ime, const std::string prezime, const char pol,
     : _ime(ime), _prezime(prezime),_pol(pol),
       _datum_rodjenja(datum_rodjenja),
       _datum_smrti(datum_smrti),
-      _supruznici(2)
+      _supruznici(2),_sifra(-1)
 
 {
-    _sifra=_MinSifra++;
+    _MinSifra++;
+    _sifra=_MinSifra;
+   // std::cout<<"Kreirao osobu: "<<_ime<<" sa sifrom: "<<_sifra<<std::endl;
 }
 
 //kada osobu uklanjamo iz stabla, sve njene veze moraju biti pobrisane, ali moraju obavestiti i objekte sa kojima su vezane da vise ne postoje

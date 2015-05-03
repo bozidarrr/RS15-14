@@ -21,7 +21,7 @@ class WidgetOsoba : public QWidget
     Q_OBJECT
 
 public:
-    explicit WidgetOsoba(short int sifra, int x, int y,const QString &ime, const QString &prezime,
+    explicit WidgetOsoba(short int sifra, int x, int y,
                          GlavniProzor2 *gp, QWidget *parent = 0);
     ~WidgetOsoba();
 
@@ -30,20 +30,22 @@ public:
     int X()const;
 
     int Y()const;
+
     short Sifra()const;
 
     bool sadrziTacku(int x, int y);
     //bool operator ==(const WidgetOsoba& druga)const;
 
-private slots:
-    void on_btnOsoba_clicked();
+signals:
 
-    void on_btnOsoba_pressed();
+    void otpusten();
 
-    void on_btnOsoba_released();
 
-    //void on_btnOsoba_toggled(bool checked);
-
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     Ui::WidgetOsoba *ui;
@@ -51,7 +53,7 @@ private:
     short int _sifra;
     int _x;
     int _y;
-    //GlavniProzor *w;
+
     GlavniProzor2 *w;
 };
 
