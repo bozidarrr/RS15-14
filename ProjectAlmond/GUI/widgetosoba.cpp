@@ -30,6 +30,16 @@ int WidgetOsoba::Y()const
     return _y;
 }
 
+bool WidgetOsoba::sadrziTacku(int x, int y)
+{
+    bool rez = x >= _x
+            && x <= _x + ui->btnOsoba->width()
+            && y >= _y
+            && y <= _y + ui->btnOsoba->height();
+    return rez;
+
+}
+
 void WidgetOsoba::postaviImePrezime(const std::string &ip)
 {
     QString q_ip = QString::fromStdString(ip);
@@ -41,13 +51,14 @@ void WidgetOsoba::on_btnOsoba_clicked()
 {
     w->promeniSelektovanu(_sifra);
     w->popuniInformacije();
+    w->postaviSifru1(_sifra);
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()
 {
     //pocinjemo povezivanje sa drugom osobom - tj kreiranje relacije u zavisnosti od radio buttona
     //nece moci ovako jer se ovo desava i na clicked :P
-    w->postaviSifru1(_sifra);
+    //w->postaviSifru1(_sifra);
 }
 
 void WidgetOsoba::on_btnOsoba_released()
@@ -58,8 +69,8 @@ void WidgetOsoba::on_btnOsoba_released()
 
     //recimo
 
-    w->postaviSifru2(_sifra);
-    w->poveziOsobe();
+    //w->postaviSifru2(_sifra);
+   // w->poveziOsobe();
 }
 /*
 void WidgetOsoba::on_btnOsoba_toggled(bool checked)
