@@ -30,17 +30,19 @@ public:
     int X()const;
 
     int Y()const;
+    int Sifra()const;
 
     bool sadrziTacku(int x, int y);
+    bool operator ==(const WidgetOsoba& druga)const;
 
-private slots:
+private Q_SLOTS:
     void on_btnOsoba_clicked();
 
     void on_btnOsoba_pressed();
 
     void on_btnOsoba_released();
 
-    //void on_btnOsoba_toggled(bool checked);
+    void on_btnOsoba_toggled(bool checked);
 
 
 private:

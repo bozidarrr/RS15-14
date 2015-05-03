@@ -20,7 +20,7 @@ public:
     ~DialogNovaOsoba();
 
     void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
-private slots:
+private Q_SLOTS:
     void promenaUnosa();
 
     void on_chkSmrt_stateChanged(int arg1);
