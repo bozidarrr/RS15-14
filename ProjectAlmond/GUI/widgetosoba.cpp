@@ -9,10 +9,6 @@ WidgetOsoba::WidgetOsoba(short int sifra, int x, int y, const QString &ime, cons
     _sifra(sifra),_x(x),_y(y),
     w(gp)
 {
-    //QString tmp(ime);
-    //tmp.append(" ");
-    //tmp.append(prezime);
-    //ui->btnOsoba->setText(ime);
     ui->setupUi(this);
     //ovako se menja izgled pomocu css-a
     ui->btnOsoba->setStyleSheet (" background-color:rgb(128,255,128);"
@@ -25,10 +21,10 @@ WidgetOsoba::WidgetOsoba(short int sifra, int x, int y, const QString &ime, cons
     //sad kad sam nasla kako se to implementira mozda bi hteli malo drugacije da napravimo widget posto sam trazila i ne postoji
     //toolkit u Qt mislila sam mozda da dodamo neku labelu sa zaobljenim ivicama posto u css-u to moze da se kaze
 
-    connect(ui->btnOsoba,SIGNAL(pressed()),this,SLOT(on_btnOsoba_pressed()));
-       connect (ui->btnOsoba,SIGNAL(clicked()),this,SLOT(on_btnOsoba_clicked()));
-       connect(ui->btnOsoba,SIGNAL(released()),this,SLOT(on_btnOsoba_released()));
-       connect(ui->btnOsoba,SIGNAL(toggled(bool)),this,SLOT(on_btnOsoba_toggled(bool)));
+//    connect(ui->btnOsoba,SIGNAL(pressed()),this,SLOT(on_btnOsoba_pressed()));
+//       connect (ui->btnOsoba,SIGNAL(clicked()),this,SLOT(on_btnOsoba_clicked()));
+//       connect(ui->btnOsoba,SIGNAL(released()),this,SLOT(on_btnOsoba_released()));
+//       connect(ui->btnOsoba,SIGNAL(toggled(bool)),this,SLOT(on_btnOsoba_toggled(bool)));
 }
 
 WidgetOsoba::~WidgetOsoba()
@@ -44,7 +40,7 @@ int WidgetOsoba::Y()const
 {
     return _y;
 }
-int WidgetOsoba::Sifra()const
+short int WidgetOsoba::Sifra()const
 {
     return _sifra;
 }
@@ -70,7 +66,20 @@ void WidgetOsoba::on_btnOsoba_clicked()
 {
     w->promeniSelektovanu(_sifra);
     w->popuniInformacije();
-    w->postaviSifru1(_sifra);
+//    if (w->Sifra1()<0)
+//    {
+//        std::cout<<w->Sifra1()<<std::endl;
+//        w->postaviSifru1(_sifra);
+//        std::cout<<w->Sifra1()<<std::endl;
+//    }
+//    else
+//        if(w->Sifra1() > 0 && w->Sifra2()<0)
+//        {
+//            std::cout<<"drugi if"<<std::endl;
+//            std::cout<<w->Sifra2()<<std::endl;
+//            w->postaviSifru2(_sifra);
+//            w->poveziOsobe();
+//        }
 }
 
 void WidgetOsoba::on_btnOsoba_pressed()
@@ -91,17 +100,17 @@ void WidgetOsoba::on_btnOsoba_released()
    // w->postaviSifru2(_sifra);
    // w->poveziOsobe();
 }
-bool WidgetOsoba::operator ==(const WidgetOsoba& druga)const{
-    //za proveru jednakosti 2 widgeta dovoljno je da proverimo njihove sifre jer je to jedinstveni identifikator
-    if(_sifra==druga._sifra)
-        return true;
-    return false;
-}
+//bool WidgetOsoba::operator ==(const WidgetOsoba& druga)const{
+//    //za proveru jednakosti 2 widgeta dovoljno je da proverimo njihove sifre jer je to jedinstveni identifikator
+//    if(_sifra==druga._sifra)
+//        return true;
+//    return false;
+//}
 
-void WidgetOsoba::on_btnOsoba_toggled(bool checked)
-{
-    //mislila sam na ovaj signal da uklanjamo osobu iz stabla
-    if (checked)
-        w->ukloniOsobu(this);
-    std::cout<<"uklanjamo"<<std::endl;
-}
+//void WidgetOsoba::on_btnOsoba_toggled(bool checked)
+//{
+//    //mislila sam na ovaj signal da uklanjamo osobu iz stabla
+//    if (checked)
+//        w->ukloniOsobu(this);
+//    std::cout<<"uklanjamo"<<std::endl;
+//}

@@ -31,16 +31,16 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 
 GlavniProzor2::~GlavniProzor2()
 {
-    delete ui;
-    delete stablo;
-       delete stabloOkvir;
-       delete grpToolBar;
-       delete tbOsoba;
-       delete tbMuzZena;
-       delete tbBratSestra;
-       delete tbRoditeljDete;
-       delete tbPomeranje;
-       delete tbDetalji;
+//    delete ui;
+//    delete stablo;
+//       delete stabloOkvir;
+//       delete grpToolBar;
+//       delete tbOsoba;
+//       delete tbMuzZena;
+//       delete tbBratSestra;
+//       delete tbRoditeljDete;
+//       delete tbPomeranje;
+//       delete tbDetalji;
 }
 
 void GlavniProzor2::promeniSelektovanu(short novaSifra)
@@ -168,7 +168,7 @@ void GlavniProzor2::izvrsiAkciju()
 
     }
     else if(tbMuzZena->isChecked()){
-        poveziOsobe();
+        //poveziOsobe();
 
 
     }
@@ -244,6 +244,9 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
         novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
         novaOsoba->show();
         _osobe.push_back(novaOsoba);
+
+        _sifra1 = -1;
+        _sifra2 = -1;
     }
 
     delete d;
@@ -259,28 +262,39 @@ void GlavniProzor2::postaviSifru2(short nova)
     _sifra2 = nova;
 }
 
+short GlavniProzor2::Sifra1() const
+{
+    return _sifra1;
+}
+
+short GlavniProzor2::Sifra2() const
+{
+    return _sifra2;
+}
+
 void GlavniProzor2::poveziOsobe()
 {
-    //za sifra1 sifra2
-    //ako je sve ok
-    //iscrtava se i ta relacija
-    std::cout<<"poceo"<<std::endl;
-    for (WidgetOsoba *o : _osobe)
-    {
-        std::cout<<"trazi"<<std::endl;
-        //ovo nam ne radi ovako jer se zapravo klikne na dugme, a ne na okvir
-   //    if (o->sadrziTacku(stabloOkvir->X1(), stabloOkvir->Y1()))
-     //   {
-            //_sifra1=o->Sifra();
-       //     std::cout<<"nasao 1"<<std::endl;
-        //}
-        if (o->sadrziTacku(stabloOkvir->X2(), stabloOkvir->Y2()))
-        {
-            //_sifra2=o->Sifra();
-            std::cout<<"nasao 2"<<std::endl;
-        }
-    }
-
+//    //za sifra1 sifra2
+//    //ako je sve ok
+//    //iscrtava se i ta relacija
+//    std::cout<<"poceo"<<std::endl;
+//    for (WidgetOsoba *o : _osobe)
+//    {
+//        std::cout<<"trazi"<<std::endl;
+//        //ovo nam ne radi ovako jer se zapravo klikne na dugme, a ne na okvir
+//   //    if (o->sadrziTacku(stabloOkvir->X1(), stabloOkvir->Y1()))
+//     //   {
+//            //_sifra1=o->Sifra();
+//       //     std::cout<<"nasao 1"<<std::endl;
+//        //}
+//        if (o->sadrziTacku(stabloOkvir->X2(), stabloOkvir->Y2()))
+//        {
+//            //_sifra2=o->Sifra();
+//            _sifra2 = o->Sifra();
+//            std::cout<<"nasao 2"<<std::endl;
+//        }
+//    }
+    std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
     if (_sifra1 > 0 && _sifra2 > 0 && _sifra1 != _sifra2)
         std::cout<<"Povezuje 2 osobe"<<std::endl;
     else
@@ -291,20 +305,20 @@ void GlavniProzor2::poveziOsobe()
     //short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
 }
 
-void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
-    auto osoba=_osobe.begin();
-    for(;osoba!=_osobe.end();osoba++){
-        if((*o)==*(*osoba)){
-             bool uspelo=stablo->UkloniOsobuPoSifri(o->Sifra());
-             if(uspelo){
-                _osobe.erase(osoba);
+//void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
+//    auto osoba=_osobe.begin();
+//    for(;osoba!=_osobe.end();osoba++){
+//        if((*o)==*(*osoba)){
+//             bool uspelo=stablo->UkloniOsobuPoSifri(o->Sifra());
+//             if(uspelo){
+//                _osobe.erase(osoba);
 
-                o->hide();
-             }
-            //treba da sakrijemo i sve njene veze
+//                o->hide();
+//             }
+//            //treba da sakrijemo i sve njene veze
 
-        }
-    }
-}
+//        }
+//    }
+//}
 
 short int GlavniProzor2::_selektovanaSifra = -1;
