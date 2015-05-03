@@ -1,4 +1,4 @@
-#ifndef WIDGETDRAG_H
+/*#ifndef WIDGETDRAG_H
 #define WIDGETDRAG_H
 
 #include <QWidget>
@@ -57,3 +57,4 @@ public:
 
 };
 #endif // WIDGETDRAG_H
+*/

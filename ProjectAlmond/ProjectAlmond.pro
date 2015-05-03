@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     alati/datum.cpp \
-    GUI/glavniprozor.cpp \
     engine/osoba.cpp \
     engine/supruznik.cpp \
     GUI/unetiosobu.cpp \
@@ -31,7 +30,6 @@ HEADERS  += \
     engine/osoba.h \
     engine/relacija.h \
     engine/supruznik.h \
-    GUI/glavniprozor.h \
     GUI/unetiosobu.h \
     GUI/WidgetDrag.h \
     engine/porodicnostablo.h \
@@ -41,8 +39,7 @@ HEADERS  += \
     GUI/okvirstabla.h \
     alati/filterobject.h
 
-FORMS    += glavniprozor.ui \
-    unetiosobu.ui \
+FORMS    += unetiosobu.ui \
     widgetosoba.ui \
     glavniprozor2.ui \
     dialognovaosoba.ui \

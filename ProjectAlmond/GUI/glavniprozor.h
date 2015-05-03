@@ -1,4 +1,4 @@
-#ifndef GLAVNIPROZOR_H
+/*#ifndef GLAVNIPROZOR_H
 #define GLAVNIPROZOR_H 1
 
 #include <QMainWindow>
@@ -103,3 +103,4 @@ protected:
 };
 
 #endif // GLAVNIPROZOR_H
+*/

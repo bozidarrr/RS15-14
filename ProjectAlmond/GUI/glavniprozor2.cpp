@@ -157,7 +157,7 @@ void GlavniProzor2::kreirajToolbar()
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);//i recimo
     alati->setAllowedAreas(Qt::TopDockWidgetArea
-                                      | Qt::LeftDockWidgetArea);
+                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::TopDockWidgetArea, alati);
     //delete alati;
 }
@@ -168,7 +168,7 @@ void GlavniProzor2::krerajMestoZaInfo()
     info->setWidget(ui->label);//i recimo
     ui->label->setToolTip("Sredicu ovo :)");
     info->setAllowedAreas(Qt::RightDockWidgetArea
-                                      | Qt::LeftDockWidgetArea);
+                          | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
     //delete info;
 }
@@ -178,6 +178,7 @@ void GlavniProzor2::izvrsiAkciju()
 
 
     if(tbOsoba->isChecked()){
+        tbOsoba->setChecked(false);
         dodajNovuOsobu(stabloOkvir->X1(),stabloOkvir->Y1());
 
     }
@@ -199,6 +200,7 @@ void GlavniProzor2::izvrsiAkciju()
 
     }
 
+    tbPomeranje->setChecked(true);
 }
 
 void GlavniProzor2::dodajNovuOsobu(int x,int y)
