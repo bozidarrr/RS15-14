@@ -46,6 +46,7 @@ public:
     void kreirajToolbar();
     void krerajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
+    void ukloniOsobu(WidgetOsoba* o);
 
 
 private:
@@ -69,7 +70,7 @@ private:
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
     std::vector< WidgetOsoba* > _osobe;
-public slots:
+public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
     void izvrsiAkciju();
 };

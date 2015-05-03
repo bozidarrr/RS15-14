@@ -12,6 +12,7 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
 
     popuniDugmice();
     postaviProvere();
+    connect(ui->chkSmrt,SIGNAL(stateChanged(int)),this,SLOT(on_chkSmrt_stateChanged(int)));
 
 }
 
@@ -66,8 +67,8 @@ void DialogNovaOsoba::popuniDugmice()
 
 void DialogNovaOsoba::postaviProvere()
 {
-    QRegExp ime("[A-Za-z]+");
-    QRegExp prezime("[A-Za-z]+");
+    QRegExp ime("[A-Z][A-Za-z ]+");
+    QRegExp prezime("[A-Z][A-Za-z ]+");
     QRegExp pol(tr("M|m|Z|z"));
     ui->unosIme->setValidator(new QRegExpValidator(ime, this));
     ui->unosPrezime->setValidator(new QRegExpValidator(prezime, this));
