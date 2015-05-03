@@ -8,8 +8,8 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    _sifra1 = -1;
-    _sifra2 = -1;
+//    _sifra1 = -1;
+//    _sifra2 = -1;
 
 
     QIcon icon(":images/ProjectAlmond.ico");
@@ -122,12 +122,26 @@ void GlavniProzor2::kreirajToolbar()
     tbDetalji->setToolTip(tr("Detalji o odabranoj osobi"));
     tbDetalji->setFocusPolicy(Qt::NoFocus);
 
+    tbMenjaj = new QToolButton();
+    tbMenjaj->setText("Promeni");
+    tbMenjaj->setCheckable(true);
+    tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili relaciji"));
+    tbMenjaj->setFocusPolicy(Qt::NoFocus);
+
+    tbBrisi = new QToolButton();
+    tbBrisi->setText("Obrisi");
+    tbBrisi->setCheckable(true);
+    tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
+    tbBrisi->setFocusPolicy(Qt::NoFocus);
+
     grpToolBar->addButton(tbMuzZena);
     grpToolBar->addButton(tbBratSestra);
     grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbOsoba);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
+    grpToolBar->addButton(tbMenjaj);
+    grpToolBar->addButton(tbBrisi);
 
     toolbar->addWidget(tbOsoba);
     toolbar->addSeparator();
@@ -137,8 +151,8 @@ void GlavniProzor2::kreirajToolbar()
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbDetalji);
-
-
+    toolbar->addWidget(tbMenjaj);
+    toolbar->addWidget(tbBrisi);
 
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);//i recimo
@@ -303,8 +317,7 @@ void GlavniProzor2::poveziOsobe()
     //na kraju resetujemo sifre na -1
     _sifra1 = -1;
     _sifra2 = -1;
-
-    //short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
+        std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
 }
 
 //void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
@@ -324,3 +337,5 @@ void GlavniProzor2::poveziOsobe()
 //}
 
 short int GlavniProzor2::_selektovanaSifra = -1;
+short int GlavniProzor2::_sifra1 = -1;
+short int GlavniProzor2::_sifra2 = -1;
