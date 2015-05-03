@@ -63,13 +63,14 @@ private:
     QToolButton *tbOsoba;
     QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
     QToolButton *tbPomeranje, *tbDetalji;
+    QToolButton *tbBrisi, *tbMenjaj;
     QToolBar *toolbar;
 
     PorodicnoStablo *stablo;
 
     okvirStabla *stabloOkvir;
 
-    short int _sifra1, _sifra2;
+    static short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
 
     //DODATI!!!
