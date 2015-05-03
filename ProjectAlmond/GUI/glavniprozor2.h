@@ -15,6 +15,8 @@
 #include "ui_glavniprozor2.h"
 #include "okvirstabla.h"
 #include <vector>
+
+#include "alati/filterobject.h"
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor2;

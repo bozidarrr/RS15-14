@@ -24,7 +24,10 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     krerajMestoZaInfo();
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
-
+//    FilterObject *f = new FilterObject();
+//    QPushButton *b = new QPushButton("dugem");
+//    b->installEventFilter(f);
+//    b->show();
 
 
 }
