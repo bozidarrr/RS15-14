@@ -1,4 +1,4 @@
-#include "glavniprozor.h"
+/*#include "glavniprozor.h"
 #include "ui_glavniprozor.h"
 #include "unetiosobu.h"
 #include "widgetosoba.h"
@@ -190,14 +190,14 @@ void GlavniProzor::napravi_Osobu(){
 
 
     u.show();
-/*
+
     WidgetOsoba *novaOsoba = new WidgetOsoba(123);
     novaOsoba->postaviImePrezime("Pera Peric");
 
-    scena->addWidget(novaOsoba);*/
+    scena->addWidget(novaOsoba);
 
 
-/*
+
     while(u.m_ime==""){
         continue;
     }
@@ -205,7 +205,7 @@ void GlavniProzor::napravi_Osobu(){
     QPushButton Pomocno(Ime);
 
     scena->addWidget(Pomocno);
-    */
+
 
    //m_osobePoz.push_back(m_ptDragPos,&Pomocno);
 
@@ -222,7 +222,7 @@ void GlavniProzor::poveziMZ(){
         tbRD->setDisabled(false);
         tbBS->setDisabled(false);
         postavi=0;
-/*
+
         int x1,x2,y1,y2;
         QPushButton S1,S2;
         for (int i=0;i<m_osobePoz.length();i++){
@@ -245,7 +245,7 @@ void GlavniProzor::poveziMZ(){
 
         }
         scena->addLine(x1,y1,x2,y2);
-        */
+
         //signaliziram da se uspostavila veza izmedju supruznika
 
     }
@@ -262,7 +262,7 @@ void GlavniProzor::poveziBS(){
         tbRD->setDisabled(false);
         tbMZ->setDisabled(false);
         postavi=0;
-        /*
+
         int x1,x2,y1,y2;
         QPushButton B1,B2;
         for (int i=0;i<m_osobePoz.length();i++){
@@ -285,7 +285,7 @@ void GlavniProzor::poveziBS(){
 
         }
         scena->addLine(x1,y1,x2,y2);
-        */
+
         //signaliziram da se uspostavila veza izmedju brace i sestre
     }
 }
@@ -301,7 +301,7 @@ void GlavniProzor::poveziRD(){
         tbMZ->setDisabled(false);
         tbBS->setDisabled(false);
         postavi=0;
-        /*
+
         int x1,x2,y1,y2;
         QPushButton R,D;
         for (int i=0;i<m_osobePoz.length();i++){
@@ -324,9 +324,9 @@ void GlavniProzor::poveziRD(){
 
         }
         scena->addLine(x1,y1,x2,y2);
-        */
+
         //signaliziram da se uspostavila veza izmedju roditelja i deteta
-    }
+     }
 }
 
 void GlavniProzor::dodajNovuOsobu()
@@ -408,3 +408,4 @@ void GlavniProzor::povezi()
 
 short int GlavniProzor::selektovana_sifra = -1;
 
+*/
