@@ -8,8 +8,9 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    _sifra1 = -1;
-    _sifra2 = -1;
+//    _sifra1 = -1;
+//    _sifra2 = -1;
+
 
     QIcon icon(":images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
@@ -23,14 +24,26 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     krerajMestoZaInfo();
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
-
+//    FilterObject *f = new FilterObject();
+//    QPushButton *b = new QPushButton("dugem");
+//    b->installEventFilter(f);
+//    b->show();
 
 
 }
 
 GlavniProzor2::~GlavniProzor2()
 {
-    delete ui;
+//    delete ui;
+//    delete stablo;
+//       delete stabloOkvir;
+//       delete grpToolBar;
+//       delete tbOsoba;
+//       delete tbMuzZena;
+//       delete tbBratSestra;
+//       delete tbRoditeljDete;
+//       delete tbPomeranje;
+//       delete tbDetalji;
 }
 
 void GlavniProzor2::promeniSelektovanu(short novaSifra)
@@ -40,8 +53,11 @@ void GlavniProzor2::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor2::popuniInformacije()
 {
-    Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
-    ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    if (_selektovanaSifra > 0)
+    {
+        Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
+        ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    }
 }
 
 void GlavniProzor2::kreirajPlatnoZaCrtanje()
@@ -106,12 +122,26 @@ void GlavniProzor2::kreirajToolbar()
     tbDetalji->setToolTip(tr("Detalji o odabranoj osobi"));
     tbDetalji->setFocusPolicy(Qt::NoFocus);
 
+    tbMenjaj = new QToolButton();
+    tbMenjaj->setText("Promeni");
+    tbMenjaj->setCheckable(true);
+    tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili relaciji"));
+    tbMenjaj->setFocusPolicy(Qt::NoFocus);
+
+    tbBrisi = new QToolButton();
+    tbBrisi->setText("Obrisi");
+    tbBrisi->setCheckable(true);
+    tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
+    tbBrisi->setFocusPolicy(Qt::NoFocus);
+
     grpToolBar->addButton(tbMuzZena);
     grpToolBar->addButton(tbBratSestra);
     grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbOsoba);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
+    grpToolBar->addButton(tbMenjaj);
+    grpToolBar->addButton(tbBrisi);
 
     toolbar->addWidget(tbOsoba);
     toolbar->addSeparator();
@@ -121,14 +151,15 @@ void GlavniProzor2::kreirajToolbar()
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbDetalji);
-
-
+    toolbar->addWidget(tbMenjaj);
+    toolbar->addWidget(tbBrisi);
 
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);//i recimo
     alati->setAllowedAreas(Qt::TopDockWidgetArea
                            | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::TopDockWidgetArea, alati);
+    //delete alati;
 }
 
 void GlavniProzor2::krerajMestoZaInfo()
@@ -139,6 +170,7 @@ void GlavniProzor2::krerajMestoZaInfo()
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
+    //delete info;
 }
 
 void GlavniProzor2::izvrsiAkciju()
@@ -148,18 +180,20 @@ void GlavniProzor2::izvrsiAkciju()
     if(tbOsoba->isChecked()){
         tbOsoba->setChecked(false);
         dodajNovuOsobu(stabloOkvir->X1(),stabloOkvir->Y1());
+
     }
     else if(tbBratSestra->isChecked()){
-
-
     }
     else if(tbMuzZena->isChecked()){
+        //poveziOsobe();
 
     }
     else if(tbRoditeljDete->isChecked()){
 
     }
     else if(tbDetalji->isChecked()){
+        //std::cout<<"sto ne pise"<<std::endl;
+        //popuniInformacije();
 
     }
     else if(tbPomeranje->isChecked()){
@@ -201,17 +235,18 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
             tj zahtevamo klik na panel gde cemo je smestiti
         */
         QString ime, prezime;
-        QString pol; // Kako pretvoriti u char -- TO DO
+        QString pol;
+        char p=pol.toStdString().c_str()[0];//konvertovala sam string u nisku karaktera i uzela prvi karakter
         QDate rodjenje, smrt;
         d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
         std::string r = rodjenje.toString("dd.MM.yyyy.").toStdString();
-        std::string d;
-        if (smrt.isValid())
-            d = "";
+        std::string s; //preimenovala sam jer ti se isto zovu i dodaj novu osobu i datum smrti
+        if (!smrt.isValid())
+            s = "";
         else
-            d = smrt.toString("dd.MM.yyyy.").toStdString();
+            s = smrt.toString("dd.MM.yyyy.").toStdString();
         short int novaSifra = stablo->DodajOsobu(ime.toStdString(),
-                                                 prezime.toStdString(), 'm', r, d); //POL!
+                                                 prezime.toStdString(), p, r, s); //Ubacila sam prvi karakter iz QStringa za pol
         if (novaSifra < 0)
             //nastao problem, obavestavamo korisnika, nece biti ovako naravno
             ui->label->setText("Neuspelo dodavanje");
@@ -221,8 +256,12 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
         WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, ime, prezime, this, ui->stabloFrame);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
-        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());//ovde ce se prosledjivati point koji je dobijen klikom
+        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
         novaOsoba->show();
+        _osobe.push_back(novaOsoba);
+
+        _sifra1 = -1;
+        _sifra2 = -1;
     }
 
     delete d;
@@ -238,15 +277,67 @@ void GlavniProzor2::postaviSifru2(short nova)
     _sifra2 = nova;
 }
 
-void GlavniProzor2::poveziOsobe()
+short GlavniProzor2::Sifra1() const
 {
-    //ovde pozivamo konstruktor za relaciju
-    //prema radio buttonu
-    //za sifra1, sifra2
-    //ako je sve ok
-    //iscrtava se i ta relacija
-
-    //short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, Odnos::SUPRUZNIK);
+    return _sifra1;
 }
 
+short GlavniProzor2::Sifra2() const
+{
+    return _sifra2;
+}
+
+bool GlavniProzor2::Povezivati() const
+{
+    return tbBratSestra->isChecked() || tbRoditeljDete->isChecked()
+            || tbMuzZena->isChecked();
+}
+
+void GlavniProzor2::poveziOsobe()
+{
+    //mislim da ovo moze mnogo bolje da se uradi ali da probamo ovako
+    std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
+    if (_sifra1 > 0 && _sifra2 > 0 && _sifra1 != _sifra2)
+    {
+        std::cout<<"Povezuje 2 osobe"<<std::endl;
+        //short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
+    }
+    else
+        std::cout<<"nesto ne valja"<<std::endl;//neki dijalog da nije kako treba
+
+    //zapravo bice dovoljno samo
+    /*
+        short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
+        odnos cemo naci lako koji je
+        if sifraRelacije < 0 greska
+        else
+        cuvamo u vektor,
+        pravimo widget za relaciju i iscrtavamo ga na sredini
+        tu negde pozivamo i dijalog za relaciju
+    */
+
+    //na kraju resetujemo sifre na -1
+    _sifra1 = -1;
+    _sifra2 = -1;
+        std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
+}
+
+//void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
+//    auto osoba=_osobe.begin();
+//    for(;osoba!=_osobe.end();osoba++){
+//        if((*o)==*(*osoba)){
+//             bool uspelo=stablo->UkloniOsobuPoSifri(o->Sifra());
+//             if(uspelo){
+//                _osobe.erase(osoba);
+
+//                o->hide();
+//             }
+//            //treba da sakrijemo i sve njene veze
+
+//        }
+//    }
+//}
+
 short int GlavniProzor2::_selektovanaSifra = -1;
+short int GlavniProzor2::_sifra1 = -1;
+short int GlavniProzor2::_sifra2 = -1;

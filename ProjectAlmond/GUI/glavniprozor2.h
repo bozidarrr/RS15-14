@@ -8,12 +8,16 @@
 #include <QToolButton>
 #include <QRadioButton>
 #include <QDockWidget>
-#include "widgetosoba.h"
+#include "GUI/widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
 #include <string>
 #include <iostream>
 #include "ui_glavniprozor2.h"
 #include "okvirstabla.h"
+#include <vector>
+
+#include "alati/filterobject.h"
+class WidgetOsoba;
 namespace Ui {
 class GlavniProzor2;
 }
@@ -33,6 +37,11 @@ public:
     void postaviSifru1(short int nova);
     void postaviSifru2(short int nova);
 
+    short Sifra1() const;
+    short Sifra2() const;
+
+    bool Povezivati() const;
+
     void poveziOsobe();
     /**
      * @brief kreirajOpcije
@@ -44,6 +53,7 @@ public:
     void kreirajToolbar();
     void krerajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
+    //void ukloniOsobu(WidgetOsoba* o);
 
 
 private:
@@ -53,20 +63,21 @@ private:
     QToolButton *tbOsoba;
     QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
     QToolButton *tbPomeranje, *tbDetalji;
+    QToolButton *tbBrisi, *tbMenjaj;
     QToolBar *toolbar;
 
     PorodicnoStablo *stablo;
 
     okvirStabla *stabloOkvir;
 
-    short int _sifra1, _sifra2;
+    static short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
-
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
-public slots:
+    std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
+public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
     void izvrsiAkciju();
 };
