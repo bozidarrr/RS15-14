@@ -243,18 +243,15 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
         else
             ui->label->setText("Uspelo");
 
-        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, ui->stabloFrame);
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
         std::string tmp = ime.toStdString() + " " + prezime.toStdString();
         novaOsoba->postaviImePrezime(tmp);
         novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
 
-  //      connect(novaOsoba,SIGNAL(stisnut(int)),this,SLOT(stisnutaOsoba(int)));
-   //     connect(novaOsoba,SIGNAL(otpusten()),this,SLOT(otpustenaOsoba()));
-
-        //novaOsoba->installEventFilter(filter);
+        novaOsoba->installEventFilter(filter);
 
         novaOsoba->show();
-        _osobe.push_back(novaOsoba);
+        //_osobe.push_back(novaOsoba);
 
         _sifra1 = -1;
         _sifra2 = -1;

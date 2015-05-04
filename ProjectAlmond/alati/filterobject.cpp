@@ -56,8 +56,8 @@ bool FilterObject::eventFilter(QObject *o, QEvent *e)
             qDebug() << p.x();
             qDebug() << p.y();
 
-            _okvir->X2(p.x());
-            _okvir->Y2(p.y());
+//            _okvir->X2(p.x());
+//            _okvir->Y2(p.y());
             //_okvir->kliknutIndirektno();
         }
         //return true;

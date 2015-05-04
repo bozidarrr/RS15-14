@@ -21,6 +21,7 @@ WidgetOsoba::WidgetOsoba(short int sifra, int x, int y,  GlavniProzor2 *gp, QWid
     //sad kad sam nasla kako se to implementira mozda bi hteli malo drugacije da napravimo widget posto sam trazila i ne postoji
     //toolkit u Qt mislila sam mozda da dodamo neku labelu sa zaobljenim ivicama posto u css-u to moze da se kaze
     ui->ImeOsobe->installEventFilter(new filterZaLabelu());
+    this->installEventFilter(new FilterObject(gp->stabloOkvir));
 
 
 }
