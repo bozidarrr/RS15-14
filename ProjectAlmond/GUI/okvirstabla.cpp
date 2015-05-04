@@ -28,11 +28,9 @@ void okvirStabla::mouseReleaseEvent(QMouseEvent *event)
 {
     std::cout<<"pustio misa na okvir"<<std::endl;
     if (event->button() == Qt::LeftButton) {
-        if (_drugiX == -1 && _drugiY == -1)
-        {
+
             _drugiX=event->pos().x();
             _drugiY=event->pos().y();
-        }
     }
     emit kliknut();
 }

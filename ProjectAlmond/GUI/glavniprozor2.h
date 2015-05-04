@@ -27,6 +27,8 @@ class GlavniProzor2 : public QMainWindow, private Ui::GlavniProzor2
     Q_OBJECT
 
 public:
+    okvirStabla *stabloOkvir;//privremeno
+
     explicit GlavniProzor2(QWidget *parent = 0);
     ~GlavniProzor2();
 
@@ -39,8 +41,6 @@ public:
 
     short Sifra1() const;
     short Sifra2() const;
-
-    bool Povezivati() const;
 
     void poveziOsobe(short int sifra1, short int sifra2, short int tip);
     /**
@@ -69,7 +69,7 @@ private:
 
     PorodicnoStablo *stablo;
 
-    okvirStabla *stabloOkvir;
+    //okvirStabla *stabloOkvir;
 
     static short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
