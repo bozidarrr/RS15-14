@@ -34,7 +34,7 @@ public:
     /**
      * @brief Ovaj metod, pozvan od strane neke osobe pri njenom uklanjanju, inicira brisanje podatka o vezi iz liste supruznika osobe sa kojom je u ovoj vezi
      */
-    void UkloniSe(const Osoba* inicijator)override;
+    bool UkloniSe(const Osoba* inicijator)override;
 
 
 private:
