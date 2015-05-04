@@ -8,10 +8,6 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //    _sifra1 = -1;
-    //    _sifra2 = -1;
-
-
     QIcon icon(":images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond");
@@ -24,14 +20,14 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     krerajMestoZaInfo();
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
-//        FilterObject *f = new FilterObject(stabloOkvir);
-        QPushButton *b1 = new QPushButton("1", stabloOkvir);
-         QPushButton *b2 = new QPushButton("2", stabloOkvir);
-         b2->move(250,100);
-       b1->installEventFilter(filter);
-       b1->show();
-       b2->installEventFilter(filter);
-       b2->show();
+
+    WidgetOsoba *w1 = new WidgetOsoba(1,12,12,this,stabloOkvir);
+        WidgetOsoba *w2 = new WidgetOsoba(2,50,50,this,stabloOkvir);
+
+        w1->move(12,12);
+        w2->move(50,50);
+        w1->installEventFilter(filter);
+        w2->installEventFilter(filter);
 
 
 }
@@ -68,12 +64,6 @@ void GlavniProzor2::kreirajPlatnoZaCrtanje()
 
 void GlavniProzor2::kreirajOpcije()
 {
-
-
-
-
-
-
 }
 
  QToolButton* GlavniProzor2::kreirajJedanAlat(QToolButton * alat, const char* ime,const char* info)
@@ -150,31 +140,85 @@ void GlavniProzor2::krerajMestoZaInfo()
 void GlavniProzor2::kliknutoPlatno()
 {
 
+    std::cout<<"---KLIKNUTO--"<<std::endl;
 
     if(tbOsoba->isChecked()){
         tbOsoba->setChecked(false);
-        dodajNovuOsobu(stabloOkvir->X1(),stabloOkvir->Y1());
+        if ((stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())) != nullptr)
+            qDebug() << "tu vec postoji nesto";
+        else
+            dodajNovuOsobu(stabloOkvir->X1(),stabloOkvir->Y1());
 
     }
     else if(tbBratSestra->isChecked()){
     }
     else if(tbMuzZena->isChecked()){
         //poveziOsobe();
+        if ((stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())) == nullptr)
+
+            qDebug() << "nije kliknuto na prvu osobu";
+
+        else
+            if ((stabloOkvir->childAt(stabloOkvir->X2(), stabloOkvir->Y2())) == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+                poveziOsobe(1,2,3);
+
 
     }
     else if(tbRoditeljDete->isChecked()){
 
     }
     else if(tbDetalji->isChecked()){
-        //std::cout<<"sto ne pise"<<std::endl;
-        //popuniInformacije();
+        if ((stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())) == nullptr)
+            qDebug() << "kliknuto u prazno";
+        else
+        {
+            WidgetOsoba *osobaZaInfo = qobject_cast<WidgetOsoba*>(stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1()));
+            if (osobaZaInfo == nullptr)
+                qDebug() << "Nije osoba na koju je kliknuto";
+            else
+                qDebug() << osobaZaInfo->Sifra();
+        }
 
     }
     else if(tbPomeranje->isChecked()){
+        if ((stabloOkvir->childAt(stabloOkvir->X2(), stabloOkvir->Y2())) != nullptr)
+            qDebug() << "tu vec postoji nesto";
+        else
+            if ((stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())) == nullptr)
+            {
+                qDebug() << "nije kliknuto na osobu koju treba pomeriti";
+                qDebug() << stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())->metaObject()->className();
+            }
+            else
+            {
+                qDebug() << stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1())->metaObject()->className();
+
+//                WidgetOsoba *osobaZaPomeranje = dynamic_cast<WidgetOsoba*>(stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1()));
+//                if (osobaZaPomeranje == nullptr)
+//                    qDebug() << "Nije osoba na koju je kliknuto";
+//                else
+//                    osobaZaPomeranje->move(stabloOkvir->X2(), stabloOkvir->Y2());
+
+                //(stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1()))->move(stabloOkvir->X2(), stabloOkvir->Y2());
+                //(stabloOkvir->childAt(stabloOkvir->X1(), stabloOkvir->Y1()))->show();
+            }
 
     }
 
     tbDetalji->setChecked(true);
+
+//        std::cout<<stabloOkvir->X1()<<stabloOkvir->X2()<<stabloOkvir->Y1()<<stabloOkvir->Y2()<<std::endl;
+//    std::cout<<stabloOkvir->resetovan()<<std::endl;
+    //stabloOkvir->resetujKoordinate();
+//    std::cout<<stabloOkvir->resetovan()<<std::endl;
+//            std::cout<<stabloOkvir->X1()<<stabloOkvir->X2()<<stabloOkvir->Y1()<<stabloOkvir->Y2()<<std::endl;
+}
+
+void GlavniProzor2::test()
+{
+    stabloOkvir->resetujKoordinate();
 }
 
 void GlavniProzor2::dodajNovuOsobu(int x,int y)
@@ -222,30 +266,6 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
     delete d;
 }
 
-//ovde se ispituju akcije kada je stisnut mis na nekoj osobi. osoba kada je pritisnuta odaje svoju sifru (kao i inace u zivotu :P)
-/*void GlavniProzor2::stisnutaOsoba(int sifra)
-{
-    // std::cout<<"mhm stisnut"<<stablo->nadjiOsobuPoSifri(sifra)->Ime()<<std::endl;
-    if(tbMuzZena->isChecked())
-        postaviSifru1(sifra);
-    else
-        postaviSifru1(-1);
-}*/
-
-void GlavniProzor2::otpustenaOsoba()
-{
-    if(tbMuzZena->isChecked() && !(_sifra1<0)&&!(_sifra2<0)){
-         std::cout<<"prva sifra: "<<_sifra1<<std::endl<<"druga sifra: "<<_sifra2<<std::endl;
-        if(_sifra1!=_sifra2){//std::cout<<"Pravim novu relaciju"<<std::endl;
-            short novaRelacija=stablo->PoveziOsobe(_sifra1,_sifra2,Odnos::SUPRUZNIK);
-            std::cout<<"Sifra nove relacije je "<< novaRelacija <<std::endl;
-        }
-    }
-    postaviSifru1(-1);
-    postaviSifru2(-1);
-
-}
-
 void GlavniProzor2::kliknutaRelacija()
 {
 
@@ -278,18 +298,10 @@ bool GlavniProzor2::Povezivati() const
             || tbMuzZena->isChecked();
 }
 
-void GlavniProzor2::poveziOsobe()
+void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, short tip)
 {
-    //mislim da ovo moze mnogo bolje da se uradi ali da probamo ovako
-    std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
-    if (_sifra1 > 0 && _sifra2 > 0 && _sifra1 != _sifra2)
-    {
-        std::cout<<"Povezuje 2 osobe"<<std::endl;
-        //short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
-    }
-    else
-        std::cout<<"nesto ne valja"<<std::endl;//neki dijalog da nije kako treba
 
+    qDebug() << "povezuje";
     //zapravo bice dovoljno samo
     /*
         short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
@@ -304,7 +316,7 @@ void GlavniProzor2::poveziOsobe()
     //na kraju resetujemo sifre na -1
     _sifra1 = -1;
     _sifra2 = -1;
-    std::cout<<_sifra1<<" "<<_sifra2<<std::endl;
+
 }
 
 //void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
