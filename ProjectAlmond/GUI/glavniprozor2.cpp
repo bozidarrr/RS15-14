@@ -76,13 +76,37 @@ void GlavniProzor2::kreirajOpcije()
 
 }
 
+ QToolButton* GlavniProzor2::kreirajJedanAlat(QToolButton * alat, const char* ime,const char* info)
+ {
+alat=new QToolButton();
+alat->setCheckable(true);
+alat->setFocusPolicy(Qt::NoFocus);
+alat->setToolTip(info);
+std::string ikonica(":/images/images/"+std::string(ime)+".ico");
+const char* pocetak=&ikonica[0];
+alat->setIcon(QIcon(pocetak));
+alat->setIconSize(QSize(200,200));
+return alat;
+ }
+
+
 void GlavniProzor2::kreirajToolbar()
 {
 
     toolbar = addToolBar(tr("Alati"));
 
     grpToolBar=new QButtonGroup();
-    tbOsoba = new QToolButton();
+
+    tbOsoba=kreirajJedanAlat(tbOsoba,"NovaOsoba","Kreirajte novu osobu");
+    tbMuzZena=kreirajJedanAlat(tbMuzZena,"RelacijaSupruznici","Kreirajte novi odnos dva supruznika");
+    tbBratSestra=kreirajJedanAlat(tbBratSestra,"RelacijaBratSestra","Kreirajte novi odnos dvoje brace/sestara");
+    tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Kreirajte novi odnos tipa roditelj-dete");
+    tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
+    tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi");
+    tbMenjaj=kreirajJedanAlat(tbMenjaj,"","Izmenite podatke o odabranoj osobi ili relaciji");
+    tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
+
+    /*tbOsoba = new QToolButton();
     tbOsoba->setCheckable(true);
     tbOsoba->setToolTip(tr("Kreirajte novu osobu"));
     tbOsoba->setFocusPolicy(Qt::NoFocus);
@@ -146,17 +170,21 @@ void GlavniProzor2::kreirajToolbar()
     tbBrisi->setFocusPolicy(Qt::NoFocus);
     tbBrisi->setIcon(QIcon(":/images/images/Ukloni.ico"));
     tbBrisi->adjustSize();
-    tbBrisi->setShortcut(tr("ALT+R"));
+    tbBrisi->setShortcut(tr("ALT+R"));*/
 
-
-    grpToolBar->addButton(tbMuzZena);
-    grpToolBar->addButton(tbBratSestra);
-    grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbOsoba);
+    grpToolBar->addButton(tbRoditeljDete);
+    grpToolBar->addButton(tbBratSestra);
+    grpToolBar->addButton(tbMuzZena);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
+
+   /* for(QObject* tb : grpToolBar->buttons())
+    {
+        toolbar->addWidget((QWidget *)tb);
+    }*/
 
     toolbar->addWidget(tbOsoba);
     toolbar->addSeparator();
@@ -215,7 +243,7 @@ void GlavniProzor2::kliknutoPlatno()
 
     }
 
-    tbPomeranje->setChecked(true);
+    tbDetalji->setChecked(true);
 }
 
 void GlavniProzor2::dodajNovuOsobu(int x,int y)
