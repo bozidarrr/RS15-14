@@ -203,13 +203,15 @@ void GlavniProzor2::kliknutoPlatno()
             else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                prva->move(y1, y2);
+                prva->setX(x2);
+                prva->setY(y2);
+                prva->move(x2, y2);
 
             }
 
     }
 
-    tbDetalji->setChecked(true);
+//    tbDetalji->setChecked(true);
 
 //        std::cout<<stabloOkvir->X1()<<stabloOkvir->X2()<<stabloOkvir->Y1()<<stabloOkvir->Y2()<<std::endl;
 //    std::cout<<stabloOkvir->resetovan()<<std::endl;
