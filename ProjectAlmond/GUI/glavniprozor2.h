@@ -65,6 +65,7 @@ private:
     QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
     QToolButton *tbPomeranje, *tbDetalji;
     QToolButton *tbBrisi, *tbMenjaj;
+    QToolButton *tbUredi;
     QToolBar *toolbar;
 
     PorodicnoStablo *stablo;

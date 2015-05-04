@@ -103,74 +103,9 @@ void GlavniProzor2::kreirajToolbar()
     tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Kreirajte novi odnos tipa roditelj-dete");
     tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
     tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi");
-    tbMenjaj=kreirajJedanAlat(tbMenjaj,"","Izmenite podatke o odabranoj osobi ili relaciji");
+    tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili relaciji");
     tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
-
-    /*tbOsoba = new QToolButton();
-    tbOsoba->setCheckable(true);
-    tbOsoba->setToolTip(tr("Kreirajte novu osobu"));
-    tbOsoba->setFocusPolicy(Qt::NoFocus);
-    tbOsoba->setIcon(QIcon(":/images/images/NovaOsoba.ico"));
-    tbOsoba->adjustSize();
-    tbOsoba->setShortcut(tr("ALT+N"));
-
-    tbMuzZena = new QToolButton();
-    tbMuzZena->setCheckable(true);
-    tbMuzZena->setToolTip(tr("Kreirajte novi odnos dva supruznika"));
-    tbMuzZena->setFocusPolicy(Qt::NoFocus);
-    tbMuzZena->setIcon(QIcon(":/images/images/RelacijaSupruznici.ico"));
-    tbMuzZena->adjustSize();
-    tbMuzZena->setShortcut(tr("ALT+V"));
-
-    tbBratSestra = new QToolButton();
-    tbBratSestra->setCheckable(true);
-    tbBratSestra->setToolTip(tr("Kreirajte novi odnos dvoje brace/sestara"));
-    tbBratSestra->setFocusPolicy(Qt::NoFocus);
-    tbBratSestra->setIcon(QIcon(":/images/images/RelacijaBratSestra.ico"));
-    tbBratSestra->adjustSize();
-    tbBratSestra->setShortcut(tr("ALT+B"));
-
-    tbRoditeljDete = new QToolButton();
-    tbRoditeljDete->setCheckable(true);
-    tbRoditeljDete->setToolTip(tr("Kreirajte novi odnos tipa roditelj-dete"));
-    tbRoditeljDete->setFocusPolicy(Qt::NoFocus);
-    tbRoditeljDete->setIcon(QIcon(":/images/images/RelacijaDete.ico"));
-    tbRoditeljDete->adjustSize();
-    tbRoditeljDete->setShortcut(tr("ALT+M"));
-
-    tbPomeranje = new QToolButton();
-    tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
-    tbPomeranje->setCheckable(true);
-    tbPomeranje->setFocusPolicy(Qt::NoFocus);
-    tbPomeranje->setIcon(QIcon(":/images/images/Pomeri.ico"));
-    tbPomeranje->adjustSize();
-    tbPomeranje->setShortcut(tr("ALT+P"));
-
-    tbDetalji = new QToolButton();
-    tbDetalji->setCheckable(true);
-    tbDetalji->setToolTip(tr("Detalji o odabranoj osobi"));
-    tbDetalji->setFocusPolicy(Qt::NoFocus);
-    tbDetalji->setIcon(QIcon(":/images/images/Informacija.ico"));
-    tbDetalji->adjustSize();
-    tbDetalji->setShortcut(tr("ALT+I"));
-
-    tbMenjaj = new QToolButton();
-    tbMenjaj->setCheckable(true);
-    tbMenjaj->setText("M");
-    tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili relaciji"));
-    tbMenjaj->setFocusPolicy(Qt::NoFocus);
-    // tbMenjaj->setIcon(QIcon(":/images/images/Menjaj.ico"));
-    tbMenjaj->adjustSize();
-    tbMenjaj->setShortcut(tr("ALT+U"));
-
-
-    tbBrisi = new QToolButton();
-    tbBrisi->setCheckable(true);
-    tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
-    tbBrisi->setFocusPolicy(Qt::NoFocus);
-    tbBrisi->setIcon(QIcon(":/images/images/Ukloni.ico"));
-    tbBrisi->adjustSize();
-    tbBrisi->setShortcut(tr("ALT+R"));*/
+    tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
 
     grpToolBar->addButton(tbOsoba);
     grpToolBar->addButton(tbRoditeljDete);
@@ -181,11 +116,6 @@ void GlavniProzor2::kreirajToolbar()
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
 
-   /* for(QObject* tb : grpToolBar->buttons())
-    {
-        toolbar->addWidget((QWidget *)tb);
-    }*/
-
     toolbar->addWidget(tbOsoba);
     toolbar->addSeparator();
     toolbar->addWidget(tbMuzZena);
@@ -193,16 +123,17 @@ void GlavniProzor2::kreirajToolbar()
     toolbar->addWidget(tbRoditeljDete);
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
-    toolbar->addWidget(tbDetalji);
     toolbar->addWidget(tbMenjaj);
     toolbar->addWidget(tbBrisi);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbUredi);
+    toolbar->addWidget(tbDetalji);
 
     QDockWidget *alati = new QDockWidget(tr("Alati"));
-    alati->setWidget(toolbar);//i recimo
+    alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
                            | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::TopDockWidgetArea, alati);
-    //delete alati;
 }
 
 void GlavniProzor2::krerajMestoZaInfo()
