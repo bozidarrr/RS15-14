@@ -4,18 +4,16 @@ short int Osoba::_MinSifra=0;
 
 Osoba::Osoba(const std::string ime, const std::string prezime, const char pol,
              const std::string datum_rodjenja, const std::string datum_smrti)
-    : _ime(ime), _prezime(prezime),_pol(pol),
+    : _sifra(Osoba::_MinSifra++),
+      _ime(ime), _prezime(prezime),_pol(pol),
       _datum_rodjenja(datum_rodjenja),
       _datum_smrti(datum_smrti),
-      _supruznici(2),_sifra(-1)
+      _supruznici(2)
 
 {
-    _MinSifra++;
-    _sifra=_MinSifra;
-   // std::cout<<"Kreirao osobu: "<<_ime<<" sa sifrom: "<<_sifra<<std::endl;
+       // std::cout<<"Kreirao osobu: "<<_ime<<" sa sifrom: "<<_sifra<<std::endl;
 }
 
-//kada osobu uklanjamo iz stabla, sve njene veze moraju biti pobrisane, ali moraju obavestiti i objekte sa kojima su vezane da vise ne postoje
 Osoba::~Osoba()
 {
     //Obavestavamo:
@@ -59,7 +57,6 @@ Osoba& Osoba::operator=(Osoba& nova){
     return *this;
 }
 
-/* provera ispravnosti podataka? reg.exp? */
 
 short int Osoba::Sifra()const
 {
@@ -91,21 +88,28 @@ char Osoba::Pol() const
     return _pol;
 }
 
+
+std::vector<Supruznik *> &Osoba::Supruznici()
+{
+    return _supruznici;
+}
+
+
+void Osoba::UkloniSupruznika(Supruznik* inicijator){    
+    _supruznici.erase(std::remove(_supruznici.begin(), _supruznici.end(), inicijator), _supruznici.end());
+}
+
+
 bool Osoba::ProveriPodatke()const
 {
     //todo
     return true;
 }
 
-std::vector<Supruznik*>& Osoba::Supruznici()
+
+std::string Osoba::toString()const
 {
-    return _supruznici;
-}
-
-
-//ovde koristim neko zlo, takozvani erase-remove idiom: procitajte na netu
-void Osoba::UkloniSupruznika(Supruznik* inicijator){    
-    _supruznici.erase(std::remove(_supruznici.begin(), _supruznici.end(), inicijator), _supruznici.end());
+    return std::string("<b>Ime:<b/> "+_ime+"\n<b>Prezime: <b/> "+_prezime+"<b>\nPol: <b/> "+_pol);
 }
 
 

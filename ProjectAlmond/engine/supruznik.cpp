@@ -55,7 +55,9 @@ Osoba& Supruznik::Zena() const
 
 
 //jer ako je muz inicijator, onda zena treba da ga obrise i obratno
-void Supruznik::UkloniSe(const Osoba *inicijator=nullptr)
+bool Supruznik::UkloniSe(const Osoba *inicijator=nullptr)
 {
-    (inicijator==&Muz())?Zena().UkloniSupruznika(this):Muz().UkloniSupruznika(this);//todo
+    (inicijator==&Muz())?Zena().UkloniSupruznika(this):Muz().UkloniSupruznika(this);
+    return true;
+    //todo
 }
