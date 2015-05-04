@@ -16,7 +16,7 @@ okvirStabla::~okvirStabla()
 
 void okvirStabla::mousePressEvent(QMouseEvent *event)
 {
-      std::cout<<"pritisao misa"<<std::endl;
+      std::cout<<"pritisao misa na okvir"<<std::endl;
     if (event->button() == Qt::LeftButton) {
         _prviX=event->pos().x();
         _prviY=event->pos().y();
@@ -26,10 +26,13 @@ void okvirStabla::mousePressEvent(QMouseEvent *event)
 
 void okvirStabla::mouseReleaseEvent(QMouseEvent *event)
 {
-    std::cout<<"pustio misa"<<std::endl;
+    std::cout<<"pustio misa na okvir"<<std::endl;
     if (event->button() == Qt::LeftButton) {
-        _drugiX=event->pos().x();
-        _drugiY=event->pos().y();
+        if (_drugiX == -1 && _drugiY == -1)
+        {
+            _drugiX=event->pos().x();
+            _drugiY=event->pos().y();
+        }
     }
     emit kliknut();
 }
@@ -70,4 +73,22 @@ void okvirStabla::Y1(int y1)
 void okvirStabla::Y2(int y2)
 {
     _drugiY = y2;
+}
+
+void okvirStabla::resetujKoordinate()
+{
+    _prviX = -1;
+    _drugiX = -1;
+    _prviY = -1;
+    _drugiY = -1;
+}
+
+bool okvirStabla::resetovan()
+{
+    return (_prviX == -1 && _prviY == -1 && _drugiX == -1 && _drugiY == -1);
+}
+
+void okvirStabla::kliknutIndirektno()
+{
+    emit kliknut();
 }

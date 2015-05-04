@@ -1,12 +1,14 @@
 #ifndef FILTEROBJECT_H
 #define FILTEROBJECT_H
-
+//#include <GUI/widgetosoba.h>
 #include <QObject>
 #include <QEvent>
 #include <QDebug>
 #include <GUI/okvirstabla.h>
 #include <QMouseEvent>
 #include <QPoint>
+
+class WidgetOsoba;
 /**
  * @brief The FilterObject class
  * Mozda bi ovo resilo problem kliktanja :)

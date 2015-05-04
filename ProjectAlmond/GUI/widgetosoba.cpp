@@ -20,6 +20,7 @@ WidgetOsoba::WidgetOsoba(short int sifra, int x, int y,  GlavniProzor2 *gp, QWid
                                  " font-size:12px; ");
     //sad kad sam nasla kako se to implementira mozda bi hteli malo drugacije da napravimo widget posto sam trazila i ne postoji
     //toolkit u Qt mislila sam mozda da dodamo neku labelu sa zaobljenim ivicama posto u css-u to moze da se kaze
+    ui->ImeOsobe->installEventFilter(new filterZaLabelu());
 
 
 }
@@ -60,90 +61,10 @@ void WidgetOsoba::postaviImePrezime(const std::string &ip)
     ui->ImeOsobe->setText(q_ip);
 }
 
-void WidgetOsoba::mousePressEvent(QMouseEvent *event)
-{
-
-      std::cout<<"pritisao misa na osobu "<<_sifra<<std::endl;
-    if (event->button() == Qt::LeftButton) {
-        QDrag *drag = new QDrag(this);
-              QMimeData *mimeData = new QMimeData;
-              mimeData->setText(QString(_sifra));
-              drag->setMimeData(mimeData);
-              w->postaviSifru1(_sifra);
-              drag->exec();
-
-
-    }
-
-}
-
-void WidgetOsoba::dragEnterEvent(QDragEnterEvent *event)
-{
-           event->acceptProposedAction();
-}
-
-
-void WidgetOsoba::dropEvent(QDropEvent *event)
-{
-  w->postaviSifru2(_sifra);
-  w->otpustenaOsoba();
-    event->acceptProposedAction();
-
-}
-
-
-void WidgetOsoba::mouseReleaseEvent(QMouseEvent *event)
-{
-    std::cout<<"pustio misa sa osobe "<<_sifra<<std::endl;
- /*   if (event->button() == Qt::LeftButton) {
-  //     emit otpusten();
-    }*/
-
-}
 
 
 
 
-/*
-void WidgetOsoba::on_btnOsoba_clicked()
-{
-    if (w->Povezivati())
-    {
-        //std::cout<<"ovo znaci da treba oznaciti prvu i drugu"<<std::endl;
-        if (w->Sifra1() > 0 && w->Sifra1() != _sifra && w->Sifra2() < 0)
-        {
-            std::cout<<"if"<<std::endl;
-            w->postaviSifru2(_sifra);
-            w->poveziOsobe();
-        }
-        if (w->Sifra1() < 0)
-            w->postaviSifru1(_sifra);
-    }
-    else
-    {
-        w->promeniSelektovanu(_sifra);
-        w->popuniInformacije();
-    }
-}
-*//*
-void WidgetOsoba::on_btnOsoba_pressed()
-{
-    //pocinjemo povezivanje sa drugom osobom - tj kreiranje relacije u zavisnosti od radio buttona
-    //nece moci ovako jer se ovo desava i na clicked :P
-   // w->postaviSifru1(_sifra);
-}
-*//*
-void WidgetOsoba::on_btnOsoba_released()
-{
-    //a na ovo kreiramo relaciju ako je sve bilo ok
-    //- pozivamo konstruktor odgovarajuci iz engin-a,
-    //a on vraca podatke i poziva iscrtavanje relacije
-    //mozda bi ovde mogla umesto ovaj metod sto pravis da predefinises void releasemouse()
-    //recimo
-
-   // w->postaviSifru2(_sifra);
-   // w->poveziOsobe();
-}*/
 //bool WidgetOsoba::operator ==(const WidgetOsoba& druga)const{
 //    //za proveru jednakosti 2 widgeta dovoljno je da proverimo njihove sifre jer je to jedinstveni identifikator
 //    if(_sifra==druga._sifra)
@@ -151,10 +72,4 @@ void WidgetOsoba::on_btnOsoba_released()
 //    return false;
 //}
 
-//void WidgetOsoba::on_btnOsoba_toggled(bool checked)
-//{
-//    //mislila sam na ovaj signal da uklanjamo osobu iz stabla
-//    if (checked)
-//        w->ukloniOsobu(this);
-//    std::cout<<"uklanjamo"<<std::endl;
-//}
+

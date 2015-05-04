@@ -8,6 +8,7 @@
 #include <QString>
 #include "GUI/glavniprozor.h"
 #include "GUI/glavniprozor2.h"
+#include "alati/filterzalabelu.h"
 
 class GlavniProzor;
 class GlavniProzor2;
@@ -36,16 +37,6 @@ public:
     bool sadrziTacku(int x, int y);
     //bool operator ==(const WidgetOsoba& druga)const;
 
-signals:
-
-    void otpusten();
-
-
-protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
 
 private:
     Ui::WidgetOsoba *ui;
