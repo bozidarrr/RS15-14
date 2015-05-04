@@ -74,6 +74,8 @@ private:
     static short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
 
+    FilterObject *filter;
+
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>

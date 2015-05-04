@@ -51,3 +51,23 @@ int okvirStabla::Y2()
 {
     return _drugiY;
 }
+
+void okvirStabla::X1(int x1)
+{
+    _prviX = x1;
+}
+
+void okvirStabla::X2(int x2)
+{
+    _drugiX = x2;
+}
+
+void okvirStabla::Y1(int y1)
+{
+    _prviY = y1;
+}
+
+void okvirStabla::Y2(int y2)
+{
+    _drugiY = y2;
+}
