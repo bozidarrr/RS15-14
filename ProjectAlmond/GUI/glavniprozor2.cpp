@@ -25,9 +25,13 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
 //        FilterObject *f = new FilterObject(stabloOkvir);
-        QPushButton *b = new QPushButton("dugem");
-       b->installEventFilter(filter);
-       b->show();
+        QPushButton *b1 = new QPushButton("1", stabloOkvir);
+         QPushButton *b2 = new QPushButton("2", stabloOkvir);
+         b2->move(250,100);
+       b1->installEventFilter(filter);
+       b1->show();
+       b2->installEventFilter(filter);
+       b2->show();
 
 
 }
