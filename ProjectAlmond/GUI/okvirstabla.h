@@ -24,8 +24,15 @@ public:
     void Y1(int y1);
     void Y2(int y2);
 
+    void resetujKoordinate();
+    bool resetovan();
+
+    void kliknutIndirektno();
+
 signals:
     void kliknut();
+    void kliknutaOsoba();
+    //kliknutaRelacija();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

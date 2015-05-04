@@ -15,7 +15,7 @@
 #include "ui_glavniprozor2.h"
 #include "okvirstabla.h"
 #include <vector>
-
+#include <qdebug.h>
 #include "alati/filterobject.h"
 class WidgetOsoba;
 namespace Ui {
@@ -42,7 +42,7 @@ public:
 
     bool Povezivati() const;
 
-    void poveziOsobe();
+    void poveziOsobe(short int sifra1, short int sifra2, short int tip);
     /**
      * @brief kreirajOpcije
      * treba dodati sve opcije, tipa save, cancel, open, recently opened, bla bla
@@ -84,10 +84,13 @@ private:
 
     QToolButton *kreirajJedanAlat(QToolButton *alat, const char *ime, const char *info);
 
+
+
 public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
     void kliknutoPlatno();
  //   void stisnutaOsoba(int sifra);
+    void test();
 
     void kliknutaRelacija();
 };
