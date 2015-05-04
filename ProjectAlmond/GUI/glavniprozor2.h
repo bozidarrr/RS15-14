@@ -80,6 +80,9 @@ private:
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
     std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
+
+    QToolButton *kreirajJedanAlat(QToolButton *alat, const char *ime, const char *info);
+
 public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
     void kliknutoPlatno();
