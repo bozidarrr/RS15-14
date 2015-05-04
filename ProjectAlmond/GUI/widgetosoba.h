@@ -34,6 +34,10 @@ public:
 
     int Y()const;
 
+    void setX(int x);
+
+    void setY(int y);
+
     short Sifra()const;
 
     bool sadrziTacku(int x, int y);

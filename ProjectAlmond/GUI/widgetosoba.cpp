@@ -27,7 +27,6 @@ WidgetOsoba::WidgetOsoba(short int sifra, int x, int y,  GlavniProzor2 *gp, QWid
 }
 
 
-
 WidgetOsoba::~WidgetOsoba()
 {
     delete ui;
@@ -45,6 +44,19 @@ short int WidgetOsoba::Sifra()const
 {
     return _sifra;
 }
+
+void WidgetOsoba::setX(int x)
+{
+    //provera da li je u redu!
+    _x=x;
+}
+
+void WidgetOsoba::setY(int y)
+{
+    //provera da li je u redu!
+    _y=y;
+}
+
 
 bool WidgetOsoba::sadrziTacku(int x, int y)
 {

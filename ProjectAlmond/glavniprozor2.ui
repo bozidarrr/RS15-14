@@ -17,10 +17,10 @@
    <widget class="QFrame" name="stabloFrame">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>10</y>
-      <width>521</width>
-      <height>531</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1000</width>
+      <height>1000</height>
      </rect>
     </property>
     <property name="acceptDrops">
@@ -62,8 +62,180 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="mFajlovi">
+    <property name="title">
+     <string>Fajlovi</string>
+    </property>
+    <addaction name="aNovoStablo"/>
+    <addaction name="aOtvori"/>
+    <addaction name="aSkoroOtvarani"/>
+    <addaction name="separator"/>
+    <addaction name="aSacuvaj"/>
+    <addaction name="aIzvezi"/>
+    <addaction name="separator"/>
+    <addaction name="aUgasi"/>
+   </widget>
+   <widget class="QMenu" name="mPodesavanja">
+    <property name="title">
+     <string>Podesavanja</string>
+    </property>
+    <widget class="QMenu" name="mJezik">
+     <property name="title">
+      <string>Odaberite jezik</string>
+     </property>
+     <addaction name="aSrpski"/>
+     <addaction name="aEngleski"/>
+     <addaction name="aNemacki"/>
+    </widget>
+    <addaction name="aMreza"/>
+    <addaction name="aSamoKrv"/>
+    <addaction name="aPreciGore"/>
+    <addaction name="separator"/>
+    <addaction name="mJezik"/>
+    <addaction name="separator"/>
+    <addaction name="aAnimacije"/>
+   </widget>
+   <widget class="QMenu" name="mPrikaz">
+    <property name="title">
+     <string>Prikaz</string>
+    </property>
+    <addaction name="aTema"/>
+    <addaction name="aAlati"/>
+    <addaction name="aInformacije"/>
+   </widget>
+   <widget class="QMenu" name="mPomoc">
+    <property name="title">
+     <string>Pomoc</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="mOProgramu">
+    <property name="title">
+     <string>O programu</string>
+    </property>
+   </widget>
+   <addaction name="mFajlovi"/>
+   <addaction name="mPodesavanja"/>
+   <addaction name="mPrikaz"/>
+   <addaction name="mOProgramu"/>
+   <addaction name="mPomoc"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="aNovoStablo">
+   <property name="text">
+    <string>Novo stablo</string>
+   </property>
+  </action>
+  <action name="aOtvori">
+   <property name="text">
+    <string>Otvorite fajl</string>
+   </property>
+  </action>
+  <action name="aSkoroOtvarani">
+   <property name="text">
+    <string>Skoro otvarani fajlovi</string>
+   </property>
+  </action>
+  <action name="aSacuvaj">
+   <property name="text">
+    <string>Sacuvajte izmene</string>
+   </property>
+  </action>
+  <action name="aIzvezi">
+   <property name="text">
+    <string>Sacuvajte kao...</string>
+   </property>
+  </action>
+  <action name="aUgasi">
+   <property name="text">
+    <string>Ugasite program</string>
+   </property>
+  </action>
+  <action name="aMreza">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prikazi mrezu</string>
+   </property>
+  </action>
+  <action name="aSamoKrv">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prikazuj samo krvne srodnike</string>
+   </property>
+  </action>
+  <action name="aSrpski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Srpski</string>
+   </property>
+  </action>
+  <action name="aEngleski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="aNemacki">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Deutsch</string>
+   </property>
+  </action>
+  <action name="aAnimacije">
+   <property name="text">
+    <string>Omoguci animacije</string>
+   </property>
+  </action>
+  <action name="aPreciGore">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Preci su sa gornje strane</string>
+   </property>
+  </action>
+  <action name="aTema">
+   <property name="text">
+    <string>Aktivna tema</string>
+   </property>
+  </action>
+  <action name="aAlati">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Alati</string>
+   </property>
+  </action>
+  <action name="aInformacije">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Informacije</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
