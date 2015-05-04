@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QEvent>
 #include <QDebug>
+#include <GUI/okvirstabla.h>
+#include <QMouseEvent>
 /**
  * @brief The FilterObject class
  * Mozda bi ovo resilo problem kliktanja :)
@@ -18,7 +20,7 @@ class FilterObject : public QObject
 {
     Q_OBJECT
 public:
-    explicit FilterObject(QObject *parent = 0);
+    explicit FilterObject(okvirStabla *okvir, QObject *parent = 0);
     ~FilterObject();
 
     bool eventFilter(QObject *o, QEvent *e);
@@ -26,6 +28,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    okvirStabla *_okvir;
 };
 
 #endif // FILTEROBJECT_H

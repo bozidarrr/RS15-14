@@ -19,6 +19,11 @@ public:
     int Y1();
     int Y2();
 
+    void X1(int x1);
+    void X2(int x2);
+    void Y1(int y1);
+    void Y2(int y2);
+
 signals:
     void kliknut();
 

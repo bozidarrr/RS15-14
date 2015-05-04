@@ -24,10 +24,10 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     krerajMestoZaInfo();
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
-    //    FilterObject *f = new FilterObject();
-    //    QPushButton *b = new QPushButton("dugem");
-    //    b->installEventFilter(f);
-    //    b->show();
+//        FilterObject *f = new FilterObject(stabloOkvir);
+        QPushButton *b = new QPushButton("dugem");
+       b->installEventFilter(filter);
+       b->show();
 
 
 }
@@ -57,6 +57,8 @@ void GlavniProzor2::kreirajPlatnoZaCrtanje()
     stabloOkvir=new okvirStabla(ui->stabloFrame);
 
     connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(kliknutoPlatno()));
+
+    filter = new FilterObject(stabloOkvir);
 
 }
 
@@ -243,6 +245,8 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
 
   //      connect(novaOsoba,SIGNAL(stisnut(int)),this,SLOT(stisnutaOsoba(int)));
    //     connect(novaOsoba,SIGNAL(otpusten()),this,SLOT(otpustenaOsoba()));
+
+        //novaOsoba->installEventFilter(filter);
 
         novaOsoba->show();
         _osobe.push_back(novaOsoba);
