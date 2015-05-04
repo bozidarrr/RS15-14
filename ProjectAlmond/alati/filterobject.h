@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <GUI/okvirstabla.h>
 #include <QMouseEvent>
+#include <QPoint>
 /**
  * @brief The FilterObject class
  * Mozda bi ovo resilo problem kliktanja :)
