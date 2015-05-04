@@ -88,8 +88,6 @@ private:
 public Q_SLOTS:
     void dodajNovuOsobu(int x, int y);
     void kliknutoPlatno();
- //   void stisnutaOsoba(int sifra);
-    void test();
 
     void kliknutaRelacija();
 };

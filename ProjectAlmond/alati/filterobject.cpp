@@ -21,10 +21,9 @@ bool FilterObject::eventFilter(QObject *o, QEvent *e)
 //            qDebug() <<mouse->pos().x();
 //            qDebug() << mouse->pos().y();
 
-            QWidget *w = dynamic_cast<QWidget*>(o);
-            if (w == nullptr)
-                return false;
-            QPoint p = w->mapToParent(mouse->pos());
+//            QWidget *w = dynamic_cast<QWidget*>(o);
+//            WidgetOsoba osoba = qobject_cast<WidgetOsoba>(*o);
+            //QPoint p = w->mapToParent(mouse->pos());
 
 //            WidgetOsoba *osoba = dynamic_cast<WidgetOsoba*>(o);
 //            if (osoba == nullptr)

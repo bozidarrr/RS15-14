@@ -87,8 +87,3 @@ bool okvirStabla::resetovan()
 {
     return (_prviX == -1 && _prviY == -1 && _drugiX == -1 && _drugiY == -1);
 }
-
-void okvirStabla::kliknutIndirektno()
-{
-    emit kliknut();
-}
