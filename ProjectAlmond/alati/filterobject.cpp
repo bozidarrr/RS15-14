@@ -21,6 +21,13 @@ bool FilterObject::eventFilter(QObject *o, QEvent *e)
             qDebug() << "levo dugme";
             qDebug() <<mouse->pos().x();
             qDebug() << mouse->pos().y();
+
+            QWidget *w = (QWidget*)o;
+            QPoint p = w->mapToParent(mouse->pos());
+
+
+            qDebug() <<p.x();
+            qDebug() << p.y();
             _okvir->X1(mouse->pos().x());
             _okvir->Y1(mouse->pos().y());
         }
@@ -36,6 +43,14 @@ bool FilterObject::eventFilter(QObject *o, QEvent *e)
             qDebug() << "levo dugme";
             qDebug() <<mouse->pos().x();
             qDebug() << mouse->pos().y();
+
+            QWidget *w = (QWidget*)o;
+            QPoint p = w->mapToParent(mouse->pos());
+
+
+            qDebug() <<p.x();
+            qDebug() << p.y();
+
             _okvir->X2(mouse->pos().x());
             _okvir->Y2(mouse->pos().y());
             _okvir->kliknut();
