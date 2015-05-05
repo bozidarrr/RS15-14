@@ -80,13 +80,14 @@ class Datum
     bool operator <=(const Datum& d) const;
     bool operator ==(const Datum& d) const;
     bool operator !=(const Datum& d) const;
-
+    std::string toString()const;
 
 
 
   private:
     /* mozda i da se napravi toString umesto ovoga */
     friend std::ostream & operator<<(std::ostream & ostr, const Datum & d);
+    friend std::istream & operator>>(std::istream & istr, Datum & d);
 
     void PostaviNepoznat();
 

@@ -134,28 +134,66 @@ bool Datum::Rodjendan(const Datum & danas) const
 }
 
 
+std::string Datum::toString()const
+{
+    if (NepoznatDatum())
+    {
+        return "--.--.----.";
+
+    }
+
+    std::string rezultat="";
+
+    if (_dan > 0)
+    {
+        if (_dan < 10)
+            rezultat.append("0");
+        rezultat.append(_dan+"");
+    }
+    rezultat.append(".");
+    if (_mesec > 0)
+    {
+        if (_mesec < 10)
+            rezultat.append("0");
+        rezultat.append(_mesec+"");
+    }
+    rezultat.append(".");
+    rezultat.append(_godina+"");
+    return rezultat;
+
+}
+
+
 std::ostream & operator<<(std::ostream & ostr, const Datum & d)
 {
     if (d.NepoznatDatum())
     {
-        ostr << "--.--.----.";
+        ostr << "-1 -1 -1";
         return ostr;
     }
 
-    if (d._dan > 0)
-    {
-        //if (d._dan < 10)
-            //ostr << 0;
-        ostr << std::setfill('0') << std::setw(2) << d._dan << '.';
-    }
-    if (d._mesec > 0)
-    {
-        //if (d._mesec < 10)
-        //    ostr << 0;
-        ostr << std::setfill('0') << std::setw(2) << d._mesec << '.';
-    }
-    ostr << d._godina << '.';
+        ostr << d._dan << ' ' <<d._mesec<<' '<<d._godina<<std::endl;
+
     return ostr;
+}
+
+std::istream & operator>>(std::istream & istr, Datum & d)
+{
+
+
+
+    if (d.NepoznatDatum())
+    {
+        d._dan=-1;
+        d._mesec=-1;
+        d._godina=-1;
+        return istr;
+    }
+
+      istr >> d._dan >> d._mesec >> d._godina;
+
+    return istr;
+
 }
 
 void Datum::PostaviNepoznat()
