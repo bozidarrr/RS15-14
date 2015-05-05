@@ -8,24 +8,24 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QIcon icon(":images/ProjectAlmond.ico");
+    QIcon icon(":images/images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond");
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
 
-
+    kreirajPlatnoZaCrtanje();
     kreirajToolbar();
     krerajMestoZaInfo();
-    kreirajPlatnoZaCrtanje();
+
     //kreirajOpcije();
 
     WidgetOsoba *w1 = new WidgetOsoba(111,12,12,this,stabloOkvir);
-        WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
+    WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
 
-        w1->move(12,12);
-        w2->move(50,50);
+    w1->move(12,12);
+    w2->move(50,50);
 }
 
 GlavniProzor2::~GlavniProzor2()
@@ -45,14 +45,22 @@ void GlavniProzor2::popuniInformacije(short sifra)
     {
         Osoba *osoba = stablo->nadjiOsobuPoSifri(sifra);
         if (osoba != nullptr)
-            ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
     }
 }
 
 void GlavniProzor2::kreirajPlatnoZaCrtanje()
 {
-    stabloOkvir=new okvirStabla(ui->stabloFrame);
+    QVBoxLayout* lejaut=new QVBoxLayout();
+    QScrollArea* skrolPanel=new QScrollArea();
+    lejaut->addWidget(skrolPanel);
+    ui->centralwidget->setLayout(lejaut);
 
+    stabloOkvir=new okvirStabla(skrolPanel);
+    stabloOkvir->setGeometry(0,0,5000,5000);
+    stabloOkvir->updateGeometry();
+    skrolPanel->setWidget(stabloOkvir);
+    stabloOkvir->setStyleSheet("background-color:rgb(0, 0, 0);");
     connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(kliknutoPlatno()));
 
     filter = new FilterObject(stabloOkvir);
@@ -63,18 +71,18 @@ void GlavniProzor2::kreirajOpcije()
 {
 }
 
- QToolButton* GlavniProzor2::kreirajJedanAlat(QToolButton * alat, const char* ime,const char* info)
- {
-alat=new QToolButton();
-alat->setCheckable(true);
-alat->setFocusPolicy(Qt::NoFocus);
-alat->setToolTip(info);
-std::string ikonica(":/images/images/"+std::string(ime)+".ico");
-const char* pocetak=&ikonica[0];
-alat->setIcon(QIcon(pocetak));
-alat->setIconSize(QSize(200,200));
-return alat;
- }
+QPushButton* GlavniProzor2::kreirajJedanAlat(QPushButton * alat, const char* ime,const char* info)
+{
+    alat=new QPushButton();
+    alat->setCheckable(true);
+    alat->setFocusPolicy(Qt::NoFocus);
+    alat->setToolTip(info);
+    std::string ikonica(":/images/images/"+std::string(ime)+".ico");
+    const char* pocetak=&ikonica[0];
+    alat->setIcon(QIcon(pocetak));
+    alat->setIconSize(QSize(48,48));
+    return alat;
+}
 
 
 void GlavniProzor2::kreirajToolbar()
@@ -93,6 +101,8 @@ void GlavniProzor2::kreirajToolbar()
     tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili relaciji");
     tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
     tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
+
+    tbUredi->setCheckable(false);
 
     grpToolBar->addButton(tbOsoba);
     grpToolBar->addButton(tbRoditeljDete);
@@ -121,15 +131,16 @@ void GlavniProzor2::kreirajToolbar()
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
-                           | Qt::LeftDockWidgetArea);
+                           | Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     addDockWidget(Qt::TopDockWidgetArea, alati);
 }
 
 void GlavniProzor2::krerajMestoZaInfo()
 {
     QDockWidget *info = new QDockWidget(tr("Informacije"));
-    info->setWidget(ui->label);//i recimo
-    ui->label->setToolTip("Sredicu ovo :)");
+    Labela=new QLabel("Informacije");
+    info->setWidget(Labela);//i recimo
+   Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
@@ -241,7 +252,7 @@ void GlavniProzor2::kliknutoPlatno()
                 qDebug() << "ne moze cast u wosobu";
             else
                 //stablo->UkloniOsobuPoSifri(druga->Sifra());
-            druga->hide();
+                druga->hide();
             //DORADITI
         }
 
@@ -304,9 +315,9 @@ void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, Odnos odnos)
             qDebug() << "Povezivanje jeste uspelo";
     }
 
-//        cuvamo u vektor,
-//        pravimo widget za relaciju i iscrtavamo ga na sredini
-//        tu negde pozivamo i dijalog za relaciju
+    //        cuvamo u vektor,
+    //        pravimo widget za relaciju i iscrtavamo ga na sredini
+    //        tu negde pozivamo i dijalog za relaciju
 
 }
 

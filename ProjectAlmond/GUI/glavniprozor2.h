@@ -5,8 +5,11 @@
 #include <engine/porodicnostablo.h>
 #include <QButtonGroup>
 #include <QToolBar>
-#include <QToolButton>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
 #include <QDockWidget>
+#include <QVBoxLayout>
 #include "GUI/widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
 #include <string>
@@ -46,7 +49,7 @@ public:
     void kreirajToolbar();
     void krerajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
-      void otpustenaOsoba();
+    void otpustenaOsoba();
     //void ukloniOsobu(WidgetOsoba* o);
 
 
@@ -54,13 +57,13 @@ private:
     Ui::GlavniProzor2 *ui;
 
     QButtonGroup *grpToolBar;
-    QToolButton *tbOsoba;
-    QToolButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
-    QToolButton *tbPomeranje, *tbDetalji;
-    QToolButton *tbBrisi, *tbMenjaj;
-    QToolButton *tbUredi;
+    QPushButton *tbOsoba;
+    QPushButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
+    QPushButton *tbPomeranje, *tbDetalji;
+    QPushButton *tbBrisi, *tbMenjaj;
+    QPushButton *tbUredi;
     QToolBar *toolbar;
-
+    QLabel *Labela;
     PorodicnoStablo *stablo;
 
     //okvirStabla *stabloOkvir;
@@ -74,7 +77,7 @@ private:
     //vector<sifra_relacije, pozicija_relacije>
     std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
 
-    QToolButton *kreirajJedanAlat(QToolButton *alat, const char *ime, const char *info);
+    QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
 
 
 
