@@ -1,6 +1,6 @@
 #include "widgetosoba.h"
 #include "ui_widgetosoba.h"
-#include "GUI/glavniprozor.h"
+#include "GUI/glavniprozor2.h"
 #include <iostream>
 #include <QtGui>
 WidgetOsoba::WidgetOsoba(short int sifra, int x, int y,  GlavniProzor2 *gp, QWidget *parent) :

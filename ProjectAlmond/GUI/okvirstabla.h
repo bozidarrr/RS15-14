@@ -2,6 +2,8 @@
 #define OKVIRSTABLA_H
 
 #include <QWidget>
+#include<vector>
+#include"alati/linija.h"
 
 namespace Ui {
 class okvirStabla;
@@ -24,6 +26,8 @@ public:
     void Y1(int y1);
     void Y2(int y2);
 
+    void povuciLiniju(int x1,int y1,int x2, int y2);
+
 //    void resetujKoordinate();
 //    bool resetovan();
 
@@ -33,10 +37,13 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 private:
     Ui::okvirStabla *ui;
     int _prviX,_prviY,_drugiX,_drugiY;
+    QPainter *cetka;
+    std::vector<linija> zaCrtanje;
 };
 
 #endif // OKVIRSTABLA_H

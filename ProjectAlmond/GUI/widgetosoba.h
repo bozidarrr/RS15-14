@@ -6,13 +6,12 @@
 #include <QPushButton>
 #include <string>
 #include <QString>
-#include "GUI/glavniprozor.h"
 #include "GUI/glavniprozor2.h"
 #include "alati/filterzalabelu.h"
 #include "alati/filterobject.h"
 #include "GUI/okvirstabla.h"
 
-class GlavniProzor;
+
 class GlavniProzor2;
 
 namespace Ui {

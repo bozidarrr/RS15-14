@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     GUI/widgetosoba.cpp \
     GUI/okvirstabla.cpp \
     alati/filterobject.cpp \
-    alati/filterzalabelu.cpp
+    alati/filterzalabelu.cpp \
+    GUI/widgetrelacija.cpp \
+    alati/linija.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -39,13 +41,16 @@ HEADERS  += \
     GUI/widgetosoba.h \
     GUI/okvirstabla.h \
     alati/filterobject.h \
-    alati/filterzalabelu.h
+    alati/filterzalabelu.h \
+    GUI/widgetrelacija.h \
+    alati/linija.h
 
 FORMS    += unetiosobu.ui \
     widgetosoba.ui \
     glavniprozor2.ui \
     dialognovaosoba.ui \
-    GUI/okvirstabla.ui
+    GUI/okvirstabla.ui \
+    widgetrelacija.ui
 
 RESOURCES += \
     slike.qrc
