@@ -24,8 +24,8 @@ public:
     void Y1(int y1);
     void Y2(int y2);
 
-    void resetujKoordinate();
-    bool resetovan();
+//    void resetujKoordinate();
+//    bool resetovan();
 
 signals:
     void kliknut();

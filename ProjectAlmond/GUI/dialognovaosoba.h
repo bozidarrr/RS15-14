@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QString>
 #include <QChar>
+#include <string>
 
 namespace Ui {
 class DialogNovaOsoba;
@@ -20,6 +21,8 @@ public:
     ~DialogNovaOsoba();
 
     void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
+
+    void popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt);
 private Q_SLOTS:
     void promenaUnosa();
 
