@@ -4,7 +4,7 @@
 #include<iostream>
 okvirStabla::okvirStabla(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::okvirStabla),_prviX(-1),_prviY(-1),_drugiX(-1),_drugiY(-1)
+    ui(new Ui::okvirStabla),_prviX(-1),_prviY(-1),_drugiX(-1),_drugiY(-1),zaCrtanje()
 {
     ui->setupUi(this);
 }
@@ -34,6 +34,21 @@ void okvirStabla::mouseReleaseEvent(QMouseEvent *event)
     }
     emit kliknut();
 }
+
+void okvirStabla::paintEvent(QPaintEvent *event)
+{
+    cetka=new QPainter(this);
+    cetka->setPen(QPen(Qt::green, 3, Qt::DashLine, Qt::RoundCap));
+    cetka->setBrush(QBrush(Qt::green, Qt::SolidPattern));
+    for(linija l: zaCrtanje){
+        cetka->drawLine(l.X1(),l.Y1(),l.X2(),l.Y2());
+    }
+}
+
+  void okvirStabla::povuciLiniju(int x1,int y1,int x2, int y2)
+  {
+      zaCrtanje.push_back(linija(x1,y1,x2,y2));
+  }
 
 
 int okvirStabla::X1()

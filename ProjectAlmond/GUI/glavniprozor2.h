@@ -10,7 +10,9 @@
 #include <QScrollArea>
 #include <QDockWidget>
 #include <QVBoxLayout>
+#include <QPainter>
 #include "GUI/widgetosoba.h"
+#include "GUI/widgetrelacija.h"
 #include "GUI/dialognovaosoba.h"
 #include <string>
 #include <iostream>
@@ -38,7 +40,7 @@ public:
 
     void popuniInformacije(short sifra);
 
-    void poveziOsobe(short int sifra1, short int sifra2, Odnos odnos);
+    void poveziOsobe(short int sifra1, short int sifra2, Odnos odnos, int x1, int y1, int x2, int y2);
     /**
      * @brief kreirajOpcije
      * treba dodati sve opcije, tipa save, cancel, open, recently opened, bla bla
@@ -50,6 +52,7 @@ public:
     void krerajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
     void otpustenaOsoba();
+
     //void ukloniOsobu(WidgetOsoba* o);
 
 
@@ -65,6 +68,7 @@ private:
     QToolBar *toolbar;
     QLabel *Labela;
     PorodicnoStablo *stablo;
+    QPainter * cetka;
 
     //okvirStabla *stabloOkvir;
 

@@ -65,6 +65,7 @@ void GlavniProzor2::kreirajPlatnoZaCrtanje()
 
     filter = new FilterObject(stabloOkvir);
 
+
 }
 
 void GlavniProzor2::kreirajOpcije()
@@ -140,7 +141,7 @@ void GlavniProzor2::krerajMestoZaInfo()
     QDockWidget *info = new QDockWidget(tr("Informacije"));
     Labela=new QLabel("Informacije");
     info->setWidget(Labela);//i recimo
-   Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
+    Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
@@ -178,7 +179,7 @@ void GlavniProzor2::kliknutoPlatno()
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
                 druga = qobject_cast<WidgetOsoba*>(labela2->parent());
-                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::BRAT_SESTRA);
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::BRAT_SESTRA,x1,y1,x2,y2);
             }
     }
     else if(tbMuzZena->isChecked()){
@@ -191,7 +192,8 @@ void GlavniProzor2::kliknutoPlatno()
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
                 druga = qobject_cast<WidgetOsoba*>(labela2->parent());
-                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::SUPRUZNIK);
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::SUPRUZNIK,x1,y1,x2,y2);
+
             }
     }
     else if(tbRoditeljDete->isChecked()){
@@ -204,7 +206,7 @@ void GlavniProzor2::kliknutoPlatno()
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
                 druga = qobject_cast<WidgetOsoba*>(labela2->parent());
-                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::RODITELJ);
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::RODITELJ,x1,y1,x2,y2);
             }
 
     }
@@ -292,27 +294,41 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
     delete d;
 }
 
+
 void GlavniProzor2::kliknutaRelacija()
 {
 
 }
 
-void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, Odnos odnos)
+void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, Odnos odnos,int x1,int y1,int x2, int y2)
 {
 
     qDebug() << "povezuje";
-    if (sifra1 == sifra2)
+    if (sifra1 == sifra2){
         qDebug() << "iste osobe povezujes!";
+
+    }
     else
     {qDebug() << odnos;
 
 
         short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, odnos);
 
-        if (sifraRelacije < 0)
+        if (sifraRelacije < 0){
+
             qDebug() << "Povezivanje nije uspelo";
+        }
         else
+        {
+
+            WidgetRelacija *novaRelacija = new WidgetRelacija(sifraRelacije,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
+            novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
+            novaRelacija->show();
+            stabloOkvir->povuciLiniju(x1,y1,x2,y2);
+            stabloOkvir->repaint();
             qDebug() << "Povezivanje jeste uspelo";
+
+        }
     }
 
     //        cuvamo u vektor,
