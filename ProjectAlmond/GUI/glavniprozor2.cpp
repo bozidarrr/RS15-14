@@ -21,13 +21,13 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     kreirajPlatnoZaCrtanje();
     //kreirajOpcije();
 
-    WidgetOsoba *w1 = new WidgetOsoba(1,12,12,this,stabloOkvir);
-        WidgetOsoba *w2 = new WidgetOsoba(2,50,50,this,stabloOkvir);
+    WidgetOsoba *w1 = new WidgetOsoba(111,12,12,this,stabloOkvir);
+        WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
 
         w1->move(12,12);
         w2->move(50,50);
-        w1->installEventFilter(filter);
-        w2->installEventFilter(filter);
+        //w1->installEventFilter(filter);
+       // w2->installEventFilter(filter);
 
 
 }
@@ -48,7 +48,8 @@ void GlavniProzor2::popuniInformacije()
     if (_selektovanaSifra > 0)
     {
         Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
-        ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+        if (osoba != nullptr)
+            ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
     }
 }
 
@@ -119,6 +120,8 @@ void GlavniProzor2::kreirajToolbar()
     toolbar->addWidget(tbUredi);
     toolbar->addWidget(tbDetalji);
 
+    tbDetalji->setChecked(true);
+
     QDockWidget *alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
@@ -188,7 +191,11 @@ void GlavniProzor2::kliknutoPlatno()
             if (prva == nullptr)
                 qDebug() << "Nije osoba na koju je kliknuto";
             else
+            {
                 qDebug() << prva->Sifra();
+                promeniSelektovanu(prva->Sifra());
+                popuniInformacije();
+            }
         }
 
     }
@@ -211,13 +218,7 @@ void GlavniProzor2::kliknutoPlatno()
 
     }
 
-//    tbDetalji->setChecked(true);
-
-//        std::cout<<stabloOkvir->X1()<<stabloOkvir->X2()<<stabloOkvir->Y1()<<stabloOkvir->Y2()<<std::endl;
-//    std::cout<<stabloOkvir->resetovan()<<std::endl;
-    //stabloOkvir->resetujKoordinate();
-//    std::cout<<stabloOkvir->resetovan()<<std::endl;
-//            std::cout<<stabloOkvir->X1()<<stabloOkvir->X2()<<stabloOkvir->Y1()<<stabloOkvir->Y2()<<std::endl;
+    tbDetalji->setChecked(true);
 }
 
 
@@ -226,38 +227,22 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
-        QString ime, prezime;
-        QString pol;
-        char p=pol.toStdString().c_str()[0];//konvertovala sam string u nisku karaktera i uzela prvi karakter
-        QDate rodjenje, smrt;
+        std::string ime, prezime, rodjenje, smrt;
+        char pol;
+
         d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
-        std::string r = rodjenje.toString("dd.MM.yyyy.").toStdString();
-        std::string s; //preimenovala sam jer ti se isto zovu i dodaj novu osobu i datum smrti
-        if (!smrt.isValid())
-            s = "";
-        else
-            s = smrt.toString("dd.MM.yyyy.").toStdString();
-        short int novaSifra = stablo->DodajOsobu(ime.toStdString(),
-                                                 prezime.toStdString(), p, r, s); //Ubacila sam prvi karakter iz QStringa za pol
+
+        short int novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt);
         if (novaSifra < 0)
-            //nastao problem, obavestavamo korisnika, nece biti ovako naravno
-            ui->label->setText("Neuspelo dodavanje");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
+            qDebug() << "Neuspelo dodavanje";//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
         else
-            ui->label->setText("Uspelo");
+            qDebug() << "Uspelo dodavanje";
 
         WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
-        std::string tmp = ime.toStdString() + " " + prezime.toStdString();
+        std::string tmp = ime + " " + prezime;
         novaOsoba->postaviImePrezime(tmp);
         novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
-
-        novaOsoba->installEventFilter(filter);
-
         novaOsoba->show();
-        //_osobe.push_back(novaOsoba);
-
-        _sifra1 = -1;
-        _sifra2 = -1;
-
     }
 
     delete d;
@@ -267,28 +252,6 @@ void GlavniProzor2::kliknutaRelacija()
 {
 
 }
-
-
-void GlavniProzor2::postaviSifru1(short nova)
-{
-    _sifra1 = nova;
-}
-
-void GlavniProzor2::postaviSifru2(short nova)
-{
-    _sifra2 = nova;
-}
-
-short GlavniProzor2::Sifra1() const
-{
-    return _sifra1;
-}
-
-short GlavniProzor2::Sifra2() const
-{
-    return _sifra2;
-}
-
 
 void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, short tip)
 {
@@ -309,11 +272,6 @@ void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, short tip)
         pravimo widget za relaciju i iscrtavamo ga na sredini
         tu negde pozivamo i dijalog za relaciju
     */
-
-    //na kraju resetujemo sifre na -1
-    _sifra1 = -1;
-    _sifra2 = -1;
-
 }
 
 //void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){
@@ -333,5 +291,3 @@ void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, short tip)
 //}
 
 short int GlavniProzor2::_selektovanaSifra = -1;
-short int GlavniProzor2::_sifra1 = -1;
-short int GlavniProzor2::_sifra2 = -1;

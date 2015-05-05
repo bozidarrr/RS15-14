@@ -1,4 +1,4 @@
-#include "GUI/glavniprozor.h"
+//#include "GUI/glavniprozor.h"
 #include "GUI/glavniprozor2.h"
 #include <QApplication>
 

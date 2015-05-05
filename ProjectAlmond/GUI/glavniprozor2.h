@@ -36,12 +36,6 @@ public:
 
     void popuniInformacije();
 
-    void postaviSifru1(short int nova);
-    void postaviSifru2(short int nova);
-
-    short Sifra1() const;
-    short Sifra2() const;
-
     void poveziOsobe(short int sifra1, short int sifra2, short int tip);
     /**
      * @brief kreirajOpcije
@@ -72,7 +66,6 @@ private:
 
     //okvirStabla *stabloOkvir;
 
-    static short int _sifra1, _sifra2;
     static short int _selektovanaSifra;
 
     FilterObject *filter;

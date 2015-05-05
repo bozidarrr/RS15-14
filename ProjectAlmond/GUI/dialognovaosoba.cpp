@@ -23,23 +23,29 @@ DialogNovaOsoba::~DialogNovaOsoba()
 
 void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
 {
-//    ime = new QString(ui->unosIme->text());
-//    prezime = new QString(ui->unosPrezime->text());
-//    pol = new QString(ui->unosPol->text());
-//    rodjenje = new QDate(ui->unosRodjenje->date());
-//    if (ui->chkSmrt->checkState())
-//        smrt = new QDate(ui->UnosSmrt->date());
-//    else
-//        smrt = nullptr;
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
     pol = ui->unosPol->text();
     rodjenje = ui->unosRodjenje->date();
     if (ui->chkSmrt->checkState())
            smrt = ui->UnosSmrt->date();
-//      else
-//           smrt = NULL;
+}
 
+void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt)
+{
+    QString _ime, _prezime, _pol;
+    QDate _rodjenje, _smrt;
+
+    popuniPodatke(_ime, _prezime, _pol, _rodjenje, _smrt);
+
+    ime = _ime.QString::toStdString();
+    prezime = _prezime.QString::toStdString();
+    pol = _pol.toStdString().c_str()[0];
+    rodjenje = _rodjenje.toString("dd.MM.yyyy.").toStdString();
+    if (!_smrt.isValid())
+        smrt = "";
+    else
+        smrt = _smrt.toString("dd.MM.yyyy.").toStdString();
 }
 
 void DialogNovaOsoba::promenaUnosa()

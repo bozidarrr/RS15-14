@@ -73,15 +73,15 @@ void okvirStabla::Y2(int y2)
     _drugiY = y2;
 }
 
-void okvirStabla::resetujKoordinate()
-{
-    _prviX = -1;
-    _drugiX = -1;
-    _prviY = -1;
-    _drugiY = -1;
-}
+//void okvirStabla::resetujKoordinate()
+//{
+//    _prviX = -1;
+//    _drugiX = -1;
+//    _prviY = -1;
+//    _drugiY = -1;
+//}
 
-bool okvirStabla::resetovan()
-{
-    return (_prviX == -1 && _prviY == -1 && _drugiX == -1 && _drugiY == -1);
-}
+//bool okvirStabla::resetovan()
+//{
+//    return (_prviX == -1 && _prviY == -1 && _drugiX == -1 && _drugiY == -1);
+//}
