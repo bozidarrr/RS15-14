@@ -1,14 +1,14 @@
 <RCC>
     <qresource prefix="/images">
         <file>images/ProjectAlmond.ico</file>
-        <file>images/NovaOsoba.ico</file>
         <file>images/Informacija.ico</file>
+        <file>images/Menjaj.ico</file>
+        <file>images/NovaOsoba.ico</file>
         <file>images/Pomeri.ico</file>
         <file>images/RelacijaBratSestra.ico</file>
         <file>images/RelacijaDete.ico</file>
         <file>images/RelacijaSupruznici.ico</file>
         <file>images/Ukloni.ico</file>
-        <file>images/Menjaj.ico</file>
         <file>images/UrediStablo.ico</file>
     </qresource>
 </RCC>
