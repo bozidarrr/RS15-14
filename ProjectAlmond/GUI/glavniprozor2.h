@@ -6,7 +6,6 @@
 #include <QButtonGroup>
 #include <QToolBar>
 #include <QToolButton>
-#include <QRadioButton>
 #include <QDockWidget>
 #include "GUI/widgetosoba.h"
 #include "GUI/dialognovaosoba.h"
@@ -34,9 +33,9 @@ public:
 
     void promeniSelektovanu(short int novaSifra);
 
-    void popuniInformacije();
+    void popuniInformacije(short sifra);
 
-    void poveziOsobe(short int sifra1, short int sifra2, short int tip);
+    void poveziOsobe(short int sifra1, short int sifra2, Odnos odnos);
     /**
      * @brief kreirajOpcije
      * treba dodati sve opcije, tipa save, cancel, open, recently opened, bla bla

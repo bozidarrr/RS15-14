@@ -26,10 +26,6 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 
         w1->move(12,12);
         w2->move(50,50);
-        //w1->installEventFilter(filter);
-       // w2->installEventFilter(filter);
-
-
 }
 
 GlavniProzor2::~GlavniProzor2()
@@ -43,11 +39,11 @@ void GlavniProzor2::promeniSelektovanu(short novaSifra)
     _selektovanaSifra = novaSifra;
 }
 
-void GlavniProzor2::popuniInformacije()
+void GlavniProzor2::popuniInformacije(short sifra)
 {
-    if (_selektovanaSifra > 0)
+    if (sifra > 0)
     {
-        Osoba *osoba = stablo->nadjiOsobuPoSifri(_selektovanaSifra);
+        Osoba *osoba = stablo->nadjiOsobuPoSifri(sifra);
         if (osoba != nullptr)
             ui->label->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
     }
@@ -137,7 +133,6 @@ void GlavniProzor2::krerajMestoZaInfo()
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
-    //delete info;
 }
 
 void GlavniProzor2::kliknutoPlatno()
@@ -148,11 +143,14 @@ void GlavniProzor2::kliknutoPlatno()
     int y1 = stabloOkvir->Y1();
     int x2 = stabloOkvir->X2();
     int y2 = stabloOkvir->Y2();
-    WidgetOsoba *prva, *druga;
     QWidget *labela1, *labela2;
+    WidgetOsoba *prva, *druga;
+    labela1 = stabloOkvir->childAt(x1, y1);
+    labela2 = stabloOkvir->childAt(x2, y2);
+
 
     if(tbOsoba->isChecked()){
-        tbOsoba->setChecked(false);
+        //tbOsoba->setChecked(false);
         if ((stabloOkvir->childAt(x2, y2)) != nullptr)
             qDebug() << "tu vec postoji nesto";
         else
@@ -160,30 +158,47 @@ void GlavniProzor2::kliknutoPlatno()
 
     }
     else if(tbBratSestra->isChecked()){
-    }
-    else if(tbMuzZena->isChecked()){
-        //poveziOsobe();
-        if ((labela1 = (stabloOkvir->childAt(x1, y1))) == nullptr)
-
+        if (labela1 == nullptr)
             qDebug() << "nije kliknuto na prvu osobu";
-
         else
-            if ((labela2 = (stabloOkvir->childAt(x2, y2))) == nullptr)
+            if (labela2 == nullptr)
                 qDebug() << "nije kliknuto na drugu osobu";
             else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
                 druga = qobject_cast<WidgetOsoba*>(labela2->parent());
-                poveziOsobe(prva->Sifra(),druga->Sifra(),3);
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::BRAT_SESTRA);
             }
-
-
+    }
+    else if(tbMuzZena->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "nije kliknuto na prvu osobu";
+        else
+            if (labela2 == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::SUPRUZNIK);
+            }
     }
     else if(tbRoditeljDete->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "nije kliknuto na prvu osobu";
+        else
+            if (labela2 == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+                poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::RODITELJ);
+            }
 
     }
     else if(tbDetalji->isChecked()){
-        if ((labela1  = (stabloOkvir->childAt(x1, y1))) == nullptr)
+        if (labela1 == nullptr)
             qDebug() << "kliknuto u prazno";
         else
         {
@@ -193,17 +208,17 @@ void GlavniProzor2::kliknutoPlatno()
             else
             {
                 qDebug() << prva->Sifra();
-                promeniSelektovanu(prva->Sifra());
-                popuniInformacije();
+                //promeniSelektovanu(prva->Sifra());
+                popuniInformacije(prva->Sifra());
             }
         }
 
     }
     else if(tbPomeranje->isChecked()){
-        if ((labela2 = (stabloOkvir->childAt(x2, y2))) != nullptr)
+        if (labela2 != nullptr)
             qDebug() << "tu vec postoji nesto";
         else
-            if ((labela1 = (stabloOkvir->childAt(x1, y1))) == nullptr)
+            if (labela1 == nullptr)
             {
                 qDebug() << "nije kliknuto na osobu koju treba pomeriti";
             }
@@ -213,10 +228,28 @@ void GlavniProzor2::kliknutoPlatno()
                 prva->setX(x2);
                 prva->setY(y2);
                 prva->move(x2, y2);
-
             }
 
     }
+    else if(tbBrisi->isChecked()){
+        if (labela2 == nullptr)
+            qDebug() << "KLiknuti na osobu za brisanje!";
+        else
+        {
+            druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+            if (druga == nullptr)
+                qDebug() << "ne moze cast u wosobu";
+            else
+                //stablo->UkloniOsobuPoSifri(druga->Sifra());
+            druga->hide();
+            //DORADITI
+        }
+
+    }
+    else if(tbMenjaj->isChecked()){
+        //izbaci dijalog za menjanje podataka
+    }
+
 
     tbDetalji->setChecked(true);
 }
@@ -253,25 +286,28 @@ void GlavniProzor2::kliknutaRelacija()
 
 }
 
-void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, short tip)
+void GlavniProzor2::poveziOsobe(short sifra1, short sifra2, Odnos odnos)
 {
 
     qDebug() << "povezuje";
     if (sifra1 == sifra2)
         qDebug() << "iste osobe povezujes!";
     else
-        qDebug() << tip;
+    {qDebug() << odnos;
 
-    //zapravo bice dovoljno samo
-    /*
-        short sifraRelacije = stablo->PoveziOsobe(_sifra1, _sifra2, Odnos::SUPRUZNIK);
-        odnos cemo naci lako koji je
-        if sifraRelacije < 0 greska
+
+        short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, odnos);
+
+        if (sifraRelacije < 0)
+            qDebug() << "Povezivanje nije uspelo";
         else
-        cuvamo u vektor,
-        pravimo widget za relaciju i iscrtavamo ga na sredini
-        tu negde pozivamo i dijalog za relaciju
-    */
+            qDebug() << "Povezivanje jeste uspelo";
+    }
+
+//        cuvamo u vektor,
+//        pravimo widget za relaciju i iscrtavamo ga na sredini
+//        tu negde pozivamo i dijalog za relaciju
+
 }
 
 //void GlavniProzor2::ukloniOsobu(WidgetOsoba *o){

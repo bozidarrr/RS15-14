@@ -58,15 +58,15 @@ void WidgetOsoba::setY(int y)
 }
 
 
-bool WidgetOsoba::sadrziTacku(int x, int y)
-{
-    bool rez = x >= _x
-            && x <= _x + ui->ImeOsobe->width()
-            && y >= _y
-            && y <= _y + ui->ImeOsobe->height();
-    return rez;
+//bool WidgetOsoba::sadrziTacku(int x, int y)
+//{
+//    bool rez = x >= _x
+//            && x <= _x + ui->ImeOsobe->width()
+//            && y >= _y
+//            && y <= _y + ui->ImeOsobe->height();
+//    return rez;
 
-}
+//}
 
 void WidgetOsoba::postaviImePrezime(const std::string &ip)
 {
