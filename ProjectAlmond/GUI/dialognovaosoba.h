@@ -27,6 +27,7 @@ private Q_SLOTS:
     void promenaUnosa();
 
     void on_chkSmrt_stateChanged(int arg1);
+    void on_chkNepoznatDR_stateChanged(int arg1);
 
 private:
     Ui::DialogNovaOsoba *ui;
