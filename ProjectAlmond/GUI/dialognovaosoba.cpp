@@ -13,6 +13,7 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
     popuniDugmice();
     postaviProvere();
     connect(ui->chkSmrt,SIGNAL(stateChanged(int)),this,SLOT(on_chkSmrt_stateChanged(int)));
+    connect(ui->chkNepoznatDR,SIGNAL(stateChanged(int)),this,SLOT(on_chkNepoznatDR_stateChanged(int)));
 
 }
 
@@ -26,7 +27,8 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
     pol = ui->unosPol->text();
-    rodjenje = ui->unosRodjenje->date();
+    if(ui->chkNepoznatDR->checkState())
+        rodjenje = ui->unosRodjenje->date();
     if (ui->chkSmrt->checkState())
            smrt = ui->UnosSmrt->date();
 }
@@ -41,7 +43,10 @@ void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char
     ime = _ime.QString::toStdString();
     prezime = _prezime.QString::toStdString();
     pol = _pol.toStdString().c_str()[0];
-    rodjenje = _rodjenje.toString("dd.MM.yyyy.").toStdString();
+    if(!_rodjenje.isValid())
+        rodjenje="";
+    else
+        rodjenje = _rodjenje.toString("dd.MM.yyyy.").toStdString();
     if (!_smrt.isValid())
         smrt = "";
     else
@@ -88,4 +93,8 @@ void DialogNovaOsoba::postaviProvere()
 void DialogNovaOsoba::on_chkSmrt_stateChanged(int arg1)
 {
     ui->UnosSmrt->setEnabled(ui->chkSmrt->checkState());
+}
+void DialogNovaOsoba::on_chkNepoznatDR_stateChanged(int arg1)
+{
+    ui->unosRodjenje->setEnabled(ui->chkNepoznatDR->checkState());
 }

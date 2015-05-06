@@ -60,7 +60,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>225</width>
+     <width>230</width>
      <height>163</height>
     </rect>
    </property>
@@ -113,12 +113,28 @@
        <widget class="QLineEdit" name="unosPrezime"/>
       </item>
       <item>
-       <widget class="QDateEdit" name="unosRodjenje"/>
+       <widget class="QDateEdit" name="unosRodjenje">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="displayFormat">
+         <string>dd.MM.yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QDateEdit" name="UnosSmrt">
         <property name="enabled">
          <bool>false</bool>
+        </property>
+        <property name="displayFormat">
+         <string>dd.MM.yyyy</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -128,6 +144,19 @@
      </layout>
     </item>
    </layout>
+  </widget>
+  <widget class="QCheckBox" name="chkNepoznatDR">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>80</y>
+     <width>98</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nepoznat</string>
+   </property>
   </widget>
  </widget>
  <resources/>

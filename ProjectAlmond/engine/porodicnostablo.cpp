@@ -1,7 +1,8 @@
 #include "porodicnostablo.h"
 
 PorodicnoStablo::PorodicnoStablo(std::string ime,std::string prezime,char pol,std::string datum_rodjenja,std::string datum_smrti)
-    :_kljucnaOsoba(ime,prezime,pol,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),_sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu(),_indeksPoSifriOsoba(),_indeksPoSifriRelacija()
+    :_kljucnaOsoba(ime,prezime,pol,datum_rodjenja,datum_smrti),_sveOsobe(8),_nepovezane(),
+      _sveRelacije(),_indeksPoImenu(),_indeksPoDatumu(),_indeksPoRodjendanu(),_indeksPoSifriOsoba(),_indeksPoSifriRelacija()
 {
     _sveOsobe.push_back(&_kljucnaOsoba);
     _indeksPoImenu[_kljucnaOsoba.Ime()]=std::vector<Osoba *>();
@@ -36,16 +37,24 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime,char 
 {
     Osoba* tren=new Osoba(ime,prezime,pol,datum_rodjenja,datum_smrti);
     _nepovezane.push_back(tren);
-    if(_indeksPoImenu.find(tren->Ime())==_indeksPoImenu.end())_indeksPoImenu[tren->Ime()]=std::vector<Osoba*>();
+    if(_indeksPoImenu.find(tren->Ime())==_indeksPoImenu.end())
+        _indeksPoImenu[tren->Ime()]=std::vector<Osoba*>();
     _indeksPoImenu[tren->Ime()].push_back(tren);
-    if(_indeksPoDatumu.find(tren->DatumRodjenja())==_indeksPoDatumu.end())_indeksPoDatumu[tren->DatumRodjenja()]=std::vector<Osoba*>();
+    if(_indeksPoDatumu.find(tren->DatumRodjenja())==_indeksPoDatumu.end())
+        _indeksPoDatumu[tren->DatumRodjenja()]=std::vector<Osoba*>();
     _indeksPoDatumu[tren->DatumRodjenja()].push_back(tren);
     int rbroj=tren->DatumRodjenja().redniBroj();
-    if(_indeksPoRodjendanu.find(rbroj)==_indeksPoRodjendanu.end())_indeksPoRodjendanu[rbroj]=std::vector<Osoba*>();
+    if(_indeksPoRodjendanu.find(rbroj)==_indeksPoRodjendanu.end())
+        _indeksPoRodjendanu[rbroj]=std::vector<Osoba*>();
     _indeksPoRodjendanu[rbroj].push_back(tren);
 
-    if(_indeksPoSifriOsoba.find(tren->Sifra())==_indeksPoSifriOsoba.end())_indeksPoSifriOsoba[tren->Sifra()]=tren;
-    else {delete tren; return -1;}//jer je neki problem nastao, dodajemo dve osobe sa istom sifrom!
+    if(_indeksPoSifriOsoba.find(tren->Sifra())==_indeksPoSifriOsoba.end())
+        _indeksPoSifriOsoba[tren->Sifra()]=tren;
+    else
+    {
+        delete tren;
+        return -1;
+    }//jer je neki problem nastao, dodajemo dve osobe sa istom sifrom!
 
     return tren->Sifra();
 }
@@ -84,8 +93,13 @@ short int PorodicnoStablo::PoveziOsobe(Osoba *prva,  Osoba *druga, Odnos srodstv
         Supruznik *nov=new Supruznik;
         prva->Supruznici().push_back(nov);
         druga->Supruznici().push_back(nov);
-        if(_indeksPoSifriRelacija.find(nov->Sifra())==_indeksPoSifriRelacija.end())_indeksPoSifriRelacija[nov->Sifra()]=nov;
-        else {delete nov; return -1;}
+        if(_indeksPoSifriRelacija.find(nov->Sifra())==_indeksPoSifriRelacija.end())
+            _indeksPoSifriRelacija[nov->Sifra()]=nov;
+        else
+        {
+            delete nov;
+            return -1;
+        }
         std::cout<<"Uspesno povezao"<<std::endl;
         return nov->Sifra();
         break;
@@ -107,7 +121,8 @@ Osoba* PorodicnoStablo::nadjiOsobuPoSifri(const short sifra)
 */
     if(_indeksPoSifriOsoba.find(sifra)==_indeksPoSifriOsoba.end())
         return nullptr;//onda nema te osobe
-    else return _indeksPoSifriOsoba[sifra];
+    else
+        return _indeksPoSifriOsoba[sifra];
 
 }
 
@@ -173,7 +188,8 @@ bool PorodicnoStablo::UkloniOsobuPoSifri(const short sifra)
 bool PorodicnoStablo::UkloniRelacijuPoSifri(const short sifra)
 {
     Relacija* obrisiMe=nadjiRelacijuPoSifri(sifra);
-    if(obrisiMe==nullptr)return false;
+    if(obrisiMe==nullptr)
+        return false;
     _sveRelacije.erase(std::remove(_sveRelacije.begin(), _sveRelacije.end(), obrisiMe), _sveRelacije.end());
     _indeksPoSifriRelacija.erase(obrisiMe->Sifra());
     delete obrisiMe;
@@ -184,7 +200,8 @@ Relacija* PorodicnoStablo::nadjiRelacijuPoSifri(const short sifra){
 
     if(_indeksPoSifriRelacija.find(sifra)==_indeksPoSifriRelacija.end())
         return nullptr;//onda nema te relacije
-    else return _indeksPoSifriRelacija[sifra];
+    else
+        return _indeksPoSifriRelacija[sifra];
 }
 
 /*

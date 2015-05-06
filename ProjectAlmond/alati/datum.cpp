@@ -180,7 +180,7 @@ std::ostream & operator<<(std::ostream & ostr, const Datum & d)
 std::istream & operator>>(std::istream & istr, Datum & d)
 {
 
-
+/*
 
     if (d.NepoznatDatum())
     {
@@ -189,6 +189,7 @@ std::istream & operator>>(std::istream & istr, Datum & d)
         d._godina=-1;
         return istr;
     }
+    */
 
       istr >> d._dan >> d._mesec >> d._godina;
 
@@ -205,15 +206,17 @@ void Datum::PostaviNepoznat()
 
 bool Datum::operator <(const Datum& datum) const
 {
-    if (this->_godina < datum._godina)
-        return true;
-    if (this->_godina > datum._godina)
+    if(this->NepoznatDatum()||datum.NepoznatDatum())
         return false;
-    if (this->_mesec < datum._mesec)
+    if (_godina < datum._godina)
         return true;
-    if (this->_mesec > datum._mesec)
+    if (_godina > datum._godina)
         return false;
-    if (this->_dan > datum._mesec)
+    if (_mesec < datum._mesec and _mesec!=0 and datum._mesec!=0)
+        return true;
+    if (_mesec > datum._mesec)
+        return false;
+    if (_dan < datum._dan and _dan!=0 and datum._dan!=0)
         return true;
     return false;
 }
@@ -225,9 +228,11 @@ bool Datum::operator >(const Datum& datum) const
 
 bool Datum::operator ==(const Datum& datum) const
 {
-    return datum._godina == this->_godina &&
-            datum._mesec == this->_mesec &&
-            datum._dan == this->_dan;
+    if(this->NepoznatDatum()||datum.NepoznatDatum())
+        return false;
+    return datum._godina == _godina &&
+            datum._mesec == _mesec && _mesec!=0 &&
+            datum._dan == _dan && _dan!=0;
 }
 
 bool Datum::operator !=(const Datum& datum) const
