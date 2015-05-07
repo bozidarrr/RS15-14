@@ -21,11 +21,11 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
 
     //kreirajOpcije();
 
-    WidgetOsoba *w1 = new WidgetOsoba(111,12,12,this,stabloOkvir);
-    WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
+//    WidgetOsoba *w1 = new WidgetOsoba(111,12,12,this,stabloOkvir);
+//    WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
 
-    w1->move(12,12);
-    w2->move(50,50);
+//    w1->move(12,12);
+//    w2->move(50,50);
 }
 
 GlavniProzor2::~GlavniProzor2()

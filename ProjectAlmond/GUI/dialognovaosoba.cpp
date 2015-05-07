@@ -12,6 +12,8 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
 
     popuniDugmice();
     postaviProvere();
+    ui->chkNepoznatDR->setToolTip(tr("Datum rodjenja nije poznat ili ne zelite da ga unosite"));
+    ui->chkSmrt->setToolTip(tr("Osoba je ziva, ili je datum smrti nepoznat"));
     connect(ui->chkSmrt,SIGNAL(stateChanged(int)),this,SLOT(on_chkSmrt_stateChanged(int)));
     connect(ui->chkNepoznatDR,SIGNAL(stateChanged(int)),this,SLOT(on_chkNepoznatDR_stateChanged(int)));
 
@@ -27,9 +29,9 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
     pol = ui->unosPol->text();
-    if(ui->chkNepoznatDR->checkState())
+    if(ui->chkNepoznatDR->isChecked() == false)
         rodjenje = ui->unosRodjenje->date();
-    if (ui->chkSmrt->checkState())
+    if (ui->chkSmrt->isChecked() == false)
            smrt = ui->UnosSmrt->date();
 }
 
@@ -55,9 +57,10 @@ void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char
 
 void DialogNovaOsoba::promenaUnosa()
 {
-    ok->setEnabled(ui->unosIme->hasAcceptableInput() &&
+    ok->setEnabled((ui->unosIme->hasAcceptableInput() &&
                    ui->unosPrezime->hasAcceptableInput() &&
-                   ui->unosPol->hasAcceptableInput());
+                   ui->unosPol->hasAcceptableInput())
+                   || ui->checkBox->isChecked());
 }
 
 void DialogNovaOsoba::popuniDugmice()
@@ -92,9 +95,21 @@ void DialogNovaOsoba::postaviProvere()
 
 void DialogNovaOsoba::on_chkSmrt_stateChanged(int arg1)
 {
-    ui->UnosSmrt->setEnabled(ui->chkSmrt->checkState());
+    ui->UnosSmrt->setDisabled(arg1);
 }
 void DialogNovaOsoba::on_chkNepoznatDR_stateChanged(int arg1)
 {
-    ui->unosRodjenje->setEnabled(ui->chkNepoznatDR->checkState());
+    ui->unosRodjenje->setDisabled(arg1);
+}
+
+void DialogNovaOsoba::on_checkBox_stateChanged(int arg1)
+{
+    ui->unosIme->setDisabled(arg1);
+    ui->unosPrezime->setDisabled(arg1);
+    ui->unosRodjenje->setDisabled(ui->chkNepoznatDR->isChecked() || arg1);
+    ui->UnosSmrt->setDisabled(ui->chkSmrt->isChecked() || arg1);
+    ui->chkNepoznatDR->setDisabled(arg1);
+    ui->chkSmrt->setDisabled(arg1);
+    ui->unosPol->setDisabled(arg1);
+    promenaUnosa();
 }
