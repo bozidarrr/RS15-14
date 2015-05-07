@@ -36,6 +36,10 @@ public:
 
     Dete* Poreklo(); //vraca adresu relacionog objekta dete, kojim se moze povezati sa brakom/vezom iz koje je nastala osoba
 
+    void PostaviPoreklo(Dete* poreklo);
+
+    void DodajVezu(Brak* veza);
+
     std::vector<Brak*>& SpisakVeza(); //vraca referencu na spisak svih veza koje je osoba imala
     //----geteri i seteri------//
 
