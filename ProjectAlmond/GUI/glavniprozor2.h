@@ -40,6 +40,8 @@ public:
 
     void popuniInformacije(short sifra);
 
+    void ispisiStatus(const QString &poruka);
+
     void poveziOsobe(short int sifra1, short int sifra2, Odnos odnos, int x1, int y1, int x2, int y2);
     /**
      * @brief kreirajOpcije
@@ -47,11 +49,11 @@ public:
      * sto ce ici u meni
      * pocetak knjige :)
      */
-    void kreirajOpcije();
-    void kreirajToolbar();
-    void krerajMestoZaInfo();
-    void kreirajPlatnoZaCrtanje();
-    void otpustenaOsoba();
+//    void kreirajOpcije();
+//    void kreirajToolbar();
+//    void krerajMestoZaInfo();
+//    void kreirajPlatnoZaCrtanje();
+//    void otpustenaOsoba();
 
     //void ukloniOsobu(WidgetOsoba* o);
 
@@ -76,12 +78,20 @@ private:
 
     FilterObject *filter;
 
+    QLabel *labelaStatus;
+
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
     std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
+
+    void kreirajOpcije();
+    void kreirajToolbar();
+    void krerajMestoZaInfo();
+    void kreirajPlatnoZaCrtanje();
+    void kreirajStatusBar();
 
 
 

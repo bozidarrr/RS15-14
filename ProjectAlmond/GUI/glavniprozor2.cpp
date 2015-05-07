@@ -18,6 +18,7 @@ GlavniProzor2::GlavniProzor2(QWidget *parent) :
     kreirajPlatnoZaCrtanje();
     kreirajToolbar();
     krerajMestoZaInfo();
+    kreirajStatusBar();
 
     //kreirajOpcije();
 
@@ -49,6 +50,11 @@ void GlavniProzor2::popuniInformacije(short sifra)
     }
 }
 
+void GlavniProzor2::ispisiStatus(const QString &poruka)
+{
+    labelaStatus->setText(poruka);
+}
+
 void GlavniProzor2::kreirajPlatnoZaCrtanje()
 {
     QVBoxLayout* lejaut=new QVBoxLayout();
@@ -66,6 +72,13 @@ void GlavniProzor2::kreirajPlatnoZaCrtanje()
     filter = new FilterObject(stabloOkvir);
 
 
+}
+
+void GlavniProzor2::kreirajStatusBar()
+{
+    labelaStatus = new QLabel(" ...");
+    labelaStatus->setMinimumSize(labelaStatus->sizeHint());
+    ui->statusBar->addWidget(labelaStatus, 1);
 }
 
 void GlavniProzor2::kreirajOpcije()
@@ -164,7 +177,7 @@ void GlavniProzor2::kliknutoPlatno()
     if(tbOsoba->isChecked()){
         //tbOsoba->setChecked(false);
         if ((stabloOkvir->childAt(x2, y2)) != nullptr)
-            qDebug() << "tu vec postoji nesto";
+            ispisiStatus("tu vec postoji nesto");
         else
             dodajNovuOsobu(x2, y2);
 
@@ -280,9 +293,9 @@ void GlavniProzor2::dodajNovuOsobu(int x,int y)
 
         short int novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt);
         if (novaSifra < 0)
-            qDebug() << "Neuspelo dodavanje";//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
+            ispisiStatus("Neuspelo dodavanje");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
         else
-            qDebug() << "Uspelo dodavanje";
+            ispisiStatus("Uspelo dodavanje");
 
         WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
         std::string tmp = ime + " " + prezime;
