@@ -4,16 +4,20 @@ short int Osoba::_sledecaSifra=0;
 
 
 Osoba::Osoba()
-    :_sifra(++_sledecaSifra),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza(2)
+    :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza(2)
 {}
 
-Osoba::Osoba(std::string &ime, std::string &prezime, char pol, QDate datumRodjenja, QDate datumsmrti,bool krvniSrodnik)
-    :_sifra(++_sledecaSifra),_nepoznata(false),_ime(ime),_prezime(prezime),_pol(pol),_datumRodjenja(datumRodjenja),_datumSmrti(datumsmrti),_krvniSrodnik(krvniSrodnik),_spisakVeza(2)
-{}
+Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
+    :_sifra(_sledecaSifra++),_nepoznata(false),_ime(ime),_prezime(prezime),_pol(pol),_krvniSrodnik(krvniSrodnik),_spisakVeza(2)
+{
+    _deteOd=nullptr;
+    _spisakVeza.clear();
+}
 
 
 Osoba::~Osoba()
 {
+  _vecSeBrise=true;
     //brisem podatke o sebi kao detetu
     if(_deteOd!=nullptr)
     {
@@ -59,7 +63,7 @@ const std::string& Osoba::Prezime() const
 {
     return _prezime;
 }
-
+/*
 QDate& Osoba::DatumRodjenja()
 {
     return _datumRodjenja;
@@ -69,7 +73,7 @@ QDate& Osoba::DatumSmrti()
 {
     return _datumSmrti;
 }
-
+*/
 bool Osoba::JeKrvniSrodnik()
 {
     return _krvniSrodnik;
@@ -123,4 +127,8 @@ bool Osoba::RaskiniSveVeze()
     return true;
 }
 
+ bool Osoba::VecSeBrisem()
+ {
+     return _vecSeBrise;
+ }
 

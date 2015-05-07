@@ -85,7 +85,7 @@ private:
 
 
 public Q_SLOTS:
-    void dodajNovuOsobu(int x, int y);
+    short dodajNovuOsobu(int x, int y);
     void kliknutoPlatno();
 
     void kliknutaRelacija();

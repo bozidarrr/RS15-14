@@ -2,15 +2,16 @@
 
 short int Brak::_sledecaSifra=0;
 
-Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija, QDate &datumUpoznavanja, QDate &datumVeze, QDate &datumRaskida, QDate &datumVeridbe, QDate &datumVencanja)
-    :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(2),_trivija(trivija),_datumUpoznavanja(datumUpoznavanja),_datumVeze(datumVeze),_datumVeridbe(datumVeridbe),_datumVencanja(datumVencanja),_datumRaskida(datumRaskida)
+Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija)
+    :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(2),_trivija(trivija)
 {
+
 }
 
 Brak::~Brak()
 {
     _tudjaOsoba->Raskini(this);//molim osobu koja nije u rodbinskoj liniji da ukloni brak, ne bih li mogao da je obrisem bez beskonacne rekurzije
-    delete _tudjaOsoba;
+   if(!_tudjaOsoba->VecSeBrisem())delete _tudjaOsoba;
 
     _nasaOsoba->Raskini(this);//molim osobu koja jeste u rodbinskoj linija da ukloni brak, ali nju ne brisem, ona ostaje
 
@@ -39,7 +40,7 @@ std::vector<Dete*>& Brak::SpisakDece()
 {
     return _spisakDece;
 }
-
+/*
 QDate& Brak::DatumUpoznavanja()
 {
     return _datumUpoznavanja;
@@ -60,7 +61,7 @@ QDate& Brak::DatumRaskida()
 {
     return _datumRaskida;
 }
-
+*/
 void Brak::DodajDete(Dete* beba)
 {
     _spisakDece.push_back(beba);

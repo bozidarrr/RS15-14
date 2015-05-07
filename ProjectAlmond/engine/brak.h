@@ -12,7 +12,7 @@ class Dete;
 class Brak
 {
 public:
-    Brak(Osoba* nasa,Osoba* tudja,std::string& trivija,QDate& datumUpoznavanja, QDate& datumVeze,QDate& datumRaskida, QDate& datumVeridbe, QDate& datumVencanja);
+    Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
     ~Brak();
 
     //----geteri i seteri------//
@@ -20,14 +20,14 @@ public:
     Osoba* NasaOsoba();
     Osoba* TudjaOsoba();
     std::vector<Dete*>& SpisakDece();
-    std::string& Trivija();
+    std::string& Trivija();/*
     QDate& DatumUpoznavanja();
     QDate& DatumVeze();
     QDate& DatumRaskida();
     QDate& DatumVeridbe();
     QDate& DatumVencanja();
 
-
+*/
 
     //----geteri i seteri------//
 
@@ -53,11 +53,11 @@ private:
     Osoba* _tudjaOsoba;
     std::vector<Dete *> _spisakDece;
     std::string _trivija;
-    QDate _datumUpoznavanja;
+   /* QDate _datumUpoznavanja;
     QDate _datumVeze;
     QDate _datumVeridbe;
     QDate _datumVencanja;
-    QDate _datumRaskida;
+    QDate _datumRaskida;*/
 };
 
 #endif // BRAK_H
