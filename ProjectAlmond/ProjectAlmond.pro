@@ -15,42 +15,39 @@ TEMPLATE = app
 SOURCES += main.cpp\
     alati/datum.cpp \
     engine/osoba.cpp \
-    engine/supruznik.cpp \
     GUI/unetiosobu.cpp \
     engine/porodicnostablo.cpp \
-    engine/relacija.cpp \
-    GUI/glavniprozor2.cpp \
     GUI/dialognovaosoba.cpp \
     GUI/widgetosoba.cpp \
     GUI/okvirstabla.cpp \
     alati/filterobject.cpp \
     alati/filterzalabelu.cpp \
     GUI/widgetrelacija.cpp \
-    alati/linija.cpp
+    GUI/glavniprozor.cpp \
+    engine/dete.cpp \
+    engine/brak.cpp
 
 HEADERS  += \
     alati/datum.h \
     engine/osoba.h \
-    engine/relacija.h \
-    engine/supruznik.h \
     GUI/unetiosobu.h \
-    GUI/WidgetDrag.h \
     engine/porodicnostablo.h \
-    GUI/glavniprozor2.h \
     GUI/dialognovaosoba.h \
     GUI/widgetosoba.h \
     GUI/okvirstabla.h \
     alati/filterobject.h \
     alati/filterzalabelu.h \
     GUI/widgetrelacija.h \
-    alati/linija.h
+    GUI/glavniprozor.h \
+    engine/dete.h \
+    engine/brak.h
 
 FORMS    += unetiosobu.ui \
     widgetosoba.ui \
-    glavniprozor2.ui \
     dialognovaosoba.ui \
     GUI/okvirstabla.ui \
-    widgetrelacija.ui
+    widgetrelacija.ui \
+    glavniprozor.ui
 
 RESOURCES += \
     slike.qrc

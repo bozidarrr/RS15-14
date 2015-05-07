@@ -1,411 +1,367 @@
-/*#include "glavniprozor.h"
+#include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
-#include "unetiosobu.h"
-#include "widgetosoba.h"
-#include <QGraphicsScene>
-#include <engine/porodicnostablo.h>
-
-
+#include "GUI/dialognovaosoba.h"
+#include <algorithm>
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GlavniProzor)
 {
-    sifra1 = -1;
-    sifra2 = -1;
+    ui->setupUi(this);
+
+    QIcon icon(":images/images/ProjectAlmond.ico");
+    this->setWindowIcon(icon);
+    this->setWindowTitle("Project Almond");
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
+    //stablo = new PorodicnoStablo("pera", "detlic", 'm', "12.04.1963.");
 
+    kreirajPlatnoZaCrtanje();
+    kreirajToolbar();
+    kreirajMestoZaInfo();
+    kreirajStatusBar();
 
-    setAcceptDrops(true);
-    ui->setupUi(this);
-    osobapix=QPixmap(":/images/images/Ellipse-tool-icon.png");
+    //kreirajOpcije();
 
-    mzpix=QPixmap(":/images/images/heart.png");
+//    WidgetOsoba *w1 = new WidgetOsoba(111,12,12,this,stabloOkvir);
+//    WidgetOsoba *w2 = new WidgetOsoba(222,50,50,this,stabloOkvir);
 
-    bspix=QPixmap(":/images/images/children.png");
-
-    rdpix=QPixmap(":/images/images/index.jpeg");
-
-
-    QToolBar *toolbar= addToolBar("main toolbar");
-
-    tbOsoba=new QToolButton();
-    tbOsoba->setIcon(QIcon(osobapix));
-    tbOsoba->setToolTip("Uneti novu osobu u porodicno stablo");
-    toolbar->addWidget(tbOsoba);
-    toolbar->addSeparator();
-
-    grpRelacije = new QButtonGroup(toolbar);
-    rbMuzZena = new QRadioButton("Supruznik");
-    rbMuzZena->setChecked(true);
-    rbBratSestra = new QRadioButton("Brat/Sestra");
-    rbRoditelj = new QRadioButton("Roditelj");
-    rbDete = new QRadioButton("Dete");
-
-    grpRelacije->addButton(rbMuzZena);
-    grpRelacije->addButton(rbBratSestra);
-    grpRelacije->addButton(rbRoditelj);
-    grpRelacije->addButton(rbDete);
-
-
-    toolbar->addWidget(rbMuzZena);
-    toolbar->addWidget(rbBratSestra);
-    toolbar->addWidget(rbRoditelj);
-    toolbar->addWidget(rbDete);
-
-    toolbar->addSeparator();
-
-    tbPomeranje = new QToolButton();
-    tbPomeranje->setText("Pomeri");
-    tbPomeranje->setToolTip("Sluzice za pomeranje stvari nakon sto su smestene");
-    //stavicemo slicicu
-    tbDetalji = new QToolButton();
-    tbDetalji->setText("?");
-    tbDetalji->setToolTip("Jasno valjda, da ispise detalje o onome na sta se posle klikne");
-
-    toolbar->addWidget(tbPomeranje);
-    toolbar->addWidget(tbDetalji);
-
-    tbMZ=new QToolButton();
-    tbMZ->setIcon(QIcon(mzpix));
-    //toolbar->addWidget(tbMZ);
-    //toolbar->addSeparator();
-    tbBS=new QToolButton();
-    tbBS->setIcon(QIcon(bspix));
-    //toolbar->addWidget(tbBS);
-    //toolbar->addSeparator();
-    tbRD=new QToolButton();
-    tbRD->setIcon(QIcon(rdpix));
-    //toolbar->addWidget(tbRD);
-    //toolbar->addSeparator();
-
-
-    // toolbar->addAction(QIcon(osobapix), "Osoba", ui->Stablo,"");
-    //toolbar->addAction(QIcon(mzpix), "Supruznici",ui->Stablo,"");
-    //toolbar->addAction(QIcon(bspix), "Brat - Sestra",ui->Stablo,"");
-    //toolbar->addAction(QIcon(rdpix), "Roditelj - dete",ui->Stablo,"");
-
-    //toolbar->addSeparator();
-    scena=new QGraphicsScene();
-
-    ui->Stablo->setScene(scena);
-
-
-    connect(tbOsoba,SIGNAL(clicked()),this,SLOT(dodajNovuOsobu()));
-    connect(tbOsoba,SIGNAL(pressed()),this,SLOT(postavi_na_0()));
-    connect(tbMZ,SIGNAL(pressed()),this,SLOT(postavi_na_1()));
-    connect(tbBS,SIGNAL(pressed()),this,SLOT(postavi_na_2()));
-    connect(tbRD,SIGNAL(pressed()),this,SLOT(postavi_na_3()));
-
-    //connect(tbOsoba,SIGNAL(released()),this,SLOT(napravi_Osobu()));
-    //connect(tbMZ,SIGNAL(released()),this,SLOT(poveziMZ()));
-    //connect(tbBS,SIGNAL(released()),this,SLOT(poveziBS()));
-    //connect(tbRD,SIGNAL(released()),this,SLOT(poveziRD()));
-    //toolbar->addSeparator();
-
-}
-
-void GlavniProzor::startDrag()
-
-{
-    WidgetDrag* pDrag;
-    if(ind == 0){
-        pDrag = new WidgetDrag (tbOsoba);
-        pDrag->setWidget(tbOsoba);
-        pDrag->setPixmap(osobapix);
-        }
-        else if(ind == 1){
-            pDrag = new WidgetDrag (tbMZ);
-            pDrag->setWidget(tbMZ);
-            pDrag->setPixmap(mzpix);
-            }
-        else if(ind == 2){
-            pDrag = new WidgetDrag (tbBS);
-            pDrag->setWidget(tbBS);
-            pDrag->setPixmap(bspix);
-            }
-        else if(ind == 3){
-            pDrag = new WidgetDrag (tbRD);
-            pDrag->setWidget(tbRD);
-            pDrag->setPixmap(rdpix);
-            }
-    pDrag->exec(Qt::MoveAction);
-}
-
-void GlavniProzor::mousePressEvent(QMouseEvent *pe)
-{
-    if ((pe->buttons() & Qt::LeftButton))
-    {
-
-        startDrag();
-
-    }
-
-    QWidget::mousePressEvent(pe);
-
-}
-
-void GlavniProzor::mouseMoveEvent(QMouseEvent *pe)
-{
-    if ((pe->buttons() & Qt::LeftButton) )
-    {
-         startDrag();
-
-    }
-    QWidget::mouseMoveEvent(pe);
-}
-
-void GlavniProzor::dragEnterEvent(QDragEnterEvent* pe)
-{
-    if (pe->mimeData()->hasFormat(WidgetMimeData::mimeType()))
-    {
-        pe->acceptProposedAction();
-    }
-    QWidget::dragEnterEvent(pe);
-}
-void GlavniProzor::dropEvent(QDropEvent* pe)
-{
-    const WidgetMimeData* pmmd =
-            dynamic_cast<const WidgetMimeData*>(pe->mimeData());
-    if (pmmd)
-    {
-        //QToolButton* pwgt = pmmd->widget();
-        //QString str("Widget is dropped\n ObjectName: %l ");
-       // scena->addText(str.arg(pwgt->objectName()));
-        m_ptDragPos=pe->pos();
-        if(ind==0)
-            napravi_Osobu();
-        else if(ind==1)
-            poveziMZ();
-        else if (ind==2)
-            poveziBS();
-        else if(ind==3)
-            poveziRD();
-
-    }
-}
-
-void GlavniProzor::napravi_Osobu(){
-
-
-    u.show();
-
-    WidgetOsoba *novaOsoba = new WidgetOsoba(123);
-    novaOsoba->postaviImePrezime("Pera Peric");
-
-    scena->addWidget(novaOsoba);
-
-
-
-    while(u.m_ime==""){
-        continue;
-    }
-    QString Ime(u.m_ime+u.m_prezime);
-    QPushButton Pomocno(Ime);
-
-    scena->addWidget(Pomocno);
-
-
-   //m_osobePoz.push_back(m_ptDragPos,&Pomocno);
-
-}
-void GlavniProzor::poveziMZ(){
-    if(postavi==0){
-        tbRD->setDisabled(true);
-        tbBS->setDisabled(true);
-        postavi=1;
-        m_pomocna=m_ptDragPos;
-    }
-    else
-    {
-        tbRD->setDisabled(false);
-        tbBS->setDisabled(false);
-        postavi=0;
-
-        int x1,x2,y1,y2;
-        QPushButton S1,S2;
-        for (int i=0;i<m_osobePoz.length();i++){
-            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
-                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
-            {
-                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                S1=m_osobePoz[i][1];
-                continue;
-            }
-            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
-                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
-            {
-                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                S2=m_osobePoz[i][1];
-                continue;
-            }
-
-        }
-        scena->addLine(x1,y1,x2,y2);
-
-        //signaliziram da se uspostavila veza izmedju supruznika
-
-    }
-}
-void GlavniProzor::poveziBS(){
-    if(postavi==0){
-        tbMZ->setDisabled(true);
-        tbRD->setDisabled(true);
-        postavi=1;
-        m_pomocna=m_ptDragPos;
-    }
-    else
-    {
-        tbRD->setDisabled(false);
-        tbMZ->setDisabled(false);
-        postavi=0;
-
-        int x1,x2,y1,y2;
-        QPushButton B1,B2;
-        for (int i=0;i<m_osobePoz.length();i++){
-            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
-                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
-            {
-                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                B1=m_osobePoz[i][1];
-                continue;
-            }
-            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
-                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
-            {
-                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                B2=m_osobePoz[i][1];
-                continue;
-            }
-
-        }
-        scena->addLine(x1,y1,x2,y2);
-
-        //signaliziram da se uspostavila veza izmedju brace i sestre
-    }
-}
-void GlavniProzor::poveziRD(){
-    if(postavi==0){
-        tbMZ->setDisabled(true);
-        tbBS->setDisabled(true);
-        postavi=1;
-        m_pomocna=m_ptDragPos;
-    }
-    else
-    {
-        tbMZ->setDisabled(false);
-        tbBS->setDisabled(false);
-        postavi=0;
-
-        int x1,x2,y1,y2;
-        QPushButton R,D;
-        for (int i=0;i<m_osobePoz.length();i++){
-            if(m_osobePoz[i][0].x()<=m_pomocna.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_pomocna.x() &&
-                    m_osobePoz[i][0].y()<=m_pomocna.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_pomocna.y() )
-            {
-                x1=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y1= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                R=m_osobePoz[i][1];
-                continue;
-            }
-            if(m_osobePoz[i][0].x()<=m_ptDragPos.x() && (m_osobePoz[i][0].x()+m_osobePoz[i][1]->width())>=m_ptDragPos.x() &&
-                    m_osobePoz[i][0].y()<=m_ptDragPos.y() && (m_osobePoz[i][0].y()+m_osobePoz[i][1]->height())>=m_ptDragPos.y() )
-            {
-                x2=m_osobePoz[i][0].x()+m_osobePoz[i][1]->width();
-                y2= m_osobePoz[i][0].y()+m_osobePoz[i][1]->height();
-                D=m_osobePoz[i][1];
-                continue;
-            }
-
-        }
-        scena->addLine(x1,y1,x2,y2);
-
-        //signaliziram da se uspostavila veza izmedju roditelja i deteta
-     }
-}
-
-void GlavniProzor::dodajNovuOsobu()
-{
-    //u.show();
-    //bice na drag&drop, ne ovako, samo da smislim sve do kraja...
-
-    //iscitamo podatke preko onog dijaloga ili kako vec
-    // -> ime, prezime, pol, datume
-
-    // short int sifra = stablo->DodajOsobu(...);
-
-    //onda
-    //Widget *novaOsoba = new WidgetOsoba(sifra, this)
-    //i negde je smestimo xD
-
-    //WidgetOsoba *novaOsoba = new WidgetOsoba(1, this, ui->okvirZaStablo);
-    //novaOsoba->postaviImePrezime("Pera Peric");
-
-    //WidgetOsoba *nova = new WidgetOsoba(2, this, ui->okvirZaStablo);
-    //novaOsoba->postaviImePrezime("Zika Dinastija");
-
-    //novaOsoba->show();
-    //nova->show();
-    //ui->okvirZaStablo->repaint();
-
-
+//    w1->move(12,12);
+//    w2->move(50,50);
 }
 
 GlavniProzor::~GlavniProzor()
 {
     delete ui;
+
 }
 
 void GlavniProzor::promeniSelektovanu(short novaSifra)
 {
-    //if sifra ok...
-    selektovana_sifra = novaSifra;
+    _selektovanaSifra = novaSifra;
 }
 
-void GlavniProzor::popuniInformacije()
+void GlavniProzor::popuniInformacije(short sifra)
 {
-//    if (selektovana_sifra > 0)
-//        std::cout<<selektovana_sifra<<std::endl;
-//    else
-//        //ui->osobaInfo->setText("Ne postoji treba da bude prazno");
-//        std::cout<<"ne postoji"<<std::endl;
-
-    //Osoba* osoba = stablo->nadjiOsobuPoSifri(selektovana_sifra);
-    // if  == nullptr greska
-    //inace pisemo
-    //QString tmp = QString::fromStdString(osoba->Ime());
-    ui->lineImePrezime->setText("nesto");
-    ui->lineRodj->setText("nesto drugo");
-    ui->lineSmrt->setText("ubicu se ja sad...");
-
+    if (sifra > 0)
+    {
+        Osoba *osoba =nullptr; //stablo->nadjiOsobuPoSifri(sifra);
+        if (osoba != nullptr)
+            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    }
 }
 
-void GlavniProzor::postaviSifru1(short nova)
+void GlavniProzor::ispisiStatus(const QString &poruka)
 {
-    sifra1 = nova;
+    labelaStatus->setText(poruka);
 }
 
-void GlavniProzor::postaviSifru2(short nova)
+void GlavniProzor::kreirajPlatnoZaCrtanje()
 {
-    sifra2 = nova;
+    QVBoxLayout* lejaut=new QVBoxLayout();
+    QScrollArea* skrolPanel=new QScrollArea();
+    lejaut->addWidget(skrolPanel);
+    ui->centralwidget->setLayout(lejaut);
+
+    stabloOkvir=new okvirStabla(skrolPanel);
+    stabloOkvir->setGeometry(0,0,5000,5000);
+    stabloOkvir->updateGeometry();
+    skrolPanel->setWidget(stabloOkvir);
+    stabloOkvir->setStyleSheet("background-color:rgb(0, 0, 0);");
+    connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(kliknutoPlatno()));
+
+    filter = new FilterObject(stabloOkvir);
+
+
 }
 
-void GlavniProzor::povezi()
+void GlavniProzor::kreirajStatusBar()
 {
-    //ovde pozivamo konstruktor za relaciju
-    //prema radio buttonu
-    //za sifra1, sifra2
-    //ako je sve ok
-    //iscrtava se i ta relacija
-
-    //short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, Odnos::SUPRUZNIK);
+    labelaStatus = new QLabel(" ...");
+    labelaStatus->setMinimumSize(labelaStatus->sizeHint());
+    ui->statusBar->addWidget(labelaStatus, 1);
 }
 
-short int GlavniProzor::selektovana_sifra = -1;
 
-*/
+
+QPushButton* GlavniProzor::kreirajJedanAlat(QPushButton * alat, const char* ime,const char* info)
+{
+    alat=new QPushButton();
+    alat->setCheckable(true);
+    alat->setFocusPolicy(Qt::NoFocus);
+    alat->setToolTip(info);
+    std::string ikonica(":/images/images/"+std::string(ime)+".ico");
+    const char* pocetak=&ikonica[0];
+    alat->setIcon(QIcon(pocetak));
+    alat->setIconSize(QSize(48,48));
+    return alat;
+}
+
+
+void GlavniProzor::kreirajToolbar()
+{
+
+    toolbar = addToolBar(tr("Alati"));
+
+    grpToolBar=new QButtonGroup();
+
+    tbOsoba=kreirajJedanAlat(tbOsoba,"NovaOsoba","Kreirajte novu osobu");
+    tbMuzZena=kreirajJedanAlat(tbMuzZena,"RelacijaSupruznici","Kreirajte novi odnos dva supruznika");
+    tbBratSestra=kreirajJedanAlat(tbBratSestra,"RelacijaBratSestra","Kreirajte novi odnos dvoje brace/sestara");
+    tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Kreirajte novi odnos tipa roditelj-dete");
+    tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
+    tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi");
+    tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili relaciji");
+    tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
+    tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
+
+    tbUredi->setCheckable(false);
+
+    grpToolBar->addButton(tbOsoba);
+    grpToolBar->addButton(tbRoditeljDete);
+    grpToolBar->addButton(tbBratSestra);
+    grpToolBar->addButton(tbMuzZena);
+    grpToolBar->addButton(tbPomeranje);
+    grpToolBar->addButton(tbDetalji);
+    grpToolBar->addButton(tbMenjaj);
+    grpToolBar->addButton(tbBrisi);
+
+    toolbar->addWidget(tbOsoba);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbMuzZena);
+    toolbar->addWidget(tbBratSestra);
+    toolbar->addWidget(tbRoditeljDete);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbPomeranje);
+    toolbar->addWidget(tbMenjaj);
+    toolbar->addWidget(tbBrisi);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbUredi);
+    toolbar->addWidget(tbDetalji);
+
+    tbDetalji->setChecked(true);
+
+    QDockWidget *alati = new QDockWidget(tr("Alati"));
+    alati->setWidget(toolbar);
+    alati->setAllowedAreas(Qt::TopDockWidgetArea
+                           | Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    addDockWidget(Qt::TopDockWidgetArea, alati);
+}
+
+void GlavniProzor::kreirajMestoZaInfo()
+{
+    QDockWidget *info = new QDockWidget(tr("Informacije"));
+    Labela=new QLabel("Informacije");
+    info->setWidget(Labela);//i recimo
+    Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
+    info->setAllowedAreas(Qt::RightDockWidgetArea
+                          | Qt::LeftDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, info);
+}
+
+void GlavniProzor::kliknutoPlatno()
+{
+
+    std::cout<<"---KLIKNUTO--"<<std::endl;
+    int x1 = stabloOkvir->X1();
+    int y1 = stabloOkvir->Y1();
+    int x2 = stabloOkvir->X2();
+    int y2 = stabloOkvir->Y2();
+    QWidget *labela1, *labela2;
+    WidgetOsoba *prva, *druga;
+    labela1 = stabloOkvir->childAt(x1, y1);
+    labela2 = stabloOkvir->childAt(x2, y2);
+
+
+    if(tbOsoba->isChecked()){
+        //tbOsoba->setChecked(false);
+        if ((stabloOkvir->childAt(x2, y2)) != nullptr)
+            ispisiStatus("tu vec postoji nesto");
+        else
+            dodajNovuOsobu(x2, y2);
+
+    }
+    else if(tbBratSestra->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "nije kliknuto na prvu osobu";
+        else
+            if (labela2 == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+                //poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::BRAT_SESTRA,x1,y1,x2,y2);
+            }
+    }
+    else if(tbMuzZena->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "nije kliknuto na prvu osobu";
+        else
+            if (labela2 == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+              //  poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::SUPRUZNIK,x1,y1,x2,y2);
+
+            }
+    }
+    else if(tbRoditeljDete->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "nije kliknuto na prvu osobu";
+        else
+            if (labela2 == nullptr)
+                qDebug() << "nije kliknuto na drugu osobu";
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+                //poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::RODITELJ,x1,y1,x2,y2);
+            }
+
+    }
+    else if(tbDetalji->isChecked()){
+        if (labela1 == nullptr)
+            qDebug() << "kliknuto u prazno";
+        else
+        {
+            prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+            if (prva == nullptr)
+                qDebug() << "Nije osoba na koju je kliknuto";
+            else
+            {
+                qDebug() << prva->Sifra();
+                //promeniSelektovanu(prva->Sifra());
+                popuniInformacije(prva->Sifra());
+            }
+        }
+
+    }
+    else if(tbPomeranje->isChecked()){
+        if (labela2 != nullptr)
+            qDebug() << "tu vec postoji nesto";
+        else
+            if (labela1 == nullptr)
+            {
+                qDebug() << "nije kliknuto na osobu koju treba pomeriti";
+            }
+            else
+            {
+                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                prva->setX(x2);
+                prva->setY(y2);
+                prva->move(x2, y2);
+            }
+
+    }
+    else if(tbBrisi->isChecked()){
+        if (labela2 == nullptr)
+            qDebug() << "KLiknuti na osobu za brisanje!";
+        else
+        {
+            druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+            if (druga == nullptr)
+                qDebug() << "ne moze cast u wosobu";
+            else
+                //stablo->UkloniOsobuPoSifri(druga->Sifra());
+                druga->hide();
+            //DORADITI
+        }
+
+    }
+    else if(tbMenjaj->isChecked()){
+        //izbaci dijalog za menjanje podataka
+    }
+
+
+    tbDetalji->setChecked(true);
+}
+
+
+void GlavniProzor::dodajNovuOsobu(int x,int y)
+{
+    DialogNovaOsoba *d = new DialogNovaOsoba(this);
+    if (d->exec())
+    {
+        std::string ime, prezime, rodjenje, smrt;
+        char pol;
+
+        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
+
+        short int novaSifra = 0;//stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt);
+        if (novaSifra < 0)
+            ispisiStatus("Neuspelo dodavanje");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
+        else
+            ispisiStatus("Uspelo dodavanje");
+
+        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
+        std::string tmp = ime + " " + prezime;
+        novaOsoba->postaviImePrezime(tmp);
+        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
+        novaOsoba->show();
+    }
+
+    delete d;
+}
+
+
+void GlavniProzor::kliknutaRelacija()
+{
+
+}
+/*
+void GlavniProzor::poveziOsobe(short sifra1, short sifra2, int x1,int y1,int x2, int y2)
+{
+
+    qDebug() << "povezuje";
+    if (sifra1 == sifra2){
+        qDebug() << "iste osobe povezujes!";
+
+    }
+    else
+    {qDebug() << odnos;
+
+
+        short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, odnos);
+
+        if (sifraRelacije < 0){
+
+            qDebug() << "Povezivanje nije uspelo";
+        }
+        else
+        {
+
+            WidgetRelacija *novaRelacija = new WidgetRelacija(sifraRelacije,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
+            novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
+            novaRelacija->show();
+            stabloOkvir->povuciLiniju(x1,y1,x2,y2);
+            stabloOkvir->repaint();
+            qDebug() << "Povezivanje jeste uspelo";
+
+        }
+    }
+
+    //        cuvamo u vektor,
+    //        pravimo widget za relaciju i iscrtavamo ga na sredini
+    //        tu negde pozivamo i dijalog za relaciju
+
+}*/
+
+//void GlavniProzor::ukloniOsobu(WidgetOsoba *o){
+//    auto osoba=_osobe.begin();
+//    for(;osoba!=_osobe.end();osoba++){
+//        if((*o)==*(*osoba)){
+//             bool uspelo=stablo->UkloniOsobuPoSifri(o->Sifra());
+//             if(uspelo){
+//                _osobe.erase(osoba);
+
+//                o->hide();
+//             }
+//            //treba da sakrijemo i sve njene veze
+
+//        }
+//    }
+//}
+
+short int GlavniProzor::_selektovanaSifra = -1;

@@ -1,106 +1,94 @@
-/*#ifndef GLAVNIPROZOR_H
-#define GLAVNIPROZOR_H 1
+#ifndef GLAVNIPROZOR_H
+#define GLAVNIPROZOR_H
 
 #include <QMainWindow>
-#include <QToolBar>
-#include <QAction>
-#include <QIcon>
-#include <QToolButton>
-#include <QGraphicsScene>
-#include <QMouseEvent>
-#include <QPixmap>
-#include <QRadioButton>
-#include <QButtonGroup>
-#include "WidgetDrag.h"
-#include <QTextBrowser>
-#include "unetiosobu.h"
-#include "widgetosoba.h"
-#include <vector>
-#include <iostream>
 #include <engine/porodicnostablo.h>
-
-
+#include <QButtonGroup>
+#include <QToolBar>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QDockWidget>
+#include <QVBoxLayout>
+#include <QPainter>
+#include "GUI/widgetosoba.h"
+#include "GUI/widgetrelacija.h"
+#include "GUI/dialognovaosoba.h"
+#include <string>
+#include <iostream>
+#include "ui_glavniprozor.h"
+#include "okvirstabla.h"
+#include <vector>
+#include <qdebug.h>
+#include "alati/filterobject.h"
+class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
 }
 
-class GlavniProzor : public QMainWindow
+class GlavniProzor : public QMainWindow, private Ui::GlavniProzor
 {
     Q_OBJECT
 
 public:
+    okvirStabla *stabloOkvir;//privremeno
+
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
 
     void promeniSelektovanu(short int novaSifra);
 
-    void popuniInformacije();
+    void popuniInformacije(short sifra);
 
-    void postaviSifru1(short int nova);
-    void postaviSifru2(short int nova);
-    void povezi();
+    void ispisiStatus(const QString &poruka);
+
+    void otpustenaOsoba();
+
+    void ukloniOsobu(WidgetOsoba* o);
 
 
 private:
-    QPoint m_ptDragPos;
-    QPoint m_pomocna;
-
     Ui::GlavniProzor *ui;
 
-    QToolButton * tbOsoba;
-    QToolButton * tbBS;
-    QToolButton * tbMZ;
-    QToolButton * tbRD;
-
-    QToolButton *tbPomeranje;
-    QToolButton *tbDetalji;
-
-    QButtonGroup *grpRelacije;
-    QRadioButton *rbMuzZena, *rbBratSestra, *rbRoditelj, *rbDete;
-
-    QGraphicsScene* scena;
-    QDrag *drag;
-    int ind=-1;
-    bool postavi=0;
-    QPixmap osobapix;
-    QPixmap mzpix;
-    QPixmap bspix;
-    QPixmap rdpix;
-
-    Unetiosobu u;
-
-    short int sifra1, sifra2;
-
-    static short int selektovana_sifra;
-
+    QButtonGroup *grpToolBar;
+    QPushButton *tbOsoba;
+    QPushButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
+    QPushButton *tbPomeranje, *tbDetalji;
+    QPushButton *tbBrisi, *tbMenjaj;
+    QPushButton *tbUredi;
+    QToolBar *toolbar;
+    QLabel *Labela;
     PorodicnoStablo *stablo;
+    QPainter * cetka;
 
-    void startDrag();
-    void napravi_Osobu();
-    void poveziMZ();
-    void poveziBS();
-    void poveziRD();
-           //vector <QPoint,QPushButton*> m_osobePoz;
+    //okvirStabla *stabloOkvir;
+
+    static short int _selektovanaSifra;
+
+    FilterObject *filter;
+
+    QLabel *labelaStatus;
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
     //vector<sifra_relacije, pozicija_relacije>
+    std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
+
+    QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
+
+    void kreirajOpcije();
+    void kreirajToolbar();
+    void kreirajMestoZaInfo();
+    void kreirajPlatnoZaCrtanje();
+    void kreirajStatusBar();
 
 
-private Q_SLOTS:
-       void postavi_na_0(){ind=0;}
-       void postavi_na_1(){ind=1;}
-       void postavi_na_2(){ind=2;}
-       void postavi_na_3(){ind=3;}
 
-       void dodajNovuOsobu();
+public Q_SLOTS:
+    void dodajNovuOsobu(int x, int y);
+    void kliknutoPlatno();
 
-protected:
-    virtual void mouseMoveEvent(QMouseEvent* pe);
-    virtual void dragEnterEvent(QDragEnterEvent* pe);
-    virtual void dropEvent(QDropEvent* pe);
-    virtual void mousePressEvent(QMouseEvent *pe);
+    void kliknutaRelacija();
 };
 
-#endif // GLAVNIPROZOR_H
-*/
+#endif // GLAVNIPROZOR2_H

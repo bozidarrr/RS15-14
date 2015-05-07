@@ -2,8 +2,9 @@
 #define OKVIRSTABLA_H
 
 #include <QWidget>
-#include<vector>
-#include"alati/linija.h"
+#include <QLine>
+
+#include <vector>
 
 namespace Ui {
 class okvirStabla;
@@ -43,7 +44,7 @@ private:
     Ui::okvirStabla *ui;
     int _prviX,_prviY,_drugiX,_drugiY;
     QPainter *cetka;
-    std::vector<linija> zaCrtanje;
+    std::vector<QLine *> zaCrtanje;
 };
 
 #endif // OKVIRSTABLA_H

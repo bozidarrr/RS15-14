@@ -40,14 +40,14 @@ void okvirStabla::paintEvent(QPaintEvent *event)
     cetka=new QPainter(this);
     cetka->setPen(QPen(Qt::green, 3, Qt::DashLine, Qt::RoundCap));
     cetka->setBrush(QBrush(Qt::green, Qt::SolidPattern));
-    for(linija l: zaCrtanje){
-        cetka->drawLine(l.X1(),l.Y1(),l.X2(),l.Y2());
+    for(QLine* l: zaCrtanje){
+        cetka->drawLine(*l);
     }
 }
 
   void okvirStabla::povuciLiniju(int x1,int y1,int x2, int y2)
   {
-      zaCrtanje.push_back(linija(x1,y1,x2,y2));
+      zaCrtanje.push_back(new QLine(x1,y1,x2,y2));
   }
 
 
