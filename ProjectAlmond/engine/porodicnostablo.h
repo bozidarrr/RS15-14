@@ -23,6 +23,8 @@ public:
 
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
     short int DodajOsobu(std::string ime, std::string prezime, char pol, QDate datumRodjenja, QDate datum_smrti, bool krvniSrodnik);
+    //slicno, samo pravi NN lice
+    short int DodajNNLice();
 
     //dodaje relaciju dete, od braka do osobe
     short int DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija="",QDate* datumUsvajanja=nullptr);

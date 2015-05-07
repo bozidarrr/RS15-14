@@ -31,7 +31,10 @@ public:
 
     //----geteri i seteri------//
 
-    //---metodi korisni u upotrebi---//OVI JOS NE RADE!!!!
+    //---metodi korisni u upotrebi---//
+    void DodajDete(Dete* beba);
+
+    //OVI JOS NE RADE!!!!
     bool UVezi();
     bool Vereni();
     bool Vencani();

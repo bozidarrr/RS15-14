@@ -22,7 +22,7 @@ PorodicnoStablo::PorodicnoStablo()
     InicijalizujSveStrukture();
     _sveOsobe.push_back(&_kljucnaOsoba);
 
-   (_indeksSifraOsobe[_kljucnaOsoba.Sifra()])=&_kljucnaOsoba;
+    (_indeksSifraOsobe[_kljucnaOsoba.Sifra()])=&_kljucnaOsoba;
 
 
 }
@@ -44,39 +44,28 @@ PorodicnoStablo::PorodicnoStablo(std::string& ime, std::string& prezime,char pol
 PorodicnoStablo::~PorodicnoStablo()
 {
     std::vector<Osoba*>::iterator b=_sveOsobe.begin();
-
     std::vector<Osoba*>::iterator e=_sveOsobe.end();
-
     for(;b!=e;b++)
     {
         (*b)->RaskiniSveVeze();
         delete *b;
     }
 
-
     std::vector<Dete*>::iterator b1=_svaDeca.begin();
-
     std::vector<Dete*>::iterator e1=_svaDeca.end();
-
     for(;b1!=e1;b1++)
     {
         (*b1)->RaskiniSveVeze();
         delete *b1;
     }
 
-
     std::vector<Brak*>::iterator b2=_sveVeze.begin();
-
     std::vector<Brak*>::iterator e2=_sveVeze.end();
-
     for(;b2!=e2;b2++)
     {
         (*b2)->RaskiniSveVeze();
         delete *b2;
     }
-
-
-
 }
 
 Osoba * PorodicnoStablo::KljucnaOsoba()
@@ -86,21 +75,49 @@ Osoba * PorodicnoStablo::KljucnaOsoba()
 
 
 //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
+short int PorodicnoStablo::DodajNNLice()
+{
+    Osoba *nova=new Osoba();
+    _indeksSifraOsobe[nova->Sifra()]=nova;
+    _sveOsobe.push_back(nova);
+    return nova->Sifra();
+}
 short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char pol, QDate datumRodjenja, QDate datum_smrti, bool krvniSrodnik)
 {
-return 0;
+    Osoba* nova=new Osoba(ime,prezime,pol,datumRodjenja,datum_smrti,krvniSrodnik);
+    _sveOsobe.push_back(nova);
+    _indeksIme[ime]=std::vector<Osoba*>();
+    _indeksIme[ime].push_back(nova);
+    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
+    _indeksRodjenje[datumRodjenja].push_back(nova);
+    _indeksRodjendan[datumRodjenja.daysInYear()]=std::vector<Osoba*>();
+    _indeksRodjendan[datumRodjenja.daysInYear()].push_back(nova);
+    _indeksSifraOsobe[nova->Sifra()]=nova;
+    return nova->Sifra();
 }
+
+
 
 //dodaje relaciju dete, od braka do osobe
 short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija,QDate* datumUsvajanja)
 {
-    return 0;
+    Dete* novo=new Dete(NadjiOsobuSifrom(sifraOsobe),NadjiBrakSifrom(sifraBraka),trivija,datumUsvajanja);
+    _svaDeca.push_back(novo);
+    _indeksSifraDete[novo->Sifra()]=novo;
+    NadjiOsobuSifrom(sifraOsobe)->PostaviPoreklo(novo);
+    NadjiBrakSifrom(sifraBraka)->DodajDete(novo);
+    return novo->Sifra();
 }
 
 //dodaje relaciju brak izmedju dve osobe date siframa
 short int PorodicnoStablo::DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija, QDate* datumUpoznavanja,QDate* datumVeze, QDate* datumRaskida, QDate* datumVeridbe, QDate* datumVencanja)
 {
-    return 0;
+    Brak* novi=new Brak(NadjiOsobuSifrom(sifraNaseOsobe),NadjiOsobuSifrom(sifraTudjeOsobe),trivija,(*datumUpoznavanja),(*datumVeze),(*datumRaskida),(*datumVeridbe),(*datumVencanja));
+    _sveVeze.push_back(novi);
+    _indeksSifraVeza[novi->Sifra()]=novi;
+    NadjiOsobuSifrom(sifraNaseOsobe)->DodajVezu(novi);
+    NadjiOsobuSifrom(sifraTudjeOsobe)->DodajVezu(novi);
+    return novi->Sifra();
 }
 
 

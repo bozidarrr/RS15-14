@@ -80,6 +80,17 @@ Dete* Osoba::Poreklo()
     return _deteOd;
 }
 
+void Osoba::PostaviPoreklo(Dete* poreklo)
+{
+    _deteOd=poreklo;
+}
+
+void Osoba::DodajVezu(Brak* veza)
+{
+    _spisakVeza.push_back(veza);
+}
+
+
 std::vector<Brak*>& Osoba::SpisakVeza()
 {
     return _spisakVeza;

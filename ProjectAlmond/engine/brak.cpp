@@ -61,6 +61,12 @@ QDate& Brak::DatumRaskida()
     return _datumRaskida;
 }
 
+void Brak::DodajDete(Dete* beba)
+{
+    _spisakDece.push_back(beba);
+
+}
+
 bool Brak::UVezi()
 {
     return false;
