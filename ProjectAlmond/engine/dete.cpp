@@ -2,8 +2,8 @@
 
 short int Dete::_sledecaSifra=0;
 
-Dete::Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija,QDate* datumUsvajanja)
-    :_sifra(++_sledecaSifra),_osoba(osoba),_roditeljskiOdnos(roditeljskaVeza),_trivija(trivija),_datumUsvajanja(*datumUsvajanja)
+Dete::Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija)
+    :_sifra(++_sledecaSifra),_osoba(osoba),_roditeljskiOdnos(roditeljskaVeza),_trivija(trivija)
 {}
 
 Dete::~Dete()
@@ -31,12 +31,12 @@ Brak* Dete::RoditeljskiOdnos()
 std::string& Dete::Trivija()
 {
     return _trivija;
-}
+}/*
 QDate& Dete::DatumUsvajanja()
 {
     return _datumUsvajanja;
 }
-
+*/
 bool Dete::BrisanjeOdOsobe()
 {
     _roditeljskiOdnos->DeteSeUklanja(this);

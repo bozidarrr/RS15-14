@@ -7,6 +7,7 @@ okvirStabla::okvirStabla(QWidget *parent) :
     ui(new Ui::okvirStabla),_prviX(-1),_prviY(-1),_drugiX(-1),_drugiY(-1),zaCrtanje()
 {
     ui->setupUi(this);
+
 }
 
 okvirStabla::~okvirStabla()
@@ -43,6 +44,7 @@ void okvirStabla::paintEvent(QPaintEvent *event)
     for(QLine* l: zaCrtanje){
         cetka->drawLine(*l);
     }
+    delete cetka;
 }
 
   void okvirStabla::povuciLiniju(int x1,int y1,int x2, int y2)

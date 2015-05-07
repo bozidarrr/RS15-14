@@ -16,7 +16,7 @@ class Osoba
 public:
 
     Osoba(); //kreira N.N lice
-    Osoba(std::string& ime, std::string& prezime,char pol,QDate datumRodjenja,QDate datumsmrti,bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
+    Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
 
     ~Osoba(); //uklanja osobu, sve njene podatke i poziva uklanjanje sopstvenog pointera iz brakova, kao i unistavanje relacionog objekta Dete
 
@@ -28,9 +28,9 @@ public:
 
     const std::string& Prezime() const;//vraca prezime
 
-    QDate& DatumRodjenja(); //vraca datum rodjenja
+   // QDate& DatumRodjenja(); //vraca datum rodjenja
 
-    QDate& DatumSmrti(); //vraca datum smrti
+   // QDate& DatumSmrti(); //vraca datum smrti
 
     bool JeKrvniSrodnik(); //vraca da li je osoba u krvnom srodstvu sa kljucnom osobom
 
@@ -54,6 +54,8 @@ public:
     bool ObrisiPoreklo(); //brise podatke o relacionom objektu dete
 
     bool RaskiniSveVeze(); //brise sve veze, zarad pripreme za brisanje na vecoj skali
+
+    bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
     //----metodi potrebni za brisanje----//
 
 
@@ -71,6 +73,7 @@ private:
     bool _krvniSrodnik;
     Dete * _deteOd;
     std::vector<Brak *> _spisakVeza;
+    bool _vecSeBrise=false;
     //----osnovni podaci----//
     //--------------------------------------------------------------//
     //----napredni podaci----//

@@ -27,17 +27,17 @@ PorodicnoStablo::PorodicnoStablo()
 
 }
 
-PorodicnoStablo::PorodicnoStablo(std::string& ime, std::string& prezime,char pol,QDate datumRodjenja,QDate datumsmrti,bool krvniSrodnik)
-    :_kljucnaOsoba(ime,prezime,pol,datumRodjenja,datumsmrti,krvniSrodnik)
+PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,  bool krvniSrodnik)
+    :_kljucnaOsoba(ime,prezime,pol,krvniSrodnik)
 {
     InicijalizujSveStrukture();
     _sveOsobe.push_back(&_kljucnaOsoba);
     _indeksIme[_kljucnaOsoba.Ime()]=std::vector<Osoba*>();
     _indeksIme[_kljucnaOsoba.Ime()].push_back(&_kljucnaOsoba);
-    _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
+  /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
     _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()].push_back(&_kljucnaOsoba);
     _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()]=std::vector<Osoba*>();
-    _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()].push_back(&_kljucnaOsoba);
+    _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()].push_back(&_kljucnaOsoba);*/
     _indeksSifraOsobe[_kljucnaOsoba.Sifra()]=&_kljucnaOsoba;
 }
 
@@ -82,16 +82,16 @@ short int PorodicnoStablo::DodajNNLice()
     _sveOsobe.push_back(nova);
     return nova->Sifra();
 }
-short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char pol, QDate datumRodjenja, QDate datum_smrti, bool krvniSrodnik)
+short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
 {
-    Osoba* nova=new Osoba(ime,prezime,pol,datumRodjenja,datum_smrti,krvniSrodnik);
+    Osoba* nova=new Osoba(ime,prezime,pol,krvniSrodnik);
     _sveOsobe.push_back(nova);
     _indeksIme[ime]=std::vector<Osoba*>();
     _indeksIme[ime].push_back(nova);
-    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
+/*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
     _indeksRodjenje[datumRodjenja].push_back(nova);
     _indeksRodjendan[datumRodjenja.daysInYear()]=std::vector<Osoba*>();
-    _indeksRodjendan[datumRodjenja.daysInYear()].push_back(nova);
+    _indeksRodjendan[datumRodjenja.daysInYear()].push_back(nova);*/
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
 }
@@ -99,9 +99,9 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char
 
 
 //dodaje relaciju dete, od braka do osobe
-short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija,QDate* datumUsvajanja)
+short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija)
 {
-    Dete* novo=new Dete(NadjiOsobuSifrom(sifraOsobe),NadjiBrakSifrom(sifraBraka),trivija,datumUsvajanja);
+    Dete* novo=new Dete(NadjiOsobuSifrom(sifraOsobe),NadjiBrakSifrom(sifraBraka),trivija);
     _svaDeca.push_back(novo);
     _indeksSifraDete[novo->Sifra()]=novo;
     NadjiOsobuSifrom(sifraOsobe)->PostaviPoreklo(novo);
@@ -110,9 +110,9 @@ short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,s
 }
 
 //dodaje relaciju brak izmedju dve osobe date siframa
-short int PorodicnoStablo::DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija, QDate* datumUpoznavanja,QDate* datumVeze, QDate* datumRaskida, QDate* datumVeridbe, QDate* datumVencanja)
+short int PorodicnoStablo::DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija)
 {
-    Brak* novi=new Brak(NadjiOsobuSifrom(sifraNaseOsobe),NadjiOsobuSifrom(sifraTudjeOsobe),trivija,(*datumUpoznavanja),(*datumVeze),(*datumRaskida),(*datumVeridbe),(*datumVencanja));
+    Brak* novi=new Brak(NadjiOsobuSifrom(sifraNaseOsobe),NadjiOsobuSifrom(sifraTudjeOsobe),trivija);
     _sveVeze.push_back(novi);
     _indeksSifraVeza[novi->Sifra()]=novi;
     NadjiOsobuSifrom(sifraNaseOsobe)->DodajVezu(novi);
@@ -142,14 +142,29 @@ Brak* PorodicnoStablo::NadjiBrakSifrom(const short sifra)
     return nullptr;
 }
 
+
+void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
+{
+    Osoba *zaBrisanje=_indeksSifraOsobe[sifra];
+    delete zaBrisanje;
+
+}
+
+void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
+{}
+
+void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
+{}
+
+
 void PorodicnoStablo::InicijalizujSveStrukture()
 {
     _sveOsobe.clear();
     _svaDeca.clear();
     _sveVeze.clear();
     _indeksIme.clear();
-    _indeksRodjenje.clear();
-    _indeksRodjendan.clear();
+  //  _indeksRodjenje.clear();
+  //  _indeksRodjendan.clear();
     _indeksSifraDete.clear();
     _indeksSifraOsobe.clear();
     _indeksSifraVeza.clear();
