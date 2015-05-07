@@ -29,6 +29,8 @@ private Q_SLOTS:
     void on_chkSmrt_stateChanged(int arg1);
     void on_chkNepoznatDR_stateChanged(int arg1);
 
+    void on_checkBox_stateChanged(int arg1);
+
 private:
     Ui::DialogNovaOsoba *ui;
 
