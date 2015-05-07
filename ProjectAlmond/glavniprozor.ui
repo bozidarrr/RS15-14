@@ -6,242 +6,235 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>610</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GlavniProzor</string>
+   <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QScrollArea" name="scrollArea">
-    <property name="geometry">
-     <rect>
-      <x>710</x>
-      <y>10</y>
-      <width>41</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="widgetResizable">
-     <bool>true</bool>
-    </property>
-    <widget class="QWidget" name="scrollAreaWidgetContents">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>39</width>
-       <height>149</height>
-      </rect>
-     </property>
-     <widget class="QGraphicsView" name="Stablo">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>0</y>
-        <width>421</width>
-        <height>151</height>
-       </rect>
-      </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>221</width>
-      <height>243</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="osobaInfo">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font: 14pt &quot;Ubuntu&quot;;</string>
-       </property>
-       <property name="text">
-        <string>Informacije o osobi</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Ime i prezime</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineImePrezime">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Datum rodjenja</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineRodj">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Datum smrti</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineSmrt"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QFrame" name="okvirZaStablo">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>0</y>
-      <width>401</width>
-      <height>551</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(196, 230, 232);</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>401</width>
-       <height>551</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridStablo"/>
-    </widget>
-   </widget>
+  <property name="windowIcon">
+   <iconset resource="slike.qrc">
+    <normaloff>:/images/images/ProjectAlmond.ico</normaloff>:/images/images/ProjectAlmond.ico</iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>758</width>
+    <height>758</height>
+   </size>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+     <horstretch>1</horstretch>
+     <verstretch>1</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>400</width>
+     <height>200</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
+     <width>800</width>
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="mFajlovi">
     <property name="title">
-     <string>File</string>
+     <string>Fajlovi</string>
     </property>
-    <addaction name="actionTest"/>
+    <addaction name="aNovoStablo"/>
+    <addaction name="aOtvori"/>
+    <addaction name="aSkoroOtvarani"/>
+    <addaction name="separator"/>
+    <addaction name="aSacuvaj"/>
+    <addaction name="aIzvezi"/>
+    <addaction name="separator"/>
+    <addaction name="aUgasi"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="geometry">
-     <rect>
-      <x>453</x>
-      <y>82</y>
-      <width>156</width>
-      <height>46</height>
-     </rect>
-    </property>
+   <widget class="QMenu" name="mPodesavanja">
     <property name="title">
-     <string>Help</string>
+     <string>Podesavanja</string>
+    </property>
+    <widget class="QMenu" name="mJezik">
+     <property name="title">
+      <string>Odaberite jezik</string>
+     </property>
+     <addaction name="aSrpski"/>
+     <addaction name="aEngleski"/>
+     <addaction name="aNemacki"/>
+    </widget>
+    <addaction name="aMreza"/>
+    <addaction name="aSamoKrv"/>
+    <addaction name="aPreciGore"/>
+    <addaction name="separator"/>
+    <addaction name="mJezik"/>
+    <addaction name="separator"/>
+    <addaction name="aAnimacije"/>
+   </widget>
+   <widget class="QMenu" name="mPrikaz">
+    <property name="title">
+     <string>Prikaz</string>
+    </property>
+    <addaction name="aTema"/>
+    <addaction name="aAlati"/>
+    <addaction name="aInformacije"/>
+   </widget>
+   <widget class="QMenu" name="mPomoc">
+    <property name="title">
+     <string>Pomoc</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuHelp"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <widget class="QMenu" name="mOProgramu">
+    <property name="title">
+     <string>O programu</string>
+    </property>
+   </widget>
+   <addaction name="mFajlovi"/>
+   <addaction name="mPodesavanja"/>
+   <addaction name="mPrikaz"/>
+   <addaction name="mOProgramu"/>
+   <addaction name="mPomoc"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionTest">
+  <action name="aNovoStablo">
    <property name="text">
-    <string>Test</string>
+    <string>Novo stablo</string>
+   </property>
+  </action>
+  <action name="aOtvori">
+   <property name="text">
+    <string>Otvorite fajl</string>
+   </property>
+  </action>
+  <action name="aSkoroOtvarani">
+   <property name="text">
+    <string>Skoro otvarani fajlovi</string>
+   </property>
+  </action>
+  <action name="aSacuvaj">
+   <property name="text">
+    <string>Sacuvajte izmene</string>
+   </property>
+  </action>
+  <action name="aIzvezi">
+   <property name="text">
+    <string>Sacuvajte kao...</string>
+   </property>
+  </action>
+  <action name="aUgasi">
+   <property name="text">
+    <string>Ugasite program</string>
+   </property>
+  </action>
+  <action name="aMreza">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prikazi mrezu</string>
+   </property>
+  </action>
+  <action name="aSamoKrv">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prikazuj samo krvne srodnike</string>
+   </property>
+  </action>
+  <action name="aSrpski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Srpski</string>
+   </property>
+  </action>
+  <action name="aEngleski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="aNemacki">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Deutsch</string>
+   </property>
+  </action>
+  <action name="aAnimacije">
+   <property name="text">
+    <string>Omoguci animacije</string>
+   </property>
+  </action>
+  <action name="aPreciGore">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Preci su sa gornje strane</string>
+   </property>
+  </action>
+  <action name="aTema">
+   <property name="text">
+    <string>Aktivna tema</string>
+   </property>
+  </action>
+  <action name="aAlati">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Alati</string>
+   </property>
+  </action>
+  <action name="aInformacije">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Informacije</string>
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="slike.qrc"/>
+ </resources>
  <connections/>
 </ui>

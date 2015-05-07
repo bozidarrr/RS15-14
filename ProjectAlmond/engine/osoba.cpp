@@ -1,60 +1,47 @@
 #include"engine/osoba.h"
-#include<algorithm>
-short int Osoba::_MinSifra=0;
 
-Osoba::Osoba(const std::string ime, const std::string prezime, const char pol,
-             const std::string datum_rodjenja, const std::string datum_smrti)
-    : _sifra(Osoba::_MinSifra++),
-      _ime(ime), _prezime(prezime),_pol(pol),
-      _datum_rodjenja(datum_rodjenja),
-      _datum_smrti(datum_smrti),
-      _supruznici(2)
+short int Osoba::_sledecaSifra=0;
 
-{
-       // std::cout<<"Kreirao osobu: "<<_ime<<" sa sifrom: "<<_sifra<<std::endl;
-}
+
+Osoba::Osoba()
+    :_sifra(++_sledecaSifra),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza(2)
+{}
+
+Osoba::Osoba(std::string &ime, std::string &prezime, char pol, QDate datumRodjenja, QDate datumsmrti,bool krvniSrodnik)
+    :_sifra(++_sledecaSifra),_nepoznata(false),_ime(ime),_prezime(prezime),_pol(pol),_datumRodjenja(datumRodjenja),_datumSmrti(datumsmrti),_krvniSrodnik(krvniSrodnik),_spisakVeza(2)
+{}
+
 
 Osoba::~Osoba()
 {
-    //Obavestavamo:
-    //muzeve i zene
-    std::vector<Supruznik*>::iterator sp=_supruznici.begin();
-    std::vector<Supruznik*>::iterator sk=_supruznici.end();
-    for(;sp!=sk;sp++){
-        (*sp)->UkloniSe(this);
-        delete *sp;
+    //brisem podatke o sebi kao detetu
+    if(_deteOd!=nullptr)
+    {
+        _deteOd->BrisanjeOdOsobe();
+        delete _deteOd;
     }
 
-    //decu
+    //za svaku vezu iz spiska
+    if(!_spisakVeza.empty()){
+        std::vector<Brak*>::iterator b=_spisakVeza.begin();
+        std::vector<Brak*>::iterator e=_spisakVeza.end();
 
-    //bracu i sestre
-
-    //roditelje
-
-}
-
-//konstruktori kopije i dodele kreiraju osobu sa istim karakteristikama, ali nepovezanu!!! Veze se ne kopiraju!!!
-Osoba::Osoba(const Osoba& nova):
-    _ime(nova.Ime()),
-    _prezime(nova.Prezime()),_pol(nova.Pol()),
-    _datum_rodjenja(nova.DatumRodjenja()),
-    _datum_smrti(nova.DatumSmrti()),
-
-    _supruznici(2)
-{_sifra=_MinSifra++;
-}
-
-
-Osoba& Osoba::operator=(Osoba& nova){
-    if(&nova!=this){
-        Osoba tmp(nova);
-        std::swap(this->_ime,nova._ime);
-        std::swap(this->_prezime,nova._prezime);
-        std::swap(this->_datum_rodjenja,nova._datum_rodjenja);
-        std::swap(this->_datum_smrti,nova._datum_smrti);
-        std::swap(this->_pol,nova._pol);
+        if(!_krvniSrodnik){
+            for(;b!=e;b++)
+            {
+                (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
+                delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
+            }
+        }
+        else//ako jeste krvni srodnik, onda treba pokrenuti samo brisanje druge osobe, koja ce zatim pokrenuti i ostatak brisanja kao u prethodnom
+        {
+            for(;b!=e;b++)
+            {
+                delete ((*b)->TudjaOsoba());
+            }
+        }
     }
-    return *this;
+
 }
 
 
@@ -73,43 +60,56 @@ const std::string& Osoba::Prezime() const
     return _prezime;
 }
 
-const Datum& Osoba::DatumRodjenja() const
+QDate& Osoba::DatumRodjenja()
 {
-    return _datum_rodjenja;
+    return _datumRodjenja;
 }
 
-const Datum& Osoba::DatumSmrti() const
+QDate& Osoba::DatumSmrti()
 {
-    return _datum_smrti;
+    return _datumSmrti;
 }
 
-char Osoba::Pol() const
+bool Osoba::JeKrvniSrodnik()
 {
-    return _pol;
+    return _krvniSrodnik;
 }
 
-
-std::vector<Supruznik *> &Osoba::Supruznici()
+Dete* Osoba::Poreklo()
 {
-    return _supruznici;
+    return _deteOd;
 }
 
-
-void Osoba::UkloniSupruznika(Supruznik* inicijator){    
-    _supruznici.erase(std::remove(_supruznici.begin(), _supruznici.end(), inicijator), _supruznici.end());
+std::vector<Brak*>& Osoba::SpisakVeza()
+{
+    return _spisakVeza;
 }
 
-
-bool Osoba::ProveriPodatke()const
+void Osoba::PretvoriUNepoznatu()
 {
-    //todo
+    _ime="N.";
+    _prezime="N.";
+    _pol='?';
+    _nepoznata=true;
+}
+
+bool Osoba::Raskini(Brak* razvod)
+{
+    _spisakVeza.erase(std::remove(_spisakVeza.begin(), _spisakVeza.end(), razvod), _spisakVeza.end());
     return true;
 }
 
-
-std::string Osoba::toString()const
+bool Osoba::ObrisiPoreklo()
 {
-    return std::string("<b>Ime:<b/> "+_ime+"\n<b>Prezime: <b/> "+_prezime+"<b>\nPol: <b/> "+_pol);
+    _deteOd=nullptr;
+    return true;
+}
+
+bool Osoba::RaskiniSveVeze()
+{
+    _deteOd=nullptr;
+    _spisakVeza.clear();
+    return true;
 }
 
 

@@ -3,7 +3,7 @@
 #include "GUI/glavniprozor.h"
 #include <iostream>
 #include <QtGui>
-WidgetRelacija::WidgetRelacija(short int sifra, int x, int y,  GlavniProzor2 *gp, QWidget *parent) :
+WidgetRelacija::WidgetRelacija(short int sifra, int x, int y,  GlavniProzor *gp, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WidgetRelacija),
     _sifra(sifra),_x(x),_y(y),

@@ -6,13 +6,13 @@
 #include <QPushButton>
 #include <string>
 #include <QString>
-#include "GUI/glavniprozor2.h"
+#include "GUI/glavniprozor.h"
 #include "alati/filterzalabelu.h"
 #include "alati/filterobject.h"
 #include "GUI/okvirstabla.h"
 
 
-class GlavniProzor2;
+class GlavniProzor;
 
 namespace Ui {
 class WidgetOsoba;
@@ -24,7 +24,7 @@ class WidgetOsoba : public QWidget
 
 public:
     explicit WidgetOsoba(short int sifra, int x, int y,
-                         GlavniProzor2 *gp, QWidget *parent = 0);
+                         GlavniProzor *gp, QWidget *parent = 0);
     ~WidgetOsoba();
 
     void postaviImePrezime(const std::string &ip);
@@ -50,7 +50,7 @@ private:
     int _x;
     int _y;
 
-    GlavniProzor2 *w;
+    GlavniProzor *w;
 };
 
 #endif // WIDGETOSOBA_H
