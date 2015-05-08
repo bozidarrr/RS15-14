@@ -180,12 +180,16 @@ void GlavniProzor::kliknutoPlatno()
         {
             prva = qobject_cast<WidgetOsoba*>(labela1->parent());
             short int novaSifraOsobe=dodajNovuOsobu(x2,y2);
-            short int novaSifraBraka=stablo->DodajBrak(prva->Sifra(),novaSifraOsobe);
-            WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraBraka,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
-            novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
-            novaRelacija->show();
-            stabloOkvir->povuciLiniju(x1,y1,x2,y2);
-            stabloOkvir->repaint();
+            if (novaSifraOsobe < 0)
+                ispisiStatus("Odustali ste od dodavanja nove osobe");
+            else{
+                short int novaSifraBraka=stablo->DodajBrak(prva->Sifra(),novaSifraOsobe);
+                WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraBraka,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
+                novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
+                novaRelacija->show();
+                stabloOkvir->povuciLiniju(x1,y1,x2,y2);
+                stabloOkvir->repaint();
+            }
 
         }
     }

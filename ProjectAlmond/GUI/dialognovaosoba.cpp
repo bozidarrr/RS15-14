@@ -1,11 +1,12 @@
 #include "GUI/dialognovaosoba.h"
 #include "ui_dialognovaosoba.h"
-#include <QRegExp>
-#include <QRegExpValidator>
+//#include <QRegExp>
+//#include <QRegExpValidator>
 
-DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
+DialogNovaOsoba::DialogNovaOsoba(bool saRelacijom, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogNovaOsoba)
+    ui(new Ui::DialogNovaOsoba),
+    _saRelacijom(saRelacijom)
 {
     ui->setupUi(this);
     setModal(true);
@@ -17,6 +18,13 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
     connect(ui->chkSmrt,SIGNAL(stateChanged(int)),this,SLOT(on_chkSmrt_stateChanged(int)));
     connect(ui->chkNepoznatDR,SIGNAL(stateChanged(int)),this,SLOT(on_chkNepoznatDR_stateChanged(int)));
 
+    if(_saRelacijom)
+    {
+        labelaTrivija = new QLabel("Trivije o relaciji");
+        ui->hlTrivija->addWidget(labelaTrivija);
+        trivija = new QTextEdit();
+        ui->hlTrivija->addWidget(trivija, 1);
+    }
 }
 
 DialogNovaOsoba::~DialogNovaOsoba()
@@ -24,7 +32,7 @@ DialogNovaOsoba::~DialogNovaOsoba()
     delete ui;
 }
 
-void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
+void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt, QString &triv)
 {
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
@@ -33,14 +41,18 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
         rodjenje = ui->unosRodjenje->date();
     if (ui->chkSmrt->isChecked() == false)
            smrt = ui->UnosSmrt->date();
+    if(_saRelacijom)
+        triv = trivija->toPlainText();
+    else
+        triv = "";
 }
 
 void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt)
 {
-    QString _ime, _prezime, _pol;
+    QString _ime, _prezime, _pol, _trivija;
     QDate _rodjenje, _smrt;
 
-    popuniPodatke(_ime, _prezime, _pol, _rodjenje, _smrt);
+    popuniPodatke(_ime, _prezime, _pol, _rodjenje, _smrt, _trivija);
 
     ime = _ime.QString::toStdString();
     prezime = _prezime.QString::toStdString();
@@ -111,5 +123,7 @@ void DialogNovaOsoba::on_checkBox_stateChanged(int arg1)
     ui->chkNepoznatDR->setDisabled(arg1);
     ui->chkSmrt->setDisabled(arg1);
     ui->unosPol->setDisabled(arg1);
+    if (_saRelacijom)
+        trivija->setDisabled(arg1);
     promenaUnosa();
 }
