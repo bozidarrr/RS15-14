@@ -7,6 +7,10 @@
 #include <QString>
 #include <QChar>
 #include <string>
+#include <QTextEdit>
+#include <QLabel>
+#include <QRegExp>
+#include <QRegExpValidator>
 
 namespace Ui {
 class DialogNovaOsoba;
@@ -17,10 +21,10 @@ class DialogNovaOsoba : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogNovaOsoba(QWidget *parent = 0);
+    explicit DialogNovaOsoba(bool saRelacijom = false, QWidget *parent = 0);
     ~DialogNovaOsoba();
 
-    void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
+    void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt, QString &trivija);
 
     void popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt);
 private Q_SLOTS:
@@ -36,6 +40,10 @@ private:
 
     QPushButton *ok, *cancel;
 
+
+    bool _saRelacijom;
+    QLabel *labelaTrivija;
+    QTextEdit *trivija;
 
     void popuniDugmice();
     void postaviProvere();

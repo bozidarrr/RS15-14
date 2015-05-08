@@ -26,6 +26,23 @@ public:
     //slicno, samo pravi NN lice
     short int DodajNNLice();
 
+    /*
+    na ovo sam mislila
+    short int DodajBS(short int sifraOsobe, std::string trivija="")
+    {
+        Osoba* osoba = NadjiOsobuSifrom(sifraOsobe);
+        if (osoba->RoditeljskiOdnos() == nullptr)
+            {
+                ne znam,
+                short int sifraBraka = DodajBrak(DodajNNLice(), DodajNNLice());
+                DodajDete(sifraOsobe, sifraBraka); -- ova nasa kojoj dodajemo brata, ne ide ovako, ali nebitno
+                return DodajDete(sifraBraka); -- onaj novi
+            }
+        return DodajDete(osoba->RoditeljskiOdnos().Sifra(), trivija);
+    }
+    Mislim da nije problem da ostavimo opciju brat sestra u GUI-u, nije tesko, a cini mi se da bi bilo zgodno imati
+    */
+
     //dodaje relaciju dete, od braka do osobe
     short int DodajDete(short int sifraBraka, short int sifraOsobe, std::string trivija="");
 
