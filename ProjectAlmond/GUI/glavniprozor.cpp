@@ -2,9 +2,11 @@
 #include "ui_glavniprozor.h"
 #include "GUI/dialognovaosoba.h"
 #include <algorithm>
+
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::GlavniProzor)
+    ui(new Ui::GlavniProzor),
+    _nesacuvaneIzmene(false)
 {
     ui->setupUi(this);
 
@@ -14,8 +16,6 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("Pera", "Detlic", 'm');
-
-
 
     kreirajPlatnoZaCrtanje();
     kreirajToolbar();
@@ -27,7 +27,6 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->move(50,50);
 
     kreirajOpcije();
-
 }
 
 GlavniProzor::~GlavniProzor()
@@ -49,6 +48,7 @@ void GlavniProzor::popuniInformacije(short sifra)
         return;
     }
     Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
+    //Neka provera da li je osoba poznata ili ne
     if (osoba != nullptr)
         Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
 }
@@ -104,6 +104,11 @@ void GlavniProzor::kreirajOpcije()
 {
     connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
     connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
+
+    connect(ui->aNovoStablo, SIGNAL(triggered()), this, SLOT(novoStablo()));
+    connect(ui->aOtvori, SIGNAL(triggered()), this, SLOT(otvoriPostojeceStablo()));
+    //connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT());
+    connect(ui->aUgasi, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void GlavniProzor::kreirajToolbar()
@@ -297,6 +302,9 @@ short int GlavniProzor::dodajNovuOsobu(int x,int y)
             novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
             novaOsoba->show();
             delete d;
+
+            _nesacuvaneIzmene = true;
+
             return novaSifra;
         }
 
@@ -316,42 +324,89 @@ void GlavniProzor::promeniKursor()
 {
 
 }
-/*
-void GlavniProzor::poveziOsobe(short sifra1, short sifra2, int x1,int y1,int x2, int y2)
+
+bool GlavniProzor::nastaviti()
 {
+    //TO DO : dugmici ne treba da budu na engleskom
+    if (_nesacuvaneIzmene == true)
+    {
+        QMessageBox *poruka = new QMessageBox();
+        poruka->setInformativeText(tr("Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?"));
+        poruka->setModal(true);
 
-    qDebug() << "povezuje";
-    if (sifra1 == sifra2){
-        qDebug() << "iste osobe povezujes!";
+        poruka->setObjectName(tr("Project Almond"));
+        QPushButton *da = poruka->addButton(tr("Da"), QMessageBox::AcceptRole);
+        poruka->setDefaultButton(da);
+        poruka->addButton(tr("Ne"), QMessageBox::NoRole);
+        QPushButton *odustani = poruka->addButton(tr("Odustani"), QMessageBox::RejectRole);
+        poruka->setEscapeButton(odustani);
+        poruka->exec();
+        //int odgovor = poruka->exec();
+        //qDebug() << odgovor;
 
+//        int odgovor = QMessageBox::warning(this, tr("Project Almond"),
+//                                           tr("Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?"),
+//                                           QMessageBox::Yes | QMessageBox::Default, QMessageBox::No,
+//                                           QMessageBox::Cancel | QMessageBox::Escape);
+//        if (odgovor == 0)
+//            return snimiIzmene();
+//        if (odgovor == 2)
+//            return false;
+        if (poruka->clickedButton() == da)
+            return snimiIzmene();
+        if (poruka->clickedButton() == odustani)
+            return false;
+    }
+    return true;
+}
+
+bool GlavniProzor::snimiIzmene()
+{
+    //TO DO
+    _nesacuvaneIzmene = false;
+    return true;
+}
+
+void GlavniProzor::novoStablo()
+{
+    //TO DO
+    if (nastaviti())
+        qDebug() << "treba otvoriti novi fajl";
+    else
+        qDebug() << "ne otvarati";
+}
+
+void GlavniProzor::otvoriPostojeceStablo()
+{
+    //TO DO
+    if (nastaviti())
+    {
+        qDebug() << "treba otvoriti postojeci fajl";
+        QString imeFajla = QFileDialog::getOpenFileName(this,
+                                                        tr("Otvorite postojece stablo."),
+                                                        tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
+        if (!imeFajla.isEmpty())
+            qDebug() << "nasli fajl i treba  ga otvoriti";
+        else
+            qDebug() << "odustali od otvaranja";
     }
     else
-    {qDebug() << odnos;
+        qDebug() << "ne otvarati";
+}
 
-
-        short sifraRelacije = stablo->PoveziOsobe(sifra1, sifra2, odnos);
-
-        if (sifraRelacije < 0){
-
-            qDebug() << "Povezivanje nije uspelo";
-        }
-        else
-        {
-
-            WidgetRelacija *novaRelacija = new WidgetRelacija(sifraRelacije,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
-            novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
-            novaRelacija->show();
-            stabloOkvir->povuciLiniju(x1,y1,x2,y2);
-            stabloOkvir->repaint();
-            qDebug() << "Povezivanje jeste uspelo";
-
-        }
+void GlavniProzor::closeEvent(QCloseEvent *event)
+{
+    if (nastaviti())
+    {
+        //storeSettings TODO
+        qDebug() << "Izlazimo iz programa";
+        event->accept();
     }
-
-    //        cuvamo u vektor,
-    //        pravimo widget za relaciju i iscrtavamo ga na sredini
-    //        tu negde pozivamo i dijalog za relaciju
-
-}*/
+    else
+    {
+        qDebug() << "Otkazano izlazenje";
+        event->ignore();
+    }
+}
 
 short int GlavniProzor::_selektovanaSifra = -1;

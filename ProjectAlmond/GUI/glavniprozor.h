@@ -21,6 +21,8 @@
 #include <vector>
 #include <qdebug.h>
 #include "alati/filterobject.h"
+#include <QMessageBox>
+#include <QFileDialog>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -52,18 +54,18 @@ private:
     QPushButton *tbBrisi, *tbMenjaj;
     QPushButton *tbUredi;
     QToolBar *toolbar;
-    QLabel *Labela;
+    QLabel *Labela, *labelaStatus;
     PorodicnoStablo *stablo;
     QPainter * cetka;
 
     QDockWidget *alati;
     //okvirStabla *stabloOkvir;
+    FilterObject *filter;
 
     static short int _selektovanaSifra;
 
-    FilterObject *filter;
+    bool _nesacuvaneIzmene;
 
-    QLabel *labelaStatus;
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
@@ -78,6 +80,8 @@ private:
     void kreirajPlatnoZaCrtanje();
     void kreirajStatusBar();
 
+    bool nastaviti();
+    bool snimiIzmene();
 
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y);
@@ -85,6 +89,10 @@ public Q_SLOTS:
     void prikaziToolbar();
     void kliknutaRelacija();
     void promeniKursor();
+    void novoStablo();
+    void otvoriPostojeceStablo();
+    void closeEvent(QCloseEvent *event);
+
 };
 
 #endif // GLAVNIPROZOR2_H

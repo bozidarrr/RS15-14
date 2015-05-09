@@ -15,7 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
     alati/datum.cpp \
     engine/osoba.cpp \
-    GUI/unetiosobu.cpp \
     engine/porodicnostablo.cpp \
     GUI/dialognovaosoba.cpp \
     GUI/widgetosoba.cpp \
@@ -30,7 +29,6 @@ SOURCES += main.cpp\
 HEADERS  += \
     alati/datum.h \
     engine/osoba.h \
-    GUI/unetiosobu.h \
     engine/porodicnostablo.h \
     GUI/dialognovaosoba.h \
     GUI/widgetosoba.h \
@@ -42,7 +40,7 @@ HEADERS  += \
     engine/dete.h \
     engine/brak.h
 
-FORMS    += unetiosobu.ui \
+FORMS    += \
     widgetosoba.ui \
     dialognovaosoba.ui \
     GUI/okvirstabla.ui \
