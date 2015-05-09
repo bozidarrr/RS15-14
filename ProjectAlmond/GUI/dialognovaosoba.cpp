@@ -49,6 +49,9 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
 
 void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt)
 {
+    if (ui->checkBox->isChecked())
+        return;
+
     QString _ime, _prezime, _pol, _trivija;
     QDate _rodjenje, _smrt;
 
