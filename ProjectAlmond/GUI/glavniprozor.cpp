@@ -26,7 +26,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->postaviImePrezime(stablo->KljucnaOsoba()->Ime()+" "+stablo->KljucnaOsoba()->Prezime());
     korena->move(50,50);
 
-    //kreirajOpcije();
+    kreirajOpcije();
 
 }
 
@@ -43,12 +43,14 @@ void GlavniProzor::promeniSelektovanu(short novaSifra)
 
 void GlavniProzor::popuniInformacije(short sifra)
 {
-    if (sifra > 0)
+    if (sifra == -1)
     {
-        Osoba *osoba =nullptr; //stablo->nadjiOsobuPoSifri(sifra);
-        if (osoba != nullptr)
-            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+        Labela->setText("");
+        return;
     }
+    Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
+    if (osoba != nullptr)
+        Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
 }
 
 void GlavniProzor::ispisiStatus(const QString &poruka)
@@ -80,7 +82,10 @@ void GlavniProzor::kreirajStatusBar()
     ui->statusBar->addWidget(labelaStatus, 1);
 }
 
-
+void GlavniProzor::prikaziToolbar()
+{
+    alati->setVisible(ui->aAlati->isChecked());
+}
 
 QPushButton* GlavniProzor::kreirajJedanAlat(QPushButton * alat, const char* ime,const char* info)
 {
@@ -95,16 +100,21 @@ QPushButton* GlavniProzor::kreirajJedanAlat(QPushButton * alat, const char* ime,
     return alat;
 }
 
+void GlavniProzor::kreirajOpcije()
+{
+    connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
+    connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
+}
 
 void GlavniProzor::kreirajToolbar()
 {
-
     toolbar = addToolBar(tr("Alati"));
 
     grpToolBar=new QButtonGroup();
 
     tbMuzZena=kreirajJedanAlat(tbMuzZena,"RelacijaSupruznici","Dodajte u stablo supruznika nekoj od osoba");
     tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Dodajte u neku vezu novo dete");
+    tbBratSestra=kreirajJedanAlat(tbBratSestra,"RelacijaBratSestra","Dodajte u stablo brata ili sestru nekoj osobi");
     tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
     tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi ili odnosu");
     tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili odnosu");
@@ -115,14 +125,15 @@ void GlavniProzor::kreirajToolbar()
 
     grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbMuzZena);
+    grpToolBar->addButton(tbBratSestra);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
 
-
     toolbar->addWidget(tbMuzZena);
     toolbar->addWidget(tbRoditeljDete);
+    toolbar->addWidget(tbBratSestra);
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbMenjaj);
@@ -133,7 +144,7 @@ void GlavniProzor::kreirajToolbar()
 
     tbDetalji->setChecked(true);
 
-    QDockWidget *alati = new QDockWidget(tr("Alati"));
+    alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
                            | Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -164,15 +175,6 @@ void GlavniProzor::kliknutoPlatno()
     labela1 = stabloOkvir->childAt(x1, y1);
     labela2 = stabloOkvir->childAt(x2, y2);
 
-
-    /*if(tbOsoba->isChecked()){
-        //tbOsoba->setChecked(false);
-        if ((stabloOkvir->childAt(x2, y2)) != nullptr)
-            ispisiStatus("tu vec postoji nesto");
-        else
-            dodajNovuOsobu(x2, y2);
-
-    }*/
     if(tbMuzZena->isChecked()){
         if (labela1 == nullptr)
             qDebug() << "nije kliknuto na prvu osobu";
@@ -190,27 +192,30 @@ void GlavniProzor::kliknutoPlatno()
                 stabloOkvir->povuciLiniju(x1,y1,x2,y2);
                 stabloOkvir->repaint();
             }
-
         }
     }
     else if(tbRoditeljDete->isChecked()){
         if (labela1 == nullptr)
             qDebug() << "nije kliknuto na prvu osobu";
         else
-            if (labela2 == nullptr)
-                qDebug() << "nije kliknuto na drugu osobu";
-            else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
+                short int novaSifraOsobe=dodajNovuOsobu(x2,y2);
+                if (novaSifraOsobe < 0)
+                        ispisiStatus("Odustali se od dodavanja novog deteta");
+                else
+                {
+                   // short int novaSifraDeteta = stablo->DodajDete(prva->)
 
-                druga = qobject_cast<WidgetOsoba*>(labela2->parent());
-                //poveziOsobe(prva->Sifra(),druga->Sifra(),Odnos::RODITELJ,x1,y1,x2,y2);
+                }
             }
-
     }
     else if(tbDetalji->isChecked()){
         if (labela1 == nullptr)
+        {
             qDebug() << "kliknuto u prazno";
+            popuniInformacije(-1);
+        }
         else
         {
             prva = qobject_cast<WidgetOsoba*>(labela1->parent());
@@ -252,7 +257,8 @@ void GlavniProzor::kliknutoPlatno()
                 qDebug() << "ne moze cast u wosobu";
             else
                 stablo->UkloniOsobuSifrom(druga->Sifra());
-                druga->hide();
+                //druga->hide();
+                delete druga;
             //DORADITI
         }
 
@@ -278,12 +284,12 @@ short int GlavniProzor::dodajNovuOsobu(int x,int y)
 
         short int novaSifra = stablo->DodajOsobu(ime, prezime, pol,false);
         if (novaSifra < 0){
-            ispisiStatus("Neuspelo dodavanje");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
+            ispisiStatus("Neuspelo dodavanje nove osobe, pokusajte ponovo.");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
             delete d;
             return -1;
         }
         else{
-            ispisiStatus("Uspelo dodavanje");
+            ispisiStatus("Uspelo dodavanje nove osobe.");
 
             WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
             std::string tmp = ime + " " + prezime;
@@ -302,6 +308,11 @@ short int GlavniProzor::dodajNovuOsobu(int x,int y)
 
 
 void GlavniProzor::kliknutaRelacija()
+{
+
+}
+
+void GlavniProzor::promeniKursor()
 {
 
 }
@@ -342,21 +353,5 @@ void GlavniProzor::poveziOsobe(short sifra1, short sifra2, int x1,int y1,int x2,
     //        tu negde pozivamo i dijalog za relaciju
 
 }*/
-
-//void GlavniProzor::ukloniOsobu(WidgetOsoba *o){
-//    auto osoba=_osobe.begin();
-//    for(;osoba!=_osobe.end();osoba++){
-//        if((*o)==*(*osoba)){
-//             bool uspelo=stablo->UkloniOsobuPoSifri(o->Sifra());
-//             if(uspelo){
-//                _osobe.erase(osoba);
-
-//                o->hide();
-//             }
-//            //treba da sakrijemo i sve njene veze
-
-//        }
-//    }
-//}
 
 short int GlavniProzor::_selektovanaSifra = -1;

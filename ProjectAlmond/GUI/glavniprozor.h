@@ -42,11 +42,6 @@ public:
 
     void ispisiStatus(const QString &poruka);
 
-    void otpustenaOsoba();
-
-    void ukloniOsobu(WidgetOsoba* o);
-
-
 private:
     Ui::GlavniProzor *ui;
 
@@ -61,6 +56,7 @@ private:
     PorodicnoStablo *stablo;
     QPainter * cetka;
 
+    QDockWidget *alati;
     //okvirStabla *stabloOkvir;
 
     static short int _selektovanaSifra;
@@ -83,12 +79,12 @@ private:
     void kreirajStatusBar();
 
 
-
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y);
     void kliknutoPlatno();
-
+    void prikaziToolbar();
     void kliknutaRelacija();
+    void promeniKursor();
 };
 
 #endif // GLAVNIPROZOR2_H
