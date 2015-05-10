@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     GUI/widgetrelacija.cpp \
     GUI/glavniprozor.cpp \
     engine/dete.cpp \
-    engine/brak.cpp
+    engine/brak.cpp \
+    GUI/dijalogizmenaosobe.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -38,14 +39,16 @@ HEADERS  += \
     GUI/widgetrelacija.h \
     GUI/glavniprozor.h \
     engine/dete.h \
-    engine/brak.h
+    engine/brak.h \
+    GUI/dijalogizmenaosobe.h
 
 FORMS    += \
     widgetosoba.ui \
     dialognovaosoba.ui \
     GUI/okvirstabla.ui \
     widgetrelacija.ui \
-    glavniprozor.ui
+    glavniprozor.ui \
+    GUI/dijalogizmenaosobe.ui
 
 RESOURCES += \
     slike.qrc

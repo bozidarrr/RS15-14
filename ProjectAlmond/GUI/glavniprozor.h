@@ -24,6 +24,7 @@
 #include "alati/filterobject.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <GUI/dijalogizmenaosobe.h>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -65,7 +66,7 @@ private:
 
     static short int _selektovanaSifra;
 
-    bool _nesacuvaneIzmene;
+    bool _nesacuvaneIzmene;//ako ih ima, pitamo korisnika zeli li da snimi
 
 
     //DODATI!!!
@@ -80,9 +81,8 @@ private:
     void kreirajMestoZaInfo();
     void kreirajPlatnoZaCrtanje();
     void kreirajStatusBar();
-
     bool nastaviti();
-    bool snimiIzmene();
+    bool snimiIzmene();//cuvamo u fajl
 
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y, bool krvniSrodnik);
@@ -94,7 +94,7 @@ public Q_SLOTS:
     void otvoriPostojeceStablo();
     void closeEvent(QCloseEvent *event);
     bool sacuvaj();
-    //void QApplication::closeAllWindows();
+    bool sacuvajKao();
 
 };
 
