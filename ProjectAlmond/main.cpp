@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
 //    splash->setPixmap(QPixmap(":/images/splash.png"));
 //    splash->show();
 
-    GlavniProzor w;
-    w.show();
+    GlavniProzor *w = new GlavniProzor();
+    w->show();
 
     return a.exec();
 }

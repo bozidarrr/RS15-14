@@ -26,7 +26,8 @@ public:
 
     void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt, QString &trivija);
 
-    void popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt);
+    void popuniPodatke(std::string &ime, std::string &prezime, char &pol,
+                       std::string &rodjenje, std::string &smrt, std::string &trivija);
 private Q_SLOTS:
     void promenaUnosa();
 

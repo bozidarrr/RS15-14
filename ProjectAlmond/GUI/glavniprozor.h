@@ -1,6 +1,7 @@
 #ifndef GLAVNIPROZOR_H
 #define GLAVNIPROZOR_H
 
+#include <QApplication>
 #include <QMainWindow>
 #include <engine/porodicnostablo.h>
 #include <QButtonGroup>
@@ -84,7 +85,7 @@ private:
     bool snimiIzmene();
 
 public Q_SLOTS:
-    short dodajNovuOsobu(int x, int y);
+    short dodajNovuOsobu(int x, int y, bool krvniSrodnik);
     void kliknutoPlatno();
     void prikaziToolbar();
     void kliknutaRelacija();
@@ -92,6 +93,8 @@ public Q_SLOTS:
     void novoStablo();
     void otvoriPostojeceStablo();
     void closeEvent(QCloseEvent *event);
+    bool sacuvaj();
+    //void QApplication::closeAllWindows();
 
 };
 
