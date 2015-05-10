@@ -69,6 +69,7 @@
     <addaction name="aSacuvaj"/>
     <addaction name="aIzvezi"/>
     <addaction name="separator"/>
+    <addaction name="aZatvori"/>
     <addaction name="aUgasi"/>
    </widget>
    <widget class="QMenu" name="mPodesavanja">
@@ -120,10 +121,16 @@
    <property name="text">
     <string>Novo stablo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="aOtvori">
    <property name="text">
     <string>Otvorite fajl</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="aSkoroOtvarani">
@@ -135,6 +142,9 @@
    <property name="text">
     <string>Sacuvajte izmene</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="aIzvezi">
    <property name="text">
@@ -144,6 +154,9 @@
   <action name="aUgasi">
    <property name="text">
     <string>Ugasite program</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="aMreza">
@@ -230,6 +243,14 @@
    </property>
    <property name="text">
     <string>Informacije</string>
+   </property>
+  </action>
+  <action name="aZatvori">
+   <property name="text">
+    <string>Zatvorite fajl</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+W</string>
    </property>
   </action>
  </widget>

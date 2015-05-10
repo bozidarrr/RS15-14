@@ -47,7 +47,8 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
         triv = "";
 }
 
-void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol, std::string &rodjenje, std::string &smrt)
+void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol,
+                                    std::string &rodjenje, std::string &smrt, std::string &trivija)
 {
     if (ui->checkBox->isChecked())
         return;
@@ -68,6 +69,7 @@ void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char
         smrt = "";
     else
         smrt = _smrt.toString("dd.MM.yyyy.").toStdString();
+    trivija = _trivija.toStdString();
 }
 
 void DialogNovaOsoba::promenaUnosa()

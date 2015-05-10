@@ -10,6 +10,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     QIcon icon(":images/images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond");
@@ -108,7 +110,9 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aNovoStablo, SIGNAL(triggered()), this, SLOT(novoStablo()));
     connect(ui->aOtvori, SIGNAL(triggered()), this, SLOT(otvoriPostojeceStablo()));
     //connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT());
-    connect(ui->aUgasi, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->aZatvori, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->aUgasi, SIGNAL(triggered()),qApp, SLOT(closeAllWindows()));
+    connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT(sacuvaj()));
 }
 
 void GlavniProzor::kreirajToolbar()
@@ -186,9 +190,9 @@ void GlavniProzor::kliknutoPlatno()
         else
         {
             prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-            short int novaSifraOsobe=dodajNovuOsobu(x2,y2);
+            short int novaSifraOsobe=dodajNovuOsobu(x2, y2, false);
             if (novaSifraOsobe < 0)
-                ispisiStatus("Odustali ste od dodavanja nove osobe");
+                ui->statusBar->showMessage("Odustali ste od dodavanja novog supruznika", 2000);
             else{
                 short int novaSifraBraka=stablo->DodajBrak(prva->Sifra(),novaSifraOsobe);
                 WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraBraka,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
@@ -205,9 +209,9 @@ void GlavniProzor::kliknutoPlatno()
         else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                short int novaSifraOsobe=dodajNovuOsobu(x2,y2);
+                short int novaSifraOsobe=dodajNovuOsobu(x2,y2,true);
                 if (novaSifraOsobe < 0)
-                        ispisiStatus("Odustali se od dodavanja novog deteta");
+                        ui->statusBar->showMessage("Odustali se od dodavanja novog deteta", 2000);
                 else
                 {
                    // short int novaSifraDeteta = stablo->DodajDete(prva->)
@@ -261,9 +265,31 @@ void GlavniProzor::kliknutoPlatno()
             if (druga == nullptr)
                 qDebug() << "ne moze cast u wosobu";
             else
-                stablo->UkloniOsobuSifrom(druga->Sifra());
+            {
+
+                QMessageBox *poruka = new QMessageBox();
+                QPushButton *da = poruka->addButton(tr("Da"), QMessageBox::AcceptRole);
+                poruka->setDefaultButton(da);
+                QPushButton *ne = poruka->addButton(tr("Ne"), QMessageBox::RejectRole);
+                poruka->setEscapeButton(ne);
+                poruka->setIcon(QMessageBox::Question);
+                poruka->setObjectName(tr("Uklanjanje osobe"));
+                poruka->setText(tr("Jeste li sigurni da zelite da uklonite selektovanu osobu i sve njene veze?"));
+////                QMessageBox *poruka = QMessageBox::warning(this, tr("Brisanje osobe"),
+////                                                           tr("Jeste li sigurni da zelite da izbrisete osobu i njene veze?"),
+////                                                           QMessageBox::Yes | QMessageBox::Default,
+////                                                           QMessageBox::Cancel | QMessageBox::Escape);
+                poruka->exec();
+                if (poruka->clickedButton() == da)
+                {
+                    stablo->UkloniOsobuSifrom(druga->Sifra());
                 //druga->hide();
-                delete druga;
+                    delete druga;
+                    ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje osobe i njenih relacija."), 2000);
+                }
+                else
+                    ui->statusBar->showMessage(tr("Osoba nije uklonjena"), 2000);
+            }
             //DORADITI
         }
 
@@ -277,27 +303,28 @@ void GlavniProzor::kliknutoPlatno()
 }
 
 
-short int GlavniProzor::dodajNovuOsobu(int x,int y)
+short int GlavniProzor::dodajNovuOsobu(int x, int y, bool krvniSrodnik)
 {
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
-        std::string ime, prezime, rodjenje, smrt;
+        std::string ime, prezime, rodjenje, smrt, trivija;
         char pol;
 
-        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
+        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt, trivija);
 
-        short int novaSifra = stablo->DodajOsobu(ime, prezime, pol,false);
+        short int novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         if (novaSifra < 0){
-            ispisiStatus("Neuspelo dodavanje nove osobe, pokusajte ponovo.");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
+            ui->statusBar->showMessage("Neuspelo dodavanje nove osobe, pokusajte ponovo.", 2000);
+            //ispisiStatus("Neuspelo dodavanje nove osobe, pokusajte ponovo.");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
             delete d;
             return -1;
         }
         else{
-            ispisiStatus("Uspelo dodavanje nove osobe.");
-
+            //ispisiStatus("Uspelo dodavanje nove osobe.");
+            ui->statusBar->showMessage("Uspelo dodavanje nove osobe.", 2000);
             WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
-            std::string tmp = ime + " " + prezime;
+            std::string tmp = stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
             novaOsoba->postaviImePrezime(tmp);
             novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
             novaOsoba->show();
@@ -307,11 +334,8 @@ short int GlavniProzor::dodajNovuOsobu(int x,int y)
 
             return novaSifra;
         }
-
     }
-
     return -1;
-
 }
 
 
@@ -322,7 +346,8 @@ void GlavniProzor::kliknutaRelacija()
 
 void GlavniProzor::promeniKursor()
 {
-
+    //TO DO
+    //this->setCursor(Qt::CursorShape::ClosedHandCursor);
 }
 
 bool GlavniProzor::nastaviti()
@@ -340,6 +365,7 @@ bool GlavniProzor::nastaviti()
         poruka->addButton(tr("Ne"), QMessageBox::NoRole);
         QPushButton *odustani = poruka->addButton(tr("Odustani"), QMessageBox::RejectRole);
         poruka->setEscapeButton(odustani);
+        poruka->setIcon(QMessageBox::Warning);
         poruka->exec();
         //int odgovor = poruka->exec();
         //qDebug() << odgovor;
@@ -364,16 +390,19 @@ bool GlavniProzor::snimiIzmene()
 {
     //TO DO
     _nesacuvaneIzmene = false;
+    ui->statusBar->showMessage("Snimljeno", 2000);
     return true;
 }
 
 void GlavniProzor::novoStablo()
 {
     //TO DO
-    if (nastaviti())
-        qDebug() << "treba otvoriti novi fajl";
-    else
-        qDebug() << "ne otvarati";
+//    if (nastaviti())
+//        qDebug() << "treba otvoriti novi fajl";
+//    else
+//        qDebug() << "ne otvarati";
+    GlavniProzor *w = new GlavniProzor();
+    w->show();
 }
 
 void GlavniProzor::otvoriPostojeceStablo()
@@ -387,6 +416,7 @@ void GlavniProzor::otvoriPostojeceStablo()
                                                         tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
         if (!imeFajla.isEmpty())
             qDebug() << "nasli fajl i treba  ga otvoriti";
+        //loadFile(imeFajla());
         else
             qDebug() << "odustali od otvaranja";
     }
@@ -399,7 +429,7 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
     if (nastaviti())
     {
         //storeSettings TODO
-        qDebug() << "Izlazimo iz programa";
+        qDebug() << "Zatvaramo fajl";
         event->accept();
     }
     else
@@ -407,6 +437,12 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
         qDebug() << "Otkazano izlazenje";
         event->ignore();
     }
+}
+
+bool GlavniProzor::sacuvaj()
+{
+    //Hmmmm
+    return snimiIzmene();
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;
