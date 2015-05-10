@@ -16,6 +16,36 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond");
 
+//DODATO---------------------------------------------------
+        //ovo treba bolje da se uradi
+//    DialogNovaOsoba *d = new DialogNovaOsoba(false, this);
+//    if (d->exec())
+//    {
+//        std::string ime, prezime, rodjenje, smrt, trivija;
+//        char pol;
+//        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt, trivija);
+
+//        stablo = new PorodicnoStablo(ime, prezime, pol, true);
+
+//        short int novaSifra = stablo->KljucnaOsoba()->Sifra();
+
+//        ui->statusBar->showMessage("Kreirano novo stablo", 2000);
+//        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra, 0, 0, this, stabloOkvir);
+//        std::string tmp = stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
+//        novaOsoba->postaviImePrezime(tmp);
+//       // novaOsoba->setX((stabloOkvir->width()-novaOsoba->width())/2);
+//       // novaOsoba->setY((stabloOkvir->height()-novaOsoba->height())/2);
+//        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
+//        novaOsoba->show();
+//        delete d;
+
+//        _nesacuvaneIzmene = true;
+
+//    }
+//    else
+//        ui->statusBar->showMessage("Nesto nije bilo u redu sa kreiranjem stabla!");
+//DODATO---------------------------------------------------------------------
+
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("Pera", "Detlic", 'm');
 
@@ -250,7 +280,7 @@ void GlavniProzor::kliknutoPlatno()
             else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                prva->setX(x2);
+                prva->setX(x2);//treba malo preracunati ovo
                 prva->setY(y2);
                 prva->move(x2, y2);
             }
@@ -266,7 +296,19 @@ void GlavniProzor::kliknutoPlatno()
                 qDebug() << "ne moze cast u wosobu";
             else
             {
-
+                //ne znam koliko ovo ima smisla, pretpostavljam da treba drugacije reagovati
+                //u svakom od slucajeva
+                //ZA SADA IPAK RADE ISTO
+                QString upozorenje;
+                if (druga->Sifra() == stablo->KljucnaOsoba()->Sifra())
+                    upozorenje = tr("Jeste li sigurni da zelite da uklonite korenu osobu?"
+                                    " To ce prouzrokovati brisanje celog stabla!");
+                else
+                    if (stablo->NadjiOsobuSifrom(druga->Sifra())->JeKrvniSrodnik())
+                        upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu,"
+                                        "a time i sve njene supruznike i potomke?");
+                    else
+                        upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu?");
                 QMessageBox *poruka = new QMessageBox();
                 QPushButton *da = poruka->addButton(tr("Da"), QMessageBox::AcceptRole);
                 poruka->setDefaultButton(da);
@@ -274,7 +316,8 @@ void GlavniProzor::kliknutoPlatno()
                 poruka->setEscapeButton(ne);
                 poruka->setIcon(QMessageBox::Question);
                 poruka->setObjectName(tr("Uklanjanje osobe"));
-                poruka->setText(tr("Jeste li sigurni da zelite da uklonite selektovanu osobu i sve njene veze?"));
+                //poruka->setText(tr("Jeste li sigurni da zelite da uklonite selektovanu osobu i sve njene veze?"));
+                poruka->setText(upozorenje);
 ////                QMessageBox *poruka = QMessageBox::warning(this, tr("Brisanje osobe"),
 ////                                                           tr("Jeste li sigurni da zelite da izbrisete osobu i njene veze?"),
 ////                                                           QMessageBox::Yes | QMessageBox::Default,
@@ -285,7 +328,8 @@ void GlavniProzor::kliknutoPlatno()
                     stablo->UkloniOsobuSifrom(druga->Sifra());
                 //druga->hide();
                     delete druga;
-                    ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje osobe i njenih relacija."), 2000);
+                    ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
+                    _nesacuvaneIzmene = true;
                 }
                 else
                     ui->statusBar->showMessage(tr("Osoba nije uklonjena"), 2000);
@@ -296,16 +340,44 @@ void GlavniProzor::kliknutoPlatno()
     }
     else if(tbMenjaj->isChecked()){
         //izbaci dijalog za menjanje podataka
+        if (labela2 == nullptr)
+            qDebug() << "nista nije izabrano";
+        else
+        {
+            //dijalog
+            druga = qobject_cast<WidgetOsoba*>(labela2->parent());
+            if (druga == nullptr)
+            {
+                qDebug() << "ne moze cast u wosobu";
+                WidgetRelacija *druga = qobject_cast<WidgetRelacija*>(labela2->parent());
+                if (druga == nullptr)
+                    qDebug() << "ne moze cast ni u wrelaciju";
+                else
+                    //dijalog za menjanje relacije...
+                    qDebug() << "menjanje relacije";
+            }
+            else
+            {
+                qDebug() << "menjanje osobe";
+
+                DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe(druga->Sifra(), this);
+                d->exec();
+                /*if (d.exec())
+
+                else
+                   bila greska...
+
+                */
+            }
+        }
     }
-
-
     tbDetalji->setChecked(true);
 }
 
 
 short int GlavniProzor::dodajNovuOsobu(int x, int y, bool krvniSrodnik)
 {
-    DialogNovaOsoba *d = new DialogNovaOsoba(this);
+    DialogNovaOsoba *d = new DialogNovaOsoba(true, this);
     if (d->exec())
     {
         std::string ime, prezime, rodjenje, smrt, trivija;
@@ -442,6 +514,12 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
 bool GlavniProzor::sacuvaj()
 {
     //Hmmmm
+    return snimiIzmene();
+}
+
+bool GlavniProzor::sacuvajKao()
+{
+    //To DO
     return snimiIzmene();
 }
 
