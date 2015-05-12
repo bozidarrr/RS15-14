@@ -28,6 +28,8 @@ public:
 
     const std::string& Prezime() const;//vraca prezime
 
+    const char Pol() const;
+
    // QDate& DatumRodjenja(); //vraca datum rodjenja
 
    // QDate& DatumSmrti(); //vraca datum smrti
