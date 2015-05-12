@@ -239,13 +239,19 @@ void GlavniProzor::kliknutoPlatno()
         else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                short int novaSifraOsobe=dodajNovuOsobu(x2,y2,true);
-                if (novaSifraOsobe < 0)
-                        ui->statusBar->showMessage("Odustali se od dodavanja novog deteta", 2000);
+                if (prva == nullptr)
+                    ui->statusBar->showMessage("Morate kliknuti na jednog roditelja kako biste dodali dete.", 2000);
                 else
                 {
-                   // short int novaSifraDeteta = stablo->DodajDete(prva->)
+                    short int novaSifraOsobe = dodajNovuOsobu(x2,y2,true);
+                    if (novaSifraOsobe < 0)
+                            ui->statusBar->showMessage("Odustali se od dodavanja novog deteta", 2000);
+                    else
+                    {
+                        Osoba *roditelj = stablo->NadjiOsobuSifrom(prva->Sifra());
+                        //short int novaSifraDeteta = stablo->DodajDete(roditelj->)
 
+                    }
                 }
             }
     }
@@ -360,14 +366,8 @@ void GlavniProzor::kliknutoPlatno()
             {
                 qDebug() << "menjanje osobe";
 
-                DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe(druga->Sifra(), this);
-                d->exec();
-                /*if (d.exec())
-
-                else
-                   bila greska...
-
-                */
+                DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe((stablo->NadjiOsobuSifrom(druga->Sifra())), this);
+                d->exec();//treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
             }
         }
     }

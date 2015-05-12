@@ -36,6 +36,7 @@ public:
     short Sifra()const;
 
 
+
 private:
     Ui::WidgetRelacija *ui;
 

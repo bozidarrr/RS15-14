@@ -63,6 +63,11 @@ const std::string& Osoba::Prezime() const
 {
     return _prezime;
 }
+
+const char Osoba::Pol() const
+{
+    return _pol;
+}
 /*
 QDate& Osoba::DatumRodjenja()
 {

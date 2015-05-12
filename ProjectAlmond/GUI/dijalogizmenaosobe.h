@@ -7,6 +7,8 @@
 #include <engine/osoba.h>
 #include <iostream>
 
+class Osoba;
+
 namespace Ui {
 class DijalogIzmenaOsobe;
 }
@@ -16,14 +18,14 @@ class DijalogIzmenaOsobe : public QDialog
     Q_OBJECT
 
 public:
-    explicit DijalogIzmenaOsobe(short int sifra, QWidget *parent = 0);
+    explicit DijalogIzmenaOsobe(Osoba *osoba, QWidget *parent = 0);
     ~DijalogIzmenaOsobe();
 
 private:
     Ui::DijalogIzmenaOsobe *ui;
     QPushButton *ok, *cancel;
 
-    short int _sifra;
+    Osoba *_osoba;
 
     void popuniDugmice();
     void popuniPolja();

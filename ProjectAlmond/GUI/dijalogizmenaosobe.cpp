@@ -1,13 +1,14 @@
 #include "GUI/dijalogizmenaosobe.h"
 #include "ui_dijalogizmenaosobe.h"
 
-DijalogIzmenaOsobe::DijalogIzmenaOsobe(short sifra, QWidget *parent) :
+DijalogIzmenaOsobe::DijalogIzmenaOsobe(Osoba *osoba, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DijalogIzmenaOsobe),
-    _sifra(sifra)
+    ui(new Ui::DijalogIzmenaOsobe)
+
 {
     ui->setupUi(this);
     setModal(true);
+    _osoba = osoba;
     popuniDugmice();
     popuniPolja();
 }
@@ -37,11 +38,15 @@ void DijalogIzmenaOsobe::popuniDugmice()
 
 void DijalogIzmenaOsobe::popuniPolja()
 {
-    ui->unosIme->setPlaceholderText("Staro ime (iz porodicnog stabla)");
-    //...
+    ui->unosIme->setPlaceholderText(QString::fromStdString(_osoba->Ime()));
+    ui->unosPrezime->setPlaceholderText(QString::fromStdString(_osoba->Prezime()));
+    //ui->unosRodjenje->setDate(_osoba->_datumRodjenja);
+    //ui->UnosSmrt->setDate(_osoba->_datumSmrti);
+    //ui->unosPol->setPlaceholderText(QString::fromStdString(tmp));
 }
 
 void DijalogIzmenaOsobe::primeniIzmene()
 {
     std::cout << "treba uneti izmene u stablo" << std::endl;
+    //nemamo settere u osobi
 }
