@@ -52,7 +52,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     kreirajPlatnoZaCrtanje();
     kreirajToolbar();
     kreirajMestoZaInfo();
-    kreirajStatusBar();
+    //kreirajStatusBar();
 
     WidgetOsoba *korena=new WidgetOsoba(stablo->KljucnaOsoba()->Sifra(),50,50,this,stabloOkvir);
     korena->postaviImePrezime(stablo->KljucnaOsoba()->Ime()+" "+stablo->KljucnaOsoba()->Prezime());
@@ -109,7 +109,7 @@ void GlavniProzor::kreirajPlatnoZaCrtanje()
 
 void GlavniProzor::kreirajStatusBar()
 {
-    labelaStatus = new QLabel(" ...");
+    labelaStatus = new QLabel("");
     labelaStatus->setMinimumSize(labelaStatus->sizeHint());
     ui->statusBar->addWidget(labelaStatus, 1);
 }
@@ -211,6 +211,7 @@ void GlavniProzor::kliknutoPlatno()
     int y2 = stabloOkvir->Y2();
     QWidget *labela1, *labela2;
     WidgetOsoba *prva, *druga;
+    WidgetRelacija *brak;
     labela1 = stabloOkvir->childAt(x1, y1);
     labela2 = stabloOkvir->childAt(x2, y2);
 
@@ -220,16 +221,22 @@ void GlavniProzor::kliknutoPlatno()
         else
         {
             prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-            short int novaSifraOsobe=dodajNovuOsobu(x2, y2, false);
-            if (novaSifraOsobe < 0)
-                ui->statusBar->showMessage("Odustali ste od dodavanja novog supruznika", 2000);
-            else{
-                short int novaSifraBraka=stablo->DodajBrak(prva->Sifra(),novaSifraOsobe);
-                WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraBraka,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
-                novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
-                novaRelacija->show();
-                stabloOkvir->povuciLiniju(x1,y1,x2,y2);
-                stabloOkvir->repaint();
+            if (prva == nullptr)
+                ui->statusBar->showMessage("Morate kliknuti na osobu kojoj zelite da dodate supruznika.", 2000);
+            else
+            {
+                short int novaSifraOsobe=dodajNovuOsobu(x2, y2, false);
+                if (novaSifraOsobe < 0)
+                    ui->statusBar->showMessage("Odustali ste od dodavanja novog supruznika", 2000);
+                else
+                {
+                    short int novaSifraBraka=stablo->DodajBrak(prva->Sifra(),novaSifraOsobe);
+                    WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraBraka,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
+                    novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
+                    novaRelacija->show();
+                    stabloOkvir->povuciLiniju(x1,y1,x2,y2);
+                    stabloOkvir->repaint();
+                }
             }
         }
     }
@@ -238,19 +245,25 @@ void GlavniProzor::kliknutoPlatno()
             qDebug() << "nije kliknuto na prvu osobu";
         else
             {
-                prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                if (prva == nullptr)
-                    ui->statusBar->showMessage("Morate kliknuti na jednog roditelja kako biste dodali dete.", 2000);
+                brak = qobject_cast<WidgetRelacija*>(labela1->parent());
+                if (brak == nullptr)
+                    ui->statusBar->showMessage("Morate kliknuti na brak roditelja kako biste dodali dete.", 2000);
                 else
                 {
-                    short int novaSifraOsobe = dodajNovuOsobu(x2,y2,true);
+                    short int novaSifraOsobe = dodajNovuOsobu(x2, y2, true);
                     if (novaSifraOsobe < 0)
-                            ui->statusBar->showMessage("Odustali se od dodavanja novog deteta", 2000);
+                            ui->statusBar->showMessage("Odustali se od dodavanja novog deteta.", 2000);
                     else
                     {
-                        Osoba *roditelj = stablo->NadjiOsobuSifrom(prva->Sifra());
-                        //short int novaSifraDeteta = stablo->DodajDete(roditelj->)
-
+                        short int novaSifraDeteta = stablo->DodajDete(brak->Sifra(), novaSifraOsobe, "");
+                        if (novaSifraDeteta >= 0)
+                        {
+                            WidgetRelacija *novaRelacija = new WidgetRelacija(novaSifraDeteta,(x1+x2)/2-25,(y1+y2)/2-25, this, stabloOkvir);
+                            novaRelacija->move(novaRelacija->X(),novaRelacija->Y());
+                            novaRelacija->show();
+                            stabloOkvir->povuciLiniju(x1,y1,x2,y2);
+                            stabloOkvir->repaint();
+                        }
                     }
                 }
             }
@@ -336,6 +349,7 @@ void GlavniProzor::kliknutoPlatno()
                     delete druga;
                     ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
                     _nesacuvaneIzmene = true;
+                    stabloOkvir->repaint();
                 }
                 else
                     ui->statusBar->showMessage(tr("Osoba nije uklonjena"), 2000);
@@ -355,7 +369,7 @@ void GlavniProzor::kliknutoPlatno()
             if (druga == nullptr)
             {
                 qDebug() << "ne moze cast u wosobu";
-                WidgetRelacija *druga = qobject_cast<WidgetRelacija*>(labela2->parent());
+                WidgetRelacija *relacija = qobject_cast<WidgetRelacija*>(labela2->parent());
                 if (druga == nullptr)
                     qDebug() << "ne moze cast ni u wrelaciju";
                 else
@@ -368,6 +382,7 @@ void GlavniProzor::kliknutoPlatno()
 
                 DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe((stablo->NadjiOsobuSifrom(druga->Sifra())), this);
                 d->exec();//treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
+                delete d;
             }
         }
     }
@@ -388,12 +403,10 @@ short int GlavniProzor::dodajNovuOsobu(int x, int y, bool krvniSrodnik)
         short int novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         if (novaSifra < 0){
             ui->statusBar->showMessage("Neuspelo dodavanje nove osobe, pokusajte ponovo.", 2000);
-            //ispisiStatus("Neuspelo dodavanje nove osobe, pokusajte ponovo.");//OVO DA SE PRETVORI U OBAVESTENJE U STATUS BARU KADA GA NAPRAVIMO
             delete d;
             return -1;
         }
         else{
-            //ispisiStatus("Uspelo dodavanje nove osobe.");
             ui->statusBar->showMessage("Uspelo dodavanje nove osobe.", 2000);
             WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra,x,y, this, stabloOkvir);
             std::string tmp = stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
@@ -424,7 +437,6 @@ void GlavniProzor::promeniKursor()
 
 bool GlavniProzor::nastaviti()
 {
-    //TO DO : dugmici ne treba da budu na engleskom
     if (_nesacuvaneIzmene == true)
     {
         QMessageBox *poruka = new QMessageBox();
@@ -440,16 +452,10 @@ bool GlavniProzor::nastaviti()
         poruka->setIcon(QMessageBox::Warning);
         poruka->exec();
         //int odgovor = poruka->exec();
-        //qDebug() << odgovor;
-
 //        int odgovor = QMessageBox::warning(this, tr("Project Almond"),
 //                                           tr("Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?"),
 //                                           QMessageBox::Yes | QMessageBox::Default, QMessageBox::No,
 //                                           QMessageBox::Cancel | QMessageBox::Escape);
-//        if (odgovor == 0)
-//            return snimiIzmene();
-//        if (odgovor == 2)
-//            return false;
         if (poruka->clickedButton() == da)
             return snimiIzmene();
         if (poruka->clickedButton() == odustani)

@@ -52,7 +52,6 @@ void okvirStabla::paintEvent(QPaintEvent *event)
       zaCrtanje.push_back(new QLine(x1,y1,x2,y2));
   }
 
-
 int okvirStabla::X1()
 {
     return _prviX;
@@ -90,15 +89,3 @@ void okvirStabla::Y2(int y2)
     _drugiY = y2;
 }
 
-//void okvirStabla::resetujKoordinate()
-//{
-//    _prviX = -1;
-//    _drugiX = -1;
-//    _prviY = -1;
-//    _drugiY = -1;
-//}
-
-//bool okvirStabla::resetovan()
-//{
-//    return (_prviX == -1 && _prviY == -1 && _drugiX == -1 && _drugiY == -1);
-//}

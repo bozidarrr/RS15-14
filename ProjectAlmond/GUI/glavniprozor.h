@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <GUI/dijalogizmenaosobe.h>
+#include <QPoint>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
