@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLine>
-
+#include <QPoint>
 #include <vector>
 
 namespace Ui {
@@ -29,9 +29,6 @@ public:
 
     void povuciLiniju(int x1,int y1,int x2, int y2);
 
-//    void resetujKoordinate();
-//    bool resetovan();
-
 signals:
     void kliknut();
 
@@ -45,6 +42,7 @@ private:
     int _prviX,_prviY,_drugiX,_drugiY;
     QPainter *cetka;
     std::vector<QLine *> zaCrtanje;
+
 };
 
 #endif // OKVIRSTABLA_H
