@@ -6,7 +6,9 @@
 #include<QDate>
 #include"engine/osoba.h"
 #include <QString>
+#include <QFile>
 
+#include <iostream>
 
 /**
  * @brief The PorodicnoStablo class sluzi za pamcenje podataka o povezanosti clanova stabla, kao i njihovo indeksiranje.

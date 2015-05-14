@@ -159,12 +159,49 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
     //TO DO
+    QFile fajl(imeFajla);
+    if (!fajl.open(QIODevice::ReadOnly)) {
+        std::cout << "Ne moze da iscita fajl" << std::endl; //bice warning
+        return false;
+    }
+    std::cout << "Citamo sta treba" << std::endl;
+    fajl.close();
     return true;
 }
 
 bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
 {
+    /*
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, tr("Spreadsheet"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(file.fileName())
+                             .arg(file.errorString()));
+        return false;
+    }
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_4_1);
+    out << quint32(MagicNumber);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    for (int row = 0; row < RowCount; ++row) {
+        for (int column = 0; column < ColumnCount; ++column) {
+            QString str = formula(row, column);
+            if (!str.isEmpty())
+                out << quint16(row) << quint16(column) << str;
+        }
+    }
+    QApplication::restoreOverrideCursor();
+    return true;
+    */
     //TO DO
+    QFile fajl(imeFajla);
+    if (!fajl.open(QIODevice::WriteOnly)) {
+        std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
+        return false;
+    }
+    std::cout << "Pisacemo sta treba" << std::endl;
+    fajl.close();
     return true;
 }
 

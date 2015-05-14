@@ -148,7 +148,7 @@ void GlavniProzor::kreirajOpcije()
         skoroOtvaraniAkcije[i] = new QAction(this);
         skoroOtvaraniAkcije[i]->setVisible(false);
         connect(skoroOtvaraniAkcije[i], SIGNAL(triggered()), this, SLOT(otvoriSkoroOtvaraniFajl()));
-        ui->mFajlovi->addAction(skoroOtvaraniAkcije[i]);//?
+        ui->mFajlovi->addAction(skoroOtvaraniAkcije[i]);//? Ne zelim da ih dodajem na kraj, nego gde treba!
     }
 }
 
@@ -505,7 +505,7 @@ void GlavniProzor::obnoviSkoroOtvarane()
         {
             QString text = tr("&%1 %2")
                            .arg(j + 1)
-                           .arg(GlavniProzor::skoroOtvarani[j]);              //.arg(strippedName(recentFiles[j]));
+                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());              //.arg(strippedName(recentFiles[j]));
             skoroOtvaraniAkcije[j]->setText(text);
             skoroOtvaraniAkcije[j]->setData(GlavniProzor::skoroOtvarani[j]);
             skoroOtvaraniAkcije[j]->setVisible(true);
