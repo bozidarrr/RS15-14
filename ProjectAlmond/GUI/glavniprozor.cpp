@@ -55,6 +55,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->move(50,50);
 
     kreirajOpcije();
+    obnoviSkoroOtvarane();
+    //readSettings();
 }
 
 GlavniProzor::~GlavniProzor()
@@ -487,7 +489,6 @@ bool GlavniProzor::snimiIzmene(const QString &imeFajla)
         ui->statusBar->showMessage(tr("Snimanje otkazano."), 2000);
         return false;
     }
-    //setWindowModified(false);
     postaviTrenutniFajl(imeFajla);
     ui->statusBar->showMessage(tr("Fajl je sacuvan."), 2000);
     return true;
@@ -505,7 +506,7 @@ void GlavniProzor::obnoviSkoroOtvarane()
         {
             QString text = tr("&%1 %2")
                            .arg(j + 1)
-                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());              //.arg(strippedName(recentFiles[j]));
+                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());
             skoroOtvaraniAkcije[j]->setText(text);
             skoroOtvaraniAkcije[j]->setData(GlavniProzor::skoroOtvarani[j]);
             skoroOtvaraniAkcije[j]->setVisible(true);
@@ -537,9 +538,29 @@ void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
         skoroOtvarani.removeAll(otvoreniFajl);
         skoroOtvarani.prepend(otvoreniFajl);
         qDebug() << "uneo fajl u skoroOtvarane";
-        obnoviSkoroOtvarane();
+        foreach (QWidget *win, QApplication::topLevelWidgets())
+        {
+            if (GlavniProzor  *glavni = qobject_cast<GlavniProzor*>(win))
+                glavni->obnoviSkoroOtvarane();
+        }
         //setWindowTitle?
     }
+}
+
+void GlavniProzor::writeSettings()
+{
+    QSettings settings("MATF", "Project Almond"); //ne znam
+    settings.setValue("skoroOtvarani", skoroOtvarani);
+    //settings.setValue("pozicijeOsoba", _pozicijeOsoba);
+    settings.setValue("geometry", geometry());
+}
+
+void GlavniProzor::readSettings()
+{
+    QSettings settings("MATF", "Project Almond");
+    //...
+    skoroOtvarani = settings.value("skoroOtvarani").toStringList();
+    obnoviSkoroOtvarane();
 }
 
 void GlavniProzor::novoStablo()
@@ -578,7 +599,7 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
 {
     if (nastaviti())
     {
-        //storeSettings TODO
+        writeSettings();
         qDebug() << "Zatvaramo fajl";
         event->accept();
     }

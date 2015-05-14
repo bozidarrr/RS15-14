@@ -28,6 +28,7 @@
 #include <GUI/dijalogizmenaosobe.h>
 #include <QPoint>
 #include <QAction>
+#include <QSettings>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -86,6 +87,8 @@ private:
     void obnoviSkoroOtvarane();//recentFileList
     bool otvoriFajl(const QString &imeFajla);//otvaranje fajla
     void postaviTrenutniFajl(const QString &imeFajla);
+    void writeSettings();//cuva pozicije widgeta, recent files, itd... Smisliti prevod imena :)
+    void readSettings();//cita ovo gore pri konstrukciji
 
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y, bool krvniSrodnik);
