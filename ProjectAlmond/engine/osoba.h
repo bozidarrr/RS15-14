@@ -28,7 +28,7 @@ public:
 
     const std::string& Prezime() const;//vraca prezime
 
-    const char Pol() const;
+    //const& char Pol() const;
 
    // QDate& DatumRodjenja(); //vraca datum rodjenja
 

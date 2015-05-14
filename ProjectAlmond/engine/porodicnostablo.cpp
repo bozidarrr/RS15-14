@@ -156,6 +156,18 @@ void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
 void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
 {}
 
+bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
+{
+    //TO DO
+    return true;
+}
+
+bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
+{
+    //TO DO
+    return true;
+}
+
 
 void PorodicnoStablo::InicijalizujSveStrukture()
 {
