@@ -20,12 +20,14 @@
 #include "ui_glavniprozor.h"
 #include "okvirstabla.h"
 #include <vector>
+#include <map>
 #include <qdebug.h>
 #include "alati/filterobject.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <GUI/dijalogizmenaosobe.h>
 #include <QPoint>
+#include <QAction>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -51,29 +53,26 @@ private:
     Ui::GlavniProzor *ui;
 
     QButtonGroup *grpToolBar;
-    QPushButton *tbOsoba;
-    QPushButton *tbMuzZena, *tbBratSestra, *tbRoditeljDete;
-    QPushButton *tbPomeranje, *tbDetalji;
-    QPushButton *tbBrisi, *tbMenjaj;
-    QPushButton *tbUredi;
+    QPushButton *tbOsoba, *tbMuzZena, *tbBratSestra, *tbRoditeljDete, *tbPomeranje, *tbDetalji, *tbBrisi, *tbMenjaj, *tbUredi;
     QToolBar *toolbar;
     QLabel *Labela, *labelaStatus;
     PorodicnoStablo *stablo;
     QPainter * cetka;
 
-    QDockWidget *alati;
+    QDockWidget *alati, *info;
     //okvirStabla *stabloOkvir;
     FilterObject *filter;
 
     static short int _selektovanaSifra;
-
-    bool _nesacuvaneIzmene;//ako ih ima, pitamo korisnika zeli li da snimi
-
+    enum {maxSkoroOtvaranih = 5};
+    static QStringList skoroOtvarani;
+    QAction *skoroOtvaraniAkcije[maxSkoroOtvaranih];
+    QString otvoreniFajl;
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
-    //vector<sifra_relacije, pozicija_relacije>
-    std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
+    std::map<short int, QPoint> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
+    //std::vector< WidgetOsoba* > _osobe;//necemo cuvati ovako, ovo sluzi za test
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
 
@@ -83,20 +82,24 @@ private:
     void kreirajPlatnoZaCrtanje();
     void kreirajStatusBar();
     bool nastaviti();
-    bool snimiIzmene();//cuvamo u fajl
+    bool snimiIzmene(const QString &imeFajla);//cuvamo u fajl
+    void obnoviSkoroOtvarane();//recentFileList
+    bool otvoriFajl(const QString &imeFajla);//otvaranje fajla
+    void postaviTrenutniFajl(const QString &imeFajla);
 
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y, bool krvniSrodnik);
     void kliknutoPlatno();
     void prikaziToolbar();
     void kliknutaRelacija();
-    void promeniKursor();
-    void novoStablo();
-    void otvoriPostojeceStablo();
-    void closeEvent(QCloseEvent *event);
-    bool sacuvaj();
-    bool sacuvajKao();
+    void promeniKursor();//mozda...
+    void novoStablo();//File|New
+    void otvoriPostojeceStablo();//File|Open
+    void closeEvent(QCloseEvent *event);//File|Exit
+    bool sacuvaj();//File|Save
+    bool sacuvajKao();//File|SaveAs
+    void otvoriSkoroOtvaraniFajl();//File|RecentFiles...
 
 };
 
-#endif // GLAVNIPROZOR2_H
+#endif // GLAVNIPROZOR_H

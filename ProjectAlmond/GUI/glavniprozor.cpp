@@ -5,8 +5,7 @@
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::GlavniProzor),
-    _nesacuvaneIzmene(false)
+    ui(new Ui::GlavniProzor)
 {
     ui->setupUi(this);
 
@@ -14,7 +13,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     QIcon icon(":images/images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
-    this->setWindowTitle("Project Almond");
+    this->setWindowTitle("Project Almond[*]");
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -38,9 +37,6 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
 //        novaOsoba->show();
 //        delete d;
-
-//        _nesacuvaneIzmene = true;
-
 //    }
 //    else
 //        ui->statusBar->showMessage("Nesto nije bilo u redu sa kreiranjem stabla!");
@@ -135,14 +131,25 @@ QPushButton* GlavniProzor::kreirajJedanAlat(QPushButton * alat, const char* ime,
 void GlavniProzor::kreirajOpcije()
 {
     connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
+    //connect(ui->aAlati, SIGNAL(toggled(bool)), this, SLOT(alati->toggleViewAction())) ;
+    //connect(ui->aInformacije, SIGNAL(toggled(bool)), info, SLOT(info->toggleViewAction()));
+    //ui->aInformacije = info->toggleViewAction();
     connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
 
     connect(ui->aNovoStablo, SIGNAL(triggered()), this, SLOT(novoStablo()));
     connect(ui->aOtvori, SIGNAL(triggered()), this, SLOT(otvoriPostojeceStablo()));
-    //connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT());
     connect(ui->aZatvori, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->aUgasi, SIGNAL(triggered()),qApp, SLOT(closeAllWindows()));
     connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT(sacuvaj()));
+    connect(ui->aIzvezi, SIGNAL(triggered()), this, SLOT(sacuvajKao()));//?
+
+    for (int i = 0; i < maxSkoroOtvaranih; ++i)
+    {
+        skoroOtvaraniAkcije[i] = new QAction(this);
+        skoroOtvaraniAkcije[i]->setVisible(false);
+        connect(skoroOtvaraniAkcije[i], SIGNAL(triggered()), this, SLOT(otvoriSkoroOtvaraniFajl()));
+        ui->mFajlovi->addAction(skoroOtvaraniAkcije[i]);//? Ne zelim da ih dodajem na kraj, nego gde treba!
+    }
 }
 
 void GlavniProzor::kreirajToolbar()
@@ -192,7 +199,7 @@ void GlavniProzor::kreirajToolbar()
 
 void GlavniProzor::kreirajMestoZaInfo()
 {
-    QDockWidget *info = new QDockWidget(tr("Informacije"));
+    info = new QDockWidget(tr("Informacije"));
     Labela=new QLabel("Informacije");
     info->setWidget(Labela);//i recimo
     Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
@@ -225,7 +232,7 @@ void GlavniProzor::kliknutoPlatno()
                 ui->statusBar->showMessage("Morate kliknuti na osobu kojoj zelite da dodate supruznika.", 2000);
             else
             {
-                short int novaSifraOsobe=dodajNovuOsobu(x2, y2, false);
+                short int novaSifraOsobe = dodajNovuOsobu(x2, y2, false);
                 if (novaSifraOsobe < 0)
                     ui->statusBar->showMessage("Odustali ste od dodavanja novog supruznika", 2000);
                 else
@@ -236,6 +243,7 @@ void GlavniProzor::kliknutoPlatno()
                     novaRelacija->show();
                     stabloOkvir->povuciLiniju(x1,y1,x2,y2);
                     stabloOkvir->repaint();
+                    setWindowModified(true);
                 }
             }
         }
@@ -263,6 +271,7 @@ void GlavniProzor::kliknutoPlatno()
                             novaRelacija->show();
                             stabloOkvir->povuciLiniju(x1,y1,x2,y2);
                             stabloOkvir->repaint();
+                            setWindowModified(true);
                         }
                     }
                 }
@@ -299,9 +308,13 @@ void GlavniProzor::kliknutoPlatno()
             else
             {
                 prva = qobject_cast<WidgetOsoba*>(labela1->parent());
-                prva->setX(x2);//treba malo preracunati ovo
-                prva->setY(y2);
-                prva->move(x2, y2);
+                if (prva != nullptr)
+                {
+                    prva->setX(x2);//treba malo preracunati ovo
+                    prva->setY(y2);
+                    prva->move(x2, y2);
+                    _pozicijeOsoba[prva->Sifra()] = QPoint(x2, y2);
+                }
             }
 
     }
@@ -345,11 +358,12 @@ void GlavniProzor::kliknutoPlatno()
                 if (poruka->clickedButton() == da)
                 {
                     stablo->UkloniOsobuSifrom(druga->Sifra());
-                //druga->hide();
-                    delete druga;
                     ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
-                    _nesacuvaneIzmene = true;
+                    _pozicijeOsoba.erase(druga->Sifra());
+                    delete druga;
+                    setWindowModified(true);
                     stabloOkvir->repaint();
+
                 }
                 else
                     ui->statusBar->showMessage(tr("Osoba nije uklonjena"), 2000);
@@ -381,7 +395,9 @@ void GlavniProzor::kliknutoPlatno()
                 qDebug() << "menjanje osobe";
 
                 DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe((stablo->NadjiOsobuSifrom(druga->Sifra())), this);
-                d->exec();//treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
+                if (d->exec())
+                    //treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
+                    setWindowModified(true);
                 delete d;
             }
         }
@@ -414,9 +430,8 @@ short int GlavniProzor::dodajNovuOsobu(int x, int y, bool krvniSrodnik)
             novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
             novaOsoba->show();
             delete d;
-
-            _nesacuvaneIzmene = true;
-
+            //setWindowModified(true);
+            _pozicijeOsoba[novaSifra] = QPoint(x,y);
             return novaSifra;
         }
     }
@@ -437,7 +452,7 @@ void GlavniProzor::promeniKursor()
 
 bool GlavniProzor::nastaviti()
 {
-    if (_nesacuvaneIzmene == true)
+    if (isWindowModified())
     {
         QMessageBox *poruka = new QMessageBox();
         poruka->setInformativeText(tr("Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?"));
@@ -457,19 +472,74 @@ bool GlavniProzor::nastaviti()
 //                                           QMessageBox::Yes | QMessageBox::Default, QMessageBox::No,
 //                                           QMessageBox::Cancel | QMessageBox::Escape);
         if (poruka->clickedButton() == da)
-            return snimiIzmene();
+            return sacuvaj();
         if (poruka->clickedButton() == odustani)
             return false;
     }
     return true;
 }
 
-bool GlavniProzor::snimiIzmene()
+bool GlavniProzor::snimiIzmene(const QString &imeFajla)
 {
     //TO DO
-    _nesacuvaneIzmene = false;
-    ui->statusBar->showMessage("Snimljeno", 2000);
+    if (!stablo->IspisiFajl(imeFajla))
+    {
+        ui->statusBar->showMessage(tr("Snimanje otkazano."), 2000);
+        return false;
+    }
+    //setWindowModified(false);
+    postaviTrenutniFajl(imeFajla);
+    ui->statusBar->showMessage(tr("Fajl je sacuvan."), 2000);
     return true;
+}
+
+void GlavniProzor::obnoviSkoroOtvarane()
+{
+    QMutableStringListIterator i(GlavniProzor::skoroOtvarani);
+    while (i.hasNext())
+        if (!QFile::exists(i.next()))
+            i.remove();
+    for (int j = 0; j < maxSkoroOtvaranih; ++j)
+    {
+        if (j < GlavniProzor::skoroOtvarani.count())
+        {
+            QString text = tr("&%1 %2")
+                           .arg(j + 1)
+                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());              //.arg(strippedName(recentFiles[j]));
+            skoroOtvaraniAkcije[j]->setText(text);
+            skoroOtvaraniAkcije[j]->setData(GlavniProzor::skoroOtvarani[j]);
+            skoroOtvaraniAkcije[j]->setVisible(true);
+        }
+        else
+            skoroOtvaraniAkcije[j]->setVisible(false);
+    }
+
+}
+
+bool GlavniProzor::otvoriFajl(const QString &imeFajla)
+{
+    if (!stablo->ProcitajFajl(imeFajla))
+    {
+        ui->statusBar->showMessage(tr("Ucitavanje fajla otkazano."), 2000);
+        return false;
+    }
+    postaviTrenutniFajl(imeFajla);
+    ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
+    return true;
+}
+
+void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
+{
+    otvoreniFajl = imeFajla;
+    setWindowModified(false);
+    if (!otvoreniFajl.isEmpty())
+    {
+        skoroOtvarani.removeAll(otvoreniFajl);
+        skoroOtvarani.prepend(otvoreniFajl);
+        qDebug() << "uneo fajl u skoroOtvarane";
+        obnoviSkoroOtvarane();
+        //setWindowTitle?
+    }
 }
 
 void GlavniProzor::novoStablo()
@@ -493,8 +563,10 @@ void GlavniProzor::otvoriPostojeceStablo()
                                                         tr("Otvorite postojece stablo."),
                                                         tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
         if (!imeFajla.isEmpty())
+        {
             qDebug() << "nasli fajl i treba  ga otvoriti";
-        //loadFile(imeFajla());
+            otvoriFajl(imeFajla);
+        }
         else
             qDebug() << "odustali od otvaranja";
     }
@@ -519,14 +591,29 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
 
 bool GlavniProzor::sacuvaj()
 {
-    //Hmmmm
-    return snimiIzmene();
+    if (otvoreniFajl.isEmpty())
+        return sacuvajKao();
+    return snimiIzmene(otvoreniFajl);
 }
 
 bool GlavniProzor::sacuvajKao()
 {
-    //To DO
-    return snimiIzmene();
+    QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo."),
+                                               ".", tr("Project Almond (*.alm)")); //EKSTENZIJE
+    if (ime.isEmpty())
+        return false;
+    return snimiIzmene(ime);
+}
+
+void GlavniProzor::otvoriSkoroOtvaraniFajl()
+{
+    if (nastaviti())
+    {
+        QAction *akcija = qobject_cast<QAction *>(sender());
+        if (akcija != nullptr)
+            qDebug() << "Otvoriti fajl";
+    }
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;
+QStringList GlavniProzor::skoroOtvarani;

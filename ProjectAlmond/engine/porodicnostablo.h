@@ -5,7 +5,10 @@
 #include<string>
 #include<QDate>
 #include"engine/osoba.h"
+#include <QString>
+#include <QFile>
 
+#include <iostream>
 
 /**
  * @brief The PorodicnoStablo class sluzi za pamcenje podataka o povezanosti clanova stabla, kao i njihovo indeksiranje.
@@ -62,6 +65,10 @@ public:
     void UkloniBrakSifrom(const short sifra);
 
     void UkloniDeteSifrom(const short sifra);
+
+    /*mislim da ovo treba ovde*/
+    bool ProcitajFajl(const QString &imeFajla);//citanje fajla
+    bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
 
 
 private:
