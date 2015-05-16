@@ -8,12 +8,13 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     ui(new Ui::GlavniProzor)
 {
     ui->setupUi(this);
-
     setAttribute(Qt::WA_DeleteOnClose);
 
     QIcon icon(":images/images/ProjectAlmond.ico");
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond[*]");
+
+    translator = new QTranslator();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -144,6 +145,8 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aUgasi, SIGNAL(triggered()),qApp, SLOT(closeAllWindows()));
     connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT(sacuvaj()));
     connect(ui->aIzvezi, SIGNAL(triggered()), this, SLOT(sacuvajKao()));//?
+    connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezik()));
+    connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezik()));
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -634,6 +637,26 @@ void GlavniProzor::otvoriSkoroOtvaraniFajl()
         if (akcija != nullptr)
             qDebug() << "Otvoriti fajl";
     }
+}
+void GlavniProzor::promeniJezik()
+{
+    if(ui->aEngleski->isChecked()){
+
+             bool ok=translator->load("ProjectAlmond_en.qm");
+             qDebug("translation %d", ok);
+              qApp->installTranslator(translator);
+                ui->retranslateUi(this);
+                qDebug() << "English";
+    }
+    else if(ui->aNemacki->isChecked()){
+        bool ok=translator->load("ProjectAlmond_ge.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           qDebug() << "German";
+
+    }
+
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/jezici">
+        <file>ProjectAlmond/ProjectAlmond_en.qm</file>
+        <file>ProjectAlmond/ProjectAlmond_en.ts</file>
+        <file>ProjectAlmond/ProjectAlmond_ge.ts</file>
+    </qresource>
+</RCC>
