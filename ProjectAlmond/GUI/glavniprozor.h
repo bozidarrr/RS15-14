@@ -29,6 +29,7 @@
 #include <QPoint>
 #include <QAction>
 #include <QSettings>
+#include <QTranslator>
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -69,6 +70,7 @@ private:
     static QStringList skoroOtvarani;
     QAction *skoroOtvaraniAkcije[maxSkoroOtvaranih];
     QString otvoreniFajl;
+    QTranslator *translator;
 
     //DODATI!!!
     //vector<sifra_osobe, pozicija_osobe>
@@ -102,6 +104,7 @@ public Q_SLOTS:
     bool sacuvaj();//File|Save
     bool sacuvajKao();//File|SaveAs
     void otvoriSkoroOtvaraniFajl();//File|RecentFiles...
+    void promeniJezik();//za Promenu jezika kad se cekira drugi jezik
 
 };
 

@@ -52,5 +52,8 @@ FORMS    += \
 
 RESOURCES += \
     slike.qrc
+TRANSLATIONS += \
+    ProjectAlmond_en.ts \
+    ProjectAlmond_ge.ts
 
 OTHER_FILES +=
