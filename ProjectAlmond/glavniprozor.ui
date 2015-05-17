@@ -62,6 +62,12 @@
     <property name="title">
      <string>Fajlovi</string>
     </property>
+    <widget class="QMenu" name="aSkoroOtvarani">
+     <property name="title">
+      <string>Skoro otvarani fajlovi</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="aNovoStablo"/>
     <addaction name="aOtvori"/>
     <addaction name="aSkoroOtvarani"/>
@@ -131,11 +137,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="aSkoroOtvarani">
-   <property name="text">
-    <string>Skoro otvarani fajlovi</string>
    </property>
   </action>
   <action name="aSacuvaj">

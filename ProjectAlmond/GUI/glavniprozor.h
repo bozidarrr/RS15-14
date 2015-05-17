@@ -105,7 +105,8 @@ public Q_SLOTS:
     bool sacuvajKao();//File|SaveAs
     void otvoriSkoroOtvaraniFajl();//File|RecentFiles...
     void promeniJezik();//za Promenu jezika kad se cekira drugi jezik
-
+    void osveziPrikazAlata(bool Vidljivost);
+    void osveziPrikazInformacija(bool Vidljivost);
 };
 
 #endif // GLAVNIPROZOR_H

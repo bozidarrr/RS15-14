@@ -58,6 +58,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     kreirajOpcije();
     obnoviSkoroOtvarane();
     //readSettings();
+     connect(info,SIGNAL(visibilityChanged(bool)),this,SLOT(osveziPrikazInformacija(bool)));
 }
 
 GlavniProzor::~GlavniProzor()
@@ -116,6 +117,7 @@ void GlavniProzor::kreirajStatusBar()
 void GlavniProzor::prikaziToolbar()
 {
     alati->setVisible(ui->aAlati->isChecked());
+    info->setVisible(ui->aInformacije->isChecked());
 }
 
 QPushButton* GlavniProzor::kreirajJedanAlat(QPushButton * alat, const char* ime,const char* info)
@@ -135,7 +137,7 @@ void GlavniProzor::kreirajOpcije()
 {
     connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
     //connect(ui->aAlati, SIGNAL(toggled(bool)), this, SLOT(alati->toggleViewAction())) ;
-    //connect(ui->aInformacije, SIGNAL(toggled(bool)), info, SLOT(info->toggleViewAction()));
+    connect(ui->aInformacije, SIGNAL(triggered()), this, SLOT(prikaziToolbar()));
     //ui->aInformacije = info->toggleViewAction();
     connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
 
@@ -153,7 +155,7 @@ void GlavniProzor::kreirajOpcije()
         skoroOtvaraniAkcije[i] = new QAction(this);
         skoroOtvaraniAkcije[i]->setVisible(false);
         connect(skoroOtvaraniAkcije[i], SIGNAL(triggered()), this, SLOT(otvoriSkoroOtvaraniFajl()));
-        ui->mFajlovi->addAction(skoroOtvaraniAkcije[i]);//? Ne zelim da ih dodajem na kraj, nego gde treba!
+        ui->aSkoroOtvarani->addAction(skoroOtvaraniAkcije[i]);//? Ne zelim da ih dodajem na kraj, nego gde treba!
     }
 }
 
@@ -200,6 +202,9 @@ void GlavniProzor::kreirajToolbar()
     alati->setAllowedAreas(Qt::TopDockWidgetArea
                            | Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     addDockWidget(Qt::TopDockWidgetArea, alati);
+
+    connect(alati,SIGNAL(visibilityChanged(bool)),this,SLOT(osveziPrikazAlata(bool)));
+
 }
 
 void GlavniProzor::kreirajMestoZaInfo()
@@ -657,6 +662,16 @@ void GlavniProzor::promeniJezik()
 
     }
 
+}
+
+void GlavniProzor::osveziPrikazAlata(bool Vidljivost)
+{
+    ui->aAlati->setChecked(Vidljivost);
+}
+
+void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
+{
+    ui->aInformacije->setChecked(Vidljivost);
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;
