@@ -1,5 +1,5 @@
 #include"engine/osoba.h"
-
+#include <QString>
 short int Osoba::_sledecaSifra=0;
 
 
@@ -17,7 +17,7 @@ Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
 
 Osoba::~Osoba()
 {
-  _vecSeBrise=true;
+    _vecSeBrise=true;
     //brisem podatke o sebi kao detetu
     if(_deteOd!=nullptr)
     {
@@ -132,8 +132,48 @@ bool Osoba::RaskiniSveVeze()
     return true;
 }
 
- bool Osoba::VecSeBrisem()
- {
-     return _vecSeBrise;
- }
+bool Osoba::VecSeBrisem()
+{
+    return _vecSeBrise;
+}
+
+
+QDataStream& operator<<(QDataStream &out,Osoba& osoba)
+{
+    out << qint32(osoba.Sifra());
+    out << osoba._nepoznata;
+    out << QString::fromStdString(osoba.Ime());
+    out << QString::fromStdString(osoba.Prezime());
+    out << QChar::fromLatin1(osoba._pol);
+    out << osoba._datumRodjenja;
+    out << osoba._datumSmrti;
+    out << osoba._krvniSrodnik;
+    out<<qint32(osoba._spisakVeza.size());
+
+
+    return out;
+}
+
+
+QDataStream& operator>>(QDataStream &out,Osoba& osoba)
+{
+    out >> osoba._sifra;
+    out >> osoba._nepoznata;
+    QString tren;
+    out >> tren;
+    osoba._ime=tren.toStdString();
+    out >> tren;
+    osoba._prezime=tren.toStdString();
+    QChar trenChar;
+    out >> trenChar;
+    osoba._pol=trenChar.toLatin1();
+    out >> osoba._datumRodjenja;
+    out >> osoba._datumSmrti;
+    out >> osoba._krvniSrodnik;
+    int velicinaSpiskaVeza;
+    out >> velicinaSpiskaVeza;
+    osoba._spisakVeza.resize(velicinaSpiskaVeza);
+
+    return out;
+}
 
