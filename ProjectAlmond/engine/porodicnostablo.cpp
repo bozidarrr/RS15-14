@@ -1,5 +1,5 @@
 #include "porodicnostablo.h"
-
+#include <QDataStream>
 
 
 /*
@@ -151,10 +151,14 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
 }
 
 void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
-{}
+{
+    delete NadjiBrakSifrom(sifra);
+}
 
 void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
-{}
+{
+    delete NadjiDeteSifrom(sifra);
+}
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
@@ -200,7 +204,15 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
         return false;
     }
-    std::cout << "Pisacemo sta treba" << std::endl;
+    QDataStream izlaz(&fajl);
+    izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
+
+    izlaz << _kljucnaOsoba;
+    izlaz << qint32(_sveOsobe.size());
+
+
+
+
     fajl.close();
     return true;
 }

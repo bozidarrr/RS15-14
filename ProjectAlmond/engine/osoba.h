@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 
-#include "QDate"
-
+#include <QDate>
+#include<QDataStream>
 #include "engine/dete.h"
 #include "engine/brak.h"
 class Dete;
@@ -59,6 +59,15 @@ public:
 
     bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
     //----metodi potrebni za brisanje----//
+
+//----metodi za citanje i pisanje ----//
+
+    friend QDataStream& operator<<(QDataStream& out,Osoba& osoba);
+    friend QDataStream& operator>>(QDataStream& out,Osoba& osoba);
+
+    //----metodi za citanje i pisanje ----//
+
+
 
 
 private:
