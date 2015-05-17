@@ -109,3 +109,31 @@ bool Brak::RaskiniSveVeze()
     return true;
 
 }
+
+QDataStream& operator<<(QDataStream &out,Brak& brak)
+{
+    out << qint32(brak._sifra);
+    out << qint32(brak._spisakDece.size());
+    out << QString::fromStdString(brak._trivija);
+
+    return out;
+}
+
+
+QDataStream& operator>>(QDataStream &in,Brak& brak)
+{
+
+    in >> brak._sifra;
+    int broj;
+    in >> broj;
+    brak._spisakDece.resize(broj);
+    QString tren;
+    in >> tren;
+    brak._trivija=tren.toStdString();
+
+    return in;
+}
+
+
+
+

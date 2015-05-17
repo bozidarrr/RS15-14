@@ -18,11 +18,14 @@ public:
     Osoba* Potomak();
     Brak* RoditeljskiOdnos();
     std::string& Trivija();
-  //  QDate& DatumUsvajanja();
+    //  QDate& DatumUsvajanja();
 
 
     bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno
     bool RaskiniSveVeze(); // brise podatke o svim vezama, priprema za brisanje na vecoj skali
+
+    friend QDataStream& operator<<(QDataStream &out,Dete& dete);
+    friend QDataStream& operator>>(QDataStream &in,Dete& dete);
 
 private:
     static short int _sledecaSifra;
@@ -30,7 +33,7 @@ private:
     Osoba* _osoba;
     Brak * _roditeljskiOdnos;
     std::string _trivija;
- //   QDate _datumUsvajanja;
+    //   QDate _datumUsvajanja;
 };
 
 #endif // DETE_H
