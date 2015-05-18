@@ -2,7 +2,7 @@
 
 Stablo::Stablo()
 {
-
+    setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 }
 
 Stablo::~Stablo()

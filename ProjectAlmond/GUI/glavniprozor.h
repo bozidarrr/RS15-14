@@ -33,6 +33,7 @@
 #include <QTranslator>
 
 #include <QGraphicsScene>
+#include <GUI/gosoba.h>
 
 class WidgetOsoba;
 namespace Ui {
