@@ -580,13 +580,24 @@ void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
     scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
-    //qDebug() << scena->sceneRect().width();
     pogled->setScene(scena);
     //scena->setSceneRect(-300, -300, 600, 600);
     setCentralWidget(pogled);
-    qDebug() << pogled->size().width();
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
     connect(pogled, SIGNAL(vucen(QPoint,QPoint)), this, SLOT(vucenoStablo(QPoint,QPoint)));
+
+    //da ima nesto na pocetku , "korena osoba"
+    gOsoba *osoba = new gOsoba(5);
+    osoba->setPos(123,123);
+    QGraphicsRectItem
+            *foo = new QGraphicsRectItem(QRect(0,0,30,60));
+
+    foo->setPen(QPen(Qt::darkMagenta, 5));
+    foo->setBrush(Qt::magenta);
+    foo->setPos(pogled->mapToScene(80, 50));
+    foo->setZValue(2);
+    scena->addItem(foo);
+    //scena->addItem(osoba);
 }
 
 void GlavniProzor::novoStablo()
@@ -849,19 +860,26 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
     if (tbDetalji->isChecked())
     {
+        QGraphicsRectItem *item = qgraphicsitem_cast<QGraphicsRectItem*>(pogled->itemAt(pozicija));
+        if (item == nullptr)
+            return;
         qDebug() << "opisati selektovano";
-        //opet item at...
-
     }
     else
         if  (tbBrisi->isChecked())
         {
-            //item at
-            qDebug() << "brisati";
+            QGraphicsRectItem *item = qgraphicsitem_cast<QGraphicsRectItem*>(pogled->itemAt(pozicija));
+            if (item == nullptr)
+                return;
+            qDebug() << "obrisati";
+            scena->removeItem(item);
         }
         else
             if (tbMenjaj->isChecked())
             {
+                QGraphicsRectItem *item = qgraphicsitem_cast<QGraphicsRectItem*>(pogled->itemAt(pozicija));
+                if (item == nullptr)
+                    return;
                 qDebug() << "menjati podatke";
             }
             else
@@ -875,11 +893,9 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     if (tbMuzZena->isChecked() || tbBratSestra->isChecked() || tbRoditeljDete->isChecked())
     {
         qDebug() << "povezati";
-        QTransform* transform = new QTransform();
-        //QGraphicsRectItem *prvi = qgraphicsitem_cast<QGraphicsRectItem*>(scena->itemAt(pogled->mapToScene(prva), false));
-        //QGraphicsRectItem *drugi = qgraphicsitem_cast<QGraphicsRectItem>(scena->itemAt(pogled->mapToScene(druga)));
-
-        //if (scena->itemAt(prva, transform) == nullptr) AKO NEKO SHVATA KAKO OVO DA URADIM NEKA JAVI :D
+        QGraphicsRectItem *prvi = qgraphicsitem_cast<QGraphicsRectItem*>(pogled->itemAt(prva));
+        if (prvi == nullptr)
+            return;
 
         /*novu "relaciju" crtamo na sredini i "ispod" ostalog*/
         QPoint poz((prva.x()+druga.x())/2, (prva.y()+druga.y())/2);
@@ -903,15 +919,17 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     else
         if (tbPomeranje->isChecked())
         {
+            QGraphicsRectItem *item = qgraphicsitem_cast<QGraphicsRectItem*>(pogled->itemAt(prva));
+            if (item == nullptr)
+                return;
             qDebug() << "pomeriti";
-
-            //I ovde mi treba itemAt, a to iz nekog razloga ne uspevam da uradim xD
+            item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         }
         else
-        {
-            qDebug() << "nista";
-        }
-        tbDetalji->setChecked(true);
+            {
+                qDebug() << "nista";
+            }
+    tbDetalji->setChecked(true);
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;
