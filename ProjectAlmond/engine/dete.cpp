@@ -2,8 +2,15 @@
 
 short int Dete::_sledecaSifra=0;
 
+Dete::Dete()
+{}
+
 Dete::Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija)
     :_sifra(++_sledecaSifra),_osoba(osoba),_roditeljskiOdnos(roditeljskaVeza),_trivija(trivija)
+{}
+
+Dete::Dete(const Dete &drugo)
+    :_sifra(drugo._sifra),_osoba(nullptr),_roditeljskiOdnos(nullptr),_trivija(drugo._trivija)
 {}
 
 Dete::~Dete()

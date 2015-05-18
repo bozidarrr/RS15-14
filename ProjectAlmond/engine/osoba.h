@@ -17,6 +17,7 @@ public:
 
     Osoba(); //kreira N.N lice
     Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
+    Osoba(const Osoba& druga);//samo podatke, ne i veze!!!
 
     ~Osoba(); //uklanja osobu, sve njene podatke i poziva uklanjanje sopstvenog pointera iz brakova, kao i unistavanje relacionog objekta Dete
 
