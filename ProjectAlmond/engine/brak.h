@@ -28,10 +28,13 @@ public:
     QDate& DatumRaskida();
     QDate& DatumVeridbe();
     QDate& DatumVencanja();
-
 */
+    void PostaviNasuOsobu(Osoba* nasa);
+    void PostaviTudjuOsobu(Osoba* tudja);
+
 
     //----geteri i seteri------//
+    static void postaviSledecuSifru(int sifra);
 
     //---metodi korisni u upotrebi---//
     void DodajDete(Dete* beba);

@@ -47,6 +47,21 @@ std::vector<Dete*>& Brak::SpisakDece()
 {
     return _spisakDece;
 }
+std::string& Brak::Trivija()
+{
+    return _trivija;
+}
+
+void Brak::PostaviNasuOsobu(Osoba *nasa)
+{
+    _nasaOsoba=nasa;
+}
+
+void Brak::PostaviTudjuOsobu(Osoba* tudja)
+{
+    _tudjaOsoba=tudja;
+}
+
 /*
 QDate& Brak::DatumUpoznavanja()
 {
@@ -69,6 +84,12 @@ QDate& Brak::DatumRaskida()
     return _datumRaskida;
 }
 */
+
+void Brak::postaviSledecuSifru(int sifra)
+{
+    _sledecaSifra=sifra;
+}
+
 void Brak::DodajDete(Dete* beba)
 {
     _spisakDece.push_back(beba);
