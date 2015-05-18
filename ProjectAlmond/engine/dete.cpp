@@ -44,6 +44,20 @@ QDate& Dete::DatumUsvajanja()
     return _datumUsvajanja;
 }
 */
+void Dete::postaviSledecuSifru(int sifra)
+{
+    _sledecaSifra=sifra;
+}
+
+void Dete::PostaviPotomka(Osoba* potomak)
+{
+    _osoba=potomak;
+}
+void Dete::PostaviRoditeljskiOdnos(Brak* odnos)
+{
+    _roditeljskiOdnos=odnos;
+}
+
 bool Dete::BrisanjeOdOsobe()
 {
     _roditeljskiOdnos->DeteSeUklanja(this);

@@ -22,6 +22,10 @@ public:
     std::string& Trivija();
     //  QDate& DatumUsvajanja();
 
+    static void postaviSledecuSifru(int sifra);
+    void PostaviPotomka(Osoba* potomak);
+    void PostaviRoditeljskiOdnos(Brak* odnos);
+
 
     bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno
     bool RaskiniSveVeze(); // brise podatke o svim vezama, priprema za brisanje na vecoj skali

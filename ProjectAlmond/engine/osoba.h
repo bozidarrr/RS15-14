@@ -41,6 +41,8 @@ public:
 
     void PostaviPoreklo(Dete* poreklo);
 
+    static void postaviSledecuSifru(int sifra);
+
     void DodajVezu(Brak* veza);
 
     std::vector<Brak*>& SpisakVeza(); //vraca referencu na spisak svih veza koje je osoba imala

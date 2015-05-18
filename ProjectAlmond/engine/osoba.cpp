@@ -101,6 +101,11 @@ void Osoba::PostaviPoreklo(Dete* poreklo)
     _deteOd=poreklo;
 }
 
+void Osoba::postaviSledecuSifru(int sifra)
+{
+    _sledecaSifra=sifra;
+}
+
 void Osoba::DodajVezu(Brak* veza)
 {
     _spisakVeza.push_back(veza);
