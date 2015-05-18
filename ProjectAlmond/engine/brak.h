@@ -12,7 +12,9 @@ class Dete;
 class Brak
 {
 public:
+    Brak();
     Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
+    Brak(const Brak& drugi);
     ~Brak();
 
     //----geteri i seteri------//

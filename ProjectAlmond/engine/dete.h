@@ -11,7 +11,9 @@ class Osoba;
 class Dete
 {
 public:
+    Dete();
     Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija="");
+    Dete(const Dete& drugo);
     ~Dete();
 
     short int Sifra();

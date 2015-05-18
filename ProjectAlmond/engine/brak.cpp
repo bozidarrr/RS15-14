@@ -2,10 +2,17 @@
 
 short int Brak::_sledecaSifra=0;
 
+Brak::Brak()
+{}
+
 Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija)
     :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(2),_trivija(trivija)
 {
+}
 
+Brak::Brak(const Brak &drugi)
+    :_sifra(drugi._sifra),_nasaOsoba(nullptr),_tudjaOsoba(nullptr),_spisakDece(drugi._spisakDece.size()),_trivija(drugi._trivija)
+{
 }
 
 Brak::~Brak()
