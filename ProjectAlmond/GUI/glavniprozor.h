@@ -104,7 +104,9 @@ public Q_SLOTS:
     bool sacuvaj();//File|Save
     bool sacuvajKao();//File|SaveAs
     void otvoriSkoroOtvaraniFajl();//File|RecentFiles...
-    void promeniJezik();//za Promenu jezika kad se cekira drugi jezik
+    void promeniJezikE();//za Promenu jezika na engleski
+    void promeniJezikN();//za promenu jezika na nemacki
+    void promeniJezikS();//za promenu jezika na srpski
     void osveziPrikazAlata(bool Vidljivost);
     void osveziPrikazInformacija(bool Vidljivost);
 };
