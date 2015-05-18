@@ -1,5 +1,6 @@
 #ifndef GLAVNIPROZOR_H
 #define GLAVNIPROZOR_H
+#include "GUI/stablo.h"
 
 #include <QApplication>
 #include <QMainWindow>
@@ -21,7 +22,7 @@
 #include "okvirstabla.h"
 #include <vector>
 #include <map>
-#include <qdebug.h>
+#include <QDebug>
 #include "alati/filterobject.h"
 #include <QMessageBox>
 #include <QFileDialog>
@@ -30,6 +31,9 @@
 #include <QAction>
 #include <QSettings>
 #include <QTranslator>
+
+#include <QGraphicsScene>
+
 class WidgetOsoba;
 namespace Ui {
 class GlavniProzor;
@@ -92,6 +96,10 @@ private:
     void writeSettings();//cuva pozicije widgeta, recent files, itd... Smisliti prevod imena :)
     void readSettings();//cita ovo gore pri konstrukciji
 
+    Stablo *pogled;
+    QGraphicsScene *scena;
+    void kreirajPogledZaStablo();
+
 public Q_SLOTS:
     short dodajNovuOsobu(int x, int y, bool krvniSrodnik);
     void kliknutoPlatno();
@@ -109,6 +117,9 @@ public Q_SLOTS:
     void promeniJezikS();//za promenu jezika na srpski
     void osveziPrikazAlata(bool Vidljivost);
     void osveziPrikazInformacija(bool Vidljivost);
+
+    void kliknutoStablo(QPoint pozicija);
+    void vucenoStablo(QPoint prva, QPoint druga);
 };
 
 #endif // GLAVNIPROZOR_H

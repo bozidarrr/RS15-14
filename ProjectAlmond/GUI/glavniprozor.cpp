@@ -50,6 +50,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     kreirajToolbar();
     kreirajMestoZaInfo();
     //kreirajStatusBar();
+    kreirajPogledZaStablo();
 
     WidgetOsoba *korena=new WidgetOsoba(stablo->KljucnaOsoba()->Sifra(),50,50,this,stabloOkvir);
     korena->postaviImePrezime(stablo->KljucnaOsoba()->Ime()+" "+stablo->KljucnaOsoba()->Prezime());
@@ -92,15 +93,15 @@ void GlavniProzor::ispisiStatus(const QString &poruka)
 
 void GlavniProzor::kreirajPlatnoZaCrtanje()
 {
-    QVBoxLayout* lejaut=new QVBoxLayout();
+    //QVBoxLayout* lejaut=new QVBoxLayout();
     QScrollArea* skrolPanel=new QScrollArea();
-    lejaut->addWidget(skrolPanel);
-    ui->centralwidget->setLayout(lejaut);
+    //lejaut->addWidget(skrolPanel);
+    //ui->centralwidget->setLayout(lejaut);
 
     stabloOkvir=new okvirStabla(skrolPanel);
     stabloOkvir->setGeometry(0,0,5000,5000);
     stabloOkvir->updateGeometry();
-    skrolPanel->setWidget(stabloOkvir);
+    //skrolPanel->setWidget(stabloOkvir);
     stabloOkvir->setStyleSheet("background-color:rgb(0, 0, 0);");
     connect(stabloOkvir,SIGNAL(kliknut()),this,SLOT(kliknutoPlatno()));
 
@@ -572,6 +573,17 @@ void GlavniProzor::readSettings()
     obnoviSkoroOtvarane();
 }
 
+void GlavniProzor::kreirajPogledZaStablo()
+{
+    scena = new QGraphicsScene(this);
+
+    pogled = new Stablo();
+    pogled->setScene(scena);
+    setCentralWidget(pogled);
+    connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
+    connect(pogled, SIGNAL(vucen(QPoint,QPoint)), this, SLOT(vucenoStablo(QPoint,QPoint)));
+}
+
 void GlavniProzor::novoStablo()
 {
     //TO DO
@@ -826,6 +838,20 @@ void GlavniProzor::osveziPrikazAlata(bool Vidljivost)
 void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
 {
     ui->aInformacije->setChecked(Vidljivost);
+}
+
+void GlavniProzor::kliknutoStablo(QPoint pozicija)
+{
+    if (tbDetalji->isChecked() || tbBrisi->isChecked())
+        qDebug() << "reagovati";
+}
+
+void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
+{
+    if (tbPomeranje->isChecked() || tbMuzZena->isChecked() || tbBratSestra->isChecked() || tbRoditeljDete->isChecked())
+        qDebug() << "uraditi nesto";
+    else
+        qDebug() << "nista";
 }
 
 short int GlavniProzor::_selektovanaSifra = -1;
