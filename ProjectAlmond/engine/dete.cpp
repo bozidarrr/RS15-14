@@ -49,3 +49,21 @@ bool Dete::RaskiniSveVeze()
     _osoba=nullptr;
     return true;
 }
+QDataStream& operator<<(QDataStream &out,Dete& dete)
+{
+    out << qint32(dete._sifra);
+    out << QString::fromStdString(dete._trivija);
+    return out;
+}
+
+
+QDataStream& operator>>(QDataStream &in,Dete& dete)
+{
+
+    in >> dete._sifra;
+    QString tren;
+    in >> tren;
+    dete._trivija=tren.toStdString();
+    return in;
+}
+

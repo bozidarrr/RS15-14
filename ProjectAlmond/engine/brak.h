@@ -46,6 +46,12 @@ public:
     bool RaskiniSupruznike(Osoba *inicijator);//jedna osoba se brise, pa se zahteva da druga osoba ukloni podatke o braku iz svoje evidencije brakova
     bool RaskiniSveVeze();
     //----metodi potrebni za brisanje----//
+
+    //----metodi potrebni za citanje i pisanje----//
+    friend QDataStream& operator<<(QDataStream &out,Brak& brak);
+    friend QDataStream& operator>>(QDataStream &in,Brak& brak);
+    //----metodi potrebni za citanje i pisanje----//
+
 private:
     static short int _sledecaSifra;
     short int _sifra;
@@ -53,7 +59,7 @@ private:
     Osoba* _tudjaOsoba;
     std::vector<Dete *> _spisakDece;
     std::string _trivija;
-   /* QDate _datumUpoznavanja;
+    /* QDate _datumUpoznavanja;
     QDate _datumVeze;
     QDate _datumVeridbe;
     QDate _datumVencanja;

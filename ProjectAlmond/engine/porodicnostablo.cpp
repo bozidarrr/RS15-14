@@ -34,7 +34,7 @@ PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,
     _sveOsobe.push_back(&_kljucnaOsoba);
     _indeksIme[_kljucnaOsoba.Ime()]=std::vector<Osoba*>();
     _indeksIme[_kljucnaOsoba.Ime()].push_back(&_kljucnaOsoba);
-  /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
+    /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
     _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()].push_back(&_kljucnaOsoba);
     _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()]=std::vector<Osoba*>();
     _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()].push_back(&_kljucnaOsoba);*/
@@ -88,7 +88,7 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char
     _sveOsobe.push_back(nova);
     _indeksIme[ime]=std::vector<Osoba*>();
     _indeksIme[ime].push_back(nova);
-/*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
+    /*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
     _indeksRodjenje[datumRodjenja].push_back(nova);
     _indeksRodjendan[datumRodjenja.daysInYear()]=std::vector<Osoba*>();
     _indeksRodjendan[datumRodjenja.daysInYear()].push_back(nova);*/
@@ -168,13 +168,20 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         std::cout << "Ne moze da iscita fajl" << std::endl; //bice warning
         return false;
     }
-    std::cout << "Citamo sta treba" << std::endl;
+
+    //---BOZIDARE RADI---//
+
+
+    //---BOZIDARE RADI---//
+
+
+
     fajl.close();
     return true;
 }
 
-bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
-{
+bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke koji su mi potrebni, da bi fajlovi bili manji
+{//time gubim na performansama pri ucitavanju, ali posto je cuvanje bitnije od ucitavanja (koje radimo prilicno retko), deluje mi bolje ovako
     /*
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -198,20 +205,104 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
     QApplication::restoreOverrideCursor();
     return true;
     */
-    //TO DO
+    //TO CHECK
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::WriteOnly)) {
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
         return false;
     }
+
     QDataStream izlaz(&fajl);
     izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
+
+
+
     izlaz << _kljucnaOsoba;
+
+
+
+
     izlaz << qint32(_sveOsobe.size());
+    for(Osoba* osoba:_sveOsobe)
+    {
+        izlaz<<(*osoba);
+    }
 
 
 
+    izlaz << qint32(_sveVeze.size());
+    for(Brak* brak:_sveVeze){
+        izlaz<<(*brak);
+    }
+
+
+
+    izlaz << qint32(_svaDeca.size());
+    for(Dete* dete:_svaDeca){
+        izlaz<<(*dete);
+    }
+
+    std::vector<Osoba*>::iterator osoba=_sveOsobe.begin();
+
+    std::vector<Osoba*>::iterator eo=_sveOsobe.end();
+
+    std::vector<Brak*>::iterator brak;
+    std::vector<Brak*>::iterator eb;
+
+    std::vector<Dete*>::iterator dete;
+    std::vector<Dete*>::iterator ed;
+
+    for(;osoba!=eo;osoba++){
+        if((*osoba)->Poreklo()==nullptr)
+            izlaz << -1;
+        else
+            izlaz << qint32((*osoba)->Poreklo()->Sifra());
+
+        izlaz << qint32((*osoba)->SpisakVeza().size());
+
+        brak= (*osoba)->SpisakVeza().begin();
+        eb=(*osoba)->SpisakVeza().end();
+        for(;brak!=eb;brak++){
+            izlaz << qint32((*brak)->Sifra());
+        }
+    }
+
+    brak=_sveVeze.begin();
+    eb=_sveVeze.end();
+    for(;brak!=eb;brak++){
+        if((*brak)!=nullptr){
+
+            if((*brak)->NasaOsoba()==nullptr)izlaz << -1;
+            else izlaz << qint32((*brak)->NasaOsoba()->Sifra());
+
+
+            if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
+            else izlaz << qint32((*brak)->TudjaOsoba()->Sifra());
+
+            izlaz << qint32((*brak)->SpisakDece().size());
+            dete=(*brak)->SpisakDece().begin();
+            ed=(*brak)->SpisakDece().end();
+
+            for(;dete!=ed;dete++){
+                if((*dete)!=nullptr)
+                    izlaz << qint32((*dete)->Sifra());
+            }
+        }
+    }
+
+    dete=_svaDeca.begin();
+    ed=_svaDeca.end();
+
+    for(;dete!=ed;dete++){
+        if((*dete)!=nullptr){
+            if((*dete)->Potomak()==nullptr)izlaz << -1;
+            else izlaz << qint32((*dete)->Potomak()->Sifra());
+
+            if((*dete)->RoditeljskiOdnos()==nullptr) izlaz << -1;
+            else izlaz << qint32((*dete)->RoditeljskiOdnos()->Sifra());
+        }
+    }
 
     fajl.close();
     return true;
@@ -224,8 +315,8 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _svaDeca.clear();
     _sveVeze.clear();
     _indeksIme.clear();
-  //  _indeksRodjenje.clear();
-  //  _indeksRodjendan.clear();
+    //  _indeksRodjenje.clear();
+    //  _indeksRodjendan.clear();
     _indeksSifraDete.clear();
     _indeksSifraOsobe.clear();
     _indeksSifraVeza.clear();
