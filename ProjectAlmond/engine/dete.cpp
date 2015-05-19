@@ -15,12 +15,14 @@ Dete::Dete(const Dete &drugo)
 
 Dete::~Dete()
 {
-    if(_roditeljskiOdnos!=nullptr)
-        _roditeljskiOdnos->DeteSeUklanja(this);//u roditeljskom odnosu brisem podatke o tom detetu
-    if(_osoba!=nullptr){
-        _osoba->ObrisiPoreklo();//osobi brisem poreklo, da ne bi doslo do beskonacne rekurzije
-        delete _osoba;//brisem osobu, sto dalje pokrece rekurzivno brisanje ostalih podataka
-    }
+    _vecSeBrisem=true;
+    if(!_preskociRazvezivanje){
+        if(_roditeljskiOdnos!=nullptr)
+            _roditeljskiOdnos->DeteSeUklanja(this);//u roditeljskom odnosu brisem podatke o tom detetu
+        if(_osoba!=nullptr){
+            _osoba->ObrisiPoreklo();//osobi brisem poreklo, da ne bi doslo do beskonacne rekurzije
+            delete _osoba;//brisem osobu, sto dalje pokrece rekurzivno brisanje ostalih podataka
+        }}
 }
 
 short int Dete::Sifra()
@@ -70,6 +72,16 @@ bool Dete::RaskiniSveVeze()
     _osoba=nullptr;
     return true;
 }
+
+bool Dete::VecSeBrisem()
+{
+    return _vecSeBrisem;
+}
+void Dete::PreskociRazvezivanje()
+{
+    _preskociRazvezivanje=true;
+}
+
 QDataStream& operator<<(QDataStream &out,Dete& dete)
 {
     out << qint32(dete._sifra);

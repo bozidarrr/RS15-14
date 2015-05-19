@@ -61,6 +61,7 @@ public:
     bool RaskiniSveVeze(); //brise sve veze, zarad pripreme za brisanje na vecoj skali
 
     bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
+    void PreskociRazvezivanje();
     //----metodi potrebni za brisanje----//
 
 //----metodi za citanje i pisanje ----//
@@ -87,7 +88,8 @@ private:
     bool _krvniSrodnik;
     Dete * _deteOd;
     std::vector<Brak *> _spisakVeza;
-    bool _vecSeBrise=false;
+    bool _vecSeBrisem=false;
+    bool _preskociRazvezivanje=false;
     //----osnovni podaci----//
     //--------------------------------------------------------------//
     //----napredni podaci----//

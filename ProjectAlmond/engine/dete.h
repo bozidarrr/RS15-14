@@ -29,6 +29,8 @@ public:
 
     bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno
     bool RaskiniSveVeze(); // brise podatke o svim vezama, priprema za brisanje na vecoj skali
+    bool VecSeBrisem();
+    void PreskociRazvezivanje();
 
     friend QDataStream& operator<<(QDataStream &out,Dete& dete);
     friend QDataStream& operator>>(QDataStream &in,Dete& dete);
@@ -40,6 +42,8 @@ private:
     Brak * _roditeljskiOdnos;
     std::string _trivija;
     //   QDate _datumUsvajanja;
+    bool _vecSeBrisem=false;
+    bool _preskociRazvezivanje=false;
 };
 
 #endif // DETE_H
