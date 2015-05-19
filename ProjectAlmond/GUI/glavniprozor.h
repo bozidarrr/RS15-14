@@ -65,6 +65,7 @@ private:
 
     //DODATI!!!
     std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
+    std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
 
@@ -84,7 +85,7 @@ private:
     short izmeniOsobu(short sifra);
     short dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
     short ukloniOsobu(short sifra);
-    short dodajNovuRelaciju(QPointF prva, QPoint druga);
+    short dodajNovuRelaciju(short sifra1, short sifra2, bool brak);
 
     Stablo *pogled;
     QGraphicsScene *scena;
