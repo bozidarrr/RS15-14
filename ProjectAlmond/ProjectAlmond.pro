@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     engine/brak.cpp \
     GUI/dijalogizmenaosobe.cpp \
     GUI/stablo.cpp \
-    GUI/gosoba.cpp
+    GUI/gosoba.cpp \
+    GUI/grelacija.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -44,7 +45,8 @@ HEADERS  += \
     engine/brak.h \
     GUI/dijalogizmenaosobe.h \
     GUI/stablo.h \
-    GUI/gosoba.h
+    GUI/gosoba.h \
+    GUI/grelacija.h
 
 FORMS    += \
     widgetosoba.ui \

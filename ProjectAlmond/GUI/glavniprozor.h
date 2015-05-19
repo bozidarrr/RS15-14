@@ -9,24 +9,18 @@
 #include <QToolBar>
 #include <QLabel>
 #include <QPushButton>
-#include <QScrollArea>
 #include <QDockWidget>
-#include <QVBoxLayout>
 #include <QPainter>
-#include "GUI/widgetosoba.h"
-#include "GUI/widgetrelacija.h"
-#include "GUI/dialognovaosoba.h"
+#include "dijalogizmenaosobe.h"
+#include "dialognovaosoba.h"
 #include <string>
 #include <iostream>
 #include "ui_glavniprozor.h"
-#include "okvirstabla.h"
 #include <vector>
 #include <map>
 #include <QDebug>
-#include "alati/filterobject.h"
 #include <QMessageBox>
 #include <QFileDialog>
-#include <GUI/dijalogizmenaosobe.h>
 #include <QPoint>
 #include <QPointF>
 #include <QAction>
@@ -34,7 +28,8 @@
 #include <QTranslator>
 
 #include <QGraphicsScene>
-#include <GUI/gosoba.h>
+#include "gosoba.h"
+#include "grelacija.h"
 
 class WidgetOsoba;
 namespace Ui {
@@ -59,10 +54,8 @@ private:
     QToolBar *toolbar;
     QLabel *Labela;
     PorodicnoStablo *stablo;
-    //QPainter * cetka;
 
     QDockWidget *alati, *info;
-    //okvirStabla *stabloOkvir;
 
     enum {maxSkoroOtvaranih = 5};
     static QStringList skoroOtvarani;
@@ -72,6 +65,7 @@ private:
 
     //DODATI!!!
     std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
+    std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
 
@@ -91,6 +85,7 @@ private:
     short izmeniOsobu(short sifra);
     short dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
     short ukloniOsobu(short sifra);
+    short dodajNovuRelaciju(short sifra1, short sifra2, bool brak);
 
     Stablo *pogled;
     QGraphicsScene *scena;
