@@ -28,6 +28,7 @@ Brak::~Brak()
         std::vector<Dete*>::iterator e=_spisakDece.end();
         for(;b!=e;b++)//brisem svako dete-relaciju iz spiska, koje dalje pokrece brisanje svih osoba potomaka
         {
+            if(!(*b)->VecSeBrisem())
             delete *b;
         }
     }
