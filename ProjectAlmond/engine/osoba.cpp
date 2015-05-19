@@ -24,35 +24,37 @@ Osoba::Osoba(const Osoba& druga)
 
 Osoba::~Osoba()
 {
-    _vecSeBrise=true;
-    //brisem podatke o sebi kao detetu
-    if(_deteOd!=nullptr)
-    {
-        _deteOd->BrisanjeOdOsobe();
-        delete _deteOd;
-    }
+    _vecSeBrisem=true;
+    if(!_preskociRazvezivanje){
 
-    //za svaku vezu iz spiska
-    if(!_spisakVeza.empty()){
-        std::vector<Brak*>::iterator b=_spisakVeza.begin();
-        std::vector<Brak*>::iterator e=_spisakVeza.end();
-
-        if(!_krvniSrodnik){
-            for(;b!=e;b++)
-            {
-                (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
-                delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
-            }
-        }
-        else//ako jeste krvni srodnik, onda treba pokrenuti samo brisanje druge osobe, koja ce zatim pokrenuti i ostatak brisanja kao u prethodnom
+        //brisem podatke o sebi kao detetu
+        if(_deteOd!=nullptr)
         {
-            for(;b!=e;b++)
+            _deteOd->BrisanjeOdOsobe();
+            delete _deteOd;
+        }
+
+        //za svaku vezu iz spiska
+        if(!_spisakVeza.empty()){
+            std::vector<Brak*>::iterator b=_spisakVeza.begin();
+            std::vector<Brak*>::iterator e=_spisakVeza.end();
+
+            if(!_krvniSrodnik){
+                for(;b!=e;b++)
+                {
+                    (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
+                    delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
+                }
+            }
+            else//ako jeste krvni srodnik, onda treba pokrenuti samo brisanje druge osobe, koja ce zatim pokrenuti i ostatak brisanja kao u prethodnom
             {
-                delete ((*b)->TudjaOsoba());
+                for(;b!=e;b++)
+                {
+                    delete ((*b)->TudjaOsoba());
+                }
             }
         }
     }
-
 }
 
 
@@ -146,7 +148,11 @@ bool Osoba::RaskiniSveVeze()
 
 bool Osoba::VecSeBrisem()
 {
-    return _vecSeBrise;
+    return _vecSeBrisem;
+}
+void Osoba::PreskociRazvezivanje()
+{
+    _preskociRazvezivanje=true;
 }
 
 
