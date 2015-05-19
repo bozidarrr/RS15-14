@@ -31,6 +31,7 @@ Osoba::~Osoba()
         if(_deteOd!=nullptr)
         {
             _deteOd->BrisanjeOdOsobe();
+            if (!_deteOd->VecSeBrisem())
             delete _deteOd;
         }
 
@@ -43,6 +44,7 @@ Osoba::~Osoba()
                 for(;b!=e;b++)
                 {
                     (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
+                    if (!(*b)->VecSeBrisem())
                     delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
                 }
             }
@@ -50,6 +52,7 @@ Osoba::~Osoba()
             {
                 for(;b!=e;b++)
                 {
+                    if(!(*b)->VecSeBrisem())
                     delete ((*b)->TudjaOsoba());
                 }
             }

@@ -21,7 +21,8 @@ Dete::~Dete()
             _roditeljskiOdnos->DeteSeUklanja(this);//u roditeljskom odnosu brisem podatke o tom detetu
         if(_osoba!=nullptr){
             _osoba->ObrisiPoreklo();//osobi brisem poreklo, da ne bi doslo do beskonacne rekurzije
-            delete _osoba;//brisem osobu, sto dalje pokrece rekurzivno brisanje ostalih podataka
+            if(!_osoba->VecSeBrisem())
+                delete _osoba;//brisem osobu, sto dalje pokrece rekurzivno brisanje ostalih podataka
         }}
 }
 
