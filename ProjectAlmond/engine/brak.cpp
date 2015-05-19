@@ -2,10 +2,17 @@
 
 short int Brak::_sledecaSifra=0;
 
+Brak::Brak()
+{}
+
 Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija)
     :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(2),_trivija(trivija)
 {
+}
 
+Brak::Brak(const Brak &drugi)
+    :_sifra(drugi._sifra),_nasaOsoba(nullptr),_tudjaOsoba(nullptr),_spisakDece(drugi._spisakDece.size()),_trivija(drugi._trivija)
+{
 }
 
 Brak::~Brak()
@@ -40,6 +47,21 @@ std::vector<Dete*>& Brak::SpisakDece()
 {
     return _spisakDece;
 }
+std::string& Brak::Trivija()
+{
+    return _trivija;
+}
+
+void Brak::PostaviNasuOsobu(Osoba *nasa)
+{
+    _nasaOsoba=nasa;
+}
+
+void Brak::PostaviTudjuOsobu(Osoba* tudja)
+{
+    _tudjaOsoba=tudja;
+}
+
 /*
 QDate& Brak::DatumUpoznavanja()
 {
@@ -62,6 +84,12 @@ QDate& Brak::DatumRaskida()
     return _datumRaskida;
 }
 */
+
+void Brak::postaviSledecuSifru(int sifra)
+{
+    _sledecaSifra=sifra;
+}
+
 void Brak::DodajDete(Dete* beba)
 {
     _spisakDece.push_back(beba);

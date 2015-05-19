@@ -151,8 +151,9 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aUgasi, SIGNAL(triggered()),qApp, SLOT(closeAllWindows()));
     connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT(sacuvaj()));
     connect(ui->aIzvezi, SIGNAL(triggered()), this, SLOT(sacuvajKao()));//?
-    connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezik()));
-    connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezik()));
+    connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezikE()));
+    connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
+     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -671,7 +672,7 @@ void GlavniProzor::otvoriSkoroOtvaraniFajl()
             qDebug() << "Otvoriti fajl";
     }
 }
-void GlavniProzor::promeniJezik()
+void GlavniProzor::promeniJezikE()
 {
     if(ui->aEngleski->isChecked()){
 
@@ -679,18 +680,171 @@ void GlavniProzor::promeniJezik()
              qDebug("translation %d", ok);
               qApp->installTranslator(translator);
                 ui->retranslateUi(this);
+                //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+                //retranslate();
+                //DialogNovaOsoba *d=new DialogNovaOsoba();
+                //d->ui.retranslateUi(d);
+                //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+                //d1->ui.retranslateUi(d1);
                 qDebug() << "English";
+                ui->aNemacki->setChecked(false);
+                 ui->aSrpski->setChecked(false);
     }
     else if(ui->aNemacki->isChecked()){
         bool ok=translator->load("ProjectAlmond_ge.qm");
         qDebug("translation %d", ok);
          qApp->installTranslator(translator);
            ui->retranslateUi(this);
-           qDebug() << "German";
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           ui->aEngleski->setChecked(false);
+            ui->aSrpski->setChecked(false);
+           qDebug() << "Deutsch";
 
+    }
+    else {
+        ui->aSrpski->setChecked(true);
+        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije, a svejedno nece da vrati na pocetno stanje
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           ui->aEngleski->setChecked(false);
+            ui->aNemacki->setChecked(false);
+          qDebug() << "Srpski";
     }
 
 }
+
+void GlavniProzor::promeniJezikN()
+{
+    if(ui->aNemacki->isChecked()){
+            bool ok=translator->load("ProjectAlmond_ge.qm");
+            qDebug("translation %d", ok);
+             qApp->installTranslator(translator);
+               ui->retranslateUi(this);
+               //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+               //retranslate();
+               //DialogNovaOsoba *d=new DialogNovaOsoba();
+               //d->ui.retranslateUi(d);
+               //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+               //d1->ui.retranslateUi(d1);
+               ui->aEngleski->setChecked(false);
+                ui->aSrpski->setChecked(false);
+               qDebug() << "Deutsch";
+
+        }
+
+    else if(ui->aEngleski->isChecked()){
+
+        bool ok=translator->load("ProjectAlmond_en.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           qDebug() << "English";
+           ui->aNemacki->setChecked(false);
+            ui->aSrpski->setChecked(false);
+}
+    else {
+        ui->aSrpski->setChecked(true);
+        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije, a svejedno nece da vrati na pocetno stanje
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           ui->aEngleski->setChecked(false);
+            ui->aNemacki->setChecked(false);
+          qDebug() << "Srpski";
+    }
+
+}
+void GlavniProzor::promeniJezikS()
+{
+
+    if(ui->aSrpski->isChecked())
+    {
+        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije, a svejedno nece da vrati na pocetno stanje
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           ui->aEngleski->setChecked(false);
+            ui->aNemacki->setChecked(false);
+          qDebug() << "Srpski";
+    }
+    else if(ui->aEngleski->isChecked()){
+
+        bool ok=translator->load("ProjectAlmond_en.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           qDebug() << "English";
+           ui->aNemacki->setChecked(false);
+            ui->aSrpski->setChecked(false);
+}
+    else if(ui->aNemacki->isChecked()){
+            bool ok=translator->load("ProjectAlmond_ge.qm");
+            qDebug("translation %d", ok);
+             qApp->installTranslator(translator);
+               ui->retranslateUi(this);
+               //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+               //retranslate();
+               //DialogNovaOsoba *d=new DialogNovaOsoba();
+               //d->ui.retranslateUi(d);
+               //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+               //d1->ui.retranslateUi(d1);
+               ui->aEngleski->setChecked(false);
+                ui->aSrpski->setChecked(false);
+               qDebug() << "Deutsch";
+
+        }
+    else{
+        ui->aSrpski->setChecked(true);
+        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije, a svejedno nece da vrati na pocetno stanje
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           //ovde pokrecemo da se i ostali dialozi prevedu i sve sto treba rucno
+           //retranslate();
+           //DialogNovaOsoba *d=new DialogNovaOsoba();
+           //d->ui.retranslateUi(d);
+           //DialogIzmenaOsobe *d1=new DialogIzmenaOsobe();
+           //d1->ui.retranslateUi(d1);
+           ui->aEngleski->setChecked(false);
+            ui->aNemacki->setChecked(false);
+          qDebug() << "Srpski";
+    }
+
+}
+
+
 
 void GlavniProzor::osveziPrikazAlata(bool Vidljivost)
 {

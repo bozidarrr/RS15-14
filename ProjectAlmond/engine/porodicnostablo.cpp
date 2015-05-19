@@ -162,19 +162,124 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
-    //TO DO
+
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::ReadOnly)) {
         std::cout << "Ne moze da iscita fajl" << std::endl; //bice warning
         return false;
     }
 
-    //---BOZIDARE RADI---//
+    QDataStream ulaz(&fajl);
+
+    ulaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
+
+    int maxSifraOsobe=-1;
+    int maxSifraBraka=-1;
+    int maxSifraDeteta=-1;
+
+    ulaz >> _kljucnaOsoba;
+
+    int trenInt=0;
+
+    ulaz >> trenInt;
+    _sveOsobe.clear();
+    _sveOsobe.resize(trenInt);
+    Osoba trenOsoba;
+    Osoba *trenOsobaPokazivac=nullptr;
+    for(int i=0;i<trenInt;i++)
+    {
+        ulaz >> trenOsoba;
+        trenOsobaPokazivac=new Osoba(trenOsoba);
+        _sveOsobe.push_back(trenOsobaPokazivac);
+        if(maxSifraOsobe<trenOsoba.Sifra())maxSifraOsobe=trenOsoba.Sifra();
+
+    }
+
+    ulaz << trenInt;
+    _sveVeze.clear();
+    _sveVeze.resize(trenInt);
+    Brak trenBrak;
+    Brak *trenBrakPokazivac=nullptr;
+    for(int i=0;i<trenInt;i++)
+    {
+        ulaz >> trenBrak;
+        trenBrakPokazivac=new Brak(trenBrak);
+        _sveVeze.push_back(trenBrakPokazivac);
+        if(maxSifraBraka<trenBrak.Sifra())maxSifraBraka=trenBrak.Sifra();
+    }
+
+    ulaz << trenInt;
+    _svaDeca.clear();
+    _svaDeca.resize(trenInt);
+    Dete trenDete;
+    Dete *trenDetePokazivac=nullptr;
+    for(int i=0;i<trenInt;i++)
+    {
+        ulaz >> trenDete;
+        trenDetePokazivac=new Dete(trenDete);
+        _svaDeca.push_back(trenDetePokazivac);
+        if(maxSifraDeteta<trenDete.Sifra())maxSifraDeteta=trenDete.Sifra();
+    }
+
+    Osoba::postaviSledecuSifru(maxSifraOsobe+1);
+    Brak::postaviSledecuSifru(maxSifraBraka+1);
+    Dete::postaviSledecuSifru(maxSifraDeteta+1);
+
+    int sifraOsobe=0,sifraPorekla=0,sifraVeze=0,velicina=0;
+    trenOsobaPokazivac=nullptr;
+    do
+    {
+        ulaz  >> sifraOsobe;
+        if(sifraOsobe==-1)continue;
+        trenOsobaPokazivac=NadjiOsobuSifrom(sifraOsobe);
+        ulaz >> sifraPorekla;
+        if(sifraPorekla!=-1)trenOsobaPokazivac->PostaviPoreklo(NadjiDeteSifrom(sifraPorekla));
+        ulaz >> velicina;
+        trenOsobaPokazivac->SpisakVeza().resize(velicina);
+        for(int i=0;i<velicina;i++){
+            ulaz >> sifraVeze;
+            if(sifraVeze!=-1)
+                trenOsobaPokazivac->DodajVezu(NadjiBrakSifrom(sifraVeze));
+        }
+    }
+    while(sifraOsobe != -100);
+    int sifraDeteta=0;
+
+    trenBrakPokazivac=nullptr;
+    do
+    {
+        ulaz  >> sifraVeze;
+        if(sifraVeze==-2)continue;
+        trenBrakPokazivac=NadjiBrakSifrom(sifraVeze);
+        ulaz >> sifraOsobe;
+        if(sifraOsobe!=-1)trenBrakPokazivac->PostaviNasuOsobu(NadjiOsobuSifrom(sifraOsobe));
+        ulaz >> sifraOsobe;
+        if(sifraOsobe!=-1)trenBrakPokazivac->PostaviTudjuOsobu(NadjiOsobuSifrom(sifraOsobe));
+
+        ulaz >> velicina;
+        trenBrakPokazivac->SpisakDece().resize(velicina);
+        for(int i=0;i<velicina;i++){
+            ulaz >> sifraDeteta;
+            if(sifraDeteta!=-2)
+                trenBrakPokazivac->DodajDete(NadjiDeteSifrom(sifraDeteta));
+        }
+    }
+    while(sifraVeze != -200);
 
 
-    //---BOZIDARE RADI---//
+    trenBrakPokazivac=nullptr;
+    do
+    {
+        ulaz  >> sifraDeteta;
+        if(sifraDeteta==-3)continue;
+        trenDetePokazivac=NadjiDeteSifrom(sifraDeteta);
+        ulaz >> sifraOsobe;
+        if(sifraOsobe!=-1)trenDetePokazivac->PostaviPotomka(NadjiOsobuSifrom(sifraOsobe));
+        ulaz >> sifraVeze;
+        if(sifraVeze!=-1)trenDetePokazivac->PostaviRoditeljskiOdnos(NadjiBrakSifrom(sifraVeze));
 
-
+    }
+    while(sifraDeteta != -300);
 
     fajl.close();
     return true;
@@ -211,40 +316,31 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
         return false;
     }
-
     QDataStream izlaz(&fajl);
     izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
-
-
-
     izlaz << _kljucnaOsoba;
-
-
-
 
     izlaz << qint32(_sveOsobe.size());
     for(Osoba* osoba:_sveOsobe)
     {
+
         izlaz<<(*osoba);
     }
 
-
-
     izlaz << qint32(_sveVeze.size());
     for(Brak* brak:_sveVeze){
+
         izlaz<<(*brak);
     }
 
-
-
     izlaz << qint32(_svaDeca.size());
     for(Dete* dete:_svaDeca){
+
         izlaz<<(*dete);
     }
 
     std::vector<Osoba*>::iterator osoba=_sveOsobe.begin();
-
     std::vector<Osoba*>::iterator eo=_sveOsobe.end();
 
     std::vector<Brak*>::iterator brak;
@@ -254,28 +350,38 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     std::vector<Dete*>::iterator ed;
 
     for(;osoba!=eo;osoba++){
-        if((*osoba)->Poreklo()==nullptr)
-            izlaz << -1;
-        else
-            izlaz << qint32((*osoba)->Poreklo()->Sifra());
 
-        izlaz << qint32((*osoba)->SpisakVeza().size());
+        if((*osoba)!=nullptr){
+            izlaz << qint32((*osoba)->Sifra());
+            if((*osoba)->Poreklo()==nullptr)
+                izlaz << -1;
+            else
+                izlaz << qint32((*osoba)->Poreklo()->Sifra());
 
-        brak= (*osoba)->SpisakVeza().begin();
-        eb=(*osoba)->SpisakVeza().end();
-        for(;brak!=eb;brak++){
-            izlaz << qint32((*brak)->Sifra());
+            izlaz << qint32((*osoba)->SpisakVeza().size());
+
+            brak= (*osoba)->SpisakVeza().begin();
+            eb=(*osoba)->SpisakVeza().end();
+            for(;brak!=eb;brak++){
+                if((*brak)!=nullptr)
+                    izlaz << qint32((*brak)->Sifra());
+                else
+                    izlaz << -1;
+            }
         }
+        else
+            izlaz << -1;
     }
+
+    izlaz << -100;//da bih znao da sam zavrsio sa ucitavanjem, da sledi ucitavanje brakova
 
     brak=_sveVeze.begin();
     eb=_sveVeze.end();
     for(;brak!=eb;brak++){
         if((*brak)!=nullptr){
-
+            izlaz << qint32((*brak)->Sifra());
             if((*brak)->NasaOsoba()==nullptr)izlaz << -1;
             else izlaz << qint32((*brak)->NasaOsoba()->Sifra());
-
 
             if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
             else izlaz << qint32((*brak)->TudjaOsoba()->Sifra());
@@ -287,13 +393,18 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
             for(;dete!=ed;dete++){
                 if((*dete)!=nullptr)
                     izlaz << qint32((*dete)->Sifra());
+                else izlaz << -2;
             }
         }
+        else
+            izlaz << -2;
+
     }
+
+    izlaz << -200;//da bih znao da sam zavrsio sa ucitavanjem, da predjem na ucitavanje dece
 
     dete=_svaDeca.begin();
     ed=_svaDeca.end();
-
     for(;dete!=ed;dete++){
         if((*dete)!=nullptr){
             if((*dete)->Potomak()==nullptr)izlaz << -1;
@@ -302,7 +413,11 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
             if((*dete)->RoditeljskiOdnos()==nullptr) izlaz << -1;
             else izlaz << qint32((*dete)->RoditeljskiOdnos()->Sifra());
         }
+        else
+            izlaz << -3;
     }
+
+    izlaz << -300; //da bih konacno zavrsio sa ucitavanjem i otisao kuci svojoj zeni i deci
 
     fajl.close();
     return true;

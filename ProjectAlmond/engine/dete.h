@@ -11,7 +11,9 @@ class Osoba;
 class Dete
 {
 public:
+    Dete();
     Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija="");
+    Dete(const Dete& drugo);
     ~Dete();
 
     short int Sifra();
@@ -19,6 +21,10 @@ public:
     Brak* RoditeljskiOdnos();
     std::string& Trivija();
     //  QDate& DatumUsvajanja();
+
+    static void postaviSledecuSifru(int sifra);
+    void PostaviPotomka(Osoba* potomak);
+    void PostaviRoditeljskiOdnos(Brak* odnos);
 
 
     bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno

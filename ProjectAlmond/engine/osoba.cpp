@@ -14,6 +14,13 @@ Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
     _spisakVeza.clear();
 }
 
+Osoba::Osoba(const Osoba& druga)
+    :_sifra(druga._sifra),_nepoznata(druga._nepoznata),_ime(druga._ime),_prezime(druga._prezime),_pol(druga._pol),_krvniSrodnik(druga._krvniSrodnik),_spisakVeza(druga._spisakVeza.size())
+{
+    _deteOd=nullptr;
+    _spisakVeza.clear();
+}
+
 
 Osoba::~Osoba()
 {
@@ -92,6 +99,11 @@ Dete* Osoba::Poreklo()
 void Osoba::PostaviPoreklo(Dete* poreklo)
 {
     _deteOd=poreklo;
+}
+
+void Osoba::postaviSledecuSifru(int sifra)
+{
+    _sledecaSifra=sifra;
 }
 
 void Osoba::DodajVezu(Brak* veza)
@@ -173,6 +185,7 @@ QDataStream& operator>>(QDataStream &out,Osoba& osoba)
     int velicinaSpiskaVeza;
     out >> velicinaSpiskaVeza;
     osoba._spisakVeza.resize(velicinaSpiskaVeza);
+    osoba._deteOd=nullptr;
 
     return out;
 }
