@@ -1,6 +1,6 @@
 #ifndef FILTEROBJECT_H
 #define FILTEROBJECT_H
-//#include <GUI/widgetosoba.h>
+/*
 #include <QObject>
 #include <QEvent>
 #include <QDebug>
@@ -8,17 +8,6 @@
 #include <QMouseEvent>
 #include <QPoint>
 
-class WidgetOsoba;
-/**
- * @brief The FilterObject class
- * Mozda bi ovo resilo problem kliktanja :)
- * implementiramo ovde sta se radi na koji event
- * instaliramo na koliko god widget-a da treba
- * Osoba, Relacija itd...
- * I ponasace se u stvari isto
- *
- *
- */
 class FilterObject : public QObject
 {
     Q_OBJECT
@@ -35,5 +24,5 @@ public slots:
 private:
     okvirStabla *_okvir;
 };
-
+*/
 #endif // FILTEROBJECT_H

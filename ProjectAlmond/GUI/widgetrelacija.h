@@ -1,6 +1,6 @@
 #ifndef WIDGETRELACIJA_H
 #define WIDGETRELACIJA_H
-
+/*
 
 #include <QWidget>
 
@@ -45,7 +45,7 @@ private:
     int _y;
     GlavniProzor *w;
 };
-
+*/
 
 #endif // WIDGETRELACIJA_H
 

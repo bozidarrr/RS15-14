@@ -1,4 +1,4 @@
-#include "okvirstabla.h"
+/*#include "okvirstabla.h"
 #include "ui_okvirstabla.h"
 #include <QtGui>
 #include<iostream>
@@ -88,4 +88,4 @@ void okvirStabla::Y2(int y2)
 {
     _drugiY = y2;
 }
-
+*/

@@ -1,6 +1,6 @@
 #ifndef WIDGETOSOBA_H
 #define WIDGETOSOBA_H
-
+/*
 #include <QWidget>
 #include <QTextBrowser>
 #include <QPushButton>
@@ -52,5 +52,5 @@ private:
 
     GlavniProzor *w;
 };
-
+*/
 #endif // WIDGETOSOBA_H

@@ -1,9 +1,9 @@
 #include "GUI/gosoba.h"
 
-gOsoba::gOsoba(short sifra)
+gOsoba::gOsoba(short sifra, QString ime_prezime)
     :_sifra(sifra)
 {
-
+    setData(IME_PREZIME, ime_prezime);
 }
 
 gOsoba::~gOsoba()
@@ -13,19 +13,38 @@ gOsoba::~gOsoba()
 
 QRectF gOsoba::boundingRect() const
 {
-    return QRectF();
+    qreal d = 1;
+    return QRectF(-40-d, -20-d, 80+d, 40+d);
 }
 
-QPainterPath gOsoba::shape() const
-{
-    return QPainterPath();
-}
+//QPainterPath gOsoba::shape() const
+//{
+//    return QPainterPath();
+//}
 
 void gOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //samo da se vidi nesto
-    QColor color(0, 255, 0);
+    QColor color(Qt::darkGreen);
     painter->setBrush(color);
-    painter->drawEllipse(this->pos(), 20, 20);
+    painter->drawEllipse(-40, -20, 80, 40);
+    //painter->setPen(Qt::darkRed);
+    //painter->drawText(-40, 30, "ime i prezime");
 }
+
+int gOsoba::type() const
+{
+    //ovo da bi qgraphicscast funkcionisao
+    return Type;
+}
+
+short gOsoba::Sifra() const
+{
+    return _sifra;
+}
+
+//void gOsoba::mousePressEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    qDebug() << "pritisnuto na osobu";
+//}
 

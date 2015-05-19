@@ -1,4 +1,4 @@
-#include "alati/filterobject.h"
+/*#include "alati/filterobject.h"
 
 FilterObject::FilterObject(okvirStabla *okvir, QObject *parent) : QObject(parent), _okvir(okvir)
 {}
@@ -49,4 +49,4 @@ bool FilterObject::eventFilter(QObject *o, QEvent *e)
 
     return false;
 }
-
+*/

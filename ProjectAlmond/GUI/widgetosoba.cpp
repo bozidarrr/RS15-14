@@ -1,4 +1,4 @@
-#include "widgetosoba.h"
+/*#include "widgetosoba.h"
 #include "ui_widgetosoba.h"
 #include "GUI/glavniprozor.h"
 #include <iostream>
@@ -85,4 +85,4 @@ void WidgetOsoba::postaviImePrezime(const std::string &ip)
 //    return false;
 //}
 
-
+*/
