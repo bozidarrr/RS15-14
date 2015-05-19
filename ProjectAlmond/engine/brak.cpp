@@ -17,18 +17,20 @@ Brak::Brak(const Brak &drugi)
 
 Brak::~Brak()
 {
-    _tudjaOsoba->Raskini(this);//molim osobu koja nije u rodbinskoj liniji da ukloni brak, ne bih li mogao da je obrisem bez beskonacne rekurzije
-   if(!_tudjaOsoba->VecSeBrisem())delete _tudjaOsoba;
+    _vecSeBrisem=true;
+    if(!_preskociRazvezivanje){
+        _tudjaOsoba->Raskini(this);//molim osobu koja nije u rodbinskoj liniji da ukloni brak, ne bih li mogao da je obrisem bez beskonacne rekurzije
+        if(!_tudjaOsoba->VecSeBrisem())delete _tudjaOsoba;
 
-    _nasaOsoba->Raskini(this);//molim osobu koja jeste u rodbinskoj linija da ukloni brak, ali nju ne brisem, ona ostaje
+        _nasaOsoba->Raskini(this);//molim osobu koja jeste u rodbinskoj linija da ukloni brak, ali nju ne brisem, ona ostaje
 
-    std::vector<Dete*>::iterator b=_spisakDece.begin();
-    std::vector<Dete*>::iterator e=_spisakDece.end();
-    for(;b!=e;b++)//brisem svako dete-relaciju iz spiska, koje dalje pokrece brisanje svih osoba potomaka
-    {
-        delete *b;
+        std::vector<Dete*>::iterator b=_spisakDece.begin();
+        std::vector<Dete*>::iterator e=_spisakDece.end();
+        for(;b!=e;b++)//brisem svako dete-relaciju iz spiska, koje dalje pokrece brisanje svih osoba potomaka
+        {
+            delete *b;
+        }
     }
-
 }
 
 short int Brak::Sifra()
@@ -136,6 +138,16 @@ bool Brak::RaskiniSveVeze()
     _spisakDece.clear();
     return true;
 
+}
+
+bool Brak::VecSeBrisem()
+{
+    return _vecSeBrisem;
+}
+
+void Brak::PreskociRazvezivanje()
+{
+    _preskociRazvezivanje=true;
 }
 
 QDataStream& operator<<(QDataStream &out,Brak& brak)

@@ -183,7 +183,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     ulaz >> trenInt;
     _sveOsobe.clear();
-    _sveOsobe.resize(trenInt);
+   // _sveOsobe.resize(trenInt);
     Osoba trenOsoba;
     Osoba *trenOsobaPokazivac=nullptr;
     for(int i=0;i<trenInt;i++)
@@ -195,9 +195,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     }
 
-    ulaz << trenInt;
+    ulaz >> trenInt;
     _sveVeze.clear();
-    _sveVeze.resize(trenInt);
+    //_sveVeze.resize(trenInt);
     Brak trenBrak;
     Brak *trenBrakPokazivac=nullptr;
     for(int i=0;i<trenInt;i++)
@@ -208,9 +208,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         if(maxSifraBraka<trenBrak.Sifra())maxSifraBraka=trenBrak.Sifra();
     }
 
-    ulaz << trenInt;
+    ulaz >> trenInt;
     _svaDeca.clear();
-    _svaDeca.resize(trenInt);
+    //_svaDeca.resize(trenInt);
     Dete trenDete;
     Dete *trenDetePokazivac=nullptr;
     for(int i=0;i<trenInt;i++)
@@ -227,15 +227,17 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     int sifraOsobe=0,sifraPorekla=0,sifraVeze=0,velicina=0;
     trenOsobaPokazivac=nullptr;
+
     do
     {
         ulaz  >> sifraOsobe;
         if(sifraOsobe==-1)continue;
+        if(sifraOsobe==-100)break;
         trenOsobaPokazivac=NadjiOsobuSifrom(sifraOsobe);
         ulaz >> sifraPorekla;
         if(sifraPorekla!=-1)trenOsobaPokazivac->PostaviPoreklo(NadjiDeteSifrom(sifraPorekla));
         ulaz >> velicina;
-        trenOsobaPokazivac->SpisakVeza().resize(velicina);
+        trenOsobaPokazivac->SpisakVeza().clear();//.resize(velicina);
         for(int i=0;i<velicina;i++){
             ulaz >> sifraVeze;
             if(sifraVeze!=-1)
@@ -250,6 +252,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     {
         ulaz  >> sifraVeze;
         if(sifraVeze==-2)continue;
+        if(sifraVeze==-200)break;
         trenBrakPokazivac=NadjiBrakSifrom(sifraVeze);
         ulaz >> sifraOsobe;
         if(sifraOsobe!=-1)trenBrakPokazivac->PostaviNasuOsobu(NadjiOsobuSifrom(sifraOsobe));
@@ -257,7 +260,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         if(sifraOsobe!=-1)trenBrakPokazivac->PostaviTudjuOsobu(NadjiOsobuSifrom(sifraOsobe));
 
         ulaz >> velicina;
-        trenBrakPokazivac->SpisakDece().resize(velicina);
+        trenBrakPokazivac->SpisakDece().clear();//.resize(velicina);
         for(int i=0;i<velicina;i++){
             ulaz >> sifraDeteta;
             if(sifraDeteta!=-2)
@@ -272,6 +275,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     {
         ulaz  >> sifraDeteta;
         if(sifraDeteta==-3)continue;
+        if(sifraDeteta==-300)break;
         trenDetePokazivac=NadjiDeteSifrom(sifraDeteta);
         ulaz >> sifraOsobe;
         if(sifraOsobe!=-1)trenDetePokazivac->PostaviPotomka(NadjiOsobuSifrom(sifraOsobe));
@@ -282,6 +286,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     while(sifraDeteta != -300);
 
     fajl.close();
+    trenDete.PreskociRazvezivanje();
+    trenOsoba.PreskociRazvezivanje();
+    trenBrak.PreskociRazvezivanje();
     return true;
 }
 
