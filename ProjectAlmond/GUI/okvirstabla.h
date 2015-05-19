@@ -1,6 +1,6 @@
 #ifndef OKVIRSTABLA_H
 #define OKVIRSTABLA_H
-
+/*
 #include <QWidget>
 #include <QLine>
 #include <QPoint>
@@ -44,5 +44,5 @@ private:
     std::vector<QLine *> zaCrtanje;
 
 };
-
+*/
 #endif // OKVIRSTABLA_H

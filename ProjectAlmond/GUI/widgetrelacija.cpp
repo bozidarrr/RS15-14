@@ -1,4 +1,4 @@
-#include "widgetrelacija.h"
+/*#include "widgetrelacija.h"
 #include "ui_widgetrelacija.h"
 #include "GUI/glavniprozor.h"
 #include <iostream>
@@ -43,6 +43,6 @@ void WidgetRelacija::setY(int y)
     //provera da li je u redu!
     _y=y;
 }
-
+*/
 
 
