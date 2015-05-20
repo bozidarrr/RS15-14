@@ -17,11 +17,6 @@ SOURCES += main.cpp\
     engine/osoba.cpp \
     engine/porodicnostablo.cpp \
     GUI/dialognovaosoba.cpp \
-    GUI/widgetosoba.cpp \
-    GUI/okvirstabla.cpp \
-    alati/filterobject.cpp \
-    alati/filterzalabelu.cpp \
-    GUI/widgetrelacija.cpp \
     GUI/glavniprozor.cpp \
     engine/dete.cpp \
     engine/brak.cpp \
@@ -36,11 +31,6 @@ HEADERS  += \
     engine/osoba.h \
     engine/porodicnostablo.h \
     GUI/dialognovaosoba.h \
-    GUI/widgetosoba.h \
-    GUI/okvirstabla.h \
-    alati/filterobject.h \
-    alati/filterzalabelu.h \
-    GUI/widgetrelacija.h \
     GUI/glavniprozor.h \
     engine/dete.h \
     engine/brak.h \
@@ -51,10 +41,7 @@ HEADERS  += \
     GUI/dijalogrelacija.h
 
 FORMS    += \
-    widgetosoba.ui \
     dialognovaosoba.ui \
-    GUI/okvirstabla.ui \
-    widgetrelacija.ui \
     glavniprozor.ui \
     GUI/dijalogizmenaosobe.ui \
     GUI/dijalogrelacija.ui
