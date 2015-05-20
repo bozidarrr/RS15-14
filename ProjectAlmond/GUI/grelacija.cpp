@@ -3,6 +3,7 @@
 gRelacija::gRelacija(short sifra, QPointF prva, QPointF druga, bool brak)
     : _sifra(sifra), _prva(prva), _druga(druga), _brak(brak)
 {
+    postaviNaSredinu();
 }
 
 gRelacija::~gRelacija()
@@ -16,7 +17,7 @@ QRectF gRelacija::boundingRect() const
 
 void gRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    postaviNaSredinu();
+    //postaviNaSredinu();
     painter->setPen(Qt::green);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);

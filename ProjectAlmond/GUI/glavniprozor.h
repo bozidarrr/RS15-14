@@ -72,7 +72,6 @@ private:
     void kreirajOpcije();
     void kreirajToolbar();
     void kreirajMestoZaInfo();
-    void kreirajStatusBar();
     bool nastaviti();//provera da li je sve sacuvano pre izlaska i sl.
     bool snimiIzmene(const QString &imeFajla);//cuvamo u fajl
     void obnoviSkoroOtvarane();//recentFileList
@@ -93,7 +92,6 @@ private:
 
 public Q_SLOTS:
     void prikaziToolbar();
-    void promeniKursor();//mozda...
     void novoStablo();//File|New
     void otvoriPostojeceStablo();//File|Open
     void closeEvent(QCloseEvent *event);//File|Exit

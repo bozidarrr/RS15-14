@@ -106,7 +106,6 @@ void GlavniProzor::kreirajOpcije()
 {
     connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
     connect(ui->aInformacije, SIGNAL(triggered()), this, SLOT(prikaziToolbar()));
-    connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
 
     connect(ui->aNovoStablo, SIGNAL(triggered()), this, SLOT(novoStablo()));
     connect(ui->aOtvori, SIGNAL(triggered()), this, SLOT(otvoriPostojeceStablo()));
@@ -255,10 +254,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
 }
 
 short GlavniProzor::dodajNovuRelaciju(short sifra1, short sifra2, bool brak)
-{//TO DO
-    /* dodajNovuRelaciju(sifra1, sifra2)?
-        sifra1 -> pos, sifra2 -> pos
-    */
+{
     short int novaSifra = -1;
     gRelacija *novaRelacija;
     if (brak)
@@ -278,15 +274,11 @@ short GlavniProzor::dodajNovuRelaciju(short sifra1, short sifra2, bool brak)
             novaRelacija = new gRelacija(novaSifra, _pozicijeBrakova[sifra1], _pozicijeOsoba[sifra2], false);
         }
     }
-
-
-///*novu "osobu" crtamo na mestu gde je pusten mis, "iznad" */
     if (novaRelacija != nullptr)
     {
         novaRelacija->setZValue(1);
         scena->addItem(novaRelacija);
     }
-
     return novaSifra;
 }
 
@@ -303,12 +295,6 @@ short GlavniProzor::izmeniOsobu(short sifra)
     }
     delete d;
     return -1;
-}
-
-void GlavniProzor::promeniKursor()
-{
-    //TO DO
-    //this->setCursor(Qt::CursorShape::ClosedHandCursor);
 }
 
 bool GlavniProzor::nastaviti()
@@ -337,7 +323,6 @@ bool GlavniProzor::nastaviti()
 
 bool GlavniProzor::snimiIzmene(const QString &imeFajla)
 {
-    //TO DO
     if (!stablo->IspisiFajl(imeFajla))
     {
         ui->statusBar->showMessage(tr("Snimanje otkazano."), 2000);
@@ -391,7 +376,7 @@ void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
     {
         skoroOtvarani.removeAll(otvoreniFajl);
         skoroOtvarani.prepend(otvoreniFajl);
-        qDebug() << "uneo fajl u skoroOtvarane";
+        //qDebug() << "uneo fajl u skoroOtvarane";
         foreach (QWidget *win, QApplication::topLevelWidgets())
         {
             if (GlavniProzor  *glavni = qobject_cast<GlavniProzor*>(win))
@@ -442,20 +427,16 @@ void GlavniProzor::otvoriPostojeceStablo()
     //TO DO
     if (nastaviti())
     {
-        qDebug() << "treba otvoriti postojeci fajl";
+        //qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
                                                         tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
         if (!imeFajla.isEmpty())
         {
-            qDebug() << "nasli fajl i treba  ga otvoriti";
+            //qDebug() << "nasli fajl i treba  ga otvoriti";
             otvoriFajl(imeFajla);
         }
-        else
-            qDebug() << "odustali od otvaranja";
     }
-    else
-        qDebug() << "ne otvarati";
 }
 
 void GlavniProzor::closeEvent(QCloseEvent *event)
@@ -463,12 +444,12 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
     if (nastaviti())
     {
         writeSettings();
-        qDebug() << "Zatvaramo fajl";
+        //qDebug() << "Zatvaramo fajl";
         event->accept();
     }
     else
     {
-        qDebug() << "Otkazano izlazenje";
+        //qDebug() << "Otkazano izlazenje";
         event->ignore();
     }
 }
@@ -494,8 +475,11 @@ void GlavniProzor::otvoriSkoroOtvaraniFajl()
     if (nastaviti())
     {
         QAction *akcija = qobject_cast<QAction *>(sender());
-        if (akcija != nullptr)
-            qDebug() << "Otvoriti fajl";
+        if (akcija)
+        {
+            otvoriFajl(akcija->data().toString());
+            //qDebug() << "Otvoriti fajl";
+        }
     }
 }
 void GlavniProzor::promeniJezikE()
@@ -765,10 +749,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             if (novaSifra < 0)
                 return;
             qDebug() << "rodilo se dete";
-            //dodajNovuRelaciju(brak->Sifra(), novaSifraOsobe, false);
-            gRelacija *dete = new gRelacija(novaSifra, pogled->mapToScene(prva), pogled->mapToScene(druga), false);
-            dete->setZValue(1);
-            scena->addItem(dete);
+            dodajNovuRelaciju(brak->Sifra(), novaSifraOsobe, false);
+            //gRelacija *dete = new gRelacija(novaSifra, pogled->mapToScene(prva), pogled->mapToScene(druga), false);
+            //dete->setZValue(1);
+            //scena->addItem(dete);
             setWindowModified(true);
         }
     }
