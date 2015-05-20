@@ -53,7 +53,9 @@ Osoba::~Osoba()
                 for(;b!=e;b++)
                 {
                     if(!(*b)->VecSeBrisem())
-                    delete ((*b)->TudjaOsoba());
+                            ;
+                        //izgleda je ovde greska...
+                    //delete ((*b)->TudjaOsoba());
                 }
             }
         }

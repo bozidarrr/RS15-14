@@ -79,9 +79,12 @@ private:
 
     /*menjanje stabla*/
     short izmeniOsobu(short sifra);
-    short dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
+    //short dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
+    GOsoba* dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
     short ukloniOsobu(short sifra);
-    short dodajNovuRelaciju(short sifra1, short sifra2, bool brak);
+    //short dodajNovuRelaciju(short sifra1, short sifra2, bool brak);
+    short dodajNovoDete(GRelacija *brak, GOsoba *dete);
+    short dodajNoviBrak(GOsoba *prva, GOsoba *druga);
 
     Stablo *pogled;
     QGraphicsScene *scena;
