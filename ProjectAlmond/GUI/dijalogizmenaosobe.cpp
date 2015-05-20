@@ -21,7 +21,6 @@ DijalogIzmenaOsobe::~DijalogIzmenaOsobe()
 void DijalogIzmenaOsobe::popuniDugmice()
 {
     ok = new QPushButton(tr("Primeni izmene"));
-    //ok->setEnabled(true);
     cancel = new QPushButton(tr("Ponisti"));
     cancel->setToolTip(tr("Nijedna izmena nece ostati zapamcena."));
 

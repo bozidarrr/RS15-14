@@ -1,22 +1,19 @@
 #ifndef GLAVNIPROZOR_H
 #define GLAVNIPROZOR_H
 #include "GUI/stablo.h"
-
 #include <QApplication>
 #include <QMainWindow>
-#include <engine/porodicnostablo.h>
+#include "engine/porodicnostablo.h"
 #include <QButtonGroup>
 #include <QToolBar>
 #include <QLabel>
 #include <QPushButton>
 #include <QDockWidget>
-#include <QPainter>
 #include "dijalogizmenaosobe.h"
 #include "dialognovaosoba.h"
+#include "dijalogrelacija.h"
 #include <string>
-#include <iostream>
 #include "ui_glavniprozor.h"
-#include <vector>
 #include <map>
 #include <QDebug>
 #include <QMessageBox>
@@ -26,7 +23,7 @@
 #include <QAction>
 #include <QSettings>
 #include <QTranslator>
-
+#include <QTransform>
 #include <QGraphicsScene>
 #include "gosoba.h"
 #include "grelacija.h"
@@ -44,7 +41,7 @@ public:
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
 
-    void popuniInformacije(short sifra);
+    void popuniInformacije(short sifra, int tip);//za sad neka ga ovako, tip 0 -> osoba, tip 1 -> brak, tip 2 -> dete
 
 private:
     Ui::GlavniProzor *ui;

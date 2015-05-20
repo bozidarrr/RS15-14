@@ -3,10 +3,9 @@
 //#include <QRegExp>
 //#include <QRegExpValidator>
 
-DialogNovaOsoba::DialogNovaOsoba(bool saRelacijom, QWidget *parent) :
+DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogNovaOsoba),
-    _saRelacijom(saRelacijom)
+    ui(new Ui::DialogNovaOsoba)
 {
     ui->setupUi(this);
     setModal(true);
@@ -17,14 +16,6 @@ DialogNovaOsoba::DialogNovaOsoba(bool saRelacijom, QWidget *parent) :
     ui->chkSmrt->setToolTip(tr("Osoba je ziva, ili je datum smrti nepoznat"));
     connect(ui->chkSmrt,SIGNAL(stateChanged(int)),this,SLOT(on_chkSmrt_stateChanged(int)));
     connect(ui->chkNepoznatDR,SIGNAL(stateChanged(int)),this,SLOT(on_chkNepoznatDR_stateChanged(int)));
-
-    if(_saRelacijom)
-    {
-        labelaTrivija = new QLabel("Trivije o relaciji");
-        ui->hlTrivija->addWidget(labelaTrivija);
-        trivija = new QTextEdit();
-        ui->hlTrivija->addWidget(trivija, 1);
-    }
 }
 
 DialogNovaOsoba::~DialogNovaOsoba()
@@ -32,7 +23,7 @@ DialogNovaOsoba::~DialogNovaOsoba()
     delete ui;
 }
 
-void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt, QString &triv)
+void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
 {
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
@@ -41,22 +32,15 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
         rodjenje = ui->unosRodjenje->date();
     if (ui->chkSmrt->isChecked() == false)
            smrt = ui->UnosSmrt->date();
-    if(_saRelacijom)
-        triv = trivija->toPlainText();
-    else
-        triv = "";
 }
 
 void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol,
-                                    std::string &rodjenje, std::string &smrt, std::string &trivija)
+                                    std::string &rodjenje, std::string &smrt)
 {
-    if (ui->checkBox->isChecked())
-        return;
-
-    QString _ime, _prezime, _pol, _trivija;
+    QString _ime, _prezime, _pol;
     QDate _rodjenje, _smrt;
 
-    popuniPodatke(_ime, _prezime, _pol, _rodjenje, _smrt, _trivija);
+    popuniPodatke(_ime, _prezime, _pol, _rodjenje, _smrt);
 
     ime = _ime.QString::toStdString();
     prezime = _prezime.QString::toStdString();
@@ -69,7 +53,6 @@ void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char
         smrt = "";
     else
         smrt = _smrt.toString("dd.MM.yyyy.").toStdString();
-    trivija = _trivija.toStdString();
 }
 
 void DialogNovaOsoba::promenaUnosa()
@@ -91,9 +74,6 @@ void DialogNovaOsoba::popuniDugmice()
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
-    ok->show();
-    cancel->show();
 }
 
 void DialogNovaOsoba::postaviProvere()
@@ -128,7 +108,5 @@ void DialogNovaOsoba::on_checkBox_stateChanged(int arg1)
     ui->chkNepoznatDR->setDisabled(arg1);
     ui->chkSmrt->setDisabled(arg1);
     ui->unosPol->setDisabled(arg1);
-    if (_saRelacijom)
-        trivija->setDisabled(arg1);
     promenaUnosa();
 }

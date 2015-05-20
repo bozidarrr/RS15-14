@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     GUI/dijalogizmenaosobe.cpp \
     GUI/stablo.cpp \
     GUI/gosoba.cpp \
-    GUI/grelacija.cpp
+    GUI/grelacija.cpp \
+    GUI/dijalogrelacija.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -46,7 +47,8 @@ HEADERS  += \
     GUI/dijalogizmenaosobe.h \
     GUI/stablo.h \
     GUI/gosoba.h \
-    GUI/grelacija.h
+    GUI/grelacija.h \
+    GUI/dijalogrelacija.h
 
 FORMS    += \
     widgetosoba.ui \
@@ -54,7 +56,8 @@ FORMS    += \
     GUI/okvirstabla.ui \
     widgetrelacija.ui \
     glavniprozor.ui \
-    GUI/dijalogizmenaosobe.ui
+    GUI/dijalogizmenaosobe.ui \
+    GUI/dijalogrelacija.ui
 
 RESOURCES += \
     slike.qrc
