@@ -22,9 +22,9 @@ SOURCES += main.cpp\
     engine/brak.cpp \
     GUI/dijalogizmenaosobe.cpp \
     GUI/stablo.cpp \
+    GUI/dijalogrelacija.cpp \
     GUI/gosoba.cpp \
-    GUI/grelacija.cpp \
-    GUI/dijalogrelacija.cpp
+    GUI/grelacija.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -36,9 +36,9 @@ HEADERS  += \
     engine/brak.h \
     GUI/dijalogizmenaosobe.h \
     GUI/stablo.h \
+    GUI/dijalogrelacija.h \
     GUI/gosoba.h \
-    GUI/grelacija.h \
-    GUI/dijalogrelacija.h
+    GUI/grelacija.h
 
 FORMS    += \
     dialognovaosoba.ui \

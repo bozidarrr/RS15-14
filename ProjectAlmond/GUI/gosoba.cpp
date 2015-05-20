@@ -1,17 +1,16 @@
-#include "GUI/gosoba.h"
+#include "gosoba.h"
 
-gOsoba::gOsoba(short sifra, QString ime_prezime)
+GOsoba::GOsoba(short sifra, QString ime_prezime)
     :_sifra(sifra)
 {
-    setData(IME_PREZIME, ime_prezime);
 }
 
-gOsoba::~gOsoba()
+GOsoba::~GOsoba()
 {
 
 }
 
-QRectF gOsoba::boundingRect() const
+QRectF GOsoba::boundingRect() const
 {
     qreal d = 1;
     return QRectF(-40-d, -20-d, 80+d, 40+d);
@@ -22,7 +21,7 @@ QRectF gOsoba::boundingRect() const
 //    return QPainterPath();
 //}
 
-void gOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void GOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //samo da se vidi nesto
     QColor color(Qt::darkGreen);
@@ -32,19 +31,18 @@ void gOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     //painter->drawText(-40, 30, "ime i prezime");
 }
 
-int gOsoba::type() const
+int GOsoba::type() const
 {
     //ovo da bi qgraphicscast funkcionisao
     return Type;
 }
 
-short gOsoba::Sifra() const
+short GOsoba::Sifra() const
 {
     return _sifra;
 }
 
-//void gOsoba::mousePressEvent(QGraphicsSceneMouseEvent *event)
-//{
-//    qDebug() << "pritisnuto na osobu";
-//}
-
+void GOsoba::obavestiRelacije()
+{
+    emit pomerilaSe(pos());
+}
