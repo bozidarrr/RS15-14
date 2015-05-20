@@ -1,10 +1,5 @@
 #include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
-#include "GUI/dialognovaosoba.h"
-#include <algorithm>
-
-#include <QGraphicsRectItem>
-#include <QTransform>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -70,17 +65,24 @@ GlavniProzor::~GlavniProzor()
 
 }
 
-void GlavniProzor::popuniInformacije(short sifra)
+void GlavniProzor::popuniInformacije(short sifra, int tip)
 {
     if (sifra == -1)
     {
         Labela->setText("");
         return;
     }
-    Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
-    //Neka provera da li je osoba poznata ili ne
-    if (osoba != nullptr)
-        Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    if (tip == 0)
+    {
+        Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
+        //Neka provera da li je osoba poznata ili ne
+        if (osoba)
+            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+    }
+    if (tip == 1)
+        Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
+    if (tip == 2)
+        Labela->setText(QString::fromStdString(stablo->NadjiDeteSifrom(sifra)->Trivija()));
 }
 
 void GlavniProzor::prikaziToolbar()
@@ -106,7 +108,6 @@ void GlavniProzor::kreirajOpcije()
 {
     connect(ui->aAlati,SIGNAL(triggered()),this,SLOT(prikaziToolbar()));
     connect(ui->aInformacije, SIGNAL(triggered()), this, SLOT(prikaziToolbar()));
-    connect(tbDetalji,SIGNAL(clicked()),this,SLOT(promeniKursor()));
 
     connect(ui->aNovoStablo, SIGNAL(triggered()), this, SLOT(novoStablo()));
     connect(ui->aOtvori, SIGNAL(triggered()), this, SLOT(otvoriPostojeceStablo()));
@@ -190,13 +191,13 @@ void GlavniProzor::kreirajMestoZaInfo()
 short int GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
 {
     short int novaSifra = -1;
-    DialogNovaOsoba *d = new DialogNovaOsoba(true, this);
+    DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
-        std::string ime, prezime, rodjenje, smrt, trivija;
+        std::string ime, prezime, rodjenje, smrt;
         char pol;
 
-        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt, trivija);
+        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
 
         novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         if (novaSifra < 0)
@@ -255,38 +256,39 @@ short GlavniProzor::ukloniOsobu(short sifra)
 }
 
 short GlavniProzor::dodajNovuRelaciju(short sifra1, short sifra2, bool brak)
-{//TO DO
-    /* dodajNovuRelaciju(sifra1, sifra2)?
-        sifra1 -> pos, sifra2 -> pos
-    */
+{
+    DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     gRelacija *novaRelacija;
-    if (brak)
+    std::string trivija;
+
+    if (d->exec())
     {
-        novaSifra = stablo->DodajBrak(sifra1, sifra2);
-        if (novaSifra >= 0)
+        d->popuniPodatke(trivija);
+        if (brak)
         {
-            novaRelacija = new gRelacija(novaSifra, _pozicijeOsoba[sifra1], _pozicijeOsoba[sifra2], true);
-            _pozicijeBrakova[novaSifra] = novaRelacija->pos();
+            novaSifra = stablo->DodajBrak(sifra1, sifra2, trivija);
+            if (novaSifra >= 0)
+            {
+                novaRelacija = new gRelacija(novaSifra, _pozicijeOsoba[sifra1], _pozicijeOsoba[sifra2], true);
+                _pozicijeBrakova[novaSifra] = novaRelacija->pos();
+            }
+        }
+        else
+        {
+            novaSifra = stablo->DodajDete(sifra1, sifra2, trivija);
+            if (novaSifra >= 0)
+            {
+                novaRelacija = new gRelacija(novaSifra, _pozicijeBrakova[sifra1], _pozicijeOsoba[sifra2], false);
+            }
+        }
+        if (novaRelacija != nullptr)
+        {
+            novaRelacija->setZValue(1);
+            scena->addItem(novaRelacija);
         }
     }
-    else
-    {
-        novaSifra = stablo->DodajDete(sifra1, sifra2);
-        if (novaSifra >= 0)
-        {
-            novaRelacija = new gRelacija(novaSifra, _pozicijeBrakova[sifra1], _pozicijeOsoba[sifra2], false);
-        }
-    }
-
-
-///*novu "osobu" crtamo na mestu gde je pusten mis, "iznad" */
-    if (novaRelacija != nullptr)
-    {
-        novaRelacija->setZValue(1);
-        scena->addItem(novaRelacija);
-    }
-
+    delete d;
     return novaSifra;
 }
 
@@ -303,12 +305,6 @@ short GlavniProzor::izmeniOsobu(short sifra)
     }
     delete d;
     return -1;
-}
-
-void GlavniProzor::promeniKursor()
-{
-    //TO DO
-    //this->setCursor(Qt::CursorShape::ClosedHandCursor);
 }
 
 bool GlavniProzor::nastaviti()
@@ -337,7 +333,6 @@ bool GlavniProzor::nastaviti()
 
 bool GlavniProzor::snimiIzmene(const QString &imeFajla)
 {
-    //TO DO
     if (!stablo->IspisiFajl(imeFajla))
     {
         ui->statusBar->showMessage(tr("Snimanje otkazano."), 2000);
@@ -391,7 +386,7 @@ void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
     {
         skoroOtvarani.removeAll(otvoreniFajl);
         skoroOtvarani.prepend(otvoreniFajl);
-        qDebug() << "uneo fajl u skoroOtvarane";
+        //qDebug() << "uneo fajl u skoroOtvarane";
         foreach (QWidget *win, QApplication::topLevelWidgets())
         {
             if (GlavniProzor  *glavni = qobject_cast<GlavniProzor*>(win))
@@ -442,20 +437,16 @@ void GlavniProzor::otvoriPostojeceStablo()
     //TO DO
     if (nastaviti())
     {
-        qDebug() << "treba otvoriti postojeci fajl";
+        //qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
                                                         tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
         if (!imeFajla.isEmpty())
         {
-            qDebug() << "nasli fajl i treba  ga otvoriti";
+            //qDebug() << "nasli fajl i treba  ga otvoriti";
             otvoriFajl(imeFajla);
         }
-        else
-            qDebug() << "odustali od otvaranja";
     }
-    else
-        qDebug() << "ne otvarati";
 }
 
 void GlavniProzor::closeEvent(QCloseEvent *event)
@@ -463,12 +454,12 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
     if (nastaviti())
     {
         writeSettings();
-        qDebug() << "Zatvaramo fajl";
+        //qDebug() << "Zatvaramo fajl";
         event->accept();
     }
     else
     {
-        qDebug() << "Otkazano izlazenje";
+        //qDebug() << "Otkazano izlazenje";
         event->ignore();
     }
 }
@@ -494,8 +485,11 @@ void GlavniProzor::otvoriSkoroOtvaraniFajl()
     if (nastaviti())
     {
         QAction *akcija = qobject_cast<QAction *>(sender());
-        if (akcija != nullptr)
-            qDebug() << "Otvoriti fajl";
+        if (akcija)
+        {
+            otvoriFajl(akcija->data().toString());
+            //qDebug() << "Otvoriti fajl";
+        }
     }
 }
 void GlavniProzor::promeniJezikE()
@@ -683,13 +677,22 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
     if (tbDetalji->isChecked())
     {
-        gOsoba *item = qgraphicsitem_cast<gOsoba*>(pogled->itemAt(pozicija));
-        if (item == nullptr)
+        gOsoba *osoba = qgraphicsitem_cast<gOsoba*>(pogled->itemAt(pozicija));
+        gRelacija *relacija = qgraphicsitem_cast<gRelacija*>(pogled->itemAt(pozicija));
+        if (osoba == nullptr && relacija == nullptr)
         {
-            popuniInformacije(-1);
+            popuniInformacije(-1, -1);
             return;
         }
-        popuniInformacije(item->Sifra());
+        if (osoba)
+            popuniInformacije(osoba->Sifra(), 0);
+        if (relacija)
+        {
+            if (relacija->BrakJe())
+                popuniInformacije(relacija->Sifra(), 1);
+            else
+                popuniInformacije(relacija->Sifra(), 2);
+        }
     }
     if  (tbBrisi->isChecked())
     {
@@ -725,12 +728,12 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked() || tbRoditeljDete->isChecked())
     {
         short novaSifraOsobe;
-        qDebug() << "povezati";
+        //qDebug() << "povezati";
         gOsoba *prvi = qgraphicsitem_cast<gOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
         if (prvi == nullptr)
         {
             tbDetalji->setChecked(true);
-            qDebug()<<"nesto ne valja";
+            //qDebug()<<"nesto ne valja";
             return;
         }
         /*novu "relaciju" crtamo na sredini i "ispod" ostalog*/
@@ -740,7 +743,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             short novaSifraBraka = stablo->DodajBrak(prvi->Sifra(), novaSifraOsobe);
             if (novaSifraBraka < 0)
                 return;
-            qDebug() << "uspeo brak";
+            //qDebug() << "uspeo brak";
             //gRelacija *brak = new gRelacija(novaSifraBraka, pogled->mapToScene(prva), pogled->mapToScene(druga), true);
             //brak->setZValue(1);
             //scena->addItem(brak);
@@ -751,11 +754,11 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     if (tbRoditeljDete->isChecked())
     {
         short novaSifraOsobe;
-        qDebug() << "povezati";
+        //qDebug() << "povezati";
         gRelacija *brak = qgraphicsitem_cast<gRelacija*>(pogled->itemAt(prva));
         if (brak == nullptr || !brak->BrakJe())
         {
-            qDebug()<<"nesto ne valja";
+            //qDebug()<<"nesto ne valja";
             tbDetalji->setChecked(true);
             return;
         }
@@ -764,11 +767,11 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             short novaSifra = stablo->DodajDete(brak->Sifra(), novaSifraOsobe);
             if (novaSifra < 0)
                 return;
-            qDebug() << "rodilo se dete";
-            //dodajNovuRelaciju(brak->Sifra(), novaSifraOsobe, false);
-            gRelacija *dete = new gRelacija(novaSifra, pogled->mapToScene(prva), pogled->mapToScene(druga), false);
-            dete->setZValue(1);
-            scena->addItem(dete);
+            //qDebug() << "rodilo se dete";
+            dodajNovuRelaciju(brak->Sifra(), novaSifraOsobe, false);
+            //gRelacija *dete = new gRelacija(novaSifra, pogled->mapToScene(prva), pogled->mapToScene(druga), false);
+            //dete->setZValue(1);
+            //scena->addItem(dete);
             setWindowModified(true);
         }
     }
@@ -780,7 +783,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             tbDetalji->setChecked(true);
             return;
         }
-        qDebug() << "pomeriti";
+        //qDebug() << "pomeriti";
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         _pozicijeOsoba[item->Sifra()] = item->pos();
         setWindowModified(true);
