@@ -34,9 +34,12 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
            smrt = ui->UnosSmrt->date();
 }
 
-void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol,
+bool DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol,
                                     std::string &rodjenje, std::string &smrt)
 {
+    if (ui->checkBox->isChecked())
+        return false;
+
     QString _ime, _prezime, _pol;
     QDate _rodjenje, _smrt;
 
@@ -53,6 +56,8 @@ void DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char
         smrt = "";
     else
         smrt = _smrt.toString("dd.MM.yyyy.").toStdString();
+
+    return true;
 }
 
 void DialogNovaOsoba::promenaUnosa()

@@ -65,23 +65,22 @@ GlavniProzor::~GlavniProzor()
 
 }
 
-void GlavniProzor::popuniInformacije(short sifra, int tip)
+void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
 {
-    if (sifra == -1)
+    if (sifra == -1 || tip == NISTA)
     {
         Labela->setText("");
         return;
     }
-    if (tip == 0)
+    if (tip == INFO_OSOBA)
     {
         Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
-        //Neka provera da li je osoba poznata ili ne
         if (osoba)
             Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
     }
-    if (tip == 1)
+    if (tip == INFO_BRAK)
         Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
-    if (tip == 2)
+    if (tip == INFO_DETE)
         Labela->setText(QString::fromStdString(stablo->NadjiDeteSifrom(sifra)->Trivija()));
 }
 
@@ -191,31 +190,28 @@ void GlavniProzor::kreirajMestoZaInfo()
 GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
 {
     short int novaSifra = -1;
-    GOsoba *novaOsoba;
+    GOsoba *novaOsoba = nullptr;
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
         std::string ime, prezime, rodjenje, smrt;
         char pol;
 
-        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt);
-
-        novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
-        if (novaSifra < 0)
-            ui->statusBar->showMessage("Neuspelo dodavanje nove osobe, pokusajte ponovo.", 2000);
+        if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
+            novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         else
-        {
-            ui->statusBar->showMessage("Uspelo je dodavanje nove osobe.", 2000);           
+            novaSifra = stablo->DodajNNLice();
+        if (novaSifra >= 0)
+        {          
             std::string tmp =
                     stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
             novaOsoba = new GOsoba(novaSifra, QString::fromStdString(tmp));
-            scena->addItem(novaOsoba);
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
-            _pozicijeOsoba[novaSifra] = pogled->mapToScene(pozicija);
-        }
-        delete d;
+            _pozicijeOsoba[novaSifra] = novaOsoba->pos();
+        }   
     }
+    delete d;
     return novaOsoba;
 }
 
@@ -700,17 +696,17 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
         GRelacija *relacija = qgraphicsitem_cast<GRelacija*>(pogled->itemAt(pozicija));
         if (osoba == nullptr && relacija == nullptr)
         {
-            popuniInformacije(-1, -1);
+            popuniInformacije(-1, NISTA);
             return;
         }
         if (osoba)
-            popuniInformacije(osoba->Sifra(), 0);
+            popuniInformacije(osoba->Sifra(), INFO_OSOBA);
         if (relacija)
         {
             if (relacija->BrakJe())
-                popuniInformacije(relacija->Sifra(), 1);
+                popuniInformacije(relacija->Sifra(), INFO_BRAK);
             else
-                popuniInformacije(relacija->Sifra(), 2);
+                popuniInformacije(relacija->Sifra(), INFO_DETE);
         }
     }
     if  (tbBrisi->isChecked())
@@ -744,48 +740,68 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 
 void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 {
-    if (tbMuzZena->isChecked())// || tbBratSestra->isChecked() || tbRoditeljDete->isChecked())
+    if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
     {
         GOsoba *novaOsoba;
         //qDebug() << "povezati";
         GOsoba *staraOsoba = qgraphicsitem_cast<GOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
-        if (staraOsoba == nullptr)
+        if (staraOsoba == nullptr || stablo->NadjiOsobuSifrom(staraOsoba->Sifra()) == nullptr)//ovo drugo ne bi smelo...
         {
             tbDetalji->setChecked(true);
             //qDebug()<<"nesto ne valja";
             return;
         }
-        /*novu "relaciju" crtamo na sredini i "ispod" ostalog*/
-        /*novu "osobu" crtamo na mestu gde je pusten mis, "iznad" */
-        if ((novaOsoba = dodajNovuOsobu(druga, true)))
+        if (!stablo->NadjiOsobuSifrom(staraOsoba->Sifra())->JeKrvniSrodnik())
+        {
+            tbDetalji->setChecked(true);
+            ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);//??!
+            return;
+        }
+        if ((novaOsoba = dodajNovuOsobu(druga, true)) != nullptr)
         {
             short novaSifraBraka = stablo->DodajBrak(staraOsoba->Sifra(), novaOsoba->Sifra());
-            if (novaSifraBraka < 0)
-                return;
-            //dodajNovuRelaciju(staraOsoba, novaOsoba, true);
-            dodajNoviBrak(staraOsoba, novaOsoba);
-            setWindowModified(true);
+            if (novaSifraBraka >= 0 && dodajNoviBrak(staraOsoba, novaOsoba) >= 0)
+            {
+                scena->addItem(novaOsoba);
+                setWindowModified(true);
+                ui->statusBar->showMessage(tr("Dodavanje nove osobe u stablo je proslo uspesno."), 2000);
+            }
+            else
+            {
+                /*! ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
+                 * tj, treba je obrisati iz stabla
+                */
+                //stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
+                ui->statusBar->showMessage(tr("Dodavanje nove osobe i relacije otkazano."), 2000);
+            }
         }
+        else
+            ui->statusBar->showMessage(tr("Dodavanje nove osobe i relacije otkazano."), 2000);
     }
     if (tbRoditeljDete->isChecked())
     {
         GOsoba *novoDete;
         GRelacija *brak = qgraphicsitem_cast<GRelacija*>(pogled->itemAt(prva));
-        if (brak == nullptr || !brak->BrakJe())
+        if (brak == nullptr || !brak->BrakJe() || stablo->NadjiBrakSifrom(brak->Sifra()) == nullptr)
         {
             //qDebug()<<"nesto ne valja";
             tbDetalji->setChecked(true);
             return;
         }
-        if ((novoDete = dodajNovuOsobu(druga, true)))
+        if ((novoDete = dodajNovuOsobu(druga, true)) != nullptr)
         {
             short novaSifra = stablo->DodajDete(brak->Sifra(), novoDete->Sifra());
-            if (novaSifra < 0)
-                return;
-            //qDebug() << "rodilo se dete";
-            dodajNovoDete(brak, novoDete);
-            setWindowModified(true);
+            if (novaSifra >= 0 && dodajNovoDete(brak, novoDete) >= 0)
+            {
+                scena->addItem(novoDete);
+                setWindowModified(true);
+            }
+            else
+                //obrisati dete!!!
+                ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
         }
+        else
+            ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
     }
     if (tbPomeranje->isChecked())
     {
