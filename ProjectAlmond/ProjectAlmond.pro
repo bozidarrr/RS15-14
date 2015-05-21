@@ -47,7 +47,8 @@ FORMS    += \
     GUI/dijalogrelacija.ui
 
 RESOURCES += \
-    slike.qrc
+    slike.qrc \
+    jezici.qrc
 TRANSLATIONS += \
     ProjectAlmond_en.ts \
     ProjectAlmond_ge.ts
