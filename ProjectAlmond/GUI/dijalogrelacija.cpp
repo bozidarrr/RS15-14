@@ -6,6 +6,8 @@ DijalogRelacija::DijalogRelacija(QWidget *parent) :
     ui(new Ui::DijalogRelacija)
 {
     ui->setupUi(this);
+    ui->retranslateUi(this);
+        retranslate();
 
     popuniDugmice();
 }
@@ -13,6 +15,12 @@ DijalogRelacija::DijalogRelacija(QWidget *parent) :
 DijalogRelacija::~DijalogRelacija()
 {
     delete ui;
+}
+void DijalogRelacija::retranslate()
+{
+    ok = new QPushButton(tr("OK"));
+    cancel = new QPushButton(tr("Ponisti"));
+
 }
 
 void DijalogRelacija::popuniPodatke(std::string &trivija)
@@ -22,8 +30,8 @@ void DijalogRelacija::popuniPodatke(std::string &trivija)
 
 void DijalogRelacija::popuniDugmice()
 {
-    ok = new QPushButton(tr("OK"));
-    cancel = new QPushButton(tr("Ponisti"));
+  //  ok = new QPushButton(tr("OK"));
+    //cancel = new QPushButton(tr("Ponisti"));
 
     ui->buttonBox->addButton(ok, QDialogButtonBox::AcceptRole);
     ui->buttonBox->addButton(cancel, QDialogButtonBox::RejectRole);

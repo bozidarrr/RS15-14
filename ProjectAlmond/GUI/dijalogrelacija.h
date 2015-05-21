@@ -17,6 +17,7 @@ public:
     ~DijalogRelacija();
 
     void popuniPodatke(std::string &trivija);
+    void retranslate();
 
 private:
     Ui::DijalogRelacija *ui;
@@ -25,6 +26,7 @@ private:
 
     void popuniDugmice();
     void postaviProvere();
+
 };
 
 #endif // DIJALOGRELACIJA_H

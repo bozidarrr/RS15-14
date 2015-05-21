@@ -9,7 +9,8 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
 {
     ui->setupUi(this);
     setModal(true);
-
+    ui->retranslateUi(this);
+       retranslate();
     popuniDugmice();
     postaviProvere();
     ui->chkNepoznatDR->setToolTip(tr("Datum rodjenja nije poznat ili ne zelite da ga unosite"));
@@ -22,7 +23,14 @@ DialogNovaOsoba::~DialogNovaOsoba()
 {
     delete ui;
 }
+void DialogNovaOsoba::retranslate()
+{
+    ui->chkNepoznatDR->setToolTip(tr("Datum rodjenja nije poznat ili ne zelite da ga unosite"));
+    ui->chkSmrt->setToolTip(tr("Osoba je ziva, ili je datum smrti nepoznat"));
+    ok = new QPushButton(tr("OK"));
+    cancel = new QPushButton(tr("Ponisti"));
 
+}
 void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
 {
     ime = ui->unosIme->text();
@@ -70,9 +78,9 @@ void DialogNovaOsoba::promenaUnosa()
 
 void DialogNovaOsoba::popuniDugmice()
 {
-    ok = new QPushButton(tr("OK"));
+    //ok = new QPushButton(tr("OK"));
     ok->setEnabled(false);
-    cancel = new QPushButton(tr("Ponisti"));
+    //cancel = new QPushButton(tr("Ponisti"));
 
     ui->buttonBox->addButton(ok, QDialogButtonBox::AcceptRole);
     ui->buttonBox->addButton(cancel, QDialogButtonBox::RejectRole);

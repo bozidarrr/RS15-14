@@ -44,6 +44,7 @@ public:
     ~GlavniProzor();
 
     void popuniInformacije(short sifra, TipZaInfo tip);//za sad neka ga ovako, tip 0 -> osoba, tip 1 -> brak, tip 2 -> dete
+    void retranslate();
 
 private:
     Ui::GlavniProzor *ui;
