@@ -30,5 +30,7 @@ void Stablo::mouseReleaseEvent(QMouseEvent *event)
         else
             emit vucen(_prva, _druga);
     }
+//    if (event->button() == Qt::RightButton)
+//        repaint();
 }
 

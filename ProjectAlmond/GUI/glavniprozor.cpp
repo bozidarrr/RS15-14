@@ -272,7 +272,7 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
-            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
+            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));            
         }
     }
     delete d;
@@ -291,7 +291,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
         novaSifra = stablo->DodajBrak(prva->Sifra(), druga->Sifra(), trivija);
         if (novaSifra >= 0)
         {
-            novaRelacija = new GRelacija(novaSifra, _pozicijeOsoba[prva->Sifra()], _pozicijeOsoba[druga->Sifra()], true);
+            novaRelacija = new GRelacija(novaSifra, prva->pos(), druga->pos(), true);
             _pozicijeBrakova[novaSifra] = novaRelacija->pos();
         }
 
