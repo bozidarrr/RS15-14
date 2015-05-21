@@ -84,7 +84,7 @@ private:
     std::map<short int, Dete* > _indeksSifraDete;//mapa koja vezuje sifru deteta za konkretan relacioni objekat dete
 
     void InicijalizujSveStrukture();
-
+    void SpaliCeloStablo();
 
 };
 

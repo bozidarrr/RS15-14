@@ -43,29 +43,7 @@ PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,
 
 PorodicnoStablo::~PorodicnoStablo()
 {
-    std::vector<Osoba*>::iterator b=_sveOsobe.begin();
-    std::vector<Osoba*>::iterator e=_sveOsobe.end();
-    for(;b!=e;b++)
-    {
-        (*b)->RaskiniSveVeze();
-        delete *b;
-    }
-
-    std::vector<Dete*>::iterator b1=_svaDeca.begin();
-    std::vector<Dete*>::iterator e1=_svaDeca.end();
-    for(;b1!=e1;b1++)
-    {
-        (*b1)->RaskiniSveVeze();
-        delete *b1;
-    }
-
-    std::vector<Brak*>::iterator b2=_sveVeze.begin();
-    std::vector<Brak*>::iterator e2=_sveVeze.end();
-    for(;b2!=e2;b2++)
-    {
-        (*b2)->RaskiniSveVeze();
-        delete *b2;
-    }
+    SpaliCeloStablo();
 }
 
 Osoba * PorodicnoStablo::KljucnaOsoba()
@@ -163,16 +141,24 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
 
+
+
+    //otvaramo fajl
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::ReadOnly)) {
         std::cout << "Ne moze da iscita fajl" << std::endl; //bice warning
         return false;
     }
 
+    //otvaramo ulazni stream
     QDataStream ulaz(&fajl);
 
     ulaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
+
+    SpaliCeloStablo();
+
+    //----------------------UCITAVANJE SVIH PODATAKA O OSOBAMA, BEZ VEZIVANJA---------------------------//
     int maxSifraOsobe=-1;
     int maxSifraBraka=-1;
     int maxSifraDeteta=-1;
@@ -183,7 +169,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     ulaz >> trenInt;
     _sveOsobe.clear();
-   // _sveOsobe.resize(trenInt);
+    // _sveOsobe.resize(trenInt);
     Osoba trenOsoba;
     Osoba *trenOsobaPokazivac=nullptr;
     for(int i=0;i<trenInt;i++)
@@ -192,9 +178,16 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         trenOsobaPokazivac=new Osoba(trenOsoba);
         _sveOsobe.push_back(trenOsobaPokazivac);
         if(maxSifraOsobe<trenOsoba.Sifra())maxSifraOsobe=trenOsoba.Sifra();
+        _indeksIme[trenOsobaPokazivac->Ime()]=std::vector<Osoba*>();
+        _indeksIme[trenOsobaPokazivac->Ime()].push_back(trenOsobaPokazivac);
+        _indeksSifraOsobe[trenOsobaPokazivac->Sifra()]=trenOsobaPokazivac;
 
     }
 
+    //----------------------UCITAVANJE SVIH PODATAKA O OSOBAMA, BEZ VEZIVANJA---------------------------//
+
+
+    //----------------------UCITAVANJE SVIH PODATAKA O BRAKOVIMA, BEZ VEZIVANJA---------------------------//
     ulaz >> trenInt;
     _sveVeze.clear();
     //_sveVeze.resize(trenInt);
@@ -206,8 +199,12 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         trenBrakPokazivac=new Brak(trenBrak);
         _sveVeze.push_back(trenBrakPokazivac);
         if(maxSifraBraka<trenBrak.Sifra())maxSifraBraka=trenBrak.Sifra();
+        _indeksSifraVeza[trenBrakPokazivac->Sifra()]=trenBrakPokazivac;
     }
+    //----------------------UCITAVANJE SVIH PODATAKA O BRAKOVIMA, BEZ VEZIVANJA---------------------------//
 
+
+    //----------------------UCITAVANJE SVIH PODATAKA O DECI, BEZ VEZIVANJA---------------------------//
     ulaz >> trenInt;
     _svaDeca.clear();
     //_svaDeca.resize(trenInt);
@@ -219,15 +216,23 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         trenDetePokazivac=new Dete(trenDete);
         _svaDeca.push_back(trenDetePokazivac);
         if(maxSifraDeteta<trenDete.Sifra())maxSifraDeteta=trenDete.Sifra();
+        _indeksSifraDete[trenDetePokazivac->Sifra()]=trenDetePokazivac;
     }
+    //----------------------UCITAVANJE SVIH PODATAKA O DECI, BEZ VEZIVANJA---------------------------//
 
+
+    //----------------------POSTAVLJANJE STATICKOG PODATKA ZA DODELU SLEDECE SIFRE NA OSNOVU MAKSIMUMA UCITANIH------------------------//
     Osoba::postaviSledecuSifru(maxSifraOsobe+1);
     Brak::postaviSledecuSifru(maxSifraBraka+1);
     Dete::postaviSledecuSifru(maxSifraDeteta+1);
+    //----------------------POSTAVLJANJE STATICKOG PODATKA ZA DODELU SLEDECE SIFRE NA OSNOVU MAKSIMUMA UCITANIH------------------------//
+
 
     int sifraOsobe=0,sifraPorekla=0,sifraVeze=0,velicina=0;
     trenOsobaPokazivac=nullptr;
 
+
+    //-----------------------------POVEZIVANJE OSOBA-----------------------------------//
     do
     {
         ulaz  >> sifraOsobe;
@@ -245,6 +250,11 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         }
     }
     while(sifraOsobe != -100);
+
+    //-----------------------------POVEZIVANJE OSOBA-----------------------------------//
+
+
+    //-----------------------------POVEZIVANJE BRAKOVA-----------------------------------//
     int sifraDeteta=0;
 
     trenBrakPokazivac=nullptr;
@@ -268,7 +278,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         }
     }
     while(sifraVeze != -200);
+    //-----------------------------POVEZIVANJE BRAKOVA-----------------------------------//
 
+    //-----------------------------POVEZIVANJE DECE-----------------------------------//
 
     trenBrakPokazivac=nullptr;
     do
@@ -284,40 +296,23 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     }
     while(sifraDeteta != -300);
+    //-----------------------------POVEZIVANJE DECE-----------------------------------//
+
 
     fajl.close();
+
+    //----------------------------Posto se svakako pozivaju destruktori lokalnih promenljivih, moram da im naglasim pre nego sto budu pozvani
+    //----------------------------da ne treba da rade nikakvu vrstu razvezivanja, koje postoji u destruktorima!!!
     trenDete.PreskociRazvezivanje();
     trenOsoba.PreskociRazvezivanje();
     trenBrak.PreskociRazvezivanje();
+
     return true;
 }
 
 bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke koji su mi potrebni, da bi fajlovi bili manji
 {//time gubim na performansama pri ucitavanju, ali posto je cuvanje bitnije od ucitavanja (koje radimo prilicno retko), deluje mi bolje ovako
-    /*
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::warning(this, tr("Spreadsheet"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(file.fileName())
-                             .arg(file.errorString()));
-        return false;
-    }
-    QDataStream out(&file);
-    out.setVersion(QDataStream::Qt_4_1);
-    out << quint32(MagicNumber);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    for (int row = 0; row < RowCount; ++row) {
-        for (int column = 0; column < ColumnCount; ++column) {
-            QString str = formula(row, column);
-            if (!str.isEmpty())
-                out << quint16(row) << quint16(column) << str;
-        }
-    }
-    QApplication::restoreOverrideCursor();
-    return true;
-    */
-    //TO CHECK
+
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::WriteOnly)) {
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
@@ -442,6 +437,43 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksSifraDete.clear();
     _indeksSifraOsobe.clear();
     _indeksSifraVeza.clear();
+}
+
+void PorodicnoStablo::SpaliCeloStablo()
+{
+
+
+    std::vector<Osoba*>::iterator b=_sveOsobe.begin();
+    std::vector<Osoba*>::iterator e=_sveOsobe.end();
+    for(;b!=e;b++)
+    {
+
+        (*b)->RaskiniSveVeze();
+        if((*b)->Sifra()== _kljucnaOsoba.Sifra())continue;
+        if(!(*b)->VecSeBrisem())
+            delete *b;
+    }
+
+    std::vector<Dete*>::iterator b1=_svaDeca.begin();
+    std::vector<Dete*>::iterator e1=_svaDeca.end();
+    for(;b1!=e1;b1++)
+    {
+        (*b1)->RaskiniSveVeze();
+        if(!(*b1)->VecSeBrisem())
+            delete *b1;
+    }
+
+    std::vector<Brak*>::iterator b2=_sveVeze.begin();
+    std::vector<Brak*>::iterator e2=_sveVeze.end();
+    for(;b2!=e2;b2++)
+    {
+        (*b2)->RaskiniSveVeze();
+        if(!(*b2)->VecSeBrisem())
+            delete *b2;
+    }
+
+    InicijalizujSveStrukture();
+
 }
 
 
