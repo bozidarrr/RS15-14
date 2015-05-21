@@ -38,10 +38,12 @@ class GlavniProzor : public QMainWindow, private Ui::GlavniProzor
     Q_OBJECT
 
 public:
+    enum TipZaInfo {NISTA, INFO_OSOBA, INFO_BRAK, INFO_DETE};
+
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
 
-    void popuniInformacije(short sifra, int tip);//za sad neka ga ovako, tip 0 -> osoba, tip 1 -> brak, tip 2 -> dete
+    void popuniInformacije(short sifra, TipZaInfo tip);//za sad neka ga ovako, tip 0 -> osoba, tip 1 -> brak, tip 2 -> dete
 
 private:
     Ui::GlavniProzor *ui;

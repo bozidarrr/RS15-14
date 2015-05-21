@@ -37,7 +37,8 @@ signals:
 
 private:
     short int _sifra;
-    int _sirina, _duzina;
+    int _sirina, _visina;
+    QString _ime;
 };
 
 #endif // GOSOBA_H

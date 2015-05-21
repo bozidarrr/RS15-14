@@ -17,10 +17,15 @@ QRectF GRelacija::boundingRect() const
 
 void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+//        qDebug() << "crta se";
+//            qDebug() << _sifra;
     painter->setPen(Qt::green);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);
     painter->drawRect(-20, -20, 40, 40);
+    //QRect okvir(-40, -40, 80, 80);
+    //QPixmap slika(":/images/images/RelacijaSupruznici.ico");
+    //painter->drawPixmap(okvir, slika);
 }
 
 int GRelacija::type() const
@@ -40,12 +45,14 @@ bool GRelacija::BrakJe() const
 
 void GRelacija::pomeriDrugu(QPointF druga)
 {
+    //qDebug() << "pomera drugu";
     _druga = druga;
     postaviNaSredinu();
 }
 
 void GRelacija::pomeriPrvu(QPointF prva)
 {
+       // qDebug() << "pomera prvu";
     _prva = prva;
     postaviNaSredinu();
 }

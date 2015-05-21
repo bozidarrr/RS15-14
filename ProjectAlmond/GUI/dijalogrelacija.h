@@ -16,8 +16,6 @@ public:
     explicit DijalogRelacija(QWidget *parent = 0);
     ~DijalogRelacija();
 
-    //void popuniPodatke(QString &trivija);
-
     void popuniPodatke(std::string &trivija);
 
 private:
