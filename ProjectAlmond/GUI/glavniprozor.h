@@ -43,7 +43,7 @@ public:
     explicit GlavniProzor(QWidget *parent = 0);
     ~GlavniProzor();
 
-    void popuniInformacije(short sifra, TipZaInfo tip);//za sad neka ga ovako, tip 0 -> osoba, tip 1 -> brak, tip 2 -> dete
+    void popuniInformacije(short sifra, TipZaInfo tip);
     void retranslate();
 
 private:
@@ -80,14 +80,14 @@ private:
     void writeSettings();//cuva pozicije widgeta, recent files, itd... Smisliti prevod imena :)
     void readSettings();//cita ovo gore pri konstrukciji
 
-    /*menjanje stabla*/
+    /** menjanje stabla **/
     short izmeniOsobu(short sifra);
-    //short dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
     GOsoba* dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
     short ukloniOsobu(short sifra);
-    //short dodajNovuRelaciju(short sifra1, short sifra2, bool brak);
     short dodajNovoDete(GRelacija *brak, GOsoba *dete);
     short dodajNoviBrak(GOsoba *prva, GOsoba *druga);
+    //GRelacija* dodajNovoDete(GRelacija *brak, GOsoba *dete);
+    //GRelacija* dodajNoviBrak(GOsoba *prva, GOsoba *druga);
 
     Stablo *pogled;
     QGraphicsScene *scena;

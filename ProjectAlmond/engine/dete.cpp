@@ -1,4 +1,5 @@
 #include "dete.h"
+#include <iostream>
 
 short int Dete::_sledecaSifra=0;
 
@@ -15,8 +16,10 @@ Dete::Dete(const Dete &drugo)
 
 Dete::~Dete()
 {
+    std::cout << "brise se dete " << Sifra() << std::endl;
     _vecSeBrisem=true;
     if(!_preskociRazvezivanje){
+        std::cout << "dete razvezuje " << Sifra() << std::endl;
         if(_roditeljskiOdnos!=nullptr)
             _roditeljskiOdnos->DeteSeUklanja(this);//u roditeljskom odnosu brisem podatke o tom detetu
         if(_osoba!=nullptr){

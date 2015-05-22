@@ -13,8 +13,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowTitle("Project Almond[*]");
 
     translator = new QTranslator();
-    ui->retranslateUi(this);
-       retranslate();
+    //ui->retranslateUi(this);
+     //  retranslate();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -267,10 +267,11 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
         novaSifra = stablo->DodajDete(brak->Sifra(), dete->Sifra(), trivija);
         if (novaSifra >= 0)
         {
-            novaRelacija = new GRelacija(novaSifra, _pozicijeBrakova[brak->Sifra()], _pozicijeOsoba[dete->Sifra()], false);
+            novaRelacija = new GRelacija(novaSifra, brak->pos(), dete->pos(), false);
         }
         if (novaRelacija != nullptr)
         {
+            //novaRelacija->setParent(brak);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -299,6 +300,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
 
         if (novaRelacija != nullptr)
         {
+            //novaRelacija->setParent(prva);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -432,6 +434,7 @@ void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
     scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
+    //scena->setSceneRect();
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -746,7 +749,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);//??!
             return;
         }
-        if ((novaOsoba = dodajNovuOsobu(druga, true)) != nullptr)
+        if ((novaOsoba = dodajNovuOsobu(druga, false)) != nullptr)
         {
             short novaSifraBraka = stablo->DodajBrak(staraOsoba->Sifra(), novaOsoba->Sifra());
             if (novaSifraBraka >= 0 && dodajNoviBrak(staraOsoba, novaOsoba) >= 0)
