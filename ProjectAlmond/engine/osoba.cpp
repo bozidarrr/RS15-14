@@ -7,7 +7,9 @@ short int Osoba::_sledecaSifra=0;
 Osoba::Osoba()
     :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza()
 {
+    //std::cout << "kreira se NN osoba " << _sifra << std::endl;
     _deteOd = nullptr;
+    _krvniSrodnik = false;
 }
 
 Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
@@ -15,6 +17,8 @@ Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
 {
     _deteOd=nullptr;
     _spisakVeza.clear();
+
+        //std::cout << "kreira se osoba " << _sifra << std::endl;
 }
 
 Osoba::Osoba(const Osoba& druga)
@@ -27,14 +31,14 @@ Osoba::Osoba(const Osoba& druga)
 
 Osoba::~Osoba()
 {
-    std::cout << "brise se osoba " << Sifra() << std::endl;
+    //std::cout << "brise se osoba " << Sifra() << std::endl;
     _vecSeBrisem=true;
     if(!_preskociRazvezivanje){
-    std::cout << "osoba razvezuje " << Sifra() << std::endl;
+    //std::cout << "osoba razvezuje " << Sifra() << std::endl;
         //brisem podatke o sebi kao detetu
         if(_deteOd!=nullptr)
         {
-            std::cout << "osoba se brise kao dete " << Sifra() << std::endl;
+            //std::cout << "osoba se brise kao dete " << Sifra() << std::endl;
             _deteOd->BrisanjeOdOsobe();
             if (!_deteOd->VecSeBrisem())
             delete _deteOd;
@@ -48,7 +52,7 @@ Osoba::~Osoba()
             if(!_krvniSrodnik){
                 for(;b!=e;b++)
                 {
-                    std::cout << "osoba nije k.s. i raskida brakove " << Sifra() << std::endl;
+                    //std::cout << "osoba nije k.s. i raskida brakove " << Sifra() << std::endl;
                     (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
                     if (!(*b)->VecSeBrisem())
                     delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
@@ -58,7 +62,7 @@ Osoba::~Osoba()
             {
                 for(;b!=e;b++)
                 {
-                    std::cout << "osoba jeste k.s. i brise supruznike " << Sifra() << std::endl;
+                    //std::cout << "osoba jeste k.s. i brise supruznike " << Sifra() << std::endl;
                     if(!(*b)->VecSeBrisem())
                             ;
                         //izgleda je ovde greska...

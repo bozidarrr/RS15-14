@@ -9,6 +9,7 @@ Brak::Brak()
 Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija)
     :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(),_trivija(trivija)
 {
+    //std::cout << "kreira se brak " << _sifra << std::endl;
 }
 
 Brak::Brak(const Brak &drugi)
@@ -18,10 +19,10 @@ Brak::Brak(const Brak &drugi)
 
 Brak::~Brak()
 {
-    std::cout << "brise se brak " << Sifra() << std::endl;
+   // std::cout << "brise se brak " << Sifra() << std::endl;
     _vecSeBrisem=true;
     if(!_preskociRazvezivanje){
-        std::cout << "i razvezuje" << Sifra() << std::endl;
+        //std::cout << "i razvezuje" << Sifra() << std::endl;
         _tudjaOsoba->Raskini(this);//molim osobu koja nije u rodbinskoj liniji da ukloni brak, ne bih li mogao da je obrisem bez beskonacne rekurzije
         if(!_tudjaOsoba->VecSeBrisem())delete _tudjaOsoba;
 

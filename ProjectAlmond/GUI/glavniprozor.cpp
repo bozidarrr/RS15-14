@@ -13,8 +13,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowTitle("Project Almond[*]");
 
     translator = new QTranslator();
-    //ui->retranslateUi(this);
-     //  retranslate();
+    ui->retranslateUi(this);
+    retranslate();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -44,7 +44,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", 'm');
+    stablo = new PorodicnoStablo("Pera", "Detlic", 'm', true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -751,8 +751,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         }
         if ((novaOsoba = dodajNovuOsobu(druga, false)) != nullptr)
         {
-            short novaSifraBraka = stablo->DodajBrak(staraOsoba->Sifra(), novaOsoba->Sifra());
-            if (novaSifraBraka >= 0 && dodajNoviBrak(staraOsoba, novaOsoba) >= 0)
+            short novaSifraBraka = dodajNoviBrak(staraOsoba, novaOsoba);
+            if (novaSifraBraka >= 0)
             {
                 scena->addItem(novaOsoba);
                 setWindowModified(true);
@@ -763,7 +763,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
                 /*! ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
                  * tj, treba je obrisati iz stabla
                 */
-                //stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
+                stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje nove osobe i relacije otkazano."), 2000);
             }
         }
@@ -782,15 +782,17 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         }
         if ((novoDete = dodajNovuOsobu(druga, true)) != nullptr)
         {
-            short novaSifra = stablo->DodajDete(brak->Sifra(), novoDete->Sifra());
-            if (novaSifra >= 0 && dodajNovoDete(brak, novoDete) >= 0)
+            short novaSifra = dodajNovoDete(brak, novoDete);
+            if (novaSifra >= 0)
             {
                 scena->addItem(novoDete);
                 setWindowModified(true);
             }
             else
-                //obrisati dete!!!
+            {
+                stablo->UkloniOsobuSifrom(novoDete->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
+            }
         }
         else
             ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
@@ -803,7 +805,6 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             tbDetalji->setChecked(true);
             return;
         }
-        //qDebug() << "pomeriti";
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         _pozicijeOsoba[item->Sifra()] = item->pos();
         item->obavestiRelacije();
