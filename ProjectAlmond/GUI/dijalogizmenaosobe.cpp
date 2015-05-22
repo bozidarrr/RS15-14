@@ -7,6 +7,8 @@ DijalogIzmenaOsobe::DijalogIzmenaOsobe(Osoba *osoba, QWidget *parent) :
 
 {
     ui->setupUi(this);
+    ui->retranslateUi(this);
+       retranslate();
     setModal(true);
     _osoba = osoba;
     popuniDugmice();
@@ -17,11 +19,18 @@ DijalogIzmenaOsobe::~DijalogIzmenaOsobe()
 {
     delete ui;
 }
-
-void DijalogIzmenaOsobe::popuniDugmice()
+void DijalogIzmenaOsobe::retranslate()
 {
     ok = new QPushButton(tr("Primeni izmene"));
     cancel = new QPushButton(tr("Ponisti"));
+     cancel->setToolTip(tr("Nijedna izmena nece ostati zapamcena."));
+}
+
+
+void DijalogIzmenaOsobe::popuniDugmice()
+{
+   // ok = new QPushButton(tr("Primeni izmene"));
+    //cancel = new QPushButton(tr("Ponisti"));
     cancel->setToolTip(tr("Nijedna izmena nece ostati zapamcena."));
 
     ui->buttonBox->addButton(ok, QDialogButtonBox::AcceptRole);

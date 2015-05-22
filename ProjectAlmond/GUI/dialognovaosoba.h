@@ -28,6 +28,7 @@ public:
 
     bool popuniPodatke(std::string &ime, std::string &prezime, char &pol,
                        std::string &rodjenje, std::string &smrt);
+    void retranslate();
 private Q_SLOTS:
     void promenaUnosa();
 

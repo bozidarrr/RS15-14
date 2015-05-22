@@ -20,6 +20,7 @@ class DijalogIzmenaOsobe : public QDialog
 public:
     explicit DijalogIzmenaOsobe(Osoba *osoba, QWidget *parent = 0);
     ~DijalogIzmenaOsobe();
+    void retranslate();
 
 private:
     Ui::DijalogIzmenaOsobe *ui;
