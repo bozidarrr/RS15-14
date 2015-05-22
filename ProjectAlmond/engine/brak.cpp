@@ -1,4 +1,5 @@
 #include "brak.h"
+#include <iostream>
 
 short int Brak::_sledecaSifra=0;
 
@@ -6,8 +7,9 @@ Brak::Brak()
 {}
 
 Brak::Brak(Osoba *nasa, Osoba *tudja, std::string &trivija)
-    :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(2),_trivija(trivija)
+    :_sifra(++_sledecaSifra),_nasaOsoba(nasa),_tudjaOsoba(tudja),_spisakDece(),_trivija(trivija)
 {
+    //std::cout << "kreira se brak " << _sifra << std::endl;
 }
 
 Brak::Brak(const Brak &drugi)
@@ -17,8 +19,10 @@ Brak::Brak(const Brak &drugi)
 
 Brak::~Brak()
 {
+   // std::cout << "brise se brak " << Sifra() << std::endl;
     _vecSeBrisem=true;
     if(!_preskociRazvezivanje){
+        //std::cout << "i razvezuje" << Sifra() << std::endl;
         _tudjaOsoba->Raskini(this);//molim osobu koja nije u rodbinskoj liniji da ukloni brak, ne bih li mogao da je obrisem bez beskonacne rekurzije
         if(!_tudjaOsoba->VecSeBrisem())delete _tudjaOsoba;
 
@@ -28,6 +32,7 @@ Brak::~Brak()
         std::vector<Dete*>::iterator e=_spisakDece.end();
         for(;b!=e;b++)//brisem svako dete-relaciju iz spiska, koje dalje pokrece brisanje svih osoba potomaka
         {
+            std::cout << "brise se dete iz braka " << Sifra() << std::endl;
             if(!(*b)->VecSeBrisem())
             delete *b;
         }

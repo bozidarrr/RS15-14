@@ -14,7 +14,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     translator = new QTranslator();
     ui->retranslateUi(this);
-       retranslate();
+    retranslate();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -44,7 +44,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", 'm');
+    stablo = new PorodicnoStablo("Pera", "Detlic", 'm', true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -267,10 +267,11 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
         novaSifra = stablo->DodajDete(brak->Sifra(), dete->Sifra(), trivija);
         if (novaSifra >= 0)
         {
-            novaRelacija = new GRelacija(novaSifra, _pozicijeBrakova[brak->Sifra()], _pozicijeOsoba[dete->Sifra()], false);
+            novaRelacija = new GRelacija(novaSifra, brak->pos(), dete->pos(), false);
         }
         if (novaRelacija != nullptr)
         {
+            //novaRelacija->setParent(brak);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -299,6 +300,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
 
         if (novaRelacija != nullptr)
         {
+            //novaRelacija->setParent(prva);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -432,6 +434,7 @@ void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
     scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
+    //scena->setSceneRect();
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -746,10 +749,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);//??!
             return;
         }
-        if ((novaOsoba = dodajNovuOsobu(druga, true)) != nullptr)
+        if ((novaOsoba = dodajNovuOsobu(druga, false)) != nullptr)
         {
-            short novaSifraBraka = stablo->DodajBrak(staraOsoba->Sifra(), novaOsoba->Sifra());
-            if (novaSifraBraka >= 0 && dodajNoviBrak(staraOsoba, novaOsoba) >= 0)
+            short novaSifraBraka = dodajNoviBrak(staraOsoba, novaOsoba);
+            if (novaSifraBraka >= 0)
             {
                 scena->addItem(novaOsoba);
                 setWindowModified(true);
@@ -760,7 +763,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
                 /*! ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
                  * tj, treba je obrisati iz stabla
                 */
-                //stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
+                stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje nove osobe i relacije otkazano."), 2000);
             }
         }
@@ -779,15 +782,17 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         }
         if ((novoDete = dodajNovuOsobu(druga, true)) != nullptr)
         {
-            short novaSifra = stablo->DodajDete(brak->Sifra(), novoDete->Sifra());
-            if (novaSifra >= 0 && dodajNovoDete(brak, novoDete) >= 0)
+            short novaSifra = dodajNovoDete(brak, novoDete);
+            if (novaSifra >= 0)
             {
                 scena->addItem(novoDete);
                 setWindowModified(true);
             }
             else
-                //obrisati dete!!!
+            {
+                stablo->UkloniOsobuSifrom(novoDete->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
+            }
         }
         else
             ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
@@ -800,7 +805,6 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             tbDetalji->setChecked(true);
             return;
         }
-        //qDebug() << "pomeriti";
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         _pozicijeOsoba[item->Sifra()] = item->pos();
         item->obavestiRelacije();

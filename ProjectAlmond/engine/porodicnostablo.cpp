@@ -1,6 +1,6 @@
 #include "porodicnostablo.h"
 #include <QDataStream>
-
+#include <iostream>
 
 /*
 Osoba _kljucnaOsoba;//osoba cije se porodicno stablo kreira
@@ -23,8 +23,6 @@ PorodicnoStablo::PorodicnoStablo()
     _sveOsobe.push_back(&_kljucnaOsoba);
 
     (_indeksSifraOsobe[_kljucnaOsoba.Sifra()])=&_kljucnaOsoba;
-
-
 }
 
 PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,  bool krvniSrodnik)
