@@ -55,7 +55,8 @@ void GRelacija::ukloniSeSaScene(short sifra)
 {
     if (_sifra != sifra)
         return;
-    scene()->removeItem(this);
+    if (scene() != 0)
+        scene()->removeItem(this);
     deleteLater();
 }
 

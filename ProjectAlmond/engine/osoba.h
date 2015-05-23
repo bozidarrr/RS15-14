@@ -15,7 +15,7 @@ class Osoba
 {
 public:
 
-    Osoba(); //kreira N.N lice
+    Osoba(bool krvniSrodnik = false); //kreira N.N lice
     Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
     Osoba(const Osoba& druga);//samo podatke, ne i veze!!!
 
@@ -37,15 +37,15 @@ public:
 
     bool JeKrvniSrodnik(); //vraca da li je osoba u krvnom srodstvu sa kljucnom osobom
 
-    Dete* Poreklo(); //vraca adresu relacionog objekta dete, kojim se moze povezati sa brakom/vezom iz koje je nastala osoba
+    //Dete* Poreklo(); //vraca adresu relacionog objekta dete, kojim se moze povezati sa brakom/vezom iz koje je nastala osoba
 
-    void PostaviPoreklo(Dete* poreklo);
+    //void PostaviPoreklo(Dete* poreklo);
 
     static void postaviSledecuSifru(int sifra);
 
-    void DodajVezu(Brak* veza);
+    //void DodajVezu(Brak* veza);
 
-    std::vector<Brak*>& SpisakVeza(); //vraca referencu na spisak svih veza koje je osoba imala
+    //std::vector<Brak*>& SpisakVeza(); //vraca referencu na spisak svih veza koje je osoba imala
     //----geteri i seteri------//
 
     //---metodi korisni u upotrebi---//
@@ -54,14 +54,14 @@ public:
     //---metodi korisni u upotrebi---//
 
     //----metodi potrebni za brisanje----//
-    bool Raskini(Brak* razvod);//posto se brise podatak o braku, zahteva se od osobe da ukloni pokazivac za brak iz svog spiska
+    //bool Raskini(Brak* razvod);//posto se brise podatak o braku, zahteva se od osobe da ukloni pokazivac za brak iz svog spiska
 
-    bool ObrisiPoreklo(); //brise podatke o relacionom objektu dete
+    //bool ObrisiPoreklo(); //brise podatke o relacionom objektu dete
 
-    bool RaskiniSveVeze(); //brise sve veze, zarad pripreme za brisanje na vecoj skali
+    //bool RaskiniSveVeze(); //brise sve veze, zarad pripreme za brisanje na vecoj skali
 
     bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
-    void PreskociRazvezivanje();
+    //void PreskociRazvezivanje();
     //----metodi potrebni za brisanje----//
 
 //----metodi za citanje i pisanje ----//
@@ -86,8 +86,8 @@ private:
     QDate _datumRodjenja;
     QDate _datumSmrti;
     bool _krvniSrodnik;
-    Dete * _deteOd;
-    std::vector<Brak *> _spisakVeza;
+    //Dete * _deteOd;
+    //std::vector<Brak *> _spisakVeza;
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;
     //----osnovni podaci----//

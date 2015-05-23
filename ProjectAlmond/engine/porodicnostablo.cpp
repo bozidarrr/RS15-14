@@ -2,36 +2,18 @@
 #include <QDataStream>
 #include <iostream>
 
-/*
-Osoba _kljucnaOsoba;//osoba cije se porodicno stablo kreira
-std::vector<Osoba*> _sveOsobe;//vektor sa pokazivacima na sve osobe u stablu
-std::vector<Dete *> _svaDeca;//vektor sa pokazivacima na sve deca relacije u stablu
-std::vector<Brak*> _sveVeze;//vektor sa pokazivacima na sve brak relacije u stablu
-std::map<std::string, std::vector<Osoba*> > _indeksIme;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
-std::map<QDate, std::vector<Osoba*> > _indeksRodjenje;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
-std::map<int, std::vector<Osoba*> > _indeksRodjendan;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
-std::map<short int, Osoba* > _indeksSifraOsobe;//mapa koja vezuje sifru osobe za tu osobu
-std::map<short int, Brak* > _indeksSifraVeza;//mapa koja vezuje sifru braka za taj brak
-std::map<short int, Dete* > _indeksSifraDete;//mapa koja vezuje sifru deteta za konkretan relacioni objekat dete
-*/
-
 
 PorodicnoStablo::PorodicnoStablo()
-    //:_kljucnaOsoba()
 {
     _kljucnaOsoba = new Osoba();
     InicijalizujSveStrukture();
-    //_sveOsobe.push_back(_kljucnaOsoba);
-
     (_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
 }
 
 PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,  bool krvniSrodnik)
-    //:_kljucnaOsoba(ime,prezime,pol,krvniSrodnik)
 {
     _kljucnaOsoba = new Osoba(ime, prezime, pol, krvniSrodnik);
     InicijalizujSveStrukture();
-    //_sveOsobe.push_back(_kljucnaOsoba);
     _indeksIme[_kljucnaOsoba->Ime()]=std::vector<Osoba*>();
     _indeksIme[_kljucnaOsoba->Ime()].push_back(_kljucnaOsoba);
     /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
@@ -43,6 +25,8 @@ PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,
 
 PorodicnoStablo::~PorodicnoStablo()
 {
+    if (_kljucnaOsoba != nullptr)
+        UkloniOsobuSifrom(_kljucnaOsoba->Sifra());
     SpaliCeloStablo();
 }
 
@@ -53,17 +37,15 @@ Osoba * PorodicnoStablo::KljucnaOsoba()
 
 
 //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
-short int PorodicnoStablo::DodajNNLice()
+short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
 {
-    Osoba *nova=new Osoba();
+    Osoba *nova=new Osoba(krvniSrodnik);
     _indeksSifraOsobe[nova->Sifra()]=nova;
-    //_sveOsobe.push_back(nova);
     return nova->Sifra();
 }
 short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
 {
     Osoba* nova=new Osoba(ime,prezime,pol,krvniSrodnik);
-    //_sveOsobe.push_back(nova);
     _indeksIme[ime]=std::vector<Osoba*>();
     _indeksIme[ime].push_back(nova);
     /*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
@@ -79,26 +61,19 @@ short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char
 //dodaje relaciju dete, od braka do osobe
 short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija)
 {
-    //Dete* novo=new Dete(NadjiOsobuSifrom(sifraOsobe),NadjiBrakSifrom(sifraBraka),trivija);
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
-    //_svaDeca.push_back(novo);
     _indeksSifraDete[novo->Sifra()]=novo;
-    //NadjiOsobuSifrom(sifraOsobe)->PostaviPoreklo(novo);
-    //NadjiBrakSifrom(sifraBraka)->DodajDete(novo);
+    _indeksBrakDeca.insert(std::make_pair(sifraBraka, sifraOsobe));
     return novo->Sifra();
 }
 
 //dodaje relaciju brak izmedju dve osobe date siframa
 short int PorodicnoStablo::DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija)
 {
-    //Brak* novi=new Brak(NadjiOsobuSifrom(sifraNaseOsobe),NadjiOsobuSifrom(sifraTudjeOsobe),trivija);
     Brak *novi = new Brak(sifraNaseOsobe, sifraTudjeOsobe, trivija);
-    //_sveVeze.push_back(novi);
     _indeksSifraVeza[novi->Sifra()]=novi;
-    //NadjiOsobuSifrom(sifraNaseOsobe)->DodajVezu(novi);
-    //NadjiOsobuSifrom(sifraTudjeOsobe)->DodajVezu(novi);
-    _indeksOsobaBrak.insert(std::make_pair(sifraNaseOsobe, novi));
-    _indeksOsobaBrak.insert(std::make_pair(sifraTudjeOsobe, novi));
+    _indeksOsobaBrak.insert(std::make_pair(sifraNaseOsobe, novi->Sifra()));
+    _indeksOsobaBrak.insert(std::make_pair(sifraTudjeOsobe, novi->Sifra()));
     return novi->Sifra();
 }
 
@@ -132,11 +107,10 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
         da raskine veze i obrise sve osobe koje treba
         a ne da to rade osobe, relacije...
     **/
-
     std::map<short, Osoba*>::iterator iter;
     if ((iter = _indeksSifraOsobe.find(sifra)) == _indeksSifraOsobe.end())
     {
-        std::cout<<"vec je obrisana";
+        std::cout<<"vec je obrisana"<<std::endl;
         return;
     }
     Osoba *zaBrisanje=_indeksSifraOsobe[sifra];
@@ -151,19 +125,18 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
         ObrisiBrakove(sifra, false);
     }
 
-    //brise se kao dete
+    //brise sebe kao dete
     std::map<short, Dete*>::iterator dete_b = _indeksSifraDete.begin();
     std::map<short, Dete*>::iterator dete_e = _indeksSifraDete.end();
     for(; dete_b != dete_e ; dete_b++)
     {
-        //ako nije dete iz posmatranog braka idemo dalje
         if (dete_b->second->SifraOsobe() != sifra)
             continue;
         emit obrisanaVezaDete(dete_b->first);
+        delete _indeksSifraDete[dete_b->first];
         _indeksSifraDete.erase(dete_b);
     }
-
-
+    //brisemo je iz indeksa (sifra, osoba)
     _indeksSifraOsobe.erase(iter);
 
     emit obrisanaOsoba(sifra);
@@ -178,8 +151,6 @@ void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
     if (iter == _indeksSifraVeza.end())
         return;
 
-    //delete _indeksSifraVeza[sifra];
-    //_indeksSifraVeza.erase(iter);
     emit obrisanaVezaBrak(sifra);
 }
 
@@ -490,12 +461,7 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
 
 void PorodicnoStablo::InicijalizujSveStrukture()
 {
-    //_sveOsobe.clear();
-    //_svaDeca.clear();
-    //_sveVeze.clear();
     _indeksIme.clear();
-    //  _indeksRodjenje.clear();
-    //  _indeksRodjendan.clear();
     _indeksSifraDete.clear();
     _indeksSifraOsobe.clear();
     _indeksSifraVeza.clear();
@@ -540,60 +506,69 @@ void PorodicnoStablo::SpaliCeloStablo()
 
 }
 
-void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)
+void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)//brise brakove osobe sa tom sifrom
 {
-    //ako je true, pozivamo brisanje samog supruznika
+    //ako je true, pozivamo brisanje samog supruznika (koji ce posle obrisati brak)
     //ako je false brisemo samo relaciju brak
-    //std::cout << sifra << " brise svoje supruznike " << std::endl;
     //vrv moze bolje
-    std::map<short, Brak*>::iterator b =_indeksSifraVeza.begin();
-    std::map<short, Brak*>::iterator e =_indeksSifraVeza.end();
+
+
     if (iSupruznike)
     {
-        for(; b!=e; b++)
+        std::pair <std::multimap<short, short>::iterator, std::multimap<short,short>::iterator> brakovi;
+        brakovi = _indeksOsobaBrak.equal_range(sifra);
+        std::multimap<short, short>::iterator iter;
+        for (iter = brakovi.first; iter != brakovi.second; iter++)
         {
-            if (b->second->SifraNase() != sifra)
-                    continue;
-            //uklanjamo supruznika, zatim i sam brak
-            UkloniOsobuSifrom(b->second->SifraTudje());
-            //UkloniBrakSifrom(b->first);
+            if (_indeksSifraVeza.find(iter->second) == _indeksSifraVeza.end())
+                continue;
+            //brisemo samo osobu, ne i veze ovde
+            UkloniOsobuSifrom(_indeksSifraVeza[iter->second]->SifraTudje());
         }
+        //std::cout << "Brakova pre erase ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
+        //_indeksOsobaBrak.erase(brakovi.first, brakovi.second);
+        //std::cout << "Brakova posle erase ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
     }
     else
     {
-        for(; b!=e; b++)
+        std::pair <std::multimap<short, short>::iterator, std::multimap<short,short>::iterator> brakovi;
+        brakovi = _indeksOsobaBrak.equal_range(sifra);
+        std::multimap<short, short>::iterator iter;
+        for (iter = brakovi.first; iter != brakovi.second; iter++)
         {
-            if (b->second->SifraTudje() != sifra)
-                    continue;
-            UkloniBrakSifrom(b->first);
-            delete _indeksSifraVeza[b->first];
-            _indeksSifraVeza.erase(b);
+            //brisemo brak iz indeksa (sifra, brak) i sam objekat
+            short sifraBraka = iter->second;
+            if (_indeksSifraVeza.find(sifraBraka) != _indeksSifraVeza.end())
+            {
+                delete _indeksSifraVeza[sifraBraka];
+                _indeksSifraVeza.erase(sifraBraka);
+            }
+            emit obrisanaVezaBrak(sifraBraka);
         }
+        //std::cout << "Brakova ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
+        //_indeksOsobaBrak.erase(brakovi.first, brakovi.second);
     }
-
 }
 
 void PorodicnoStablo::ObrisiDecu(short sifra)
 {
-    //std::cout << sifra << " brise svoju decu " << std::endl;
+    //samo poziva ukloniOsobu za svako dete, to ce ukloniti i relaciju
 
-    std::map<short, Brak*>::iterator brak_b =_indeksSifraVeza.begin();
-    std::map<short, Brak*>::iterator brak_e =_indeksSifraVeza.end();
-    for(; brak_b != brak_e; brak_b++)
+    std::pair <std::multimap<short, short>::iterator, std::multimap<short,short>::iterator> brakovi;
+    brakovi = _indeksOsobaBrak.equal_range(sifra);//nadjemo brakove osobe koja brise svoju decu
+    std::multimap<short, short>::iterator iter;
+    for (iter = brakovi.first; iter != brakovi.second; iter++)
     {
-        //ako nije brak ove osobe
-        if (brak_b->second->SifraTudje() != sifra)
-                continue;
-        //tudja osoba je zaduzena da brise decu iz braka
-        std::map<short, Dete*>::iterator dete_b = _indeksSifraDete.begin();
-        std::map<short, Dete*>::iterator dete_e = _indeksSifraDete.end();
-        for(; dete_b != dete_e ; dete_b++)
-        {
-            //ako nije dete iz posmatranog braka idemo dalje
-            if (dete_b->second->SifraRoditeljskogOdnosa() != brak_b->first)
-                continue;
-            UkloniOsobuSifrom(dete_b->second->SifraOsobe());
-        }
+        //brisemo brak iz indeksa (sifra, brak) i sam objekat
+        short sifraBraka = iter->second;
+        if (_indeksSifraVeza.find(sifraBraka) == _indeksSifraVeza.end() )
+            continue;
+        //ako nije vec obrisan, onda mozda ima neke dece
+        std::pair <std::multimap<short, short>::iterator, std::multimap<short,short>::iterator> deca;
+        deca = _indeksBrakDeca.equal_range(sifraBraka);//nadjemo sifre dece
+        std::multimap<short, short>::iterator iterDeca;
+        for (iterDeca = deca.first; iterDeca != deca.second; iterDeca++)
+            UkloniOsobuSifrom(iterDeca->second);
     }
 }
 

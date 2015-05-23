@@ -64,6 +64,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
 GlavniProzor::~GlavniProzor()
 {
+    delete stablo;
     delete ui;
 
 }
@@ -168,6 +169,9 @@ void GlavniProzor::kreirajToolbar()
 
     tbDetalji->setChecked(true);
 
+    tbUredi->setCheckable(false);
+    connect(tbUredi, SIGNAL(clicked()), this, SLOT(urediStablo()));
+
     alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
@@ -203,7 +207,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
             novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         else
-            novaSifra = stablo->DodajNNLice();
+            novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
             std::string tmp =
@@ -815,6 +819,15 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         setWindowModified(true);
     }
     tbDetalji->setChecked(true);
+}
+
+void GlavniProzor::urediStablo()
+{
+    //kako cemo ovo...
+    if (ui->aPreciGore->isChecked())
+        qDebug() <<"uredi preci gore";
+    else
+        qDebug() << "uredi preci dole";
 }
 
 QStringList GlavniProzor::skoroOtvarani;
