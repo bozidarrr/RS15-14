@@ -35,6 +35,9 @@ public:
 signals:
     void pomerilaSe(QPointF);
 
+public slots:
+    void skloniSeSaScene(short sifra);
+
 private:
     short int _sifra;
     int _sirina, _visina;

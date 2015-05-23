@@ -7,7 +7,7 @@ short int Osoba::_sledecaSifra=0;
 Osoba::Osoba()
     :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza()
 {
-    //std::cout << "kreira se NN osoba " << _sifra << std::endl;
+    std::cout << "kreira se NN osoba " << _sifra << std::endl;
     _deteOd = nullptr;
     _krvniSrodnik = false;
 }
@@ -18,7 +18,7 @@ Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
     _deteOd=nullptr;
     _spisakVeza.clear();
 
-        //std::cout << "kreira se osoba " << _sifra << std::endl;
+        std::cout << "kreira se osoba " <<  _ime << std::endl;
 }
 
 Osoba::Osoba(const Osoba& druga)
@@ -31,46 +31,44 @@ Osoba::Osoba(const Osoba& druga)
 
 Osoba::~Osoba()
 {
-    //std::cout << "brise se osoba " << Sifra() << std::endl;
+    std::cout << "brise se osoba " << _ime << std::endl;
     _vecSeBrisem=true;
-    if(!_preskociRazvezivanje){
-    //std::cout << "osoba razvezuje " << Sifra() << std::endl;
-        //brisem podatke o sebi kao detetu
-        if(_deteOd!=nullptr)
-        {
-            //std::cout << "osoba se brise kao dete " << Sifra() << std::endl;
-            _deteOd->BrisanjeOdOsobe();
-            if (!_deteOd->VecSeBrisem())
-            delete _deteOd;
-        }
+//        if(!_preskociRazvezivanje){
+//        //std::cout << "osoba razvezuje " << Sifra() << std::endl;
+//            //brisem podatke o sebi kao detetu
+//            if(_deteOd!=nullptr)
+//            {
+//                //std::cout << "osoba se brise kao dete " << Sifra() << std::endl;
+//                _deteOd->BrisanjeOdOsobe();
+//                if (!_deteOd->VecSeBrisem())
+//                delete _deteOd;
+//            }
 
-        //za svaku vezu iz spiska
-        if(!_spisakVeza.empty()){
-            std::vector<Brak*>::iterator b=_spisakVeza.begin();
-            std::vector<Brak*>::iterator e=_spisakVeza.end();
+//            //za svaku vezu iz spiska
+//            if(!_spisakVeza.empty()){
+//                std::vector<Brak*>::iterator b=_spisakVeza.begin();
+//                std::vector<Brak*>::iterator e=_spisakVeza.end();
 
-            if(!_krvniSrodnik){
-                for(;b!=e;b++)
-                {
-                    //std::cout << "osoba nije k.s. i raskida brakove " << Sifra() << std::endl;
-                    (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
-                    if (!(*b)->VecSeBrisem())
-                    delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
-                }
-            }
-            else//ako jeste krvni srodnik, onda treba pokrenuti samo brisanje druge osobe, koja ce zatim pokrenuti i ostatak brisanja kao u prethodnom
-            {
-                for(;b!=e;b++)
-                {
-                    //std::cout << "osoba jeste k.s. i brise supruznike " << Sifra() << std::endl;
-                    if(!(*b)->VecSeBrisem())
-                            ;
-                        //izgleda je ovde greska...
-                    delete ((*b)->TudjaOsoba());
-                }
-            }
-        }
-    }
+//                if(!_krvniSrodnik){
+//                    for(;b!=e;b++)
+//                    {
+//                        //std::cout << "osoba nije k.s. i raskida brakove " << Sifra() << std::endl;
+//                        (*b)->RaskiniSupruznike(this);//necu brisati i supruznika iz spiska, nego ga treba zamoliti da ukloni brak jer ostaje u porodici tj. ne brise se
+//                        if (!(*b)->VecSeBrisem())
+//                        delete *b;//brisanje braka ce automatski obrisati svu decu i sve njihove potomke
+//                    }
+//                }
+//                else//ako jeste krvni srodnik, onda treba pokrenuti samo brisanje druge osobe, koja ce zatim pokrenuti i ostatak brisanja kao u prethodnom
+//                {
+//                    for(;b!=e;b++)
+//                    {
+//                        //std::cout << "osoba jeste k.s. i brise supruznike " << Sifra() << std::endl;
+//                        if(!(*b)->VecSeBrisem())
+//                            delete ((*b)->TudjaOsoba());
+//                    }
+//                }
+//            }
+//        }
 }
 
 

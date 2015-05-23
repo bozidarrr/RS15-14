@@ -33,6 +33,7 @@ public:
 public Q_SLOTS:
     void pomeriPrvu(QPointF prva);
     void pomeriDrugu(QPointF druga);
+    void ukloniSeSaScene(short sifra);
 
 signals:
     void pomerilaSe(QPointF);
