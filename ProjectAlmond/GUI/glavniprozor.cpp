@@ -12,9 +12,9 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond[*]");
 
-    translator = new QTranslator();
-    ui->retranslateUi(this);
-    retranslate();
+    //translator = new QTranslator();
+    //ui->retranslateUi(this);
+    //retranslate();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -58,6 +58,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->setZValue(2);
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
+    connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
 }
 
@@ -211,6 +212,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
+            connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
         }   
     }
     delete d;
@@ -275,7 +277,8 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
-            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));            
+            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
+            connect(stablo, SIGNAL(obrisanaVezaDete(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
     }
     delete d;
@@ -305,6 +308,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
+            connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
     }
     delete d;
@@ -711,7 +715,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
         }
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
-            scena->removeItem(item);
+            //scena->removeItem(item);
             _pozicijeOsoba.erase(item->Sifra());
             setWindowModified(true);
         }
