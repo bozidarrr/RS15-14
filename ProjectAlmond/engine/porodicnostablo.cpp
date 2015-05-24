@@ -654,7 +654,6 @@ void PorodicnoStablo::ObrisiDecu(short sifra)
 std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum) const
 {// std::multimap<int, short> _indeksRodjendan;
     std::vector<short> *slavljenici = new std::vector<short>();
-    //std::pair <std::multimap<int, short>::iterator, std::multimap<int, short>::iterator> sl;// =
     auto sl = _indeksRodjendan.equal_range(datum.dayOfYear());
     auto iter = sl.first;
     for(; iter != sl.second; iter++)

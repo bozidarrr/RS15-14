@@ -19,6 +19,8 @@ public:
     GRelacija(short sifra, QPointF prva, QPointF druga, bool brak);
     ~GRelacija();
 
+    //QPainterPath shape() const;
+
     QRectF boundingRect() const override;
 
     void paint(QPainter *painter,
