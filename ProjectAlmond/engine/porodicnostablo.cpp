@@ -210,7 +210,48 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 //    ulaz >> date;
 //    ulaz >> date;
 //    ulaz >> date;
+    ulaz>>*_kljucnaOsoba;
+    InicijalizujSveStrukture();
+    qint32 velicina;
 
+    ulaz>>velicina;
+    for (int i=0;i<(short)velicina;i++){
+        Osoba *o;
+        ulaz>>*o;
+        _indeksSifraOsobe[o->Sifra()]=o;
+
+    }
+    ulaz>>velicina;
+    for (int i=0;i<(short)velicina;i++){
+        Brak *b;
+        ulaz>>*b;
+        _indeksSifraVeza[b->Sifra()]=b;
+
+    }
+    ulaz>>velicina;
+    for (int i=0;i<(short)velicina;i++){
+        Dete *d;
+        ulaz>>*d;
+        _indeksSifraDete[d->Sifra()]=d;
+
+    }
+    ulaz>>velicina;
+    for (int i=0;i<(short)velicina;i++){
+        qint32 a,b;
+        ulaz>>a;
+        ulaz>>b;
+        _indeksOsobaBrak.insert(std::pair<short,short>((short)a,(short)b));
+
+    }
+    ulaz>>velicina;
+    for (int i=0;i<(short)velicina;i++){
+        qint32 a,b;
+        ulaz>>a;
+        ulaz>>b;
+        _indeksBrakDeca.insert(std::pair<short,short>((short)a,(short)b));
+
+
+    }
     //std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
 
     //=========================
@@ -352,6 +393,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     //-----------------------------POVEZIVANJE DECE-----------------------------------//
 
 */
+    std::cout<<"Uspesno Procitano"<<std::endl;
     fajl.close();
 
     //----------------------------Posto se svakako pozivaju destruktori lokalnih promenljivih, moram da im naglasim pre nego sto budu pozvani
@@ -380,104 +422,122 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     izlaz << _kljucnaOsoba;
 
     //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;
-    izlaz << qint32(_indeksSifraOsobe.size());
+    izlaz << (qint32)_indeksSifraOsobe.size();
+
+
     for(auto osoba :_indeksSifraOsobe)
     {
         izlaz<<(*(osoba.second));
     }
 
-    izlaz << qint32(_indeksSifraVeza.size());
+    izlaz << (qint32)_indeksSifraVeza.size();
     for(auto brak :_indeksSifraVeza)
     {
         izlaz<<(*brak.second);
     }
 
-    izlaz << qint32(_indeksSifraDete.size());
+    izlaz << (qint32)_indeksSifraDete.size();
     for(auto dete :_indeksSifraDete)
     {
         izlaz<<(*dete.second);
     }
+    //std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
+    //std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
 
-   // std::vector<Osoba*>::iterator osoba=_sveOsobe.begin();
-  //  std::vector<Osoba*>::iterator eo=_sveOsobe.end();
+    izlaz << (qint32)_indeksOsobaBrak.size();
+    for(auto veza :_indeksOsobaBrak)
+    {
+        izlaz<<(qint32)(veza.first);
+        izlaz<<(qint32)(veza.second);
+    }
 
-    //std::vector<Brak*>::iterator brak;
-   // std::vector<Brak*>::iterator eb;
+    izlaz << (qint32)_indeksBrakDeca.size();
+    for(auto dete :_indeksBrakDeca)
+    {
+        izlaz<<(qint32)(dete.first);
+        izlaz<<(qint32)(dete.second);
+    }
+      fajl.close();
+    /*
 
-    //std::vector<Dete*>::iterator dete;
-   // std::vector<Dete*>::iterator ed;
+    for(;osoba!=eo;osoba++){
 
-//    for(;osoba!=eo;osoba++){
+        if((*osoba)!=nullptr){
+            izlaz << (qint32)(*osoba)->Sifra();
+            if((*osoba)->Poreklo()==nullptr)
+                izlaz << (qint32)-1;
+           else
+                izlaz << (qint32)((*osoba)->Poreklo()->Sifra());
 
-//        if((*osoba)!=nullptr){
-//            izlaz << qint32((*osoba)->Sifra());
-//            if((*osoba)->Poreklo()==nullptr)
-//                izlaz << -1;
-//            else
-//                izlaz << qint32((*osoba)->Poreklo()->Sifra());
+            izlaz << (qint32)((*osoba)->SpisakVeza().size());
 
-//            izlaz << qint32((*osoba)->SpisakVeza().size());
+            brak= (*osoba)->SpisakVeza().begin();
+            eb=(*osoba)->SpisakVeza().end();
+            for(;brak!=eb;brak++){
+                if((*brak)!=nullptr)
+                    izlaz << (qint32)((*brak)->Sifra());
+                else
+                    izlaz << (qint32)-1;
+            }
+        }
+        else
+            izlaz << (qint32)-1;
+    }
 
-//            brak= (*osoba)->SpisakVeza().begin();
-//            eb=(*osoba)->SpisakVeza().end();
-//            for(;brak!=eb;brak++){
-//                if((*brak)!=nullptr)
-//                    izlaz << qint32((*brak)->Sifra());
-//                else
-//                    izlaz << -1;
-//            }
-//        }
-//        else
-//            izlaz << -1;
-//    }
+    izlaz << (qint32)-100;//da bih znao da sam zavrsio sa ucitavanjem, da sledi ucitavanje brakova
 
-    izlaz << -100;//da bih znao da sam zavrsio sa ucitavanjem, da sledi ucitavanje brakova
+    brak=_sveVeze.begin();
+    eb=_sveVeze.end();
+    for(;brak!=eb;brak++){
+        if((*brak)!=nullptr){
+            izlaz << (qint32)((*brak)->Sifra());
+            if((*brak)->NasaOsoba()==nullptr)
+                izlaz << (qint32)-1;
+            else
+                izlaz << (qint32)((*brak)->NasaOsoba()->Sifra());
 
-//    brak=_sveVeze.begin();
-//    eb=_sveVeze.end();
-//    for(;brak!=eb;brak++){
-//        if((*brak)!=nullptr){
-//            izlaz << qint32((*brak)->Sifra());
-//            //if((*brak)->NasaOsoba()==nullptr)izlaz << -1;
-//            //else izlaz << qint32((*brak)->NasaOsoba()->Sifra());
+            if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
+            else izlaz << (qint32)((*brak)->TudjaOsoba()->Sifra());
 
-//            //if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
-//            //else izlaz << qint32((*brak)->TudjaOsoba()->Sifra());
+            izlaz << (qint32)((*brak)->SpisakDece().size());
+            dete=(*brak)->SpisakDece().begin();
+            ed=(*brak)->SpisakDece().end();
 
-//            izlaz << qint32((*brak)->SpisakDece().size());
-//            dete=(*brak)->SpisakDece().begin();
-//            ed=(*brak)->SpisakDece().end();
+            for(;dete!=ed;dete++){
+                if((*dete)!=nullptr)
+                    izlaz << (qint32)((*dete)->Sifra());
+                else izlaz << (qint32)-2;
+            }
+        }
+       else
+            izlaz << (qint32)-2;
 
-//            for(;dete!=ed;dete++){
-//                if((*dete)!=nullptr)
-//                    izlaz << qint32((*dete)->Sifra());
-//                else izlaz << -2;
-//            }
-//        }
-//        else
-//            izlaz << -2;
+    }
 
-//    }
+    izlaz << (qint32)-200;//da bih znao da sam zavrsio sa ucitavanjem, da predjem na ucitavanje dece
 
-//    izlaz << -200;//da bih znao da sam zavrsio sa ucitavanjem, da predjem na ucitavanje dece
+    dete=_svaDeca.begin();
+    ed=_svaDeca.end();
+    for(;dete!=ed;dete++){
+        if((*dete)!=nullptr){
+            if((*dete)->Potomak()==nullptr)
+                izlaz <<(qint32)-1;
+            else
+                izlaz << (qint32)((*dete)->Potomak()->Sifra());
 
-//    dete=_svaDeca.begin();
-//    ed=_svaDeca.end();
-//    for(;dete!=ed;dete++){
-//        if((*dete)!=nullptr){
-//            //if((*dete)->Potomak()==nullptr)izlaz << -1;
-//            //else izlaz << qint32((*dete)->Potomak()->Sifra());
+            if((*dete)->RoditeljskiOdnos()==nullptr)
+                izlaz << (qint32)-1;
+            else
+                izlaz << (qint32)((*dete)->RoditeljskiOdnos()->Sifra());
+        }
+        else
+            izlaz << (qint32)-3;
+    }
 
-//            //if((*dete)->RoditeljskiOdnos()==nullptr) izlaz << -1;
-//            //else izlaz << qint32((*dete)->RoditeljskiOdnos()->Sifra());
-//        }
-//        else
-//            izlaz << -3;
-//    }
+    izlaz <<(qint32)-300; //da bih konacno zavrsio sa ucitavanjem i otisao kuci svojoj zeni i deci
+*/
+    std::cout<<"Uspesno ispisano";
 
-    izlaz << -300; //da bih konacno zavrsio sa ucitavanjem i otisao kuci svojoj zeni i deci
-
-    fajl.close();
     return true;
 }
 

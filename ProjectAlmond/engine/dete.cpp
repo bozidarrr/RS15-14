@@ -104,17 +104,23 @@ QDataStream& operator<<(QDataStream &out,Dete& dete)
     out << qint32(dete._sifra);
     out << qint32(dete._sifraOsobe);
     out << qint32(dete._sifraRoditeljskeVeze);
-    out << dete._trivija;
+    out << dete._trivija.toStdString().c_str();
     return out;
 }
 
 
 QDataStream& operator>>(QDataStream &in,Dete& dete)
 {
-
-    in >> dete._sifra;
-    QString tren;
-    in >> dete._trivija;
+    qint32 a;
+    in>>a;
+    dete._sifra=(short)a;
+    in>>a;
+    dete._sifraOsobe=(short)a;
+    in>>a;
+    dete._sifraRoditeljskeVeze=(short)a;
+    char* tren;
+    in >> tren;
+    dete._trivija=QString(tren);
     return in;
 }
 
