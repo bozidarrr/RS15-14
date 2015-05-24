@@ -13,7 +13,7 @@ Brak::Brak()
 //    //std::cout << "kreira se brak " << _sifra << std::endl;
 //}
 
-Brak::Brak(short sifraNase, short sifraTudje, std::string &trivija)
+Brak::Brak(const short sifraNase, const short sifraTudje, const QString &trivija)
     : _sifra(++_sledecaSifra), _sifraNase(sifraNase), _sifraTudje(sifraTudje), _trivija(trivija)
 {}
 
@@ -68,7 +68,7 @@ short Brak::SifraTudje()
 //{
 //    return _spisakDece;
 //}
-std::string& Brak::Trivija()
+const QString &Brak::Trivija() const
 {
     return _trivija;
 }
@@ -175,7 +175,7 @@ QDataStream& operator<<(QDataStream &out,Brak& brak)
     //out << qint32(brak._spisakDece.size());
     out << qint32(brak.SifraNase());
     out << qint32(brak.SifraTudje());
-    out << QString::fromStdString(brak._trivija);
+    out << brak._trivija;
 
     return out;
 }
@@ -190,7 +190,7 @@ QDataStream& operator>>(QDataStream &in,Brak& brak)
     //brak._spisakDece.resize(broj);
     QString tren;
     in >> tren;
-    brak._trivija=tren.toStdString();
+    //brak._trivija=tren.toStdString();
 
     return in;
 }

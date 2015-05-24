@@ -2,7 +2,7 @@
 #define BRAK_H
 
 #include<vector>
-#include<string>
+#include<QString>
 #include<QDate>
 
 //#include"engine/osoba.h"
@@ -14,7 +14,7 @@ class Brak
 public:
     Brak();
     //Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
-    Brak(short sifraNase, short sifraTudje, std::string &trivija);
+    Brak(const short sifraNase, const short sifraTudje, const QString &trivija);
     Brak(const Brak& drugi);
     ~Brak();
 
@@ -25,7 +25,7 @@ public:
     //Osoba* NasaOsoba();
     //Osoba* TudjaOsoba();
     //std::vector<Dete*>& SpisakDece();
-    std::string& Trivija();/*
+    const QString& Trivija() const;/*
     QDate& DatumUpoznavanja();
     QDate& DatumVeze();
     QDate& DatumRaskida();
@@ -70,7 +70,7 @@ private:
     //Osoba* _nasaOsoba;
     //Osoba* _tudjaOsoba;
     //std::vector<Dete *> _spisakDece;
-    std::string _trivija;
+    QString _trivija;
     /* QDate _datumUpoznavanja;
     QDate _datumVeze;
     QDate _datumVeridbe;

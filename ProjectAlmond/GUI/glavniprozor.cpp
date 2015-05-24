@@ -1,5 +1,6 @@
 #include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
+#include <vector>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +45,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", "m", true);
+    stablo = new PorodicnoStablo("Pera", "Detlic", "m",
+                                 QDate::currentDate(), QDate::currentDate(), true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -53,13 +55,17 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     obnoviSkoroOtvarane();
 
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                stablo->KljucnaOsoba()->Ime());//DOPUNITI
+                                *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     korena->setPos(123,123);
     korena->setZValue(2);
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
+
+    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    //qDebug() << v->size();
+    //delete v;
 }
 
 GlavniProzor::~GlavniProzor()
@@ -84,9 +90,9 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
             Labela->setText(osoba->Ime());
     }
     if (tip == INFO_BRAK)
-        Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiBrakSifrom(sifra)->Trivija());
     if (tip == INFO_DETE)
-        Labela->setText(QString::fromStdString(stablo->NadjiDeteSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiDeteSifrom(sifra)->Trivija());
 }
 
 void GlavniProzor::prikaziToolbar()
@@ -207,14 +213,14 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         QString pol;
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
-            novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
+            novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
         else
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
             //std::string tmp =
             //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
-            novaOsoba = new GOsoba(novaSifra, ime);
+            novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
@@ -264,7 +270,7 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
 
     if (d->exec())
     {
@@ -292,7 +298,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
     if (d->exec())
     {
         d->popuniPodatke(trivija);
@@ -438,7 +444,6 @@ void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
     scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
-    //scena->setSceneRect();
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -729,7 +734,10 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             return;
         }
         if (izmeniOsobu(item->Sifra()) == item->Sifra())
+        {
+            item->promeniIme(*(stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime()));
             setWindowModified(true);
+        }
     }
     tbDetalji->setChecked(true);
 }

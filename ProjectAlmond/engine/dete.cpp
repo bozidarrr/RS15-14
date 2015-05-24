@@ -11,7 +11,7 @@ Dete::Dete()
 //    :_sifra(++_sledecaSifra),_osoba(osoba),_roditeljskiOdnos(roditeljskaVeza),_trivija(trivija)
 //{}
 
-Dete::Dete(short sifraOsobe, short sifraRoditeljskeVeze, std::string trivija)
+Dete::Dete(const short sifraOsobe, const short sifraRoditeljskeVeze, const QString &trivija)
     : _sifra(++_sledecaSifra), _sifraOsobe(sifraOsobe), _sifraRoditeljskeVeze(sifraRoditeljskeVeze), _trivija(trivija)
 {}
 
@@ -21,7 +21,7 @@ Dete::Dete(const Dete &drugo)
 
 Dete::~Dete()
 {
-    std::cout << "brise se dete " << Sifra() << std::endl;
+    //std::cout << "brise se dete " << Sifra() << std::endl;
     _vecSeBrisem=true;
 //    if(!_preskociRazvezivanje){
 //        //std::cout << "dete razvezuje " << Sifra() << std::endl;
@@ -54,7 +54,7 @@ short Dete::SifraRoditeljskogOdnosa()
 //{
 //    return _roditeljskiOdnos;
 //}
-std::string& Dete::Trivija()
+const QString &Dete::Trivija() const
 {
     return _trivija;
 }/*
@@ -104,7 +104,7 @@ QDataStream& operator<<(QDataStream &out,Dete& dete)
     out << qint32(dete._sifra);
     out << qint32(dete._sifraOsobe);
     out << qint32(dete._sifraRoditeljskeVeze);
-    out << QString::fromStdString(dete._trivija);
+    out << dete._trivija;
     return out;
 }
 
@@ -114,8 +114,7 @@ QDataStream& operator>>(QDataStream &in,Dete& dete)
 
     in >> dete._sifra;
     QString tren;
-    in >> tren;
-    dete._trivija=tren.toStdString();
+    in >> dete._trivija;
     return in;
 }
 

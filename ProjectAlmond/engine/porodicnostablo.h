@@ -20,7 +20,7 @@ class PorodicnoStablo : public QObject
     Q_OBJECT
 public:
     PorodicnoStablo();
-    PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik=true);
+    PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik=true);
 
     ~PorodicnoStablo();//brise apsolutno sve, tako sto prvo raskine sve veze u strukturama, a onda brise redom koristeci vektore sa pokazivacima
 
@@ -28,7 +28,7 @@ public:
 
 
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
-    short int DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik);
+    short int DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate rodjenje, const QDate smrt, bool krvniSrodnik);
     //slicno, samo pravi NN lice
     short int DodajNNLice(bool krvniSrodnik);
 
@@ -50,10 +50,10 @@ public:
     */
 
     //dodaje relaciju dete, od braka do osobe
-    short int DodajDete(short int sifraBraka, short int sifraOsobe, std::string trivija="");
+    short int DodajDete(const short sifraBraka, const short sifraOsobe, const QString &trivija="");
 
     //dodaje relaciju brak izmedju dve osobe date siframa
-    short int DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija="");
+    short int DodajBrak(const short int sifraNaseOsobe, const short int sifraTudjeOsobe, const QString &trivija="");
 
 
     Osoba* NadjiOsobuSifrom(const short sifra);
@@ -69,6 +69,9 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
+
+    std::vector<short>* KomeJeSveRodjendan(const QDate& datum) const;
+
     /*ne rade!!!*/
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
@@ -78,7 +81,8 @@ private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//
-    std::map<QString, std::vector<Osoba*> > _indeksIme;
+    //std::map<QString, std::vector<Osoba*> > _indeksIme;
+    std::multimap<QString, Osoba*> _indeksIme;
     //std::map<std::string, std::vector<Osoba*> > _indeksIme;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
 //    std::map<QDate, std::vector<Osoba*> > _indeksRodjenje;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
 //    std::map<int, std::vector<Osoba*> > _indeksRodjendan;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
@@ -90,9 +94,12 @@ private:
     std::map<short int, Dete* > _indeksSifraDete;//mapa koja vezuje sifru deteta za konkretan relacioni objekat dete
     //-----OVE STALNO AZURIRAMO------//
     //-----OVE DOLE NE!!!! zato uvek konsultovati prva tri------//
+    //mozda da umesto brisanja iz ovih uvedemo ivalidaciju, tipa promenimo vrednost_sifru na -1... //
     //uvesti periodicno osvezavanje ovih indeksa?...//
     std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
     std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
+    std::multimap<QDate, short> _indeksRodjenje;//mapa koja vezuje datum i sve osobe rodjene tog dana
+    std::multimap<int, short> _indeksRodjendan;//mapa vezuje dan [1,366] sa sifrom osobe rodjenom tog dana
 
 
     //--------------------INDEKSI------------------------//
