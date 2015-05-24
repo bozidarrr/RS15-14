@@ -10,16 +10,17 @@ PorodicnoStablo::PorodicnoStablo()
     (_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
 }
 
-PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol,  bool krvniSrodnik)
+PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol,
+                                 const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
 {
-    _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), QDate::currentDate(), QDate::currentDate(), krvniSrodnik);
+    _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), rodjenje, smrt, krvniSrodnik);
     InicijalizujSveStrukture();
-    //_indeksIme[_kljucnaOsoba->Ime()]=std::vector<Osoba*>();
-    //_indeksIme[_kljucnaOsoba->Ime()].push_back(_kljucnaOsoba);
-    /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
-    _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()].push_back(&_kljucnaOsoba);
-    _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()]=std::vector<Osoba*>();
-    _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()].push_back(&_kljucnaOsoba);*/
+    _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
+    if (rodjenje.isValid())
+    {
+        _indeksRodjenje.insert(std::make_pair(rodjenje, _kljucnaOsoba->Sifra()));//ubacuje pri pravljenju osobe
+        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), _kljucnaOsoba->Sifra()));//ne azurira pri promeni kasnijoj!
+    }
     _indeksSifraOsobe[_kljucnaOsoba->Sifra()]=_kljucnaOsoba;
 }
 
@@ -44,16 +45,17 @@ short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
 }
-short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik)
+short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime, const QString &pol,
+                                      const QDate rodjenje, const QDate smrt, bool krvniSrodnik)
 {
     QChar p = pol.at(0);
-    Osoba* nova=new Osoba(ime, prezime, p, QDate::currentDate(), QDate::currentDate(), krvniSrodnik);
-    ///_indeksIme[ime]=std::vector<Osoba*>();
-   // _indeksIme[ime].push_back(nova);
-    /*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
-    _indeksRodjenje[datumRodjenja].push_back(nova);
-    _indeksRodjendan[datumRodjenja.daysInYear()]=std::vector<Osoba*>();
-    _indeksRodjendan[datumRodjenja.daysInYear()].push_back(nova);*/
+    Osoba* nova=new Osoba(ime, prezime, p, rodjenje, smrt, krvniSrodnik);
+    _indeksIme.insert(std::make_pair(ime, nova));
+    if (rodjenje.isValid())
+    {
+        _indeksRodjenje.insert(std::make_pair(rodjenje, nova->Sifra()));//ubacuje pri pravljenju osobe
+        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), nova->Sifra()));//ne azurira pri promeni kasnijoj!
+    }
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
 }
@@ -487,6 +489,8 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksSifraVeza.clear();
     _indeksBrakDeca.clear();
     _indeksOsobaBrak.clear();
+    _indeksRodjendan.clear();
+    _indeksRodjenje.clear();
 }
 
 void PorodicnoStablo::SpaliCeloStablo()
@@ -585,6 +589,21 @@ void PorodicnoStablo::ObrisiDecu(short sifra)
         for (iterDeca = deca.first; iterDeca != deca.second; iterDeca++)
             UkloniOsobuSifrom(iterDeca->second);
     }
+}
+
+std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum) const
+{// std::multimap<int, short> _indeksRodjendan;
+    std::vector<short> *slavljenici = new std::vector<short>();
+    //std::pair <std::multimap<int, short>::iterator, std::multimap<int, short>::iterator> sl;// =
+    auto sl = _indeksRodjendan.equal_range(datum.dayOfYear());
+    auto iter = sl.first;
+    for(; iter != sl.second; iter++)
+    {
+        //proveravam da li osoba postoji, ali ne proveravam da li joj je izmenjen podatak!
+        if (_indeksSifraOsobe.find(iter->second) != _indeksSifraOsobe.end())
+            slavljenici->push_back(iter->second);
+    }
+    return slavljenici;
 }
 
 

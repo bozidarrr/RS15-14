@@ -1,5 +1,6 @@
 #include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
+#include <vector>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +45,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", "m", true);
+    stablo = new PorodicnoStablo("Pera", "Detlic", "m",
+                                 QDate::currentDate(), QDate::currentDate(), true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -60,6 +62,10 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
+
+    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    //qDebug() << v->size();
+    //delete v;
 }
 
 GlavniProzor::~GlavniProzor()
@@ -207,7 +213,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         QString pol;
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
-            novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
+            novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
         else
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
