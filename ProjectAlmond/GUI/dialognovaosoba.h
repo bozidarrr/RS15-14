@@ -24,7 +24,7 @@ public:
     explicit DialogNovaOsoba(QWidget *parent = 0);
     ~DialogNovaOsoba();
 
-    void popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
+    bool popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt);
 
     bool popuniPodatke(std::string &ime, std::string &prezime, char &pol,
                        std::string &rodjenje, std::string &smrt);

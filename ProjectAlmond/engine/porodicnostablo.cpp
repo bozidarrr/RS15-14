@@ -10,12 +10,12 @@ PorodicnoStablo::PorodicnoStablo()
     (_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
 }
 
-PorodicnoStablo::PorodicnoStablo(std::string ime, std::string prezime, char pol,  bool krvniSrodnik)
+PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol,  bool krvniSrodnik)
 {
-    _kljucnaOsoba = new Osoba(ime, prezime, pol, krvniSrodnik);
+    _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), QDate::currentDate(), QDate::currentDate(), krvniSrodnik);
     InicijalizujSveStrukture();
-    _indeksIme[_kljucnaOsoba->Ime()]=std::vector<Osoba*>();
-    _indeksIme[_kljucnaOsoba->Ime()].push_back(_kljucnaOsoba);
+    //_indeksIme[_kljucnaOsoba->Ime()]=std::vector<Osoba*>();
+    //_indeksIme[_kljucnaOsoba->Ime()].push_back(_kljucnaOsoba);
     /*  _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()]=std::vector<Osoba*>();
     _indeksRodjenje[_kljucnaOsoba.DatumRodjenja()].push_back(&_kljucnaOsoba);
     _indeksRodjendan[_kljucnaOsoba.DatumRodjenja().daysInYear()]=std::vector<Osoba*>();
@@ -27,7 +27,8 @@ PorodicnoStablo::~PorodicnoStablo()
 {
     if (_kljucnaOsoba != nullptr)
         UkloniOsobuSifrom(_kljucnaOsoba->Sifra());
-    SpaliCeloStablo();
+    InicijalizujSveStrukture();
+    //SpaliCeloStablo();
 }
 
 Osoba * PorodicnoStablo::KljucnaOsoba()
@@ -43,11 +44,12 @@ short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
 }
-short int PorodicnoStablo::DodajOsobu(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
+short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik)
 {
-    Osoba* nova=new Osoba(ime,prezime,pol,krvniSrodnik);
-    _indeksIme[ime]=std::vector<Osoba*>();
-    _indeksIme[ime].push_back(nova);
+    QChar p = pol.at(0);
+    Osoba* nova=new Osoba(ime, prezime, p, QDate::currentDate(), QDate::currentDate(), krvniSrodnik);
+    ///_indeksIme[ime]=std::vector<Osoba*>();
+   // _indeksIme[ime].push_back(nova);
     /*    _indeksRodjenje[datumRodjenja]=std::vector<Osoba*>();
     _indeksRodjenje[datumRodjenja].push_back(nova);
     _indeksRodjendan[datumRodjenja.daysInYear()]=std::vector<Osoba*>();
@@ -159,21 +161,19 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
     delete NadjiDeteSifrom(sifra);
 }
 
+//bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
+//{
+//    return true;
+//}
+//bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
+//{
+//    return true;
+//}
+
+
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
-    return true;
-}
-bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
-{
-    return true;
-}
-
-/*
-bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
-{
-
-
-
+    std::cout << "Citam fajl" << std::endl;
     //otvaramo fajl
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::ReadOnly)) {
@@ -193,28 +193,48 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     int maxSifraOsobe=-1;
     int maxSifraBraka=-1;
     int maxSifraDeteta=-1;
+    //===========================
+    qint32 sifraKlj;
+    QString ime, prezime;
+    bool srodnik, nepoznata;
+    QChar pol;
+    QDate date;
+    ulaz >> sifraKlj;
+//    ulaz >> nepoznata;
+//    ulaz >> ime;
+//    ulaz >> prezime;
+//    ulaz >> pol;
+//    ulaz >> srodnik;
+//    ulaz >> date;
+//    ulaz >> date;
+//    ulaz >> date;
 
-    ulaz >> *_kljucnaOsoba;
+    std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
+
+    //=========================
+
+    //ulaz >> *_kljucnaOsoba;
 
     int trenInt=0;
 
     ulaz >> trenInt;
-    //_sveOsobe.clear();
-    // _sveOsobe.resize(trenInt);
-    Osoba trenOsoba;
-    Osoba *trenOsobaPokazivac=nullptr;
-    for(int i=0;i<trenInt;i++)
-    {
-        ulaz >> trenOsoba;
-        trenOsobaPokazivac=new Osoba(trenOsoba);
-        //_sveOsobe.push_back(trenOsobaPokazivac);
-        if(maxSifraOsobe<trenOsoba.Sifra())maxSifraOsobe=trenOsoba.Sifra();
-        _indeksIme[trenOsobaPokazivac->Ime()]=std::vector<Osoba*>();
-        _indeksIme[trenOsobaPokazivac->Ime()].push_back(trenOsobaPokazivac);
-        _indeksSifraOsobe[trenOsobaPokazivac->Sifra()]=trenOsobaPokazivac;
+    std::cout << "citam " << trenInt << " osoba"<<std::endl;
+//    Osoba trenOsoba;
+//    Osoba *trenOsobaPokazivac=new Osoba();
+//    for(int i=0;i<trenInt;i++)
+//    {
+//        //std::cout << "citam osobu"<<std::endl;
+//        ulaz >> trenOsoba;
+//        //trenOsobaPokazivac=new Osoba(trenOsoba);
+//        //_sveOsobe.push_back(trenOsobaPokazivac);
+//        //if(maxSifraOsobe<trenOsoba.Sifra())maxSifraOsobe=trenOsoba.Sifra();
+//       // _indeksIme[trenOsobaPokazivac->Ime()]=std::vector<Osoba*>();
+//       // _indeksIme[trenOsobaPokazivac->Ime()].push_back(trenOsobaPokazivac);
+//       // _indeksSifraOsobe[trenOsobaPokazivac->Sifra()]=trenOsobaPokazivac;
 
-    }
-
+//    }
+    std::cout << "zavrsio sa osobama"<<std::endl;
+/*
     //----------------------UCITAVANJE SVIH PODATAKA O OSOBAMA, BEZ VEZIVANJA---------------------------//
 
 
@@ -329,23 +349,24 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     while(sifraDeteta != -300);
     //-----------------------------POVEZIVANJE DECE-----------------------------------//
 
-
+*/
     fajl.close();
 
     //----------------------------Posto se svakako pozivaju destruktori lokalnih promenljivih, moram da im naglasim pre nego sto budu pozvani
     //----------------------------da ne treba da rade nikakvu vrstu razvezivanja, koje postoji u destruktorima!!!
-    trenDete.PreskociRazvezivanje();
-    trenOsoba.PreskociRazvezivanje();
-    trenBrak.PreskociRazvezivanje();
+   // //trenDete.PreskociRazvezivanje();
+   // trenOsoba.PreskociRazvezivanje();
+   // trenBrak.PreskociRazvezivanje();
 
     return true;
 }
-*/
 
-/*
+
+
 bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke koji su mi potrebni, da bi fajlovi bili manji
 {//time gubim na performansama pri ucitavanju, ali posto je cuvanje bitnije od ucitavanja (koje radimo prilicno retko), deluje mi bolje ovako
 
+    std::cout << "Pisem u fajl" << std::endl;
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::WriteOnly)) {
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
@@ -356,108 +377,107 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
 
     izlaz << _kljucnaOsoba;
 
- //   izlaz << qint32(_sveOsobe.size());
-  //  for(Osoba* osoba:_sveOsobe)
-  //  {
+    //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;
+    izlaz << qint32(_indeksSifraOsobe.size());
+    for(auto osoba :_indeksSifraOsobe)
+    {
+        izlaz<<(*(osoba.second));
+    }
 
-  //      izlaz<<(*osoba);
- //   }
+    izlaz << qint32(_indeksSifraVeza.size());
+    for(auto brak :_indeksSifraVeza)
+    {
+        izlaz<<(*brak.second);
+    }
 
-  //  izlaz << qint32(_sveVeze.size());
- //   for(Brak* brak:_sveVeze){
-//
- //       izlaz<<(*brak);
- //   }
-
-    //izlaz << qint32(_svaDeca.size());
-   // for(Dete* dete:_svaDeca){
-
- //       izlaz<<(*dete);
-  ///  }
+    izlaz << qint32(_indeksSifraDete.size());
+    for(auto dete :_indeksSifraDete)
+    {
+        izlaz<<(*dete.second);
+    }
 
    // std::vector<Osoba*>::iterator osoba=_sveOsobe.begin();
   //  std::vector<Osoba*>::iterator eo=_sveOsobe.end();
 
-    std::vector<Brak*>::iterator brak;
-    std::vector<Brak*>::iterator eb;
+    //std::vector<Brak*>::iterator brak;
+   // std::vector<Brak*>::iterator eb;
 
-    std::vector<Dete*>::iterator dete;
-    std::vector<Dete*>::iterator ed;
+    //std::vector<Dete*>::iterator dete;
+   // std::vector<Dete*>::iterator ed;
 
-    for(;osoba!=eo;osoba++){
+//    for(;osoba!=eo;osoba++){
 
-        if((*osoba)!=nullptr){
-            izlaz << qint32((*osoba)->Sifra());
-            if((*osoba)->Poreklo()==nullptr)
-                izlaz << -1;
-            else
-                izlaz << qint32((*osoba)->Poreklo()->Sifra());
+//        if((*osoba)!=nullptr){
+//            izlaz << qint32((*osoba)->Sifra());
+//            if((*osoba)->Poreklo()==nullptr)
+//                izlaz << -1;
+//            else
+//                izlaz << qint32((*osoba)->Poreklo()->Sifra());
 
-            izlaz << qint32((*osoba)->SpisakVeza().size());
+//            izlaz << qint32((*osoba)->SpisakVeza().size());
 
-            brak= (*osoba)->SpisakVeza().begin();
-            eb=(*osoba)->SpisakVeza().end();
-            for(;brak!=eb;brak++){
-                if((*brak)!=nullptr)
-                    izlaz << qint32((*brak)->Sifra());
-                else
-                    izlaz << -1;
-            }
-        }
-        else
-            izlaz << -1;
-    }
+//            brak= (*osoba)->SpisakVeza().begin();
+//            eb=(*osoba)->SpisakVeza().end();
+//            for(;brak!=eb;brak++){
+//                if((*brak)!=nullptr)
+//                    izlaz << qint32((*brak)->Sifra());
+//                else
+//                    izlaz << -1;
+//            }
+//        }
+//        else
+//            izlaz << -1;
+//    }
 
     izlaz << -100;//da bih znao da sam zavrsio sa ucitavanjem, da sledi ucitavanje brakova
 
-    brak=_sveVeze.begin();
-    eb=_sveVeze.end();
-    for(;brak!=eb;brak++){
-        if((*brak)!=nullptr){
-            izlaz << qint32((*brak)->Sifra());
-            //if((*brak)->NasaOsoba()==nullptr)izlaz << -1;
-            //else izlaz << qint32((*brak)->NasaOsoba()->Sifra());
+//    brak=_sveVeze.begin();
+//    eb=_sveVeze.end();
+//    for(;brak!=eb;brak++){
+//        if((*brak)!=nullptr){
+//            izlaz << qint32((*brak)->Sifra());
+//            //if((*brak)->NasaOsoba()==nullptr)izlaz << -1;
+//            //else izlaz << qint32((*brak)->NasaOsoba()->Sifra());
 
-            //if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
-            //else izlaz << qint32((*brak)->TudjaOsoba()->Sifra());
+//            //if((*brak)->TudjaOsoba()==nullptr)izlaz << -1;
+//            //else izlaz << qint32((*brak)->TudjaOsoba()->Sifra());
 
-            izlaz << qint32((*brak)->SpisakDece().size());
-            dete=(*brak)->SpisakDece().begin();
-            ed=(*brak)->SpisakDece().end();
+//            izlaz << qint32((*brak)->SpisakDece().size());
+//            dete=(*brak)->SpisakDece().begin();
+//            ed=(*brak)->SpisakDece().end();
 
-            for(;dete!=ed;dete++){
-                if((*dete)!=nullptr)
-                    izlaz << qint32((*dete)->Sifra());
-                else izlaz << -2;
-            }
-        }
-        else
-            izlaz << -2;
+//            for(;dete!=ed;dete++){
+//                if((*dete)!=nullptr)
+//                    izlaz << qint32((*dete)->Sifra());
+//                else izlaz << -2;
+//            }
+//        }
+//        else
+//            izlaz << -2;
 
-    }
+//    }
 
-    izlaz << -200;//da bih znao da sam zavrsio sa ucitavanjem, da predjem na ucitavanje dece
+//    izlaz << -200;//da bih znao da sam zavrsio sa ucitavanjem, da predjem na ucitavanje dece
 
-    dete=_svaDeca.begin();
-    ed=_svaDeca.end();
-    for(;dete!=ed;dete++){
-        if((*dete)!=nullptr){
-            //if((*dete)->Potomak()==nullptr)izlaz << -1;
-            //else izlaz << qint32((*dete)->Potomak()->Sifra());
+//    dete=_svaDeca.begin();
+//    ed=_svaDeca.end();
+//    for(;dete!=ed;dete++){
+//        if((*dete)!=nullptr){
+//            //if((*dete)->Potomak()==nullptr)izlaz << -1;
+//            //else izlaz << qint32((*dete)->Potomak()->Sifra());
 
-            //if((*dete)->RoditeljskiOdnos()==nullptr) izlaz << -1;
-            //else izlaz << qint32((*dete)->RoditeljskiOdnos()->Sifra());
-        }
-        else
-            izlaz << -3;
-    }
+//            //if((*dete)->RoditeljskiOdnos()==nullptr) izlaz << -1;
+//            //else izlaz << qint32((*dete)->RoditeljskiOdnos()->Sifra());
+//        }
+//        else
+//            izlaz << -3;
+//    }
 
     izlaz << -300; //da bih konacno zavrsio sa ucitavanjem i otisao kuci svojoj zeni i deci
 
     fajl.close();
     return true;
 }
-*/
 
 void PorodicnoStablo::InicijalizujSveStrukture()
 {
@@ -522,12 +542,9 @@ void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)//brise brakov
         {
             if (_indeksSifraVeza.find(iter->second) == _indeksSifraVeza.end())
                 continue;
-            //brisemo samo osobu, ne i veze ovde
+            //brisemo samo drugu osobu, ne i veze ovde
             UkloniOsobuSifrom(_indeksSifraVeza[iter->second]->SifraTudje());
         }
-        //std::cout << "Brakova pre erase ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
-        //_indeksOsobaBrak.erase(brakovi.first, brakovi.second);
-        //std::cout << "Brakova posle erase ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
     }
     else
     {
@@ -545,8 +562,6 @@ void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)//brise brakov
             }
             emit obrisanaVezaBrak(sifraBraka);
         }
-        //std::cout << "Brakova ostalo " << _indeksOsobaBrak.count(sifra) << std::endl;
-        //_indeksOsobaBrak.erase(brakovi.first, brakovi.second);
     }
 }
 

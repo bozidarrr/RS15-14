@@ -3,10 +3,10 @@
 #include <string>
 #include <QDate>
 
-#include "engine/brak.h"
-#include "engine/osoba.h"
-class Brak;
-class Osoba;
+//#include "engine/brak.h"
+//#include "engine/osoba.h"
+//class Brak;
+//class Osoba;
 
 class Dete
 {

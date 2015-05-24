@@ -30,9 +30,13 @@ private:
 
     void popuniDugmice();
     void popuniPolja();
+    void postaviProvere();
 
 public Q_SLOTS:
     void primeniIzmene();
+private slots:
+    void on_chkRodjenje_stateChanged(int arg1);
+    void on_chkSmrt_stateChanged(int arg1);
 };
 
 #endif // DIJALOGIZMENAOSOBE_H

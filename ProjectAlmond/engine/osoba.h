@@ -3,49 +3,63 @@
 
 #include <vector>
 #include <string>
-
+#include <QString>
 #include <QDate>
 #include<QDataStream>
-#include "engine/dete.h"
-#include "engine/brak.h"
-class Dete;
-class Brak;
+//#include "engine/dete.h"
+//#include "engine/brak.h"
+//class Dete;
+//class Brak;
+
+/**
+ *  static short int _sledecaSifra;
+    int _sifra;
+    bool _nepoznata;
+    std::string _ime;
+    std::string _prezime;
+    char _pol;
+    QDate _datumRodjenja;
+    QDate _datumSmrti;
+    bool _krvniSrodnik;
+ *
+ *
+**/
 
 class Osoba
 {
 public:
 
     Osoba(bool krvniSrodnik = false); //kreira N.N lice
-    Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
+    Osoba(const QString &ime, const QString &prezime, const QChar &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik);
+    //Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
     Osoba(const Osoba& druga);//samo podatke, ne i veze!!!
 
     ~Osoba(); //uklanja osobu, sve njene podatke i poziva uklanjanje sopstvenog pointera iz brakova, kao i unistavanje relacionog objekta Dete
 
 
     //----geteri i seteri------//
-    short int Sifra()const;//vraca sifru
+    short int Sifra() const;//vraca sifru
 
-    const std::string& Ime() const;//vraca ime
+    const QString &Ime() const;//vraca ime
 
-    const std::string& Prezime() const;//vraca prezime
+    const QString& Prezime() const;//vraca prezime
 
-    //const& char Pol() const;
+    const QChar& Pol() const;
 
-   // QDate& DatumRodjenja(); //vraca datum rodjenja
+    const QDate& DatumRodjenja() const; //vraca datum rodjenja
 
-   // QDate& DatumSmrti(); //vraca datum smrti
+    const QDate& DatumSmrti() const; //vraca datum smrti
 
-    bool JeKrvniSrodnik(); //vraca da li je osoba u krvnom srodstvu sa kljucnom osobom
-
-    //Dete* Poreklo(); //vraca adresu relacionog objekta dete, kojim se moze povezati sa brakom/vezom iz koje je nastala osoba
-
-    //void PostaviPoreklo(Dete* poreklo);
+    bool JeKrvniSrodnik() const; //vraca da li je osoba u krvnom srodstvu sa kljucnom osobom
 
     static void postaviSledecuSifru(int sifra);
 
-    //void DodajVezu(Brak* veza);
+    void PromeniIme(const QString &ime);
+    void PromeniPrezime(const QString &prezime);
+    void PromeniPol(const QChar &pol);
+    void PromeniDatumRodjenja(const QDate &datum);
+    void PromeniDatumSmrti(const QDate &datum);
 
-    //std::vector<Brak*>& SpisakVeza(); //vraca referencu na spisak svih veza koje je osoba imala
     //----geteri i seteri------//
 
     //---metodi korisni u upotrebi---//
@@ -80,9 +94,9 @@ private:
     static short int _sledecaSifra;
     int _sifra;
     bool _nepoznata;
-    std::string _ime;
-    std::string _prezime;
-    char _pol;
+    QString _ime;
+    QString _prezime;
+    QChar _pol;
     QDate _datumRodjenja;
     QDate _datumSmrti;
     bool _krvniSrodnik;

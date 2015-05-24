@@ -1,11 +1,13 @@
 #ifndef PORODICNOSTABLO_H
 #define PORODICNOSTABLO_H
 #include <QObject>
-#include<vector>
-#include<map>
-#include<string>
-#include<QDate>
-#include"engine/osoba.h"
+#include <vector>
+#include <map>
+#include <string>
+#include <QDate>
+#include "engine/osoba.h"
+#include "engine/brak.h"
+#include "engine/dete.h"
 #include <QString>
 #include <QFile>
 #include <iostream>
@@ -18,7 +20,7 @@ class PorodicnoStablo : public QObject
     Q_OBJECT
 public:
     PorodicnoStablo();
-    PorodicnoStablo(std::string ime, std::string prezime, char pol, bool krvniSrodnik=true);
+    PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik=true);
 
     ~PorodicnoStablo();//brise apsolutno sve, tako sto prvo raskine sve veze u strukturama, a onda brise redom koristeci vektore sa pokazivacima
 
@@ -26,7 +28,7 @@ public:
 
 
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
-    short int DodajOsobu(std::string ime, std::string prezime, char pol,bool krvniSrodnik);
+    short int DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, bool krvniSrodnik);
     //slicno, samo pravi NN lice
     short int DodajNNLice(bool krvniSrodnik);
 
@@ -67,7 +69,7 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
-    /*mislim da ovo treba ovde*/
+    /*ne rade!!!*/
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
 
@@ -76,7 +78,8 @@ private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//
-    std::map<std::string, std::vector<Osoba*> > _indeksIme;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
+    std::map<QString, std::vector<Osoba*> > _indeksIme;
+    //std::map<std::string, std::vector<Osoba*> > _indeksIme;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
 //    std::map<QDate, std::vector<Osoba*> > _indeksRodjenje;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
 //    std::map<int, std::vector<Osoba*> > _indeksRodjendan;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
 

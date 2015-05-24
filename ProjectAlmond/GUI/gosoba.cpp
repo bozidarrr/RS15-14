@@ -47,6 +47,11 @@ short GOsoba::Sifra() const
     return _sifra;
 }
 
+void GOsoba::promeniIme(const QString &novoIme)
+{
+    _ime = novoIme;
+}
+
 void GOsoba::obavestiRelacije()
 {
     emit pomerilaSe(pos());
