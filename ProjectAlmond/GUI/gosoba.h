@@ -30,10 +30,15 @@ public:
 
     short int Sifra() const;
 
+    void promeniIme(const QString &novoIme);
+
     void obavestiRelacije();
 
 signals:
     void pomerilaSe(QPointF);
+
+public slots:
+    void skloniSeSaScene(short sifra);
 
 private:
     short int _sifra;

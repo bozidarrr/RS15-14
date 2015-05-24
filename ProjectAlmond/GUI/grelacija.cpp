@@ -1,4 +1,5 @@
 #include "GUI/grelacija.h"
+#include <QGraphicsScene>
 
 GRelacija::GRelacija(short sifra, QPointF prva, QPointF druga, bool brak)
     : _sifra(sifra), _prva(prva), _druga(druga), _brak(brak)
@@ -48,6 +49,15 @@ void GRelacija::pomeriDrugu(QPointF druga)
     //qDebug() << "pomera drugu";
     _druga = druga;
     postaviNaSredinu();
+}
+
+void GRelacija::ukloniSeSaScene(short sifra)
+{
+    if (_sifra != sifra)
+        return;
+    if (scene() != 0)
+        scene()->removeItem(this);
+    deleteLater();
 }
 
 void GRelacija::pomeriPrvu(QPointF prva)

@@ -2,42 +2,45 @@
 #define BRAK_H
 
 #include<vector>
-#include<string>
+#include<QString>
 #include<QDate>
 
-#include"engine/osoba.h"
-class Osoba;
-class Dete;
+//#include"engine/osoba.h"
+//class Osoba;
+//class Dete;
 
 class Brak
 {
 public:
     Brak();
-    Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
+    //Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
+    Brak(const short sifraNase, const short sifraTudje, const QString &trivija);
     Brak(const Brak& drugi);
     ~Brak();
 
     //----geteri i seteri------//
     short int Sifra();
-    Osoba* NasaOsoba();
-    Osoba* TudjaOsoba();
-    std::vector<Dete*>& SpisakDece();
-    std::string& Trivija();/*
+    short SifraNase();
+    short SifraTudje();
+    //Osoba* NasaOsoba();
+    //Osoba* TudjaOsoba();
+    //std::vector<Dete*>& SpisakDece();
+    const QString& Trivija() const;/*
     QDate& DatumUpoznavanja();
     QDate& DatumVeze();
     QDate& DatumRaskida();
     QDate& DatumVeridbe();
     QDate& DatumVencanja();
 */
-    void PostaviNasuOsobu(Osoba* nasa);
-    void PostaviTudjuOsobu(Osoba* tudja);
+    //void PostaviNasuOsobu(Osoba* nasa);
+    //void PostaviTudjuOsobu(Osoba* tudja);
 
 
     //----geteri i seteri------//
     static void postaviSledecuSifru(int sifra);
 
     //---metodi korisni u upotrebi---//
-    void DodajDete(Dete* beba);
+    //void DodajDete(Dete* beba);
 
     //OVI JOS NE RADE!!!!
     bool UVezi();
@@ -47,9 +50,9 @@ public:
     //---metodi korisni u upotrebi---//
 
     //----metodi potrebni za brisanje----//
-    bool DeteSeUklanja(Dete *obrisiMe);//detetov destruktor ce biti pozvan, pa se zahteva uklanjanje deteta iz spiska dece
-    bool RaskiniSupruznike(Osoba *inicijator);//jedna osoba se brise, pa se zahteva da druga osoba ukloni podatke o braku iz svoje evidencije brakova
-    bool RaskiniSveVeze();
+    //bool DeteSeUklanja(Dete *obrisiMe);//detetov destruktor ce biti pozvan, pa se zahteva uklanjanje deteta iz spiska dece
+    //bool RaskiniSupruznike(Osoba *inicijator);//jedna osoba se brise, pa se zahteva da druga osoba ukloni podatke o braku iz svoje evidencije brakova
+    //bool RaskiniSveVeze();
     bool VecSeBrisem();
     void PreskociRazvezivanje();
     //----metodi potrebni za brisanje----//
@@ -62,10 +65,12 @@ public:
 private:
     static short int _sledecaSifra;
     short int _sifra;
-    Osoba* _nasaOsoba;
-    Osoba* _tudjaOsoba;
-    std::vector<Dete *> _spisakDece;
-    std::string _trivija;
+    short _sifraNase;
+    short _sifraTudje;
+    //Osoba* _nasaOsoba;
+    //Osoba* _tudjaOsoba;
+    //std::vector<Dete *> _spisakDece;
+    QString _trivija;
     /* QDate _datumUpoznavanja;
     QDate _datumVeze;
     QDate _datumVeridbe;

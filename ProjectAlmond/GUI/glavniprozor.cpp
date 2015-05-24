@@ -1,5 +1,6 @@
 #include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
+#include <vector>
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -12,9 +13,9 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowIcon(icon);
     this->setWindowTitle("Project Almond[*]");
 
-    translator = new QTranslator();
-    ui->retranslateUi(this);
-       retranslate();
+    //translator = new QTranslator();
+    //ui->retranslateUi(this);
+    //retranslate();
 
 //DODATO---------------------------------------------------
         //ovo treba bolje da se uradi
@@ -44,7 +45,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", 'm');
+    stablo = new PorodicnoStablo("Pera", "Detlic", "m",
+                                 QDate::currentDate(), QDate::currentDate(), true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -53,16 +55,22 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     obnoviSkoroOtvarane();
 
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                QString::fromStdString(stablo->KljucnaOsoba()->Ime()+" "+stablo->KljucnaOsoba()->Prezime()));
+                                *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     korena->setPos(123,123);
     korena->setZValue(2);
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
+    connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
+
+    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    //qDebug() << v->size();
+    //delete v;
 }
 
 GlavniProzor::~GlavniProzor()
 {
+    delete stablo;
     delete ui;
 
 }
@@ -78,12 +86,13 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
     {
         Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
         if (osoba)
-            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+            //Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+            Labela->setText(osoba->Ime());
     }
     if (tip == INFO_BRAK)
-        Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiBrakSifrom(sifra)->Trivija());
     if (tip == INFO_DETE)
-        Labela->setText(QString::fromStdString(stablo->NadjiDeteSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiDeteSifrom(sifra)->Trivija());
 }
 
 void GlavniProzor::prikaziToolbar()
@@ -167,6 +176,9 @@ void GlavniProzor::kreirajToolbar()
 
     tbDetalji->setChecked(true);
 
+    tbUredi->setCheckable(false);
+    connect(tbUredi, SIGNAL(clicked()), this, SLOT(urediStablo()));
+
     alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
@@ -196,21 +208,23 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
-        std::string ime, prezime, rodjenje, smrt;
-        char pol;
+        QString ime, prezime;
+        QDate rodjenje, smrt;
+        QString pol;
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
-            novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
+            novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
         else
-            novaSifra = stablo->DodajNNLice();
+            novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
-            std::string tmp =
-                    stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
-            novaOsoba = new GOsoba(novaSifra, QString::fromStdString(tmp));
+            //std::string tmp =
+            //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
+            novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
+            connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
         }   
     }
     delete d;
@@ -219,9 +233,6 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
 
 short GlavniProzor::ukloniOsobu(short sifra)
 {
-            //ne znam koliko ovo ima smisla, pretpostavljam da treba drugacije reagovati
-                    //u svakom od slucajeva
-                    //ZA SADA IPAK RADE ISTO
     QString upozorenje;
     if (sifra == stablo->KljucnaOsoba()->Sifra())
         upozorenje = tr("Jeste li sigurni da zelite da uklonite korenu osobu?"
@@ -231,7 +242,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
             upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu,"
                             "a time i sve njene supruznike i potomke?");
         else
-            upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu?");
+            upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu i njene potomke?");
 
     QMessageBox *poruka = new QMessageBox();
     QPushButton *da = poruka->addButton(tr("Da"), QMessageBox::AcceptRole);
@@ -259,7 +270,7 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
 
     if (d->exec())
     {
@@ -267,14 +278,15 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
         novaSifra = stablo->DodajDete(brak->Sifra(), dete->Sifra(), trivija);
         if (novaSifra >= 0)
         {
-            novaRelacija = new GRelacija(novaSifra, _pozicijeBrakova[brak->Sifra()], _pozicijeOsoba[dete->Sifra()], false);
+            novaRelacija = new GRelacija(novaSifra, brak->pos(), dete->pos(), false);
         }
         if (novaRelacija != nullptr)
         {
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
-            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));            
+            connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
+            connect(stablo, SIGNAL(obrisanaVezaDete(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
     }
     delete d;
@@ -286,7 +298,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
     if (d->exec())
     {
         d->popuniPodatke(trivija);
@@ -303,6 +315,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
+            connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
     }
     delete d;
@@ -315,7 +328,6 @@ short GlavniProzor::izmeniOsobu(short sifra)
     DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe(stablo->NadjiOsobuSifrom(sifra), this);
     if (d->exec())
     {
-        //treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
         ui->statusBar->showMessage(tr("Uspesno unete izmene."), 2000);
         delete d;
         return sifra;
@@ -708,7 +720,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
         }
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
-            scena->removeItem(item);
+            //scena->removeItem(item);
             _pozicijeOsoba.erase(item->Sifra());
             setWindowModified(true);
         }
@@ -722,7 +734,10 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             return;
         }
         if (izmeniOsobu(item->Sifra()) == item->Sifra())
+        {
+            item->promeniIme(*(stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime()));
             setWindowModified(true);
+        }
     }
     tbDetalji->setChecked(true);
 }
@@ -746,10 +761,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);//??!
             return;
         }
-        if ((novaOsoba = dodajNovuOsobu(druga, true)) != nullptr)
+        if ((novaOsoba = dodajNovuOsobu(druga, false)) != nullptr)
         {
-            short novaSifraBraka = stablo->DodajBrak(staraOsoba->Sifra(), novaOsoba->Sifra());
-            if (novaSifraBraka >= 0 && dodajNoviBrak(staraOsoba, novaOsoba) >= 0)
+            short novaSifraBraka = dodajNoviBrak(staraOsoba, novaOsoba);
+            if (novaSifraBraka >= 0)
             {
                 scena->addItem(novaOsoba);
                 setWindowModified(true);
@@ -760,7 +775,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
                 /*! ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
                  * tj, treba je obrisati iz stabla
                 */
-                //stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
+                stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje nove osobe i relacije otkazano."), 2000);
             }
         }
@@ -779,15 +794,17 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         }
         if ((novoDete = dodajNovuOsobu(druga, true)) != nullptr)
         {
-            short novaSifra = stablo->DodajDete(brak->Sifra(), novoDete->Sifra());
-            if (novaSifra >= 0 && dodajNovoDete(brak, novoDete) >= 0)
+            short novaSifra = dodajNovoDete(brak, novoDete);
+            if (novaSifra >= 0)
             {
                 scena->addItem(novoDete);
                 setWindowModified(true);
             }
             else
-                //obrisati dete!!!
+            {
+                stablo->UkloniOsobuSifrom(novoDete->Sifra());
                 ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
+            }
         }
         else
             ui->statusBar->showMessage(tr("Dodavanje novog deteta otkazano."), 2000);
@@ -800,13 +817,21 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             tbDetalji->setChecked(true);
             return;
         }
-        //qDebug() << "pomeriti";
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         _pozicijeOsoba[item->Sifra()] = item->pos();
         item->obavestiRelacije();
         setWindowModified(true);
     }
     tbDetalji->setChecked(true);
+}
+
+void GlavniProzor::urediStablo()
+{
+    //kako cemo ovo...
+    if (ui->aPreciGore->isChecked())
+        qDebug() <<"uredi preci gore";
+    else
+        qDebug() << "uredi preci dole";
 }
 
 QStringList GlavniProzor::skoroOtvarani;

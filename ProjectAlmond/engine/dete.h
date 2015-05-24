@@ -1,34 +1,37 @@
 #ifndef DETE_H
 #define DETE_H
-#include <string>
+#include <QString>
 #include <QDate>
 
-#include "engine/brak.h"
-#include "engine/osoba.h"
-class Brak;
-class Osoba;
+//#include "engine/brak.h"
+//#include "engine/osoba.h"
+//class Brak;
+//class Osoba;
 
 class Dete
 {
 public:
     Dete();
-    Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija="");
+    //Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija="");
+    Dete(const short sifraOsobe, const short sifraRoditeljskeVeze, const QString &trivija="");
     Dete(const Dete& drugo);
     ~Dete();
 
     short int Sifra();
-    Osoba* Potomak();
-    Brak* RoditeljskiOdnos();
-    std::string& Trivija();
+    short SifraOsobe();
+    short SifraRoditeljskogOdnosa();
+    //Osoba* Potomak();
+    //Brak* RoditeljskiOdnos();
+    const QString& Trivija() const;
     //  QDate& DatumUsvajanja();
 
     static void postaviSledecuSifru(int sifra);
-    void PostaviPotomka(Osoba* potomak);
-    void PostaviRoditeljskiOdnos(Brak* odnos);
+    //void PostaviPotomka(Osoba* potomak);
+    //void PostaviRoditeljskiOdnos(Brak* odnos);
 
 
-    bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno
-    bool RaskiniSveVeze(); // brise podatke o svim vezama, priprema za brisanje na vecoj skali
+    //bool BrisanjeOdOsobe(); // destruktor od Osobe je pozvan, pa dete mora obavestiti i brak, jer ce i ono biti uskoro uklonjeno
+    //bool RaskiniSveVeze(); // brise podatke o svim vezama, priprema za brisanje na vecoj skali
     bool VecSeBrisem();
     void PreskociRazvezivanje();
 
@@ -37,10 +40,10 @@ public:
 
 private:
     static short int _sledecaSifra;
-    short int _sifra;
-    Osoba* _osoba;
-    Brak * _roditeljskiOdnos;
-    std::string _trivija;
+    short int _sifra, _sifraOsobe, _sifraRoditeljskeVeze;
+    //Osoba* _osoba;
+    //Brak * _roditeljskiOdnos;
+    QString _trivija;
     //   QDate _datumUsvajanja;
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;

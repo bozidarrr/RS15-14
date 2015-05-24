@@ -23,9 +23,9 @@ void DijalogRelacija::retranslate()
 
 }
 
-void DijalogRelacija::popuniPodatke(std::string &trivija)
+void DijalogRelacija::popuniPodatke(QString &trivija)
 {
-    trivija = ui->unosTrivija->toPlainText().toStdString();
+    trivija = ui->unosTrivija->toPlainText();
 }
 
 void DijalogRelacija::popuniDugmice()

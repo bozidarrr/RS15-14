@@ -1,4 +1,5 @@
 #include "gosoba.h"
+#include <QGraphicsScene>
 
 GOsoba::GOsoba(short sifra, QString ime_prezime)
     :_sifra(sifra), _sirina(100), _visina(40), _ime(ime_prezime)
@@ -46,7 +47,21 @@ short GOsoba::Sifra() const
     return _sifra;
 }
 
+void GOsoba::promeniIme(const QString &novoIme)
+{
+    _ime = novoIme;
+}
+
 void GOsoba::obavestiRelacije()
 {
     emit pomerilaSe(pos());
+}
+
+void GOsoba::skloniSeSaScene(short sifra)
+{
+    if (_sifra != sifra)
+        return;
+    if (scene() != 0)
+        scene()->removeItem(this);
+    deleteLater();
 }

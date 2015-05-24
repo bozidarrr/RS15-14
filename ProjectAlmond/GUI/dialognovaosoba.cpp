@@ -31,8 +31,10 @@ void DialogNovaOsoba::retranslate()
     cancel = new QPushButton(tr("Ponisti"));
 
 }
-void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
+bool DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol, QDate &rodjenje, QDate &smrt)
 {
+    if (ui->checkBox->isChecked())
+        return false;
     ime = ui->unosIme->text();
     prezime = ui->unosPrezime->text();
     pol = ui->unosPol->text();
@@ -40,6 +42,7 @@ void DialogNovaOsoba::popuniPodatke(QString &ime, QString &prezime, QString &pol
         rodjenje = ui->unosRodjenje->date();
     if (ui->chkSmrt->isChecked() == false)
            smrt = ui->UnosSmrt->date();
+    return true;
 }
 
 bool DialogNovaOsoba::popuniPodatke(std::string &ime, std::string &prezime, char &pol,
