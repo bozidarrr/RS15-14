@@ -1,6 +1,6 @@
 #ifndef DETE_H
 #define DETE_H
-#include <string>
+#include <QString>
 #include <QDate>
 
 //#include "engine/brak.h"
@@ -13,7 +13,7 @@ class Dete
 public:
     Dete();
     //Dete(Osoba* osoba, Brak* roditeljskaVeza, std::string trivija="");
-    Dete(short sifraOsobe, short sifraRoditeljskeVeze, std::string trivija="");
+    Dete(const short sifraOsobe, const short sifraRoditeljskeVeze, const QString &trivija="");
     Dete(const Dete& drugo);
     ~Dete();
 
@@ -22,7 +22,7 @@ public:
     short SifraRoditeljskogOdnosa();
     //Osoba* Potomak();
     //Brak* RoditeljskiOdnos();
-    std::string& Trivija();
+    const QString& Trivija() const;
     //  QDate& DatumUsvajanja();
 
     static void postaviSledecuSifru(int sifra);
@@ -43,7 +43,7 @@ private:
     short int _sifra, _sifraOsobe, _sifraRoditeljskeVeze;
     //Osoba* _osoba;
     //Brak * _roditeljskiOdnos;
-    std::string _trivija;
+    QString _trivija;
     //   QDate _datumUsvajanja;
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;

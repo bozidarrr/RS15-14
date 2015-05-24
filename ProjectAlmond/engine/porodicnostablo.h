@@ -50,10 +50,10 @@ public:
     */
 
     //dodaje relaciju dete, od braka do osobe
-    short int DodajDete(short int sifraBraka, short int sifraOsobe, std::string trivija="");
+    short int DodajDete(const short sifraBraka, const short sifraOsobe, const QString &trivija="");
 
     //dodaje relaciju brak izmedju dve osobe date siframa
-    short int DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija="");
+    short int DodajBrak(const short int sifraNaseOsobe, const short int sifraTudjeOsobe, const QString &trivija="");
 
 
     Osoba* NadjiOsobuSifrom(const short sifra);

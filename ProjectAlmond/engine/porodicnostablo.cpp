@@ -61,7 +61,7 @@ short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime
 
 
 //dodaje relaciju dete, od braka do osobe
-short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,std::string trivija)
+short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int sifraOsobe, const QString &trivija)
 {
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
     _indeksSifraDete[novo->Sifra()]=novo;
@@ -70,7 +70,7 @@ short int PorodicnoStablo::DodajDete(short int sifraBraka,short int sifraOsobe,s
 }
 
 //dodaje relaciju brak izmedju dve osobe date siframa
-short int PorodicnoStablo::DodajBrak(short int sifraNaseOsobe, short int sifraTudjeOsobe, std::string trivija)
+short int PorodicnoStablo::DodajBrak(const short sifraNaseOsobe, const short sifraTudjeOsobe, const QString &trivija)
 {
     Brak *novi = new Brak(sifraNaseOsobe, sifraTudjeOsobe, trivija);
     _indeksSifraVeza[novi->Sifra()]=novi;

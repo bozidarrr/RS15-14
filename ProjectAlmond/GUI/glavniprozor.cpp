@@ -84,9 +84,9 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
             Labela->setText(osoba->Ime());
     }
     if (tip == INFO_BRAK)
-        Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiBrakSifrom(sifra)->Trivija());
     if (tip == INFO_DETE)
-        Labela->setText(QString::fromStdString(stablo->NadjiDeteSifrom(sifra)->Trivija()));
+        Labela->setText(stablo->NadjiDeteSifrom(sifra)->Trivija());
 }
 
 void GlavniProzor::prikaziToolbar()
@@ -264,7 +264,7 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
 
     if (d->exec())
     {
@@ -292,7 +292,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
     DijalogRelacija *d = new DijalogRelacija(this);
     short int novaSifra = -1;
     GRelacija *novaRelacija;
-    std::string trivija;
+    QString trivija;
     if (d->exec())
     {
         d->popuniPodatke(trivija);
