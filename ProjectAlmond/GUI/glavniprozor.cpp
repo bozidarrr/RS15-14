@@ -67,9 +67,9 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
 
-    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
-    //qDebug() << v->size();
-    //delete v;
+    std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    qDebug() << v->size();
+    delete v;
 }
 
 GlavniProzor::~GlavniProzor()
@@ -83,20 +83,39 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
 {
     if (sifra == -1 || tip == NISTA)
     {
-        Labela->setText("");
+        ui->zaInformacije->setPlaceholderText("Informacije");
+        //Labela->setText("");
         return;
     }
     if (tip == INFO_OSOBA)
     {
         Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
         if (osoba)
+        {
             //Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
-            Labela->setText(osoba->Ime());
+            //Labela->setText(osoba->Ime());
+            //setfont, textformat ????
+            ui->zaInformacije->clear();
+            ui->zaInformacije->append(osoba->Ime());
+            ui->zaInformacije->append(osoba->Prezime());
+            QDate datum = osoba->DatumRodjenja();
+            if (datum.isValid())
+            {
+                ui->zaInformacije->append("Datum rodjenja:");
+                ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
+            }
+            datum = osoba->DatumSmrti();
+            if (datum.isValid())
+            {
+                ui->zaInformacije->append("Datum smrti: ");
+                ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
+            }
+        }
     }
     if (tip == INFO_BRAK)
-        Labela->setText(stablo->NadjiBrakSifrom(sifra)->Trivija());
+        ui->zaInformacije->append(stablo->NadjiBrakSifrom(sifra)->Trivija());
     if (tip == INFO_DETE)
-        Labela->setText(stablo->NadjiDeteSifrom(sifra)->Trivija());
+        ui->zaInformacije->append(stablo->NadjiDeteSifrom(sifra)->Trivija());
 }
 
 void GlavniProzor::prikaziToolbar()
@@ -196,9 +215,12 @@ void GlavniProzor::kreirajToolbar()
 void GlavniProzor::kreirajMestoZaInfo()
 {
     info = new QDockWidget(tr("Informacije"));
-    Labela=new QLabel("Informacije");
-    info->setWidget(Labela);//i recimo
-    Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
+    //Labela=new QLabel("Informacije");
+    //info->setWidget(Labela);//i recimo
+    //Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
+    /** bilo bi lepo da je malo uzi :) **/
+    info->setWidget(ui->zaInformacije);
+    ui->zaInformacije->setPlaceholderText("Informacije");
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
@@ -699,6 +721,8 @@ void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
 
 void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
+    ui->zaInformacije->clear();
+    ui->zaInformacije->setPlaceholderText("Informacije");
     if (tbDetalji->isChecked())
     {
         GOsoba *osoba = qgraphicsitem_cast<GOsoba*>(pogled->itemAt(pozicija));
@@ -726,12 +750,14 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             tbDetalji->setChecked(true);
             return;
         }
+        item->promeniStil(GOsoba::SELEKTOVANA);
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
-            //scena->removeItem(item);
             _pozicijeOsoba.erase(item->Sifra());
             setWindowModified(true);
         }
+        else
+            item->promeniStil(GOsoba::OBICNA);
     }
     if (tbMenjaj->isChecked())
     {
@@ -752,6 +778,8 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 
 void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 {
+    ui->zaInformacije->clear();
+    ui->zaInformacije->setPlaceholderText("Informacije");
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
     {
         GOsoba *novaOsoba;

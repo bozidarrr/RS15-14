@@ -25,6 +25,7 @@
 #include <QTranslator>
 #include <QTransform>
 #include <QGraphicsScene>
+#include <QTextBrowser>
 #include "gosoba.h"
 #include "grelacija.h"
 
@@ -92,6 +93,8 @@ private:
     Stablo *pogled;
     QGraphicsScene *scena;
     void kreirajPogledZaStablo();
+
+    //void oznaciSlavljenike();
 
 public Q_SLOTS:
     void prikaziToolbar();

@@ -15,6 +15,9 @@ class GOsoba : public QObject, public QGraphicsItem
 public:
     enum { Type = UserType + 1 };
 
+    enum Stil { OBICNA, KORENA, SELEKTOVANA, POKOJNA, NEPOZNATA, SLAVLJENIK };//DA LI OVAKO OVO DA RADIMO?
+    //mozda bi bolje bilo nesto kao sa flegovima, da onda radimo bitovsko & i |, nemam pojma
+
     GOsoba(short int sifra, QString ime_prezime);
     ~GOsoba();
 
@@ -34,6 +37,8 @@ public:
 
     void obavestiRelacije();
 
+    void promeniStil(Stil stil);
+
 signals:
     void pomerilaSe(QPointF);
 
@@ -44,6 +49,7 @@ private:
     short int _sifra;
     int _sirina, _visina;
     QString _ime;
+    QColor _osnovnaBoja = Qt::darkGreen;
 };
 
 #endif // GOSOBA_H
