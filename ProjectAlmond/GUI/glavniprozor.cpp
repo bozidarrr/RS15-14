@@ -14,6 +14,10 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     this->setWindowTitle("Project Almond[*]");
 
     //translator = new QTranslator();
+    //treba da napravim kao da ima prevod na srpski to cu kad uradimo prevod na nemacki
+    //bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+    //qDebug("translation %d", ok);
+    // qApp->installTranslator(translator);
     //ui->retranslateUi(this);
     //retranslate();
 
@@ -547,7 +551,8 @@ void GlavniProzor::promeniJezikE()
     }
     else {
         ui->aSrpski->setChecked(true);
-        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije
+        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+        qDebug("translation %d", ok);
          qApp->installTranslator(translator);
            ui->retranslateUi(this);
           retranslate();
@@ -585,7 +590,8 @@ void GlavniProzor::promeniJezikN()
 }
     else {
         ui->aSrpski->setChecked(true);
-        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije
+        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+        qDebug("translation %d", ok);
          qApp->installTranslator(translator);
            ui->retranslateUi(this);
            retranslate();
@@ -600,7 +606,8 @@ void GlavniProzor::promeniJezikS()
 
     if(ui->aSrpski->isChecked())
     {
-        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije
+        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+        qDebug("translation %d", ok);
          qApp->installTranslator(translator);
            ui->retranslateUi(this);
            retranslate();
@@ -632,7 +639,8 @@ void GlavniProzor::promeniJezikS()
         }
     else{
         ui->aSrpski->setChecked(true);
-        translator= new QTranslator();//mozda ovo da resimo drugacije, jer ovako imam curenje memorije
+        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+        qDebug("translation %d", ok);
          qApp->installTranslator(translator);
            ui->retranslateUi(this);
             retranslate();

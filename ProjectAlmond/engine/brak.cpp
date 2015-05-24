@@ -183,14 +183,17 @@ QDataStream& operator<<(QDataStream &out,Brak& brak)
 
 QDataStream& operator>>(QDataStream &in,Brak& brak)
 {
-
-    in >> brak._sifra;
-    int broj;
+    qint32 broj;
     in >> broj;
+    brak._sifra=(short)broj;
+    in >> broj;
+    brak._sifraNase=(short)broj;
+    in >> broj;
+    brak._sifraTudje=(short)broj;
     //brak._spisakDece.resize(broj);
-    QString tren;
+    char* tren;
     in >> tren;
-    //brak._trivija=tren.toStdString();
+    brak._trivija=QString(tren);
 
     return in;
 }
