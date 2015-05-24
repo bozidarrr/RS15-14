@@ -195,33 +195,40 @@ bool Osoba::VecSeBrisem()
 
 QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 {
+
     out << qint32(osoba.Sifra());
-//    out << osoba._nepoznata;
-//    out << QString::fromStdString(osoba.Ime());
-//    out << QString::fromStdString(osoba.Prezime());
-//    out << QChar::fromLatin1(osoba._pol);
-//    out << osoba._datumRodjenja;
-//    out << osoba._datumSmrti;
-//    out << osoba._krvniSrodnik;
+    out << osoba._nepoznata;
+    out <<  osoba.Ime().toStdString().c_str();
+    out << osoba.Prezime().toStdString().c_str();
+    char  pom[1];
+    pom[0]=osoba.Pol().toLatin1();
+    out << pom;
+    out << osoba._datumRodjenja.toString().toStdString().c_str();
+    out << osoba._datumSmrti.toString().toStdString().c_str();
+    out << osoba._krvniSrodnik;
     return out;
 }
 
 QDataStream& operator>>(QDataStream &out,Osoba& osoba)
 {
-    out >> osoba._sifra;
-//    out >> osoba._nepoznata;
-//    QString tren;
-//    out >> tren;
-//    osoba._ime=tren.toStdString();
-//    out >> tren;
-//    osoba._prezime=tren.toStdString();
-//    QChar trenChar;
-//    out >> trenChar;
-//    osoba._pol=trenChar.toLatin1();
-//    out >> osoba._datumRodjenja;
-//    out >> osoba._datumSmrti;
-//    out >> osoba._krvniSrodnik;
-//    std::cout << tren.toStdString() << std::endl;
+    qint32 a;
+    out >> a;
+    osoba._sifra=(short)a;
+    out >> osoba._nepoznata;
+    char* tren;
+    out >> tren;
+    osoba._ime=QString(tren);
+    out >> tren;
+    osoba._prezime=QString(tren);
+    char *pom;
+    out >> pom;
+    osoba._pol=QChar(pom[0]);
+    out >> tren;
+    osoba._datumRodjenja=QDate::fromString(QString(tren));
+    out >> tren;
+    osoba._datumSmrti=QDate::fromString(QString(tren));
+    out >> osoba._krvniSrodnik;
+    //std::cout << tren.toStdString() << std::endl;
     return out;
 }
 
