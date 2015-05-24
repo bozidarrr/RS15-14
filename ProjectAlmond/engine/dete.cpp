@@ -1,5 +1,6 @@
 #include "dete.h"
 #include <iostream>
+#include <QDataStream>
 
 short int Dete::_sledecaSifra=0;
 
@@ -101,6 +102,8 @@ void Dete::PreskociRazvezivanje()
 QDataStream& operator<<(QDataStream &out,Dete& dete)
 {
     out << qint32(dete._sifra);
+    out << qint32(dete._sifraOsobe);
+    out << qint32(dete._sifraRoditeljskeVeze);
     out << QString::fromStdString(dete._trivija);
     return out;
 }

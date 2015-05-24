@@ -5,9 +5,9 @@
 #include<string>
 #include<QDate>
 
-#include"engine/osoba.h"
-class Osoba;
-class Dete;
+//#include"engine/osoba.h"
+//class Osoba;
+//class Dete;
 
 class Brak
 {

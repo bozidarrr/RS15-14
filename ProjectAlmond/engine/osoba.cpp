@@ -1,37 +1,36 @@
 #include"engine/osoba.h"
+#include <vector>
+#include <string>
+#include <QDate>
+#include<QDataStream>
 #include <QString>
 #include <iostream>
 short int Osoba::_sledecaSifra=0;
 
 
-Osoba::Osoba()
-    :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),_pol('?'),_spisakVeza()
-{
-    std::cout << "kreira se NN osoba " << _sifra << std::endl;
-    _deteOd = nullptr;
-    _krvniSrodnik = false;
-}
+Osoba::Osoba(bool krvniSrodnik)
+    :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),
+      _pol('?'),_datumRodjenja(),_datumSmrti(),_krvniSrodnik(krvniSrodnik)
+{}
 
-Osoba::Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik)
-    :_sifra(_sledecaSifra++),_nepoznata(false),_ime(ime),_prezime(prezime),_pol(pol),_krvniSrodnik(krvniSrodnik),_spisakVeza()
+Osoba::Osoba(const QString &ime, const QString &prezime, const QChar &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
+    :_sifra(_sledecaSifra++),_nepoznata(false),_ime(ime),_prezime(prezime),
+      _pol(pol), _datumRodjenja(), _datumSmrti(), _krvniSrodnik(krvniSrodnik)
 {
-    _deteOd=nullptr;
-    _spisakVeza.clear();
-
-        std::cout << "kreira se osoba " <<  _ime << std::endl;
+    if (rodjenje.isValid())
+        _datumRodjenja.setDate(rodjenje.year(), rodjenje.month(), rodjenje.day());
+    if (smrt.isValid())
+        _datumSmrti.setDate(smrt.year(), smrt.month(), smrt.day());
 }
 
 Osoba::Osoba(const Osoba& druga)
-    :_sifra(druga._sifra),_nepoznata(druga._nepoznata),_ime(druga._ime),_prezime(druga._prezime),_pol(druga._pol),_krvniSrodnik(druga._krvniSrodnik),_spisakVeza(druga._spisakVeza.size())
-{
-    _deteOd=nullptr;
-    _spisakVeza.clear();
-}
-
+    :_sifra(druga._sifra),_nepoznata(druga._nepoznata),_ime(druga._ime),_prezime(druga._prezime),
+      _pol(druga._pol),_krvniSrodnik(druga._krvniSrodnik)
+{}
 
 Osoba::~Osoba()
 {
-    std::cout << "brise se osoba " << _ime << std::endl;
+    //std::cout << "brise se osoba " << _ime << std::endl;
     _vecSeBrisem=true;
 //        if(!_preskociRazvezivanje){
 //        //std::cout << "osoba razvezuje " << Sifra() << std::endl;
@@ -77,44 +76,60 @@ short int Osoba::Sifra()const
     return _sifra;
 }
 
-const std::string& Osoba::Ime() const
+const QString& Osoba::Ime() const
 {
     return _ime;
 }
 
-const std::string& Osoba::Prezime() const
+const QString &Osoba::Prezime() const
 {
     return _prezime;
 }
-/*
-const char& Osoba::Pol() const
+
+const QChar& Osoba::Pol() const
 {
     return _pol;
-}*/
-/*
-QDate& Osoba::DatumRodjenja()
+}
+
+const QDate& Osoba::DatumRodjenja() const
 {
     return _datumRodjenja;
 }
 
-QDate& Osoba::DatumSmrti()
+const QDate& Osoba::DatumSmrti() const
 {
     return _datumSmrti;
 }
-*/
-bool Osoba::JeKrvniSrodnik()
+
+bool Osoba::JeKrvniSrodnik() const
 {
     return _krvniSrodnik;
 }
 
-Dete* Osoba::Poreklo()
+void Osoba::PromeniIme(const QString &ime)
 {
-    return _deteOd;
+    _ime = ime;
 }
 
-void Osoba::PostaviPoreklo(Dete* poreklo)
+void Osoba::PromeniPrezime(const QString &prezime)
 {
-    _deteOd=poreklo;
+    _prezime = prezime;
+}
+void Osoba::PromeniPol(const QChar &pol)
+{
+    _pol = pol;
+}
+
+void Osoba::PromeniDatumRodjenja(const QDate &datum)
+{
+    if (datum.isValid())
+        _datumRodjenja.setDate(datum.year(), datum.month(), datum.day());
+}
+
+void Osoba::PromeniDatumSmrti(const QDate &datum)
+{
+    if (datum.isValid())
+        _datumSmrti.setDate(datum.year(), datum.month(), datum.day());
 }
 
 void Osoba::postaviSledecuSifru(int sifra)
@@ -122,16 +137,16 @@ void Osoba::postaviSledecuSifru(int sifra)
     _sledecaSifra=sifra;
 }
 
-void Osoba::DodajVezu(Brak* veza)
-{
-    _spisakVeza.push_back(veza);
-}
+//void Osoba::DodajVezu(Brak* veza)
+//{
+//    _spisakVeza.push_back(veza);
+//}
 
 
-std::vector<Brak*>& Osoba::SpisakVeza()
-{
-    return _spisakVeza;
-}
+//std::vector<Brak*>& Osoba::SpisakVeza()
+//{
+//    return _spisakVeza;
+//}
 
 void Osoba::PretvoriUNepoznatu()
 {
@@ -141,72 +156,64 @@ void Osoba::PretvoriUNepoznatu()
     _nepoznata=true;
 }
 
-bool Osoba::Raskini(Brak* razvod)
-{
-    _spisakVeza.erase(std::remove(_spisakVeza.begin(), _spisakVeza.end(), razvod), _spisakVeza.end());
-    return true;
-}
+//bool Osoba::Raskini(Brak* razvod)
+//{
+//    _spisakVeza.erase(std::remove(_spisakVeza.begin(), _spisakVeza.end(), razvod), _spisakVeza.end());
+//    return true;
+//}
 
-bool Osoba::ObrisiPoreklo()
-{
-    _deteOd=nullptr;
-    return true;
-}
+//bool Osoba::ObrisiPoreklo()
+//{
+//    _deteOd=nullptr;
+//    return true;
+//}
 
-bool Osoba::RaskiniSveVeze()
-{
-    _deteOd=nullptr;
-    _spisakVeza.clear();
-    return true;
-}
+//bool Osoba::RaskiniSveVeze()
+//{
+//    //_deteOd=nullptr;
+//   // _spisakVeza.clear();
+//    return true;
+//}
 
 bool Osoba::VecSeBrisem()
 {
     return _vecSeBrisem;
 }
-void Osoba::PreskociRazvezivanje()
-{
-    _preskociRazvezivanje=true;
-}
+//void Osoba::PreskociRazvezivanje()
+//{
+//    _preskociRazvezivanje=true;
+//}
 
 
 QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 {
     out << qint32(osoba.Sifra());
-    out << osoba._nepoznata;
-    out << QString::fromStdString(osoba.Ime());
-    out << QString::fromStdString(osoba.Prezime());
-    out << QChar::fromLatin1(osoba._pol);
-    out << osoba._datumRodjenja;
-    out << osoba._datumSmrti;
-    out << osoba._krvniSrodnik;
-    out<<qint32(osoba._spisakVeza.size());
-
-
+//    out << osoba._nepoznata;
+//    out << QString::fromStdString(osoba.Ime());
+//    out << QString::fromStdString(osoba.Prezime());
+//    out << QChar::fromLatin1(osoba._pol);
+//    out << osoba._datumRodjenja;
+//    out << osoba._datumSmrti;
+//    out << osoba._krvniSrodnik;
     return out;
 }
-
 
 QDataStream& operator>>(QDataStream &out,Osoba& osoba)
 {
     out >> osoba._sifra;
-    out >> osoba._nepoznata;
-    QString tren;
-    out >> tren;
-    osoba._ime=tren.toStdString();
-    out >> tren;
-    osoba._prezime=tren.toStdString();
-    QChar trenChar;
-    out >> trenChar;
-    osoba._pol=trenChar.toLatin1();
-    out >> osoba._datumRodjenja;
-    out >> osoba._datumSmrti;
-    out >> osoba._krvniSrodnik;
-    int velicinaSpiskaVeza;
-    out >> velicinaSpiskaVeza;
-    osoba._spisakVeza.resize(velicinaSpiskaVeza);
-    osoba._deteOd=nullptr;
-
+//    out >> osoba._nepoznata;
+//    QString tren;
+//    out >> tren;
+//    osoba._ime=tren.toStdString();
+//    out >> tren;
+//    osoba._prezime=tren.toStdString();
+//    QChar trenChar;
+//    out >> trenChar;
+//    osoba._pol=trenChar.toLatin1();
+//    out >> osoba._datumRodjenja;
+//    out >> osoba._datumSmrti;
+//    out >> osoba._krvniSrodnik;
+//    std::cout << tren.toStdString() << std::endl;
     return out;
 }
 

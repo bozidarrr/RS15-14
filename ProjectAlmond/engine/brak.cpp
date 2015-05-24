@@ -1,5 +1,6 @@
 #include "brak.h"
 #include <iostream>
+#include <QDataStream>
 
 short int Brak::_sledecaSifra=0;
 
@@ -172,6 +173,8 @@ QDataStream& operator<<(QDataStream &out,Brak& brak)
 {
     out << qint32(brak._sifra);
     //out << qint32(brak._spisakDece.size());
+    out << qint32(brak.SifraNase());
+    out << qint32(brak.SifraTudje());
     out << QString::fromStdString(brak._trivija);
 
     return out;

@@ -47,6 +47,11 @@ short GOsoba::Sifra() const
     return _sifra;
 }
 
+void GOsoba::promeniIme(const QString &novoIme)
+{
+    _ime = novoIme;
+}
+
 void GOsoba::obavestiRelacije()
 {
     emit pomerilaSe(pos());
@@ -56,6 +61,7 @@ void GOsoba::skloniSeSaScene(short sifra)
 {
     if (_sifra != sifra)
         return;
-    scene()->removeItem(this);
+    if (scene() != 0)
+        scene()->removeItem(this);
     deleteLater();
 }

@@ -30,6 +30,8 @@ public:
 
     short int Sifra() const;
 
+    void promeniIme(const QString &novoIme);
+
     void obavestiRelacije();
 
 signals:

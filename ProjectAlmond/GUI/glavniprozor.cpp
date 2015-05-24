@@ -44,7 +44,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 //DODATO---------------------------------------------------------------------
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", 'm', true);
+    stablo = new PorodicnoStablo("Pera", "Detlic", "m", true);
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -53,7 +53,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     obnoviSkoroOtvarane();
 
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                QString::fromStdString(stablo->KljucnaOsoba()->Ime()+" "+stablo->KljucnaOsoba()->Prezime()));
+                                stablo->KljucnaOsoba()->Ime());//DOPUNITI
     korena->setPos(123,123);
     korena->setZValue(2);
     scena->addItem(korena);
@@ -64,6 +64,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
 GlavniProzor::~GlavniProzor()
 {
+    delete stablo;
     delete ui;
 
 }
@@ -79,7 +80,8 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
     {
         Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
         if (osoba)
-            Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+            //Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
+            Labela->setText(osoba->Ime());
     }
     if (tip == INFO_BRAK)
         Labela->setText(QString::fromStdString(stablo->NadjiBrakSifrom(sifra)->Trivija()));
@@ -168,6 +170,9 @@ void GlavniProzor::kreirajToolbar()
 
     tbDetalji->setChecked(true);
 
+    tbUredi->setCheckable(false);
+    connect(tbUredi, SIGNAL(clicked()), this, SLOT(urediStablo()));
+
     alati = new QDockWidget(tr("Alati"));
     alati->setWidget(toolbar);
     alati->setAllowedAreas(Qt::TopDockWidgetArea
@@ -197,18 +202,19 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
-        std::string ime, prezime, rodjenje, smrt;
-        char pol;
+        QString ime, prezime;
+        QDate rodjenje, smrt;
+        QString pol;
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
             novaSifra = stablo->DodajOsobu(ime, prezime, pol, krvniSrodnik);
         else
-            novaSifra = stablo->DodajNNLice();
+            novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
-            std::string tmp =
-                    stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
-            novaOsoba = new GOsoba(novaSifra, QString::fromStdString(tmp));
+            //std::string tmp =
+            //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
+            novaOsoba = new GOsoba(novaSifra, ime);
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
@@ -221,9 +227,6 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
 
 short GlavniProzor::ukloniOsobu(short sifra)
 {
-            //ne znam koliko ovo ima smisla, pretpostavljam da treba drugacije reagovati
-                    //u svakom od slucajeva
-                    //ZA SADA IPAK RADE ISTO
     QString upozorenje;
     if (sifra == stablo->KljucnaOsoba()->Sifra())
         upozorenje = tr("Jeste li sigurni da zelite da uklonite korenu osobu?"
@@ -233,7 +236,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
             upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu,"
                             "a time i sve njene supruznike i potomke?");
         else
-            upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu?");
+            upozorenje = tr("Jeste li sigurni da zelite da uklonite selektovanu osobu i njene potomke?");
 
     QMessageBox *poruka = new QMessageBox();
     QPushButton *da = poruka->addButton(tr("Da"), QMessageBox::AcceptRole);
@@ -273,7 +276,6 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
         }
         if (novaRelacija != nullptr)
         {
-            //novaRelacija->setParent(brak);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(brak, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -303,7 +305,6 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
 
         if (novaRelacija != nullptr)
         {
-            //novaRelacija->setParent(prva);
             novaRelacija->setZValue(1);
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
@@ -321,7 +322,6 @@ short GlavniProzor::izmeniOsobu(short sifra)
     DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe(stablo->NadjiOsobuSifrom(sifra), this);
     if (d->exec())
     {
-        //treba nekako pokupiti podatke nove i uneti ih u stablo, setteri...
         ui->statusBar->showMessage(tr("Uspesno unete izmene."), 2000);
         delete d;
         return sifra;
@@ -815,6 +815,15 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         setWindowModified(true);
     }
     tbDetalji->setChecked(true);
+}
+
+void GlavniProzor::urediStablo()
+{
+    //kako cemo ovo...
+    if (ui->aPreciGore->isChecked())
+        qDebug() <<"uredi preci gore";
+    else
+        qDebug() << "uredi preci dole";
 }
 
 QStringList GlavniProzor::skoroOtvarani;

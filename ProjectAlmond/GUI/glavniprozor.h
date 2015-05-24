@@ -109,6 +109,8 @@ public Q_SLOTS:
 
     void kliknutoStablo(QPoint pozicija);
     void vucenoStablo(QPoint prva, QPoint druga);
+
+    void urediStablo();
 };
 
 #endif // GLAVNIPROZOR_H
