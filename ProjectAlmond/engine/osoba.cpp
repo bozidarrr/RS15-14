@@ -86,6 +86,14 @@ const QString &Osoba::Prezime() const
     return _prezime;
 }
 
+const QString *Osoba::ImePrezime() const
+{
+    QString* novi = new QString(_ime);
+    novi->append(" ");
+    novi->append(_prezime);
+    return novi;
+}
+
 const QChar& Osoba::Pol() const
 {
     return _pol;

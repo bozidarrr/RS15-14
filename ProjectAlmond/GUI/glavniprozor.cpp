@@ -53,7 +53,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     obnoviSkoroOtvarane();
 
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                stablo->KljucnaOsoba()->Ime());//DOPUNITI
+                                *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     korena->setPos(123,123);
     korena->setZValue(2);
     scena->addItem(korena);
@@ -214,7 +214,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         {          
             //std::string tmp =
             //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
-            novaOsoba = new GOsoba(novaSifra, ime);
+            novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
@@ -438,7 +438,6 @@ void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
     scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
-    //scena->setSceneRect();
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -729,7 +728,10 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             return;
         }
         if (izmeniOsobu(item->Sifra()) == item->Sifra())
+        {
+            item->promeniIme(*(stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime()));
             setWindowModified(true);
+        }
     }
     tbDetalji->setChecked(true);
 }

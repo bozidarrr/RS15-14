@@ -190,16 +190,16 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     SpaliCeloStablo();
 
     //----------------------UCITAVANJE SVIH PODATAKA O OSOBAMA, BEZ VEZIVANJA---------------------------//
-    int maxSifraOsobe=-1;
-    int maxSifraBraka=-1;
-    int maxSifraDeteta=-1;
+    //int maxSifraOsobe=-1;
+    //int maxSifraBraka=-1;
+    //int maxSifraDeteta=-1;
     //===========================
-    qint32 sifraKlj;
-    QString ime, prezime;
-    bool srodnik, nepoznata;
-    QChar pol;
-    QDate date;
-    ulaz >> sifraKlj;
+   // qint32 sifraKlj;
+    //QString ime, prezime;
+  //  bool srodnik, nepoznata;
+  //  QChar pol;
+   // QDate date;
+   // ulaz >> sifraKlj;
 //    ulaz >> nepoznata;
 //    ulaz >> ime;
 //    ulaz >> prezime;
@@ -209,16 +209,16 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 //    ulaz >> date;
 //    ulaz >> date;
 
-    std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
+    //std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
 
     //=========================
 
     //ulaz >> *_kljucnaOsoba;
 
-    int trenInt=0;
+   // int trenInt=0;
 
-    ulaz >> trenInt;
-    std::cout << "citam " << trenInt << " osoba"<<std::endl;
+   // ulaz >> trenInt;
+   // std::cout << "citam " << trenInt << " osoba"<<std::endl;
 //    Osoba trenOsoba;
 //    Osoba *trenOsobaPokazivac=new Osoba();
 //    for(int i=0;i<trenInt;i++)
