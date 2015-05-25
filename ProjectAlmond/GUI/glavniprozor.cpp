@@ -67,9 +67,9 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //readSettings();
 
-    std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
-    qDebug() << v->size();
-    delete v;
+    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    //qDebug() << v->size();
+    //delete v;
 }
 
 GlavniProzor::~GlavniProzor()
