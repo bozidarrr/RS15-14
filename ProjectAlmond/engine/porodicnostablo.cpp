@@ -207,16 +207,23 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     ulaz>>velicina;
     std::cout<<"procitala broj osoba\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Osoba *o;
+        Osoba *o=new Osoba();
         ulaz>>*o;
         _indeksSifraOsobe[o->Sifra()]=o;
+        _indeksIme.insert(std::make_pair(o->Ime(), o));
+        QDate datum = o->DatumRodjenja();
+        if (datum.isValid())
+        {
+            _indeksRodjendan.insert(std::make_pair(datum.dayOfYear(), o->Sifra()));
+            _indeksRodjenje.insert(std::make_pair(datum, o->Sifra()));
+        }
         std::cout<<"Procitala osobu\n";
 
     }
     ulaz>>velicina;
      std::cout<<"procitala broj veza\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Brak *b;
+        Brak *b=new Brak();
         ulaz>>*b;
         _indeksSifraVeza[b->Sifra()]=b;
         std::cout<<"Procitala vezu\n";
@@ -225,7 +232,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     ulaz>>velicina;
     std::cout<<"procitala broj dece\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Dete *d;
+        Dete *d=new Dete();
         ulaz>>*d;
         _indeksSifraDete[d->Sifra()]=d;
          std::cout<<"Procitala dete\n";
