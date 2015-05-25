@@ -81,11 +81,7 @@ private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//
-    //std::map<QString, std::vector<Osoba*> > _indeksIme;
     std::multimap<QString, Osoba*> _indeksIme;
-    //std::map<std::string, std::vector<Osoba*> > _indeksIme;//mapa koja vezuje parove ime, vektor svih osoba sa tim imenom
-//    std::map<QDate, std::vector<Osoba*> > _indeksRodjenje;//mapa koja vezuje parove datum rodjenja, vektor svih osoba sa tim datumom rodjenja
-//    std::map<int, std::vector<Osoba*> > _indeksRodjendan;//mapa koja vezuje dan [1,366] u godini, sa osobom kojoj je tog rednog dana u godini rodjendan
 
     //-----OVE STALNO AZURIRAMO------//
     //-----SAMO NJIH PISEMO/CITAMO---//

@@ -25,8 +25,8 @@ QRectF GOsoba::boundingRect() const
 void GOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //samo da se vidi nesto
-    QColor color(Qt::darkGreen);
-    painter->setBrush(color);
+    //QColor color(Qt::darkGreen);
+    painter->setBrush(_osnovnaBoja);
     QRectF rect(-_sirina/2, -_visina/2, _sirina, _visina);
     painter->setRenderHint(QPainter::Antialiasing,false);
     painter->drawRoundedRect( rect.translated(0.5,0.5), 3.0, 3.0 );
@@ -55,6 +55,23 @@ void GOsoba::promeniIme(const QString &novoIme)
 void GOsoba::obavestiRelacije()
 {
     emit pomerilaSe(pos());
+}
+
+void GOsoba::promeniStil(Stil stil)
+{
+    switch (stil)
+    {
+    case SELEKTOVANA:
+            _osnovnaBoja = Qt::darkYellow;
+            break;
+    case POKOJNA:
+            _osnovnaBoja = Qt::gray;
+            break;
+    case OBICNA:
+    default:
+            _osnovnaBoja = Qt::darkGreen;
+            break;
+    }
 }
 
 void GOsoba::skloniSeSaScene(short sifra)

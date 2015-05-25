@@ -7,6 +7,25 @@
 #include <iostream>
 short int Osoba::_sledecaSifra=0;
 
+/**
+ * @brief Osoba::Osoba za ucitavanje
+ *
+ * izgleda nece da prepise lokalne promenljive? 0_o
+ *
+ *
+ */
+
+int sif, srod, nep;
+QString datR, datS, im, pr;
+QChar p;
+
+
+Osoba::Osoba()
+    :_sifra(),_nepoznata(),_ime(),_prezime(),
+    _pol(),_datumRodjenja(),_datumSmrti(),_krvniSrodnik()
+{
+
+}
 
 Osoba::Osoba(bool krvniSrodnik)
     :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),
@@ -196,39 +215,42 @@ bool Osoba::VecSeBrisem()
 QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 {
 
-    out << qint32(osoba.Sifra());
+    out << osoba.Sifra();
     out << osoba._nepoznata;
-    out <<  osoba.Ime().toStdString().c_str();
-    out << osoba.Prezime().toStdString().c_str();
-    char  pom[1];
-    pom[0]=osoba.Pol().toLatin1();
-    out << pom;
-    out << osoba._datumRodjenja.toString().toStdString().c_str();
-    out << osoba._datumSmrti.toString().toStdString().c_str();
+    out <<  osoba.Ime();
+    out << osoba.Prezime();
+    out << osoba.Pol();
+    out << osoba._datumRodjenja.toString("dd.MM.yyyy.");
+    out << osoba._datumSmrti.toString("dd.MM.yyyy.");
     out << osoba._krvniSrodnik;
     return out;
 }
 
 QDataStream& operator>>(QDataStream &out,Osoba& osoba)
 {
-    qint32 a;
-    out >> a;
-    osoba._sifra=(short)a;
-    out >> osoba._nepoznata;
-    char* tren;
-    out >> tren;
-    osoba._ime=QString(tren);
-    out >> tren;
-    osoba._prezime=QString(tren);
-    char *pom;
-    out >> pom;
-    osoba._pol=QChar(pom[0]);
-    out >> tren;
-    osoba._datumRodjenja=QDate::fromString(QString(tren));
-    out >> tren;
-    osoba._datumSmrti=QDate::fromString(QString(tren));
-    out >> osoba._krvniSrodnik;
-    //std::cout << tren.toStdString() << std::endl;
+    /*
+int sif, srod, nep;
+QString datR, datS, im, pr;
+QChar p;
+*/
+    QString datum;
+    out >> sif;
+    osoba._sifra = sif;
+    out >> nep;
+    osoba._nepoznata = nep;
+    out >> im;
+    osoba._ime = im;
+    out >> pr;
+    osoba._prezime = pr;
+    out >> p;
+    osoba._pol = p;
+    out >> datR;
+    osoba._datumRodjenja = QDate::fromString(datR, "dd.MM.yyyy.");
+    out >> datS;
+    osoba._datumSmrti = QDate::fromString(datS, "dd.MM.yyyy.");
+    out >> srod;
+    osoba._krvniSrodnik = srod;
+    //std::cout << osoba.Ime().toStdString() << std::endl;
     return out;
 }
 

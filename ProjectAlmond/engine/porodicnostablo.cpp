@@ -163,19 +163,9 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
     delete NadjiDeteSifrom(sifra);
 }
 
-//bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
-//{
-//    return true;
-//}
-//bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)
-//{
-//    return true;
-//}
-
-
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
-    std::cout << "Citam fajl" << std::endl;
+    std::cout << "Citam fajl" << imeFajla.toStdString() << std::endl;
     //otvaramo fajl
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::ReadOnly)) {
@@ -188,30 +178,27 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     ulaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
+    SpaliCeloStablo();  
 
-    SpaliCeloStablo();
+    _kljucnaOsoba = new Osoba();
+    ulaz >> *_kljucnaOsoba;
 
+    //std::cout << _kljucnaOsoba->Prezime().toStdString() << _kljucnaOsoba->DatumRodjenja().toString("dd.MM.yyyy.").toStdString() << std::endl;
+    _indeksSifraOsobe[_kljucnaOsoba->Sifra()] = _kljucnaOsoba;
+    _indeksIme.insert(std::make_pair(_kljucnaOsoba->Ime(), _kljucnaOsoba));
+    QDate datum = _kljucnaOsoba->DatumRodjenja();
+    if (datum.isValid())
+    {
+        _indeksRodjendan.insert(std::make_pair(datum.dayOfYear(), _kljucnaOsoba->Sifra()));
+        _indeksRodjenje.insert(std::make_pair(datum, _kljucnaOsoba->Sifra()));
+    }
     //----------------------UCITAVANJE SVIH PODATAKA O OSOBAMA, BEZ VEZIVANJA---------------------------//
     //int maxSifraOsobe=-1;
     //int maxSifraBraka=-1;
     //int maxSifraDeteta=-1;
     //===========================
-   // qint32 sifraKlj;
-    //QString ime, prezime;
-  //  bool srodnik, nepoznata;
-  //  QChar pol;
-   // QDate date;
-   // ulaz >> sifraKlj;
-//    ulaz >> nepoznata;
-//    ulaz >> ime;
-//    ulaz >> prezime;
-//    ulaz >> pol;
-//    ulaz >> srodnik;
-//    ulaz >> date;
-//    ulaz >> date;
-//    ulaz >> date;
-    ulaz>>*_kljucnaOsoba;
-    InicijalizujSveStrukture();
+
+    /**
     qint32 velicina;
 
     ulaz>>velicina;
@@ -235,6 +222,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         _indeksSifraDete[d->Sifra()]=d;
 
     }
+    /*
     ulaz>>velicina;
     for (int i=0;i<(short)velicina;i++){
         qint32 a,b;
@@ -250,8 +238,8 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz>>b;
         _indeksBrakDeca.insert(std::pair<short,short>((short)a,(short)b));
 
-
-    }
+**/
+  //  }/*
     //std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
 
     //=========================
@@ -443,7 +431,7 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     }
     //std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
     //std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
-
+/*
     izlaz << (qint32)_indeksOsobaBrak.size();
     for(auto veza :_indeksOsobaBrak)
     {
@@ -456,7 +444,7 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     {
         izlaz<<(qint32)(dete.first);
         izlaz<<(qint32)(dete.second);
-    }
+    }*/
       fajl.close();
     /*
 
@@ -536,7 +524,7 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
 
     izlaz <<(qint32)-300; //da bih konacno zavrsio sa ucitavanjem i otisao kuci svojoj zeni i deci
 */
-    std::cout<<"Uspesno ispisano";
+    std::cout<<"Uspesno ispisano" << std::endl;
 
     return true;
 }
@@ -555,39 +543,9 @@ void PorodicnoStablo::InicijalizujSveStrukture()
 
 void PorodicnoStablo::SpaliCeloStablo()
 {
-
-/*
-    std::vector<Osoba*>::iterator b=_sveOsobe.begin();
-    std::vector<Osoba*>::iterator e=_sveOsobe.end();
-    for(;b!=e;b++)
-    {
-
-        (*b)->RaskiniSveVeze();
-        if((*b)->Sifra()== _kljucnaOsoba->Sifra())continue;
-        if(!(*b)->VecSeBrisem())
-            delete *b;
-    }
-
-    std::vector<Dete*>::iterator b1=_svaDeca.begin();
-    std::vector<Dete*>::iterator e1=_svaDeca.end();
-    for(;b1!=e1;b1++)
-    {
-        (*b1)->RaskiniSveVeze();
-        if(!(*b1)->VecSeBrisem())
-            delete *b1;
-    }
-
-    std::vector<Brak*>::iterator b2=_sveVeze.begin();
-    std::vector<Brak*>::iterator e2=_sveVeze.end();
-    for(;b2!=e2;b2++)
-    {
-        (*b2)->RaskiniSveVeze();
-        if(!(*b2)->VecSeBrisem())
-            delete *b2;
-    }
-*/
+    if (_kljucnaOsoba != nullptr)
+        UkloniOsobuSifrom(_kljucnaOsoba->Sifra());
     InicijalizujSveStrukture();
-
 }
 
 void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)//brise brakove osobe sa tom sifrom
@@ -654,7 +612,6 @@ void PorodicnoStablo::ObrisiDecu(short sifra)
 std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum) const
 {// std::multimap<int, short> _indeksRodjendan;
     std::vector<short> *slavljenici = new std::vector<short>();
-    //std::pair <std::multimap<int, short>::iterator, std::multimap<int, short>::iterator> sl;// =
     auto sl = _indeksRodjendan.equal_range(datum.dayOfYear());
     auto iter = sl.first;
     for(; iter != sl.second; iter++)

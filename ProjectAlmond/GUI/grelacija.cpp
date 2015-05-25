@@ -10,6 +10,12 @@ GRelacija::GRelacija(short sifra, QPointF prva, QPointF druga, bool brak)
 GRelacija::~GRelacija()
 {}
 
+//QPainterPath GRelacija::shape() const
+//{
+//    QPainterPath putanja;
+//    putanja.
+//}
+
 QRectF GRelacija::boundingRect() const
 {
     qreal d = 1;
@@ -18,8 +24,6 @@ QRectF GRelacija::boundingRect() const
 
 void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//        qDebug() << "crta se";
-//            qDebug() << _sifra;
     painter->setPen(Qt::green);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);
@@ -46,7 +50,6 @@ bool GRelacija::BrakJe() const
 
 void GRelacija::pomeriDrugu(QPointF druga)
 {
-    //qDebug() << "pomera drugu";
     _druga = druga;
     postaviNaSredinu();
 }
@@ -62,7 +65,6 @@ void GRelacija::ukloniSeSaScene(short sifra)
 
 void GRelacija::pomeriPrvu(QPointF prva)
 {
-       // qDebug() << "pomera prvu";
     _prva = prva;
     postaviNaSredinu();
 }
