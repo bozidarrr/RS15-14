@@ -191,9 +191,8 @@ QDataStream& operator>>(QDataStream &in,Brak& brak)
     in >> broj;
     brak._sifraTudje=(short)broj;
     //brak._spisakDece.resize(broj);
-    char* tren;
-    in >> tren;
-    brak._trivija=QString(tren);
+
+    in >> brak._trivija;
 
     return in;
 }
