@@ -29,7 +29,8 @@ class Osoba
 {
 public:
 
-    Osoba(bool krvniSrodnik = false); //kreira N.N lice
+    Osoba(); //kreira osobu bez icega, radi ucitavanja
+    Osoba(bool krvniSrodnik); //kreira N.N lice
     Osoba(const QString &ime, const QString &prezime, const QChar &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik);
     //Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
     Osoba(const Osoba& druga);//samo podatke, ne i veze!!!

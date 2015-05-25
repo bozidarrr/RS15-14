@@ -81,7 +81,6 @@ private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//
-    //std::map<QString, std::vector<Osoba*> > _indeksIme;
     std::multimap<QString, Osoba*> _indeksIme;
 
     //-----OVE STALNO AZURIRAMO------//
