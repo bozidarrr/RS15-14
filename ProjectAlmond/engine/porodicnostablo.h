@@ -69,8 +69,13 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
-    //metod koji vraca true ako osoba ima bar jednog supruznika, trebace u GUI-ju
-    bool osobaImaBrakove(const short sifra) const;
+    //metod koji vraca broj supruznika osobe sa tom sifrom, trebace u GUI-ju
+    int osobaImaBrakova(const short sifra) const;
+    //vraca listu sve dece date osobe
+    std::vector<short>* ListaDece(const short sifra) const;
+    //vraca max broj supruznika koje neka osoba u stablu ima
+    int maxBrakova() const;
+
 
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);
 

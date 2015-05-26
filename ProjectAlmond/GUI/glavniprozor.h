@@ -78,6 +78,10 @@ private:
     void kreirajPogledZaStablo();
 
     bool uredjeno = true;
+    std::vector<int>* sirine;
+
+    //osobu te sifre postavlja gde treba
+    void pomeriOsobu(short int sifra, int x);
 
 public Q_SLOTS:
     //-----Toolbar, Menubar...-----//

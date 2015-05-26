@@ -15,8 +15,9 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
 {
     _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), rodjenje, smrt, krvniSrodnik);
     _kljucnaOsoba->Nivo(0);
-    _nivoi.push_back(1);
+
     InicijalizujSveStrukture();
+        _nivoi.push_back(1);
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
     {
@@ -191,11 +192,41 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
     delete NadjiDeteSifrom(sifra);
 }
 
-bool PorodicnoStablo::osobaImaBrakove(const short sifra) const
+int PorodicnoStablo::osobaImaBrakova(const short sifra) const
 {
     if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
-        return false;
-    return _indeksOsobaBrak.count(sifra) > 0;
+        return -1;
+    return _indeksOsobaBrak.count(sifra);
+}
+
+std::vector<short> *PorodicnoStablo::ListaDece(const short sifra) const
+{
+    std::vector<short> *svaDeca = new std::vector<short>();
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        auto deca = _indeksBrakDeca.equal_range(b->second);
+        for (auto d = deca.first; d != deca.second; d++)
+            svaDeca->push_back(d->second);
+    }
+    return svaDeca;
+}
+
+int PorodicnoStablo::maxBrakova() const
+{
+    int max = 0;
+    auto b = _indeksSifraOsobe.begin(), e = _indeksSifraOsobe.end();
+    for (;b!=e;b++)
+    {
+        Osoba *o = b->second;
+        if (o->JeKrvniSrodnik())
+        {
+            int broj = _indeksOsobaBrak.count(o->Sifra());
+            if (broj > max)
+                max = broj;
+        }
+    }
+    return max;
 }
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
@@ -512,7 +543,9 @@ const std::multimap<short, short> PorodicnoStablo::BrakDeca() const
 {
     return _indeksBrakDeca;
 }
-//std::vector<int> PorodicnoStablo::Nivoi()
-//{
-//}
+
+std::vector<int> PorodicnoStablo::Nivoi()
+{
+    return _nivoi;
+}
 
