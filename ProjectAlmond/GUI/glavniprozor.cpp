@@ -65,11 +65,9 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
-    //readSettings();
 
-    //std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
-    //qDebug() << v->size();
-    //delete v;
+    connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));
+    //readSettings();
 }
 
 GlavniProzor::~GlavniProzor()
@@ -352,6 +350,7 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
 short GlavniProzor::izmeniOsobu(short sifra)
 {
     DijalogIzmenaOsobe *d = new DijalogIzmenaOsobe(stablo->NadjiOsobuSifrom(sifra), this);
+    connect(d, SIGNAL(azurirajRodjenje(QDate,QDate,short)), stablo, SLOT(azurirajIndeksRodj(QDate,QDate,short)));
     if (d->exec())
     {
         ui->statusBar->showMessage(tr("Uspesno unete izmene."), 2000);
@@ -868,6 +867,14 @@ void GlavniProzor::urediStablo()
         qDebug() <<"uredi preci gore";
     else
         qDebug() << "uredi preci dole";
+}
+
+void GlavniProzor::prikaziSlavljenike()
+{
+    std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    for (short sifra : *v)
+        qDebug() << sifra;
+    delete v;
 }
 
 QStringList GlavniProzor::skoroOtvarani;
