@@ -64,7 +64,6 @@ private:
     QString otvoreniFajl;
     QTranslator *translator;
 
-    //DODATI!!!
     std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
@@ -93,8 +92,6 @@ private:
     Stablo *pogled;
     QGraphicsScene *scena;
     void kreirajPogledZaStablo();
-
-    //void oznaciSlavljenike();
 
 public Q_SLOTS:
     void prikaziToolbar();

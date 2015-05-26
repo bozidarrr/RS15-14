@@ -60,10 +60,10 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
                                 *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
-    korena->setPos(123,123);
+    korena->setPos(pogled->mapToScene(pogled->viewport()->rect().center()));
     korena->setZValue(2);
     scena->addItem(korena);
-    _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
+    _pozicijeOsoba[korena->Sifra()] = QPointF(korena->pos());
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
 
     connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));
@@ -213,9 +213,6 @@ void GlavniProzor::kreirajToolbar()
 void GlavniProzor::kreirajMestoZaInfo()
 {
     info = new QDockWidget(tr("Informacije"));
-    //Labela=new QLabel("Informacije");
-    //info->setWidget(Labela);//i recimo
-    //Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
     /** bilo bi lepo da je malo uzi :) **/
     info->setWidget(ui->zaInformacije);
     ui->zaInformacije->setPlaceholderText("Informacije");
@@ -242,8 +239,6 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
-            //std::string tmp =
-            //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
             novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
@@ -468,7 +463,7 @@ void GlavniProzor::readSettings()
 void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
-    scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
+    scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height());
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -782,12 +777,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
     {
         GOsoba *novaOsoba;
-        //qDebug() << "povezati";
         GOsoba *staraOsoba = qgraphicsitem_cast<GOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
         if (staraOsoba == nullptr || stablo->NadjiOsobuSifrom(staraOsoba->Sifra()) == nullptr)//ovo drugo ne bi smelo...
         {
             tbDetalji->setChecked(true);
-            //qDebug()<<"nesto ne valja";
             return;
         }
         if (!stablo->NadjiOsobuSifrom(staraOsoba->Sifra())->JeKrvniSrodnik())
@@ -823,7 +816,6 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         GRelacija *brak = qgraphicsitem_cast<GRelacija*>(pogled->itemAt(prva));
         if (brak == nullptr || !brak->BrakJe() || stablo->NadjiBrakSifrom(brak->Sifra()) == nullptr)
         {
-            //qDebug()<<"nesto ne valja";
             tbDetalji->setChecked(true);
             return;
         }
@@ -874,6 +866,7 @@ void GlavniProzor::prikaziSlavljenike()
     std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
     for (short sifra : *v)
         qDebug() << sifra;
+    //idemo po sifri i postavljamo im poseban stil
     delete v;
 }
 
