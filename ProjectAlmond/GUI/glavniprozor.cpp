@@ -94,7 +94,7 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
                 ui->zaInformacije->append("Datum smrti: ");
                 ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
             }
-            qDebug() << osoba->Nivo();
+            //qDebug() << osoba->Nivo();
         }
     }
     if (tip == INFO_BRAK)

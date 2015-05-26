@@ -72,10 +72,14 @@ public:
     //metod koji vraca true ako osoba ima bar jednog supruznika, trebace u GUI-ju
     bool osobaImaBrakove(const short sifra) const;
 
-    //vraca vektor sifara osoba kojima je na prosledjeni datum rodjendan
-    //usput azurira delimicno indeksRodjendan, koji ne prati izmene osoba automatski
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);
 
+    //----GETTERI ZA INDEKSE----//
+    std::map<short, Osoba*> Osobe();
+    std::map<short, Brak*> Brakovi();
+    std::map<short, Dete*> Deca();
+    std::vector<int> Nivoi();
+    //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
 
@@ -108,7 +112,8 @@ private:
     void ObrisiBrakove(short sifra, bool iSupruznike);
     void ObrisiDecu(short sifra);
 
-    std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+    //std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+    std::vector<int> _nivoi;
 
 signals:
     void obrisanaOsoba(short sifra);
