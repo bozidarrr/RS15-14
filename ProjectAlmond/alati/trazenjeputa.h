@@ -7,17 +7,18 @@
 class TrazenjePuta
 {
 public:
-    TrazenjePuta(PorodicnoStablo *stablo, int sifraKorena, int sifraTrazene);
-    std::vector<int> operator()(void);
+    TrazenjePuta(PorodicnoStablo *stablo);
+
+    ~TrazenjePuta();
+    std::vector<short> operator()(short sifraPocetne,short sifraTrazene);
 
 private:
     PorodicnoStablo *_stablo;
-    int _sifraKorena;
-    int _sifraTrazene;
-    std::vector<int> _put;
-    std::vector<Osoba*> _redCekanja;
-    std::vector<int> _obradjeneSifre;
-
+    short **_putevi;
+    short **_duzine;
+    short *_sifre;
+    void InicijalizujMatricu(short **m,int n);
+    int rBr(const short sifra)const;
 
 };
 

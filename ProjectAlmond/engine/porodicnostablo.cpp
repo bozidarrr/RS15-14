@@ -74,7 +74,7 @@ short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int
     short noviNivo = _indeksSifraVeza[sifraBraka]->Nivo()+1;
     _indeksSifraOsobe[sifraOsobe]->Nivo(noviNivo);
     //i ubacujemo u brojac
-    if (_nivoi.size() <= noviNivo)
+    if (_nivoi.size() <= (unsigned)noviNivo)
         _nivoi.push_back(1);
     else
         _nivoi[noviNivo]++;
@@ -480,13 +480,13 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
     return slavljenici;
 }
 
-std::vector<int> PorodicnoStablo::kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
+std::vector<short> PorodicnoStablo::sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
 {
-    TrazenjePuta pretraga(this,sifraPocetne,sifraTrazene);
-    std::vector<int> Kod(pretraga());
+    TrazenjePuta pretraga(this);
+    std::vector<short> Put(pretraga(sifraPocetne,sifraTrazene));
 
 
-    return Kod;
+    return Put;
 }
 
 
@@ -501,6 +501,16 @@ std::map<short, Brak*> PorodicnoStablo::Brakovi()
 std::map<short, Dete*> PorodicnoStablo::Deca()
 {
     return _indeksSifraDete;
+}
+
+const std::multimap<short, short> PorodicnoStablo::OsobaBrak()const
+{
+    return _indeksOsobaBrak;
+}
+
+const std::multimap<short, short> PorodicnoStablo::BrakDeca() const
+{
+    return _indeksBrakDeca;
 }
 //std::vector<int> PorodicnoStablo::Nivoi()
 //{

@@ -78,6 +78,8 @@ public:
     std::map<short, Osoba*> Osobe();
     std::map<short, Brak*> Brakovi();
     std::map<short, Dete*> Deca();
+    const std::multimap<short, short> OsobaBrak() const;
+    const std::multimap<short,short> BrakDeca()const;
     std::vector<int> Nivoi();
     //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
@@ -122,7 +124,7 @@ signals:
 
 public Q_SLOTS:
     void azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra);
-    std::vector<int> kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
+    std::vector<short> sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
 
 };
 
