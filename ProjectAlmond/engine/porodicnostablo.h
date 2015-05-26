@@ -124,7 +124,7 @@ signals:
 
 public Q_SLOTS:
     void azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra);
-    std::vector<int> kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
+    std::vector<short> sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
 
 };
 
