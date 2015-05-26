@@ -108,6 +108,8 @@ private:
     void ObrisiBrakove(short sifra, bool iSupruznike);
     void ObrisiDecu(short sifra);
 
+    std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+
 signals:
     void obrisanaOsoba(short sifra);
     void obrisanaVezaDete(short sifra);

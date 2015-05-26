@@ -14,6 +14,7 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
                                  const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
 {
     _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), rodjenje, smrt, krvniSrodnik);
+    _kljucnaOsoba->Nivo(0);
     InicijalizujSveStrukture();
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
@@ -68,6 +69,14 @@ short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int
     //osoba je dete iz ovog braka, vec kreirana sa vrednoscu -1 za sifru roditeljskog odnosa, pa joj to postavljamo
     _indeksSifraOsobe[sifraOsobe]->PostaviRoditeljskuSifru(sifraBraka);
     //ili si hteo da dodjes do relacije "dete"?
+    //osobi, tj detetu dodeljujemo nivo_roditelja + 1
+    short noviNivo = _indeksSifraVeza[sifraBraka]->Nivo()+1;
+    _indeksSifraOsobe[sifraOsobe]->Nivo(noviNivo);
+    //i ubacujemo u brojac
+    if (_nivoOsoba.find(noviNivo) == _nivoOsoba.end())
+        _nivoOsoba[noviNivo] = 1;
+    else
+        _nivoOsoba[noviNivo] = _nivoOsoba[noviNivo] + 1;
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
     _indeksSifraDete[novo->Sifra()]=novo;
     _indeksBrakDeca.insert(std::make_pair(sifraBraka, sifraOsobe));
@@ -78,6 +87,7 @@ short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int
 short int PorodicnoStablo::DodajBrak(const short sifraNaseOsobe, const short sifraTudjeOsobe, const QString &trivija)
 {
     Brak *novi = new Brak(sifraNaseOsobe, sifraTudjeOsobe, trivija);
+    novi->Nivo(_indeksSifraOsobe[sifraNaseOsobe]->Nivo());//treba nam zbog racunanja nivo deteta
     _indeksSifraVeza[novi->Sifra()]=novi;
     _indeksOsobaBrak.insert(std::make_pair(sifraNaseOsobe, novi->Sifra()));
     _indeksOsobaBrak.insert(std::make_pair(sifraTudjeOsobe, novi->Sifra()));
@@ -358,6 +368,7 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksOsobaBrak.clear();
     _indeksRodjendan.clear();
     //_indeksRodjenje.clear();
+    _nivoOsoba.clear();
 }
 
 void PorodicnoStablo::SpaliCeloStablo()
