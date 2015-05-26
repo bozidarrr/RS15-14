@@ -9,7 +9,7 @@ DialogPretrage::DialogPretrage(QWidget *parent) :
     connect(ui->Odustanibtn,SIGNAL(clicked()),this,SLOT(close()));
     connect(ui->Prihvatibtn,SIGNAL(clicked()),this,SLOT(izvrsiPretragu()));
 }
-bool DialogPretrage::izvrsiPretragu(){
+bool DialogPretrage::procitajPodatke(){
     _ime=QString();
     _prezime=QString();
     _datumRodj=QDate();
