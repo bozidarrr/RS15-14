@@ -18,7 +18,7 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
     {
-        _indeksRodjenje.insert(std::make_pair(rodjenje, _kljucnaOsoba->Sifra()));//ubacuje pri pravljenju osobe
+        //_indeksRodjenje.insert(std::make_pair(rodjenje, _kljucnaOsoba->Sifra()));//ubacuje pri pravljenju osobe
         _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), _kljucnaOsoba->Sifra()));//ne azurira pri promeni kasnijoj!
     }
     _indeksSifraOsobe[_kljucnaOsoba->Sifra()]=_kljucnaOsoba;
@@ -53,7 +53,7 @@ short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime
     _indeksIme.insert(std::make_pair(ime, nova));
     if (rodjenje.isValid())
     {
-        _indeksRodjenje.insert(std::make_pair(rodjenje, nova->Sifra()));//ubacuje pri pravljenju osobe
+        //_indeksRodjenje.insert(std::make_pair(rodjenje, nova->Sifra()));//ubacuje pri pravljenju osobe
         _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), nova->Sifra()));//ne azurira pri promeni kasnijoj!
     }
     _indeksSifraOsobe[nova->Sifra()]=nova;
@@ -194,7 +194,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     if (datum.isValid())
     {
         _indeksRodjendan.insert(std::make_pair(datum.dayOfYear(), _kljucnaOsoba->Sifra()));
-        _indeksRodjenje.insert(std::make_pair(datum, _kljucnaOsoba->Sifra()));
+        //_indeksRodjenje.insert(std::make_pair(datum, _kljucnaOsoba->Sifra()));
     }
     if (_kljucnaOsoba->Sifra() > maxSifraOsobe)
         maxSifraOsobe = _kljucnaOsoba->Sifra();
@@ -213,7 +213,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         if (datum.isValid())
         {
             _indeksRodjendan.insert(std::make_pair(datum.dayOfYear(), o->Sifra()));
-            _indeksRodjenje.insert(std::make_pair(datum, o->Sifra()));
+            //_indeksRodjenje.insert(std::make_pair(datum, o->Sifra()));
         }
         if (o->Sifra() > maxSifraOsobe)
             maxSifraOsobe = o->Sifra();
@@ -338,7 +338,7 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksBrakDeca.clear();
     _indeksOsobaBrak.clear();
     _indeksRodjendan.clear();
-    _indeksRodjenje.clear();
+    //_indeksRodjenje.clear();
 }
 
 void PorodicnoStablo::SpaliCeloStablo()
@@ -409,6 +409,23 @@ void PorodicnoStablo::ObrisiDecu(short sifra)
     }
 }
 
+void PorodicnoStablo::azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra)
+{
+    //na promeni osobe iz GUI-ja dobijamo signal
+    auto dani = _indeksRodjendan.equal_range(stari.dayOfYear());
+    auto iter = dani.first;
+    for (; iter != dani.second; iter++)
+    {
+        if (iter->second == sifra)
+        {
+            _indeksRodjendan.erase(iter);
+            _indeksRodjendan.emplace(novi.dayOfYear(), sifra);
+            _indeksSifraOsobe[sifra]->PromeniDatumRodjenja(novi);
+            break;
+        }
+    }
+}
+
 std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
 {// std::multimap<int, short> _indeksRodjendan;
     std::vector<short> *slavljenici = new std::vector<short>();
@@ -416,19 +433,9 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
     auto iter = sl.first;
     for(; iter != sl.second; iter++)
     {
-        //proveravam da li osoba postoji, ali ne proveravam da li joj je izmenjen podatak!
+        //proveravam da li osoba postoji
         if (_indeksSifraOsobe.find(iter->second) != _indeksSifraOsobe.end())
-        {
-           Osoba *slavljenik = _indeksSifraOsobe[iter->second];
-            if (slavljenik->DatumRodjenja().dayOfYear() != datum.dayOfYear())
-            {
-                //datum je promenjen u medjuvremenu pa ga azuriramo u indeksu
-                _indeksRodjendan.erase(iter);
-                _indeksRodjendan.insert(std::make_pair(slavljenik->DatumRodjenja().dayOfYear(), slavljenik->Sifra()));
-            }
-            else
                 slavljenici->push_back(iter->second);
-        }
     }
     return slavljenici;
 }

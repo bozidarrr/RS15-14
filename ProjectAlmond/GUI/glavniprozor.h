@@ -114,6 +114,7 @@ public Q_SLOTS:
     void vucenoStablo(QPoint prva, QPoint druga);
 
     void urediStablo();
+    void prikaziSlavljenike();
 };
 
 #endif // GLAVNIPROZOR_H
