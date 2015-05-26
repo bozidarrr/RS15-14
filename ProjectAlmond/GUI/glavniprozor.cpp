@@ -21,33 +21,6 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     //ui->retranslateUi(this);
     //retranslate();
 
-//DODATO---------------------------------------------------
-        //ovo treba bolje da se uradi
-//    DialogNovaOsoba *d = new DialogNovaOsoba(false, this);
-//    if (d->exec())
-//    {
-//        std::string ime, prezime, rodjenje, smrt, trivija;
-//        char pol;
-//        d->popuniPodatke(ime, prezime, pol, rodjenje, smrt, trivija);
-
-//        stablo = new PorodicnoStablo(ime, prezime, pol, true);
-
-//        short int novaSifra = stablo->KljucnaOsoba()->Sifra();
-
-//        ui->statusBar->showMessage("Kreirano novo stablo", 2000);
-//        WidgetOsoba *novaOsoba = new WidgetOsoba(novaSifra, 0, 0, this, stabloOkvir);
-//        std::string tmp = stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
-//        novaOsoba->postaviImePrezime(tmp);
-//       // novaOsoba->setX((stabloOkvir->width()-novaOsoba->width())/2);
-//       // novaOsoba->setY((stabloOkvir->height()-novaOsoba->height())/2);
-//        novaOsoba->move(novaOsoba->X(),novaOsoba->Y());
-//        novaOsoba->show();
-//        delete d;
-//    }
-//    else
-//        ui->statusBar->showMessage("Nesto nije bilo u redu sa kreiranjem stabla!");
-//DODATO---------------------------------------------------------------------
-
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("Pera", "Detlic", "m",
                                  QDate::currentDate(), QDate::currentDate(), true);
@@ -57,16 +30,16 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     kreirajPogledZaStablo();
     kreirajOpcije();
     obnoviSkoroOtvarane();
-
+    //-------Pravi se stablo i korena osoba-------//
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
                                 *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
-    korena->setPos(123,123);
+    korena->setPos(pogled->mapToScene(pogled->viewport()->rect().center()));
     korena->setZValue(2);
     scena->addItem(korena);
-    _pozicijeOsoba[korena->Sifra()] = QPointF(123,123);
+    _pozicijeOsoba[korena->Sifra()] = QPointF(korena->pos());
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
+    //-------Pravi se stablo i korena osoba-------//
 
-    connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));
     //readSettings();
 }
 
@@ -82,7 +55,6 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
     if (sifra == -1 || tip == NISTA)
     {
         ui->zaInformacije->setPlaceholderText("Informacije");
-        //Labela->setText("");
         return;
     }
     if (tip == INFO_OSOBA)
@@ -90,9 +62,6 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
         Osoba *osoba = stablo->NadjiOsobuSifrom(sifra);
         if (osoba)
         {
-            //Labela->setText(QString::fromStdString("<H1>"+osoba->Ime()+"<H1/>\n"+osoba->Prezime()));//i sve ostalo
-            //Labela->setText(osoba->Ime());
-            //setfont, textformat ????
             ui->zaInformacije->clear();
             ui->zaInformacije->append(osoba->Ime());
             ui->zaInformacije->append(osoba->Prezime());
@@ -149,6 +118,8 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezikE()));
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
+    connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
+    connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));//ovo jos doraditi
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -213,9 +184,6 @@ void GlavniProzor::kreirajToolbar()
 void GlavniProzor::kreirajMestoZaInfo()
 {
     info = new QDockWidget(tr("Informacije"));
-    //Labela=new QLabel("Informacije");
-    //info->setWidget(Labela);//i recimo
-    //Labela->setToolTip("Ovde mozete pronaci informacije o trenutno aktivnoj osobi");
     /** bilo bi lepo da je malo uzi :) **/
     info->setWidget(ui->zaInformacije);
     ui->zaInformacije->setPlaceholderText("Informacije");
@@ -242,8 +210,6 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
-            //std::string tmp =
-            //        stablo->NadjiOsobuSifrom(novaSifra)->Ime() + " " + stablo->NadjiOsobuSifrom(novaSifra)->Prezime();
             novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
@@ -468,7 +434,7 @@ void GlavniProzor::readSettings()
 void GlavniProzor::kreirajPogledZaStablo()
 {
     pogled = new Stablo();
-    scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height(), this);
+    scena = new QGraphicsScene(0, 0, pogled->width(), pogled->height());
     pogled->setScene(scena);
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
@@ -782,12 +748,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
     {
         GOsoba *novaOsoba;
-        //qDebug() << "povezati";
         GOsoba *staraOsoba = qgraphicsitem_cast<GOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
         if (staraOsoba == nullptr || stablo->NadjiOsobuSifrom(staraOsoba->Sifra()) == nullptr)//ovo drugo ne bi smelo...
         {
             tbDetalji->setChecked(true);
-            //qDebug()<<"nesto ne valja";
             return;
         }
         if (!stablo->NadjiOsobuSifrom(staraOsoba->Sifra())->JeKrvniSrodnik())
@@ -823,7 +787,6 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         GRelacija *brak = qgraphicsitem_cast<GRelacija*>(pogled->itemAt(prva));
         if (brak == nullptr || !brak->BrakJe() || stablo->NadjiBrakSifrom(brak->Sifra()) == nullptr)
         {
-            //qDebug()<<"nesto ne valja";
             tbDetalji->setChecked(true);
             return;
         }
@@ -863,6 +826,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 void GlavniProzor::urediStablo()
 {
     //kako cemo ovo...
+    //engine mi vraca mapu ili tako nesto, <sifra osobe, udaljenost od korene>
+    //na osnovu toga im preracunavam koordinate
     if (ui->aPreciGore->isChecked())
         qDebug() <<"uredi preci gore";
     else
@@ -871,10 +836,22 @@ void GlavniProzor::urediStablo()
 
 void GlavniProzor::prikaziSlavljenike()
 {
+    //ovde sam mislila da uvedemo korisniku mogucnost da izabere datum, ne samo danasnji datum da bude
     std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
     for (short sifra : *v)
         qDebug() << sifra;
+    //idemo po sifri i postavljamo im poseban stil
     delete v;
+}
+
+void GlavniProzor::prikaziSakrijTudje()
+{
+    if (ui->aSamoKrv->isChecked())
+        qDebug() << "sakriti tudje";
+    else
+        qDebug() << "vratiti tudje";
+    //for (QGraphicsItem osoba : scena->items())
+    //ili sa grupama, videcu ovo
 }
 
 QStringList GlavniProzor::skoroOtvarani;

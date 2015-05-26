@@ -59,6 +59,8 @@ void GOsoba::obavestiRelacije()
 
 void GOsoba::promeniStil(Stil stil)
 {
+    _ukljuceniFlegovi |= stil;//TO DO
+    //napraviti .css za ovo
     switch (stil)
     {
     case SELEKTOVANA:

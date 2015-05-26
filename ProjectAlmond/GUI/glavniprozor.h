@@ -64,7 +64,6 @@ private:
     QString otvoreniFajl;
     QTranslator *translator;
 
-    //DODATI!!!
     std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
@@ -94,9 +93,8 @@ private:
     QGraphicsScene *scena;
     void kreirajPogledZaStablo();
 
-    //void oznaciSlavljenike();
-
 public Q_SLOTS:
+    //-----Toolbar, Menubar...-----//
     void prikaziToolbar();
     void novoStablo();//File|New
     void otvoriPostojeceStablo();//File|Open
@@ -109,12 +107,15 @@ public Q_SLOTS:
     void promeniJezikS();//za promenu jezika na srpski
     void osveziPrikazAlata(bool Vidljivost);
     void osveziPrikazInformacija(bool Vidljivost);
-
+    //-----Toolbar, Menubar...-----//
+    //-----INTERAKCIJA-----//
     void kliknutoStablo(QPoint pozicija);
     void vucenoStablo(QPoint prva, QPoint druga);
-
     void urediStablo();
+    //-----INTERAKCIJA-----//
+    //-----Menjanje prikazanih osoba-----//
     void prikaziSlavljenike();
+    void prikaziSakrijTudje();
 };
 
 #endif // GLAVNIPROZOR_H
