@@ -11,13 +11,15 @@ Osoba::Osoba()
     :_sifra(),_nepoznata(),_ime(),_prezime(),
     _pol(),_datumRodjenja(),_datumSmrti(),_krvniSrodnik()
 {
-
+    _sifraRoditeljskeVeze = -1;
 }
 
 Osoba::Osoba(bool krvniSrodnik)
     :_sifra(_sledecaSifra++),_nepoznata(true),_ime("N."),_prezime("N."),
       _pol('?'),_datumRodjenja(),_datumSmrti(),_krvniSrodnik(krvniSrodnik)
-{}
+{
+    _sifraRoditeljskeVeze = -1;
+}
 
 Osoba::Osoba(const QString &ime, const QString &prezime, const QChar &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
     :_sifra(_sledecaSifra++),_nepoznata(false),_ime(ime),_prezime(prezime),
@@ -27,11 +29,12 @@ Osoba::Osoba(const QString &ime, const QString &prezime, const QChar &pol, const
         _datumRodjenja.setDate(rodjenje.year(), rodjenje.month(), rodjenje.day());
     if (smrt.isValid())
         _datumSmrti.setDate(smrt.year(), smrt.month(), smrt.day());
+    _sifraRoditeljskeVeze = -1;
 }
 
 Osoba::Osoba(const Osoba& druga)
     :_sifra(druga._sifra),_nepoznata(druga._nepoznata),_ime(druga._ime),_prezime(druga._prezime),
-      _pol(druga._pol),_krvniSrodnik(druga._krvniSrodnik)
+      _pol(druga._pol),_krvniSrodnik(druga._krvniSrodnik), _sifraRoditeljskeVeze(druga.SifraRoditeljskeVeze())
 {}
 
 Osoba::~Osoba()
@@ -85,6 +88,11 @@ bool Osoba::JeKrvniSrodnik() const
     return _krvniSrodnik;
 }
 
+short Osoba::SifraRoditeljskeVeze() const
+{
+    return _sifraRoditeljskeVeze;
+}
+
 void Osoba::PromeniIme(const QString &ime)
 {
     _ime = ime;
@@ -109,6 +117,12 @@ void Osoba::PromeniDatumSmrti(const QDate &datum)
 {
     if (datum.isValid())
         _datumSmrti.setDate(datum.year(), datum.month(), datum.day());
+}
+
+void Osoba::PostaviRoditeljskuSifru(const short sifra)
+{
+    //>if _sifraRoditeljskeVeze vec >= 0 da ne menjamo, ne znam, videcemo
+    _sifraRoditeljskeVeze = sifra;
 }
 
 void Osoba::postaviSledecuSifru(int sifra)

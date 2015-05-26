@@ -65,6 +65,9 @@ short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime
 //dodaje relaciju dete, od braka do osobe
 short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int sifraOsobe, const QString &trivija)
 {
+    //osoba je dete iz ovog braka, vec kreirana sa vrednoscu -1 za sifru roditeljskog odnosa, pa joj to postavljamo
+    _indeksSifraOsobe[sifraOsobe]->PostaviRoditeljskuSifru(sifraBraka);
+    //ili si hteo da dodjes do relacije "dete"?
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
     _indeksSifraDete[novo->Sifra()]=novo;
     _indeksBrakDeca.insert(std::make_pair(sifraBraka, sifraOsobe));
