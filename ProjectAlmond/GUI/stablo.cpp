@@ -2,6 +2,7 @@
 
 Stablo::Stablo()
 {
+    setResizeAnchor(QGraphicsView::AnchorViewCenter);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 }
 
