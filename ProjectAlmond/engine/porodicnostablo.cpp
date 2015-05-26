@@ -15,6 +15,7 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
 {
     _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), rodjenje, smrt, krvniSrodnik);
     _kljucnaOsoba->Nivo(0);
+    _nivoi.push_back(1);
     InicijalizujSveStrukture();
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
@@ -73,10 +74,10 @@ short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int
     short noviNivo = _indeksSifraVeza[sifraBraka]->Nivo()+1;
     _indeksSifraOsobe[sifraOsobe]->Nivo(noviNivo);
     //i ubacujemo u brojac
-    if (_nivoOsoba.find(noviNivo) == _nivoOsoba.end())
-        _nivoOsoba[noviNivo] = 1;
+    if (_nivoi.size() <= noviNivo)
+        _nivoi.push_back(1);
     else
-        _nivoOsoba[noviNivo] = _nivoOsoba[noviNivo] + 1;
+        _nivoi[noviNivo]++;
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
     _indeksSifraDete[novo->Sifra()]=novo;
     _indeksBrakDeca.insert(std::make_pair(sifraBraka, sifraOsobe));
@@ -133,8 +134,13 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
     Osoba *zaBrisanje=_indeksSifraOsobe[sifra];
 
     if (zaBrisanje->JeKrvniSrodnik())
-        //brisemo njene supruznike
+    {//brisemo njene supruznike
         ObrisiBrakove(sifra, true);
+        //i smanjujemo broj ljudi u njenom nivou
+        _nivoi[zaBrisanje->Nivo()]--;
+        if (_nivoi[zaBrisanje->Nivo()] == 0)
+            _nivoi.pop_back();//ako je ovaj nula, moraju i svi posle biti nula
+    }
     //to ce obrisati i decu, jer supruznik nece biti krvni srodnik pa ce uci u else granu
     else
     {
@@ -368,7 +374,7 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksOsobaBrak.clear();
     _indeksRodjendan.clear();
     //_indeksRodjenje.clear();
-    _nivoOsoba.clear();
+    _nivoi.clear();
 }
 
 void PorodicnoStablo::SpaliCeloStablo()
@@ -483,4 +489,20 @@ std::vector<int> PorodicnoStablo::kodiranPutOdOsobeDoOsobe(int sifraPocetne,int 
     return Kod;
 }
 
+
+std::map<short, Osoba*> PorodicnoStablo::Osobe()
+{
+    return _indeksSifraOsobe;
+}
+std::map<short, Brak*> PorodicnoStablo::Brakovi()
+{
+    return _indeksSifraVeza;
+}
+std::map<short, Dete*> PorodicnoStablo::Deca()
+{
+    return _indeksSifraDete;
+}
+//std::vector<int> PorodicnoStablo::Nivoi()
+//{
+//}
 
