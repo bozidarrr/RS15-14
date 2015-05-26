@@ -10,7 +10,7 @@ public:
     TrazenjePuta(PorodicnoStablo *stablo);
 
     ~TrazenjePuta();
-    std::vector<int> operator()(short sifraPocetne,short sifraTrazene);
+    std::vector<short> operator()(short sifraPocetne,short sifraTrazene);
 
 private:
     PorodicnoStablo *_stablo;
@@ -18,7 +18,7 @@ private:
     short **_duzine;
     short *_sifre;
     void InicijalizujMatricu(short **m,int n);
-
+    int rBr(const short sifra)const;
 
 };
 
