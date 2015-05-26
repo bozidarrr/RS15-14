@@ -23,6 +23,7 @@ public:
     QDate _datumSmr;
     QChar _pol;
     int _kriterijum;
+
 public Q_SLOTS:
     bool procitajPodatke();
     
