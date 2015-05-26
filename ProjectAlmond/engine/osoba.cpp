@@ -215,7 +215,7 @@ bool Osoba::VecSeBrisem()
 QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 {
 
-    out << osoba.Sifra();
+    out << (qint32)osoba.Sifra();
     out << osoba._nepoznata;
     out <<  osoba.Ime();
     out << osoba.Prezime();
@@ -228,29 +228,22 @@ QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 
 QDataStream& operator>>(QDataStream &out,Osoba& osoba)
 {
-    /*
-int sif, srod, nep;
-QString datR, datS, im, pr;
-QChar p;
-*/
+
+    qint32 sif;
     QString datum;
     out >> sif;
-    osoba._sifra = sif;
-    out >> nep;
-    osoba._nepoznata = nep;
-    out >> im;
-    osoba._ime = im;
-    out >> pr;
-    osoba._prezime = pr;
-    out >> p;
-    osoba._pol = p;
-    out >> datR;
-    osoba._datumRodjenja = QDate::fromString(datR, "dd.MM.yyyy.");
-    out >> datS;
-    osoba._datumSmrti = QDate::fromString(datS, "dd.MM.yyyy.");
-    out >> srod;
-    osoba._krvniSrodnik = srod;
-    //std::cout << osoba.Ime().toStdString() << std::endl;
+    osoba._sifra = (int)sif;
+    out >> osoba._nepoznata;
+    out >> osoba._ime;
+    out >>osoba._prezime;
+    out >> osoba._pol;
+    out >> datum;
+    osoba._datumRodjenja = QDate::fromString(datum, "dd.MM.yyyy.");
+    out >> datum;
+    osoba._datumSmrti = QDate::fromString(datum, "dd.MM.yyyy.");
+    out >> osoba._krvniSrodnik;
+
+
     return out;
 }
 

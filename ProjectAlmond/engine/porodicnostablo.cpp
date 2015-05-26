@@ -181,10 +181,13 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     SpaliCeloStablo();  
 
     _kljucnaOsoba = new Osoba();
-    ulaz >> *_kljucnaOsoba;
+    ulaz >>*_kljucnaOsoba;
+    std::cout<<"Procitala kljucnu\n";
+    std::cout << _kljucnaOsoba->Prezime().toStdString() <<std::endl<< _kljucnaOsoba->DatumRodjenja().toString("dd.MM.yyyy.").toStdString() << std::endl;
+    std::cout<<"ubacujem kljucnu u indekse\n";
 
-    //std::cout << _kljucnaOsoba->Prezime().toStdString() << _kljucnaOsoba->DatumRodjenja().toString("dd.MM.yyyy.").toStdString() << std::endl;
     _indeksSifraOsobe[_kljucnaOsoba->Sifra()] = _kljucnaOsoba;
+
     _indeksIme.insert(std::make_pair(_kljucnaOsoba->Ime(), _kljucnaOsoba));
     QDate datum = _kljucnaOsoba->DatumRodjenja();
     if (datum.isValid())
@@ -198,29 +201,41 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     //int maxSifraDeteta=-1;
     //===========================
 
-    /**
+    std::cout<<"zavrsila sa indeksima\n";
     qint32 velicina;
 
     ulaz>>velicina;
+    std::cout<<"procitala broj osoba\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Osoba *o;
+        Osoba *o=new Osoba();
         ulaz>>*o;
         _indeksSifraOsobe[o->Sifra()]=o;
+        _indeksIme.insert(std::make_pair(o->Ime(), o));
+        QDate datum = o->DatumRodjenja();
+        if (datum.isValid())
+        {
+            _indeksRodjendan.insert(std::make_pair(datum.dayOfYear(), o->Sifra()));
+            _indeksRodjenje.insert(std::make_pair(datum, o->Sifra()));
+        }
+        std::cout<<"Procitala osobu\n";
 
     }
     ulaz>>velicina;
+     std::cout<<"procitala broj veza\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Brak *b;
+        Brak *b=new Brak();
         ulaz>>*b;
         _indeksSifraVeza[b->Sifra()]=b;
+        std::cout<<"Procitala vezu\n";
 
     }
     ulaz>>velicina;
+    std::cout<<"procitala broj dece\n"<<(short)velicina;
     for (int i=0;i<(short)velicina;i++){
-        Dete *d;
+        Dete *d=new Dete();
         ulaz>>*d;
         _indeksSifraDete[d->Sifra()]=d;
-
+         std::cout<<"Procitala dete\n";
     }
     /*
     ulaz>>velicina;
@@ -238,7 +253,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz>>b;
         _indeksBrakDeca.insert(std::pair<short,short>((short)a,(short)b));
 
-**/
+*/
   //  }/*
     //std::cout << sifraKlj << std::endl;// << ime.toStdString() << prezime.toStdString() << pol.toLatin1() << std::endl;
 
@@ -398,7 +413,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke koji su mi potrebni, da bi fajlovi bili manji
 {//time gubim na performansama pri ucitavanju, ali posto je cuvanje bitnije od ucitavanja (koje radimo prilicno retko), deluje mi bolje ovako
 
-    std::cout << "Pisem u fajl" << std::endl;
+    std::cout << "Pisem u fajl"<<std::endl;
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::WriteOnly)) {
         std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
@@ -407,27 +422,36 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     QDataStream izlaz(&fajl);
     izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
-    izlaz << _kljucnaOsoba;
+    izlaz <<* _kljucnaOsoba;
+    std::cout<<"ispisala kjucnu\n";
 
     //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;
     izlaz << (qint32)_indeksSifraOsobe.size();
-
+   // std::cout<<"ispisala velicinu vektora osoba\n"<<_indeksSifraOsobe.size();
 
     for(auto osoba :_indeksSifraOsobe)
     {
         izlaz<<(*(osoba.second));
+     //   std::cout<<"ispisala osobu\n";
     }
 
     izlaz << (qint32)_indeksSifraVeza.size();
+    //std::cout<<"ispisala velicinu vektora brak\n"<<_indeksSifraVeza.size();
+
     for(auto brak :_indeksSifraVeza)
     {
         izlaz<<(*brak.second);
+      //  std::cout<<"ispisala vezu\n";
+
     }
 
     izlaz << (qint32)_indeksSifraDete.size();
+
+     //std::cout<<"ispisala velicinu vektora Dete\n"<<_indeksSifraDete.size();
     for(auto dete :_indeksSifraDete)
     {
         izlaz<<(*dete.second);
+       //  std::cout<<"ispisala decu\n";
     }
     //std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
     //std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
