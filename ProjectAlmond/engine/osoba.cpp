@@ -143,6 +143,16 @@ bool Osoba::VecSeBrisem()
     return _vecSeBrisem;
 }
 
+short Osoba::Nivo() const
+{
+    return _nivo;
+}
+
+void Osoba::Nivo(short nivo)
+{
+    _nivo = nivo;
+}
+
 QDataStream& operator<<(QDataStream &out,Osoba& osoba)
 {
 

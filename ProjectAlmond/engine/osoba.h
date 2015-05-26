@@ -86,8 +86,9 @@ public:
 
     //----metodi za citanje i pisanje ----//
 
-
-
+    //----rasporedjivanje----//
+    short Nivo() const;
+    void Nivo(short nivo);
 
 private:
 
@@ -101,8 +102,6 @@ private:
     QDate _datumRodjenja;
     QDate _datumSmrti;
     bool _krvniSrodnik;
-    //Dete * _deteOd;
-    //std::vector<Brak *> _spisakVeza;
     short _sifraRoditeljskeVeze;
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;
@@ -111,6 +110,8 @@ private:
     //----napredni podaci----//
 
     //----napredni podaci----//
+
+    short _nivo = -1;
 
 };
 

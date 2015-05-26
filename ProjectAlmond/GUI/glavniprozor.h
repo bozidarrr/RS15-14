@@ -5,27 +5,11 @@
 #include <QMainWindow>
 #include "engine/porodicnostablo.h"
 #include <QButtonGroup>
-#include <QToolBar>
 #include <QLabel>
 #include <QPushButton>
-#include <QDockWidget>
-#include "dijalogizmenaosobe.h"
-#include "dialognovaosoba.h"
-#include "dijalogrelacija.h"
-#include <string>
 #include "ui_glavniprozor.h"
 #include <map>
-#include <QDebug>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QPoint>
-#include <QPointF>
-#include <QAction>
-#include <QSettings>
-#include <QTranslator>
-#include <QTransform>
 #include <QGraphicsScene>
-#include <QTextBrowser>
 #include "gosoba.h"
 #include "grelacija.h"
 
@@ -64,7 +48,7 @@ private:
     QString otvoreniFajl;
     QTranslator *translator;
 
-    std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
+    std::map<short int, GOsoba*> _pozicijeOsoba;//<sifra_osobe, GOsoba>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
@@ -92,6 +76,8 @@ private:
     Stablo *pogled;
     QGraphicsScene *scena;
     void kreirajPogledZaStablo();
+
+    bool uredjeno = true;
 
 public Q_SLOTS:
     //-----Toolbar, Menubar...-----//

@@ -1,6 +1,23 @@
 #include "GUI/glavniprozor.h"
 #include "ui_glavniprozor.h"
+#include <QToolBar>
+#include <QDockWidget>
+#include "dijalogizmenaosobe.h"
+#include "dialognovaosoba.h"
+#include "dijalogrelacija.h"
 #include <vector>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QPoint>
+#include <QPointF>
+#include <QAction>
+#include <QSettings>
+#include <QTranslator>
+#include <QTransform>
+#include <QTextBrowser>
+
+#include <QDebug>
+
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -36,7 +53,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->setPos(pogled->mapToScene(pogled->viewport()->rect().center()));
     korena->setZValue(2);
     scena->addItem(korena);
-    _pozicijeOsoba[korena->Sifra()] = QPointF(korena->pos());
+    _pozicijeOsoba[korena->Sifra()] = korena;
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
     //-------Pravi se stablo i korena osoba-------//
 
@@ -77,6 +94,7 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
                 ui->zaInformacije->append("Datum smrti: ");
                 ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
             }
+            qDebug() << osoba->Nivo();
         }
     }
     if (tip == INFO_BRAK)
@@ -213,7 +231,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
-            _pozicijeOsoba[novaSifra] = novaOsoba->pos();
+            _pozicijeOsoba[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
         }   
     }
@@ -766,6 +784,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             if (novaSifraBraka >= 0)
             {
                 scena->addItem(novaOsoba);
+                //dodavanje je definitivno pa ni stablo vise ne mora biti uredjeno
+                uredjeno = false;
                 setWindowModified(true);
                 ui->statusBar->showMessage(tr("Dodavanje nove osobe u stablo je proslo uspesno."), 2000);
             }
@@ -796,6 +816,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             if (novaSifra >= 0)
             {
                 scena->addItem(novoDete);
+                //dodavanje je definitivno pa ni stablo vise ne mora biti uredjeno
+                uredjeno = false;
                 setWindowModified(true);
             }
             else
@@ -816,7 +838,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             return;
         }
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
-        _pozicijeOsoba[item->Sifra()] = item->pos();
+        uredjeno = false;
         item->obavestiRelacije();
         setWindowModified(true);
     }
@@ -825,8 +847,11 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 
 void GlavniProzor::urediStablo()
 {
-    //kako cemo ovo...
-    //engine mi vraca mapu ili tako nesto, <sifra osobe, udaljenost od korene>
+    if (uredjeno)//popravice se ovo
+        return;
+    //idemo po nivoima
+    //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
+    //
     //na osnovu toga im preracunavam koordinate
     if (ui->aPreciGore->isChecked())
         qDebug() <<"uredi preci gore";

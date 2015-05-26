@@ -96,6 +96,16 @@ void Brak::PreskociRazvezivanje()
     _preskociRazvezivanje=true;
 }
 
+short Brak::Nivo() const
+{
+    return _nivo;
+}
+
+void Brak::Nivo(short nivo)
+{
+    _nivo = nivo;
+}
+
 QDataStream& operator<<(QDataStream &out,Brak& brak)
 {
     out << qint32(brak._sifra);
