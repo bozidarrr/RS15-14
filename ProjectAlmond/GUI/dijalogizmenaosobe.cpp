@@ -86,7 +86,11 @@ void DijalogIzmenaOsobe::primeniIzmene()
     if (ui->unosPrezime->isModified())
         _osoba->PromeniPrezime(ui->unosPrezime->text());
     if (!ui->chkRodjenje->isVisible() || ui->chkRodjenje->isChecked())
-        _osoba->PromeniDatumRodjenja(ui->unosRodjenje->date());
+    {
+        emit azurirajRodjenje(_osoba->DatumRodjenja(), ui->unosRodjenje->date(), _osoba->Sifra());
+        //_osoba->PromeniDatumRodjenja(ui->unosRodjenje->date());
+
+    }
     if (!ui->chkSmrt->isVisible() || ui->chkSmrt->isChecked())
         _osoba->PromeniDatumSmrti(ui->UnosSmrt->date());
     if (ui->unosPol->isModified())

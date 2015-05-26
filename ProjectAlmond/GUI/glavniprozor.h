@@ -5,27 +5,11 @@
 #include <QMainWindow>
 #include "engine/porodicnostablo.h"
 #include <QButtonGroup>
-#include <QToolBar>
 #include <QLabel>
 #include <QPushButton>
-#include <QDockWidget>
-#include "dijalogizmenaosobe.h"
-#include "dialognovaosoba.h"
-#include "dijalogrelacija.h"
-#include <string>
 #include "ui_glavniprozor.h"
 #include <map>
-#include <QDebug>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QPoint>
-#include <QPointF>
-#include <QAction>
-#include <QSettings>
-#include <QTranslator>
-#include <QTransform>
 #include <QGraphicsScene>
-#include <QTextBrowser>
 #include "gosoba.h"
 #include "grelacija.h"
 
@@ -64,8 +48,7 @@ private:
     QString otvoreniFajl;
     QTranslator *translator;
 
-    //DODATI!!!
-    std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, njena_pozicija>
+    std::map<short int, GOsoba*> _pozicijeOsoba;//<sifra_osobe, GOsoba>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
@@ -94,9 +77,10 @@ private:
     QGraphicsScene *scena;
     void kreirajPogledZaStablo();
 
-    //void oznaciSlavljenike();
+    bool uredjeno = true;
 
 public Q_SLOTS:
+    //-----Toolbar, Menubar...-----//
     void prikaziToolbar();
     void novoStablo();//File|New
     void otvoriPostojeceStablo();//File|Open
@@ -109,11 +93,15 @@ public Q_SLOTS:
     void promeniJezikS();//za promenu jezika na srpski
     void osveziPrikazAlata(bool Vidljivost);
     void osveziPrikazInformacija(bool Vidljivost);
-
+    //-----Toolbar, Menubar...-----//
+    //-----INTERAKCIJA-----//
     void kliknutoStablo(QPoint pozicija);
     void vucenoStablo(QPoint prva, QPoint druga);
-
     void urediStablo();
+    //-----INTERAKCIJA-----//
+    //-----Menjanje prikazanih osoba-----//
+    void prikaziSlavljenike();
+    void prikaziSakrijTudje();
 };
 
 #endif // GLAVNIPROZOR_H

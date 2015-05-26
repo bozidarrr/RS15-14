@@ -22,9 +22,6 @@ public:
     short int Sifra();
     short SifraNase();
     short SifraTudje();
-    //Osoba* NasaOsoba();
-    //Osoba* TudjaOsoba();
-    //std::vector<Dete*>& SpisakDece();
     const QString& Trivija() const;/*
     QDate& DatumUpoznavanja();
     QDate& DatumVeze();
@@ -32,15 +29,10 @@ public:
     QDate& DatumVeridbe();
     QDate& DatumVencanja();
 */
-    //void PostaviNasuOsobu(Osoba* nasa);
-    //void PostaviTudjuOsobu(Osoba* tudja);
-
-
     //----geteri i seteri------//
     static void postaviSledecuSifru(int sifra);
 
     //---metodi korisni u upotrebi---//
-    //void DodajDete(Dete* beba);
 
     //OVI JOS NE RADE!!!!
     bool UVezi();
@@ -50,9 +42,6 @@ public:
     //---metodi korisni u upotrebi---//
 
     //----metodi potrebni za brisanje----//
-    //bool DeteSeUklanja(Dete *obrisiMe);//detetov destruktor ce biti pozvan, pa se zahteva uklanjanje deteta iz spiska dece
-    //bool RaskiniSupruznike(Osoba *inicijator);//jedna osoba se brise, pa se zahteva da druga osoba ukloni podatke o braku iz svoje evidencije brakova
-    //bool RaskiniSveVeze();
     bool VecSeBrisem();
     void PreskociRazvezivanje();
     //----metodi potrebni za brisanje----//
@@ -61,6 +50,9 @@ public:
     friend QDataStream& operator<<(QDataStream &out,Brak& brak);
     friend QDataStream& operator>>(QDataStream &in,Brak& brak);
     //----metodi potrebni za citanje i pisanje----//
+
+    short Nivo() const;
+    void Nivo(short nivo);
 
 private:
     static short int _sledecaSifra;
@@ -78,6 +70,8 @@ private:
     QDate _datumRaskida;*/
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;
+
+    short _nivo = -1;
 };
 
 #endif // BRAK_H

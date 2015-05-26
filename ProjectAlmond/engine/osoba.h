@@ -6,10 +6,6 @@
 #include <QString>
 #include <QDate>
 #include<QDataStream>
-//#include "engine/dete.h"
-//#include "engine/brak.h"
-//class Dete;
-//class Brak;
 
 /**
  *  static short int _sledecaSifra;
@@ -35,7 +31,7 @@ public:
     //Osoba(std::string ime, std::string prezime, char pol, bool krvniSrodnik); //kreira validnu osobu, ali bez pokazivaca za roditelje
     Osoba(const Osoba& druga);//samo podatke, ne i veze!!!
 
-    ~Osoba(); //uklanja osobu, sve njene podatke i poziva uklanjanje sopstvenog pointera iz brakova, kao i unistavanje relacionog objekta Dete
+    ~Osoba(); //uklanja osobu
 
 
     //----geteri i seteri------//
@@ -55,6 +51,8 @@ public:
 
     bool JeKrvniSrodnik() const; //vraca da li je osoba u krvnom srodstvu sa kljucnom osobom
 
+    short SifraRoditeljskeVeze() const;//vraca sifru braka ove osobe, Bozidare, samo za tebe :)
+
     static void postaviSledecuSifru(int sifra);
 
     void PromeniIme(const QString &ime);
@@ -62,7 +60,7 @@ public:
     void PromeniPol(const QChar &pol);
     void PromeniDatumRodjenja(const QDate &datum);
     void PromeniDatumSmrti(const QDate &datum);
-
+    void PostaviRoditeljskuSifru(const short sifra);//racunamo da se ovo radi jednaput
     //----geteri i seteri------//
 
     //---metodi korisni u upotrebi---//
@@ -88,8 +86,9 @@ public:
 
     //----metodi za citanje i pisanje ----//
 
-
-
+    //----rasporedjivanje----//
+    short Nivo() const;
+    void Nivo(short nivo);
 
 private:
 
@@ -103,8 +102,7 @@ private:
     QDate _datumRodjenja;
     QDate _datumSmrti;
     bool _krvniSrodnik;
-    //Dete * _deteOd;
-    //std::vector<Brak *> _spisakVeza;
+    short _sifraRoditeljskeVeze;
     bool _vecSeBrisem=false;
     bool _preskociRazvezivanje=false;
     //----osnovni podaci----//
@@ -112,6 +110,8 @@ private:
     //----napredni podaci----//
 
     //----napredni podaci----//
+
+    short _nivo = -1;
 
 };
 

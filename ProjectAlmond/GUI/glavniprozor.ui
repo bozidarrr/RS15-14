@@ -121,6 +121,7 @@
     <addaction name="aTema"/>
     <addaction name="aAlati"/>
     <addaction name="aInformacije"/>
+    <addaction name="actionRodjendan"/>
    </widget>
    <widget class="QMenu" name="mPomoc">
     <property name="title">
@@ -268,6 +269,11 @@
    </property>
    <property name="shortcut">
     <string>Shift+W</string>
+   </property>
+  </action>
+  <action name="actionRodjendan">
+   <property name="text">
+    <string>Rodjendan</string>
    </property>
   </action>
  </widget>

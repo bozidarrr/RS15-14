@@ -69,10 +69,13 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
+    //metod koji vraca true ako osoba ima bar jednog supruznika, trebace u GUI-ju
+    bool osobaImaBrakove(const short sifra) const;
 
-    std::vector<short>* KomeJeSveRodjendan(const QDate& datum) const;
+    //vraca vektor sifara osoba kojima je na prosledjeni datum rodjendan
+    //usput azurira delimicno indeksRodjendan, koji ne prati izmene osoba automatski
+    std::vector<short>* KomeJeSveRodjendan(const QDate& datum);
 
-    /*ne rade!!!*/
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
 
@@ -94,7 +97,7 @@ private:
     //uvesti periodicno osvezavanje ovih indeksa?...//
     std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
     std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
-    std::multimap<QDate, short> _indeksRodjenje;//mapa koja vezuje datum i sve osobe rodjene tog dana
+    //std::multimap<QDate, short> _indeksRodjenje;//mapa koja vezuje datum i sve osobe rodjene tog dana !Da li nam i ovaj treba?
     std::multimap<int, short> _indeksRodjendan;//mapa vezuje dan [1,366] sa sifrom osobe rodjenom tog dana
 
 
@@ -105,10 +108,16 @@ private:
     void ObrisiBrakove(short sifra, bool iSupruznike);
     void ObrisiDecu(short sifra);
 
+    std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+
 signals:
     void obrisanaOsoba(short sifra);
     void obrisanaVezaDete(short sifra);
     void obrisanaVezaBrak(short sifra);
+
+public Q_SLOTS:
+    void azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra);
+    std::vector<int> kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
 
 };
 

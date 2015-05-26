@@ -32,6 +32,9 @@ private:
     void popuniPolja();
     void postaviProvere();
 
+signals:
+    void azurirajRodjenje(const QDate &stari, const QDate &novi, const short sifra);
+
 public Q_SLOTS:
     void primeniIzmene();
 private slots:
