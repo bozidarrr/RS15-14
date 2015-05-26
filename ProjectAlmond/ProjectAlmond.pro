@@ -51,6 +51,8 @@ RESOURCES += \
     jezici.qrc
 TRANSLATIONS += \
     ProjectAlmond_en.ts \
-    ProjectAlmond_ge.ts
+    ProjectAlmond_gr.ts \
+    ProjectAlmond_es.ts \
+    ProjectAlmond_sr.ts
 
 OTHER_FILES +=
