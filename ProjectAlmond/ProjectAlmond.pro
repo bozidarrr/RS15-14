@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     GUI/stablo.cpp \
     GUI/dijalogrelacija.cpp \
     GUI/gosoba.cpp \
-    GUI/grelacija.cpp
+    GUI/grelacija.cpp \
+    alati/trazenjeputa.cpp
 
 HEADERS  += \
     alati/datum.h \
@@ -38,7 +39,8 @@ HEADERS  += \
     GUI/stablo.h \
     GUI/dijalogrelacija.h \
     GUI/gosoba.h \
-    GUI/grelacija.h
+    GUI/grelacija.h \
+    alati/trazenjeputa.h
 
 FORMS    += \
     GUI/dijalogizmenaosobe.ui \
