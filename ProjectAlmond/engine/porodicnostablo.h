@@ -69,6 +69,9 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
+    //metod koji vraca true ako osoba ima bar jednog supruznika, trebace u GUI-ju
+    bool osobaImaBrakove(const short sifra) const;
+
     //vraca vektor sifara osoba kojima je na prosledjeni datum rodjendan
     //usput azurira delimicno indeksRodjendan, koji ne prati izmene osoba automatski
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);

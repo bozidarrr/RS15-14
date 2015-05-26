@@ -142,6 +142,9 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
     }
     //brisemo je iz indeksa (sifra, osoba)
     _indeksSifraOsobe.erase(iter);
+    //mozda bi trebalo i iz ostalih indeksa
+    //auto nesto =  _indeksSifraVeza.equal_range(sifra);
+    //_indeksSifraVeza.erase(nesto.first, nesto.second);
 
     emit obrisanaOsoba(sifra);
 
@@ -149,18 +152,31 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
         delete zaBrisanje;
 }
 
+//ovo sada azurira indekse
 void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
 {
-    std::map<short, Brak*>::iterator iter = _indeksSifraVeza.find(sifra);
-    if (iter == _indeksSifraVeza.end())
+    if (_indeksSifraVeza.find(sifra) == _indeksSifraVeza.end())
         return;
-
-    emit obrisanaVezaBrak(sifra);
+//brise brak iz indeksa za nasu osobu (pozvan je ako se brise tudja osoba)
+    Brak *brak = _indeksSifraVeza[sifra];
+    auto brakovi = _indeksOsobaBrak.equal_range(brak->SifraNase());
+    for (auto iter = brakovi.first; iter != brakovi.second; iter++)
+    {
+        if (iter->second == sifra)
+            _indeksOsobaBrak.erase(iter);
+    }
 }
 
 void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
 {
     delete NadjiDeteSifrom(sifra);
+}
+
+bool PorodicnoStablo::osobaImaBrakove(const short sifra) const
+{
+    if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
+        return false;
+    return _indeksOsobaBrak.count(sifra) > 0;
 }
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
@@ -379,6 +395,7 @@ void PorodicnoStablo::ObrisiBrakove(short sifra, bool iSupruznike)//brise brakov
             short sifraBraka = iter->second;
             if (_indeksSifraVeza.find(sifraBraka) != _indeksSifraVeza.end())
             {
+                //UkloniBrakSifrom(sifraBraka);//uklanjamo brak iz indeksa za onu drugu osobu
                 delete _indeksSifraVeza[sifraBraka];
                 _indeksSifraVeza.erase(sifraBraka);
             }
@@ -436,6 +453,9 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
         //proveravam da li osoba postoji
         if (_indeksSifraOsobe.find(iter->second) != _indeksSifraOsobe.end())
                 slavljenici->push_back(iter->second);
+        else
+            //ako je osoba izbrisana u medjuvremenu moze se izbrisati i iz indeksa
+            _indeksRodjendan.erase(iter);
     }
     return slavljenici;
 }

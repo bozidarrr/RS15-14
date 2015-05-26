@@ -41,10 +41,10 @@ HEADERS  += \
     GUI/grelacija.h
 
 FORMS    += \
-    dialognovaosoba.ui \
-    glavniprozor.ui \
     GUI/dijalogizmenaosobe.ui \
-    GUI/dijalogrelacija.ui
+    GUI/dijalogrelacija.ui \
+    GUI/dialognovaosoba.ui \
+    GUI/glavniprozor.ui
 
 RESOURCES += \
     slike.qrc \
