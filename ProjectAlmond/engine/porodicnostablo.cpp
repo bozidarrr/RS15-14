@@ -1,7 +1,7 @@
 #include "porodicnostablo.h"
 #include <QDataStream>
 #include <iostream>
-
+#include "alati/trazenjeputa.h"
 
 PorodicnoStablo::PorodicnoStablo()
 {
@@ -458,6 +458,15 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
             _indeksRodjendan.erase(iter);
     }
     return slavljenici;
+}
+
+std::vector<int> PorodicnoStablo::kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
+{
+    TrazenjePuta pretraga(this,sifraPocetne,sifraTrazene);
+    std::vector<int> Kod(pretraga());
+
+
+    return Kod;
 }
 
 

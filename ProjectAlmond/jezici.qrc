@@ -2,6 +2,10 @@
     <qresource prefix="/jezici">
         <file>ProjectAlmond_en.qm</file>
         <file>ProjectAlmond_en.ts</file>
-        <file>ProjectAlmond_ge.ts</file>
+        <file>ProjectAlmond_es.qm</file>
+        <file>ProjectAlmond_es.ts</file>
+        <file>ProjectAlmond_gr.ts</file>
+        <file>ProjectAlmond_sr.qm</file>
+        <file>ProjectAlmond_sr.ts</file>
     </qresource>
 </RCC>
