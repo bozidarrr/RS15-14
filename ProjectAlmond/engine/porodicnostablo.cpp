@@ -482,8 +482,8 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
 
 std::vector<int> PorodicnoStablo::kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
 {
-    TrazenjePuta pretraga(this,sifraPocetne,sifraTrazene);
-    std::vector<int> Kod(pretraga());
+    TrazenjePuta pretraga(this);
+    std::vector<int> Kod(pretraga(sifraPocetne,sifraTrazene));
 
 
     return Kod;
@@ -501,6 +501,16 @@ std::map<short, Brak*> PorodicnoStablo::Brakovi()
 std::map<short, Dete*> PorodicnoStablo::Deca()
 {
     return _indeksSifraDete;
+}
+
+const std::multimap<short, short> PorodicnoStablo::OsobaBrak()const
+{
+    return _indeksOsobaBrak;
+}
+
+const std::multimap<short, short> PorodicnoStablo::BrakDeca() const
+{
+    return _indeksBrakDeca;
 }
 //std::vector<int> PorodicnoStablo::Nivoi()
 //{
