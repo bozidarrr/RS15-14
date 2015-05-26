@@ -18,6 +18,8 @@
 
 #include <QDebug>
 
+#include "alati/uredjivanje.h"
+
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -266,6 +268,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
     {
         stablo->UkloniOsobuSifrom(sifra);
         ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
+        uredjeno = false;
         return sifra;
     }
     else
@@ -457,6 +460,14 @@ void GlavniProzor::kreirajPogledZaStablo()
     setCentralWidget(pogled);
     connect(pogled, SIGNAL(kliknut(QPoint)), this, SLOT(kliknutoStablo(QPoint)));
     connect(pogled, SIGNAL(vucen(QPoint,QPoint)), this, SLOT(vucenoStablo(QPoint,QPoint)));
+}
+
+void GlavniProzor::pomeriOsobu(short sifra, int x)
+{
+    /** TO DO **/
+    //ona i supruznici se rasporedjuju u pravougaonik koji pocinje na x, sirine koju imamo u vektoru
+    //for svako dete i
+    //pomeriOsobu (sifraDeteta, x + i*sirina[j+1])
 }
 
 void GlavniProzor::novoStablo()
@@ -853,10 +864,28 @@ void GlavniProzor::urediStablo()
     //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
     //
     //na osnovu toga im preracunavam koordinate
+    int dodajVisinu = 1;
     if (ui->aPreciGore->isChecked())
         qDebug() <<"uredi preci gore";
-    else
+    else{
         qDebug() << "uredi preci dole";
+        dodajVisinu = -1;
+    }
+    std::vector<int> nivoi(stablo->Nivoi());
+    //for (auto v : nivoi)
+        //qDebug() << nivoi.size();
+    uredjivanje u;
+    delete sirine;
+    sirine = u.IzracunajSirinuCelije(nivoi, stablo->maxBrakova());
+
+    //i sad pokrecemo pomeranje
+    //tj korena i njeni supruznici (posto nema brace jel) se rasporede u prvu celiju
+    //a ona poziva isti metod za svoju decu
+
+
+
+
+    delete sirine;
 }
 
 void GlavniProzor::prikaziSlavljenike()
