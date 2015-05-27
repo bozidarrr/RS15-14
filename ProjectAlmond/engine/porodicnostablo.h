@@ -150,7 +150,7 @@ private:
     void ObrisiDecu(short sifra);
 
     //std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
-    std::vector<int> _nivoi;
+    std::vector<int> _nivoi;//VELIKI PROBLEM - dodati da se i ovo ucitava!!!
 
 signals:
     void obrisanaOsoba(short sifra);
