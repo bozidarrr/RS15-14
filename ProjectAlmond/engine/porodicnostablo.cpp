@@ -737,4 +737,25 @@ bool PorodicnoStablo::jeSupruznikOd(short sifraPrve, short sifraDruge)
     return false;
 }
 
+bool PorodicnoStablo::jeBratSestraOd(short sifraPrve, short sifraDruge)
+{
+    auto it=_indeksSifraOsobe.cbegin();
+    auto ie=_indeksSifraOsobe.cend();
+    short sifraOca=-1;
+
+    for(;it!=ie;++it)
+    {
+        if(jeDeteOd(sifraPrve,(*it).first))
+        {
+            sifraOca=(*it).first;
+            break;
+        }
+    }
+
+    if(sifraOca!=-1 && jeDeteOd(sifraDruge,sifraOca))return true;
+
+
+    return false;
+}
+
 

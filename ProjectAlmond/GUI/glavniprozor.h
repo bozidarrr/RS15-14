@@ -97,6 +97,7 @@ public Q_SLOTS:
     void promeniJezikE();//za Promenu jezika na engleski
     void promeniJezikN();//za promenu jezika na nemacki
     void promeniJezikS();//za promenu jezika na srpski
+    void promeniJezikSpanski();//za promenu jezika na spanski
     void osveziPrikazAlata(bool Vidljivost);
     void osveziPrikazInformacija(bool Vidljivost);
     //-----Toolbar, Menubar...-----//

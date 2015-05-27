@@ -6,18 +6,18 @@ TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
 TrazenjePuta::~TrazenjePuta()
 {
     if(_duzine!=nullptr)
-    delete []_duzine;
+        delete []_duzine;
     if(_putevi!=nullptr)
-    delete []_putevi;
+        delete []_putevi;
     if(_sifre!=nullptr)
-    delete []_sifre;
+        delete []_sifre;
 }
 
 std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazene)const
 {
 
     std::vector<short> _put;
-    int tren=rBr(sifraTrazene),kraj=rBr(sifraPocetne);
+    int tren=rBr(sifraPocetne),kraj=rBr(sifraTrazene);
     while(tren!=kraj)
     {
         _put.push_back(_sifre[tren]);
@@ -31,13 +31,122 @@ std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazen
 
 QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
 {
+    std::vector<short> osobeIzmedju(operator()(sifraPocetne,sifraTrazene));
+    int duzinaPuta=osobeIzmedju.size();
+    if(duzinaPuta<2)return QString("greska");
+    bool trazenaJeZensko=_stablo->NadjiOsobuSifrom(sifraTrazene)->Pol()=='Z';
+
+    std::vector<short>::const_iterator prva=osobeIzmedju.cbegin();
+    std::vector<short>::const_iterator druga=osobeIzmedju.cbegin();
+    std::vector<short>::const_iterator kraj=osobeIzmedju.cend();
+    druga++;
+    int razlika=0;
+
+    for(;druga!=kraj;++prva,++druga)
+    {
+        if(_stablo->jeDeteOd(*prva,*druga))razlika++;
+        else if(_stablo->jeRoditeljOd(*prva,*druga))razlika--;
+    }
+
+    switch(duzinaPuta)
+    {
+    case 2:
+        if(_stablo->jeDeteOd(sifraPocetne,sifraTrazene))
+            if(trazenaJeZensko)
+                return QString("cerka");
+            else
+                return QString("sin");
+        else
+            if(trazenaJeZensko)
+                return QString("majka");
+            else
+                return QString("otac");
+        break;
+    case 3:
+        if(_stablo->jeBratSestraOd(sifraPocetne,sifraTrazene))
+            if(trazenaJeZensko)
+                return QString("sestra");
+            else
+                return QString("brat");
+        else if(razlika<0)
+        {
+            if(trazenaJeZensko)
+                return QString("baba");
+            else
+                return QString("deda");
+        }
+        else
+        {
+            if(trazenaJeZensko)
+                return QString("unuka");
+            else
+                return QString("unuk");
+        }
+        break;
+    case 4:
+        if(razlika==3){
+            if(trazenaJeZensko)
+                return QString("prababa");
+            else
+                return QString("pradeda");
+        }
+        else if(razlika==-3){
+            if(trazenaJeZensko)
+                return QString("praunuka");
+            else
+                return QString("praunuk");
+        }
+        else if(razlika==1)
+        {
+            if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()=='Z')
+            {
+                if(trazenaJeZensko)
+                    return QString("tetka");
+                else
+                    return QString("ujak");
+            }
+            else
+            {
+                if(trazenaJeZensko)
+                    return QString("tetka");
+                else
+                    return QString("stric");
+            }
+
+        }
+        else if(razlika==-1)
+        {
+            if(_stablo->NadjiOsobuSifrom(osobeIzmedju[2])->Pol()=='Z')
+            {
+                if(trazenaJeZensko)
+                    return QString("sestricina");
+                else
+                    return QString("sestric");
+            }
+            else
+            {
+                if(trazenaJeZensko)
+                    return QString("bratanica");
+                else
+                    return QString("bratanac");
+            }
+
+        }
 
 
-//std::vector<short> osobeIzmedju(operator()(sifraPocetne,sifraTrazene));
+        break;
+    default:
+        if(trazenaJeZensko)
+            return QString("daleka rodjaka");
+        else
+            return QString("daleki rodjak");
+        break;
+
+    }
 
 
 
-return QString("rodjak");
+    return QString("daleki rodjak");
 }
 
 void TrazenjePuta::OsveziMatricuPuteva()
