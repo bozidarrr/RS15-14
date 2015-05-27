@@ -163,9 +163,6 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
     //brisemo je iz indeksa (sifra, osoba)
     _indeksSifraOsobe.erase(iter);
     //mozda bi trebalo i iz ostalih indeksa
-    //auto nesto =  _indeksSifraVeza.equal_range(sifra);
-    //_indeksSifraVeza.erase(nesto.first, nesto.second);
-
     emit obrisanaOsoba(sifra);
 
     if (!zaBrisanje->VecSeBrisem())
@@ -592,22 +589,22 @@ std::vector<int> PorodicnoStablo::Nivoi()
 std::vector<short>* PorodicnoStablo::PretragaPoImenu(const QString& Ime,int tip){
     std::vector<short> *Osobe= new std::vector<short>();
     if(tip==0){
-        //Sve cije je ime pre zadatog
-        for(auto imena:_indeksIme)
-            if(imena.first<Ime)
-                Osobe->push_back(imena.second->Sifra());
+        //Sve cije je prezime pre zadatog
+        for(auto imena:_indeksSifraOsobe)
+            if(imena.second->Ime()<Ime)
+                Osobe->push_back(imena.first);
     }
     if(tip==1){
-        //Sve cije je ime jednako zadatom
-        auto iter=_indeksIme.equal_range(Ime);
-        for(auto it=iter.first;it!=iter.second;it++)
-                Osobe->push_back(it->second->Sifra());
+        //Sve cije je prezime jednako zadatom
+        for(auto imena:_indeksSifraOsobe)
+            if(imena.second->Ime()==Ime)
+                Osobe->push_back(imena.first);
     }
     if(tip==2){
-        //Sve cije je ime posle zadatog
-        for(auto imena:_indeksIme)
-            if(imena.first>Ime)
-                Osobe->push_back(imena.second->Sifra());
+        //Sve cije je prezime posle zadatog
+        for(auto imena:_indeksSifraOsobe)
+            if(imena.second->Ime()>Ime)
+                Osobe->push_back(imena.first);
     }
     return Osobe;
 
@@ -681,7 +678,7 @@ std::vector<short>* PorodicnoStablo::PretragaPoDatumuRodjenja(const QDate& DatRo
    }
     std::vector<short>* PorodicnoStablo::PretragaPoPolu(const QChar& Pol,int tip){
         std::vector<short> *Osobe= new std::vector<short>();
-        if(tip==0){
+        if(tip==0 || tip==2){
             //Sve ciji je pol razlicit
             for(auto pol:_indeksSifraOsobe)
                 if(pol.second->Pol()!=Pol)
@@ -696,6 +693,15 @@ std::vector<short>* PorodicnoStablo::PretragaPoDatumuRodjenja(const QDate& DatRo
 
         return Osobe;
 
+    }
+
+    std::vector<short> *PorodicnoStablo::NisuKrvniSrodnici()
+    {
+        std::vector<short> *Osobe= new std::vector<short>();
+        for(auto osobe:_indeksSifraOsobe)
+            if(!osobe.second->JeKrvniSrodnik())
+                Osobe->push_back(osobe.first);
+        return Osobe;
     }
 
 
