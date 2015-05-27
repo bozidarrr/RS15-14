@@ -1,7 +1,7 @@
 #include "trazenjeputa.h"
 
 TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
-    :_stablo(stablo)
+    :_stablo(stablo),_putevi(nullptr),_duzine(nullptr),_sifre(nullptr)
 {}
 TrazenjePuta::~TrazenjePuta()
 {
@@ -17,15 +17,15 @@ std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazen
 {
 
     std::vector<short> _put;
-    int tren=rBr(sifraPocetne),kraj=rBr(sifraTrazene);
+    int tren=rBr(sifraTrazene),kraj=rBr(sifraPocetne);
     while(tren!=kraj)
     {
         _put.push_back(_sifre[tren]);
-        tren=_putevi[tren][kraj];
+        tren=_putevi[kraj][tren];
     }
     _put.push_back(_sifre[kraj]);
 
-
+    std::reverse(_put.begin(),_put.end());
     return _put;
 }
 
@@ -56,11 +56,16 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
                 return QString("cerka");
             else
                 return QString("sin");
-        else
+        else if(_stablo->jeRoditeljOd(sifraPocetne,sifraTrazene))
             if(trazenaJeZensko)
                 return QString("majka");
             else
                 return QString("otac");
+        else
+            if(trazenaJeZensko)
+                return QString("zena");
+            else
+                return QString("muz");
         break;
     case 3:
         if(_stablo->jeBratSestraOd(sifraPocetne,sifraTrazene))
@@ -152,15 +157,17 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
 void TrazenjePuta::OsveziMatricuPuteva()
 {
     int n=_stablo->Osobe().size(),i,j;
-    InicijalizujMatricu(_duzine,n);
-    InicijalizujMatricu(_putevi,n);
+
+    InicijalizujMatricu(&_duzine,n);
+    InicijalizujMatricu(&_putevi,n);
     _sifre=new short[n];
 
     auto it=_stablo->Osobe().cbegin();
 
-    for(i=0;i<n;i++,++it)
+    for(i=0;i<n;++i,++it)
     {
         _sifre[i]=(*it).first;
+
     }
 
 
@@ -172,14 +179,18 @@ void TrazenjePuta::OsveziMatricuPuteva()
 
         }
     }
-
-    auto brak=_stablo->Brakovi().cbegin();
-    auto krajBraka=_stablo->Brakovi().cend();
+    std::cout<<_stablo->Brakovi().size()<<std::endl;
+    std::map<short, Brak*>::iterator brak=_stablo->Brakovi().begin();
+    std::map<short, Brak*>::iterator krajBraka=_stablo->Brakovi().end();
     //postavljanje direktnih veza
     for(;brak!=krajBraka;++brak){
+        short sNase=(*brak).second->SifraNase();
+        short sTudje=(*brak).second->SifraTudje();
 
-        int rb1=rBr((*brak).second->SifraNase());
-        int rb2=rBr((*brak).second->SifraTudje());
+
+        int rb1=rBr(sNase);
+        int rb2=rBr(sTudje);
+
         int rbd=-1;
         _duzine[rb1][rb2]=1;
         _duzine[rb2][rb1]=1;
@@ -213,6 +224,27 @@ void TrazenjePuta::OsveziMatricuPuteva()
             }
         }
     }
+
+
+    for(int i=0;i<n;i++){
+
+        for(int j=0;j<n;j++)
+        {
+            std::cout<<_putevi[i][j]<<",";
+        }
+        std::cout<<std::endl;
+    }
+
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    for(int i=0;i<n;i++){
+
+        for(int j=0;j<n;j++)
+        {
+            std::cout<<_duzine[i][j]<<",";
+        }
+        std::cout<<std::endl;
+    }
     //ovime sam popunio matricu duzina i putanja, sada mogu da je koristim pozivima funkcija
 
     /*
@@ -231,21 +263,23 @@ void TrazenjePuta::OsveziMatricuPuteva()
 */
 }
 
-void TrazenjePuta::InicijalizujMatricu(short **m, int n)
+void TrazenjePuta::InicijalizujMatricu(short ***m, int n)
 {
-    if(m!=nullptr)delete[] m;
-    m=new short*[n];
+    if(*m!=nullptr){
+        delete[] *m;
+    }
+    *m=new short*[n];
     for(int i=0;i<n;++i)
     {
-        m[i]=new short[n];
+        (*m)[i]=new short[n];
         for(int j=0;j<n;j++)
         {
-            m[i][j]=-1;
+            (*m)[i][j]=-1;
         }
     }
 }
 
-int TrazenjePuta::rBr(const short sifra) const
+int TrazenjePuta::rBr( short sifra) const
 {
     int n=_stablo->Osobe().size();
     for(int i=0;i<n;i++)
