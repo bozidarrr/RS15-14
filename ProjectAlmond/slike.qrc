@@ -10,5 +10,7 @@
         <file>images/RelacijaSupruznici.ico</file>
         <file>images/Ukloni.ico</file>
         <file>images/UrediStablo.ico</file>
+        <file>images/DeteUokvireno.png</file>
+        <file>images/BrakUokviren.png</file>
     </qresource>
 </RCC>

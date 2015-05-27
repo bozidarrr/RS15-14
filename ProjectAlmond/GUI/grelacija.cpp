@@ -24,13 +24,17 @@ QRectF GRelacija::boundingRect() const
 
 void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setPen(Qt::green);
+    painter->setPen(Qt::darkGreen);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);
-    painter->drawRect(-20, -20, 40, 40);
-    //QRect okvir(-40, -40, 80, 80);
-    //QPixmap slika(":/images/images/RelacijaSupruznici.ico");
-    //painter->drawPixmap(okvir, slika);
+    //painter->drawRect(-20, -20, 40, 40);
+    QRect okvir(-30, -30, 60, 60);
+    QPixmap slika;
+    if(_brak)
+    slika=QPixmap(":/images/images/BrakUokviren.png");
+    else
+    slika=QPixmap(":/images/images/DeteUokvireno.png");
+    painter->drawPixmap(okvir, slika);
 }
 
 int GRelacija::type() const
