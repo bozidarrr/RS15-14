@@ -140,6 +140,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezikE()));
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
+    connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));//--------------------ZA SPANSKIIIIII
     connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
     connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));
 
