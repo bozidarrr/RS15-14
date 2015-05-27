@@ -64,6 +64,8 @@ private:
     void writeSettings();//cuva pozicije widgeta, recent files, itd... Smisliti prevod imena :)
     void readSettings();//cita ovo gore pri konstrukciji
 
+    void RekonstruisiStablo();//nakon sto podatke ucitamo u enginu
+
     /** menjanje stabla **/
     short izmeniOsobu(short sifra);
     GOsoba* dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik);
