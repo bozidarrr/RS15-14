@@ -611,15 +611,15 @@ std::vector<short> PorodicnoStablo::sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,i
 }
 
 
-std::map<short, Osoba*> PorodicnoStablo::Osobe()
+std::map<short, Osoba*>& PorodicnoStablo::Osobe()
 {
     return _indeksSifraOsobe;
 }
-std::map<short, Brak*> PorodicnoStablo::Brakovi()
+std::map<short, Brak*>& PorodicnoStablo::Brakovi()
 {
     return _indeksSifraVeza;
 }
-std::map<short, Dete*> PorodicnoStablo::Deca()
+std::map<short, Dete*> &PorodicnoStablo::Deca()
 {
     return _indeksSifraDete;
 }

@@ -19,7 +19,7 @@
 #include <QDebug>
 #include "alati/uredjivanje.h"
 #include <iostream>
-
+#include "alati/trazenjeputa.h"
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -237,7 +237,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         {          
             novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
-            novaOsoba->setZValue(2);
+            novaOsoba->setZValue(3);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
             _osobe[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
@@ -328,14 +328,20 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
 
         if (novaRelacija != nullptr)
         {
-            novaRelacija->setZValue(1);
+            novaRelacija->setZValue(2);
             scena->addItem(novaRelacija);
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
+        TrazenjePuta t(stablo);
+        t.OsveziMatricuPuteva();
+
+        //qDebug()<<t.tipSrodstva(0,1);//moram da nastavim posle, neka ostane ovde
+
     }
     delete d;
+
     return novaSifra;
 }
 
@@ -948,7 +954,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 {
     ui->zaInformacije->clear();
-    ui->zaInformacije->setPlaceholderText("Informacije");
+    ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
     {
         GOsoba *novaOsoba;
@@ -974,6 +980,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
                 uredjeno = false;
                 setWindowModified(true);
                 ui->statusBar->showMessage(tr("Dodavanje nove osobe u stablo je proslo uspesno."), 2000);
+
+
             }
             else
             {

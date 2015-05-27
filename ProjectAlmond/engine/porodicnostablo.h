@@ -83,9 +83,9 @@ public:
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);
 
     //----GETTERI ZA INDEKSE----//
-    std::map<short, Osoba*> Osobe();
-    std::map<short, Brak*> Brakovi();
-    std::map<short, Dete*> Deca();
+    std::map<short, Osoba*> &Osobe();
+    std::map<short, Brak *> &Brakovi();
+    std::map<short, Dete*> &Deca();
     const std::multimap<short, short>& OsobaBrak() const;
     const std::multimap<short,short>& BrakDeca()const;
     std::vector<int> Nivoi();

@@ -31,6 +31,11 @@ public:
      */
     QString tipSrodstva(short sifraPocetne,short sifraTrazene)const;
 
+    /*!
+     * \brief OsveziMatricuPuteva Na osnovu trenutnih podataka u stablu kreira matricu najkracih puteva izmedju cvorova
+     */
+    void OsveziMatricuPuteva();
+
 private:
     /*!
      * \brief _stablo Pokazivac na porodicno stablo za koje se izracunavaju podaci
@@ -49,24 +54,20 @@ private:
      * \brief _sifre spisak svih sifara trenutno postojecih osoba, za koji su vezani ostali podaci
      */
     short *_sifre;
-    /*!
-     * \brief OsveziMatricuPuteva Na osnovu trenutnih podataka u stablu kreira matricu najkracih puteva izmedju cvorova
-     */
-    void OsveziMatricuPuteva();
 
     /*!
      * \brief InicijalizujMatricu dealocira prethodnu matricu ako postoji i alocira novu, popunjenu sa -1
      * \param m matrica koju treba inicijalizovati
      * \param n dimenzija matrice, odnosno broj osoba
      */
-    void InicijalizujMatricu(short **m,int n);
+    void InicijalizujMatricu(short ***m, int n);
 
     /*!
      * \brief rBr pretraga po sifri u nizu svih
      * \param sifra data sifra koju treba naci
      * \return Vraca redni broj u nizu sifara _sifra, date sifre
      */
-    int rBr(const short sifra)const;
+    int rBr(short sifra)const;
 
 };
 
