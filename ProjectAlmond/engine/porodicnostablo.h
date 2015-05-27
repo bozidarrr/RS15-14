@@ -91,6 +91,11 @@ public:
     //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
+    std::vector<short>* PretragaPoImenu(const QString& Ime,int tip);
+     std::vector<short>* PretragaPoPrezimenu(const QString& Prezime,int tip);
+      std::vector<short>* PretragaPoDatumuRodjenja(const QDate& DatRodj,int tip);
+       std::vector<short>* PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip);
+        std::vector<short>* PretragaPoPolu(const QChar& Pol,int tip);
 
 
 private:
