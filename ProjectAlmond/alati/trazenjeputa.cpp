@@ -1,24 +1,62 @@
 #include "trazenjeputa.h"
 
-
 TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
     :_stablo(stablo)
+{}
+TrazenjePuta::~TrazenjePuta()
 {
-    int n=stablo->Osobe().size(),i,j;
+    if(_duzine!=nullptr)
+    delete []_duzine;
+    if(_putevi!=nullptr)
+    delete []_putevi;
+    if(_sifre!=nullptr)
+    delete []_sifre;
+}
+
+std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazene)const
+{
+
+    std::vector<short> _put;
+    int tren=rBr(sifraTrazene),kraj=rBr(sifraPocetne);
+    while(tren!=kraj)
+    {
+        _put.push_back(_sifre[tren]);
+        tren=_putevi[tren][kraj];
+    }
+    _put.push_back(_sifre[kraj]);
+
+
+    return _put;
+}
+
+QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
+{
+
+
+//std::vector<short> osobeIzmedju(operator()(sifraPocetne,sifraTrazene));
+
+
+
+return QString("rodjak");
+}
+
+void TrazenjePuta::OsveziMatricuPuteva()
+{
+    int n=_stablo->Osobe().size(),i,j;
     InicijalizujMatricu(_duzine,n);
     InicijalizujMatricu(_putevi,n);
     _sifre=new short[n];
 
-    auto it=stablo->Osobe().cbegin();
+    auto it=_stablo->Osobe().cbegin();
 
-    for(int i=0;i<n;i++,++it)
+    for(i=0;i<n;i++,++it)
     {
         _sifre[i]=(*it).first;
     }
 
 
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++){
+    for( i=0;i<n;i++){
+        for( j=0;j<n;j++){
 
             _duzine[i][i]=0;
             _putevi[i][i]=_sifre[i];
@@ -26,8 +64,8 @@ TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
         }
     }
 
-    auto brak=stablo->Brakovi().cbegin();
-    auto krajBraka=stablo->Brakovi().cend();
+    auto brak=_stablo->Brakovi().cbegin();
+    auto krajBraka=_stablo->Brakovi().cend();
     //postavljanje direktnih veza
     for(;brak!=krajBraka;++brak){
 
@@ -39,10 +77,10 @@ TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
         _putevi[rb1][rb2]=rb1;
         _putevi[rb2][rb1]=rb2;
 
-        auto decaBraka=stablo->BrakDeca().equal_range((*brak).first);
+        auto decaBraka=_stablo->BrakDeca().equal_range((*brak).first);
         std::multimap<short,short>::const_iterator i;
         for(i=decaBraka.first;i!=decaBraka.second;++i){
-            rbd=rBr((stablo->NadjiDeteSifrom((*i).second))->SifraOsobe());
+            rbd=rBr((_stablo->NadjiDeteSifrom((*i).second))->SifraOsobe());
             _duzine[rb1][rbd]=1;
             _duzine[rb2][rbd]=1;
             _duzine[rbd][rb1]=1;
@@ -82,35 +120,11 @@ TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
     11         end if
 
 */
-
-}
-TrazenjePuta::~TrazenjePuta()
-{
-    delete []_duzine;
-    delete []_putevi;
-    delete []_sifre;
-}
-
-
-
-std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazene)
-{
-
-    std::vector<short> _put;
-    int tren=rBr(sifraTrazene),kraj=rBr(sifraPocetne);
-    while(tren!=kraj)
-    {
-        _put.push_back(_sifre[tren]);
-        tren=_putevi[tren][kraj];
-    }
-    _put.push_back(_sifre[kraj]);
-
-
-    return _put;
 }
 
 void TrazenjePuta::InicijalizujMatricu(short **m, int n)
 {
+    if(m!=nullptr)delete[] m;
     m=new short*[n];
     for(int i=0;i<n;++i)
     {
