@@ -443,6 +443,7 @@ void GlavniProzor::RekonstruisiStablo()
         GOsoba *g = new GOsoba(a.first, a.second->ImePrezime());
         scena->addItem(g);
         g->setPos(_pozicijeOsoba.at(g->Sifra()));
+        g->setZValue(2);
         _osobe[a.first] = g;
         connect(stablo, SIGNAL(obrisanaOsoba(short)), g, SLOT(skloniSeSaScene(short)));
     }
@@ -453,6 +454,7 @@ void GlavniProzor::RekonstruisiStablo()
         QPointF druga(_pozicijeOsoba.at(brak->SifraTudje()));
         GRelacija *g = new GRelacija(b.first, prva, druga ,true);
         g->setPos(_pozicijeBrakova[b.first]);
+        g->setZValue(1);
         scena->addItem(g);
 
         connect(_osobe.at(brak->SifraNase()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
@@ -468,6 +470,7 @@ void GlavniProzor::RekonstruisiStablo()
         QPointF druga(_pozicijeOsoba.at(dete->SifraOsobe()));
         GRelacija *g = new GRelacija(d.first, prva, druga ,false);
         scena->addItem(g);
+        g->setZValue(1);
         /** dopuniti ovaj connect **/
         //connect(dete->SifraRoditeljskogOdnosa(), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
         connect(_osobe.at(dete->SifraOsobe()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
