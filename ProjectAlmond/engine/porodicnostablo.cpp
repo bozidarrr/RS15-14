@@ -183,7 +183,7 @@ void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
     for (auto iter = brakovi.first; iter != brakovi.second; iter++)
     {
         if (iter->second == sifra)
-            _indeksOsobaBrak.erase(iter);
+            _indeksOsobaBrak.erase(iter);//ovo valjda znaci da je za krvne srodnike uvek tacna informacija u indeksu?
     }
 }
 
@@ -192,27 +192,48 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
     delete NadjiDeteSifrom(sifra);
 }
 
-int PorodicnoStablo::osobaImaBrakova(const short sifra) const
+int PorodicnoStablo::osobaImaBrakova(const short sifra)
 {
     if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
         return -1;
-    return _indeksOsobaBrak.count(sifra);
+    int count = 0;
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
+        short suprug = _indeksSifraVeza[b->second]->SifraTudje();
+         if (_indeksSifraOsobe.find(suprug) == _indeksSifraOsobe.end())
+             continue;
+         count++;
+    }
+    return count;
 }
 
-std::vector<short> *PorodicnoStablo::ListaDece(const short sifra) const
+std::vector<short> *PorodicnoStablo::ListaDece(const short sifra)
 {
+    if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
+        return nullptr;
+
     std::vector<short> *svaDeca = new std::vector<short>();
     auto brakovi = _indeksOsobaBrak.equal_range(sifra);
     for (auto b = brakovi.first; b != brakovi.second; b++)
     {
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
         auto deca = _indeksBrakDeca.equal_range(b->second);
         for (auto d = deca.first; d != deca.second; d++)
-            svaDeca->push_back(d->second);
+        {
+            if (_indeksSifraOsobe.find(d->second) == _indeksSifraOsobe.end())
+                continue;
+            else
+                svaDeca->push_back(d->second);
+        }
     }
     return svaDeca;
 }
 
-int PorodicnoStablo::maxBrakova() const
+int PorodicnoStablo::maxBrakova()
 {
     int max = 0;
     auto b = _indeksSifraOsobe.begin(), e = _indeksSifraOsobe.end();
@@ -221,12 +242,32 @@ int PorodicnoStablo::maxBrakova() const
         Osoba *o = b->second;
         if (o->JeKrvniSrodnik())
         {
-            int broj = _indeksOsobaBrak.count(o->Sifra());
+            int broj = osobaImaBrakova(o->Sifra());
             if (broj > max)
                 max = broj;
         }
     }
     return max;
+}
+
+std::vector<short> *PorodicnoStablo::ListaSupruznika(const short sifra)
+{
+    if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
+        return nullptr;
+    std::vector<short> *supruznici = new std::vector<short>();
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        //b je sifra braka
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
+        Brak *brak = _indeksSifraVeza[b->second];
+        short sifraTudje = brak->SifraTudje();
+        if (_indeksSifraOsobe.find(sifraTudje) == _indeksSifraOsobe.end())
+            continue;
+        supruznici->push_back(sifraTudje);
+    }
+    return  supruznici;
 }
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)

@@ -6,7 +6,7 @@
 class uredjivanje
 {
 public:
-    uredjivanje(int sirina = 120);
+    uredjivanje(int sirina = 170);//ako je osoba sirine 100, damo joj jos 70
     ~uredjivanje();
 
     std::vector<int> * IzracunajSirinuCelije(const std::vector<int> &m, const int maxPoCeliji) const;
