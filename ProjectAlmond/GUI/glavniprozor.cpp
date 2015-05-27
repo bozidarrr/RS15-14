@@ -15,7 +15,7 @@
 #include <QTranslator>
 #include <QTransform>
 #include <QTextBrowser>
-
+#include "GUI/dijalogpretrage.h"
 #include <QDebug>
 
 #include "alati/uredjivanje.h"
@@ -141,7 +141,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
     connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
-    connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));//ovo jos doraditi
+    connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));//ovo jos doraditi
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -930,10 +930,10 @@ void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
 }
 
 
-void GlavniProzor::prikaziSlavljenike()
+void GlavniProzor::prikaziSlavljenike(const QDate &datum)
 {
     //ovde sam mislila da uvedemo korisniku mogucnost da izabere datum, ne samo danasnji datum da bude
-    std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    std::vector<short> *v = stablo->KomeJeSveRodjendan(datum);
     for (short sifra : *v)
         qDebug() << sifra;
     //idemo po sifri i postavljamo im poseban stil
@@ -948,6 +948,22 @@ void GlavniProzor::prikaziSakrijTudje()
         qDebug() << "vratiti tudje";
     //for (QGraphicsItem osoba : scena->items())
     //ili sa grupama, videcu ovo
+}
+
+void GlavniProzor::izvrsiPretragu()
+{
+    DijalogPretrage *d = new DijalogPretrage(this);
+    if (d->exec())
+    {
+        int opcija, kriterijum;
+        QString podatak;
+        d->procitajPodatke(opcija, kriterijum, podatak);
+        qDebug() << "pretrazi";
+        qDebug() << opcija;
+        qDebug() << kriterijum;
+        qDebug() << podatak;
+    }
+    delete d;
 }
 
 QStringList GlavniProzor::skoroOtvarani;

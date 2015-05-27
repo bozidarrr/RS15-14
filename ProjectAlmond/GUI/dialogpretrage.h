@@ -5,6 +5,7 @@
 #include <QString>
 #include <QDate>
 #include <QChar>
+#include <QPushButton>
 
 namespace Ui {
 class DialogPretrage;
@@ -26,9 +27,11 @@ public:
 
 public Q_SLOTS:
     bool procitajPodatke();
+
     
 private:
     Ui::DialogPretrage *ui;
+    QPushButton *ok, *ponisti;
 };
 
 #endif // DIALOGPRETRAGE_H
