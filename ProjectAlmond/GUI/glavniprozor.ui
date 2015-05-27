@@ -278,6 +278,9 @@
    </property>
   </action>
   <action name="aSpanski">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Español</string>
    </property>

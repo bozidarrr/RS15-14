@@ -141,7 +141,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezikE()));
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
-    connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));//--------------------ZA SPANSKIIIIII
+    connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikSpanski()));//--------------------ZA SPANSKIIIIII
     connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
     connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));
 
@@ -583,6 +583,7 @@ void GlavniProzor::promeniJezikE()
                 qDebug() << "English";
                 ui->aNemacki->setChecked(false);
                  ui->aSrpski->setChecked(false);
+                  ui->aSpanski->setChecked(false);
     }
     else if(ui->aNemacki->isChecked()){
         bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
@@ -592,7 +593,20 @@ void GlavniProzor::promeniJezikE()
            retranslate();
            ui->aEngleski->setChecked(false);
             ui->aSrpski->setChecked(false);
+             ui->aSpanski->setChecked(false);
            qDebug() << "Deutsch";
+
+    }
+    else if (ui->aSpanski->isChecked()){
+        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           retranslate();
+           ui->aEngleski->setChecked(false);
+           ui->aNemacki->setChecked(false);
+            ui->aSrpski->setChecked(false);
+           qDebug() << "Espanol";
 
     }
     else {
@@ -604,6 +618,7 @@ void GlavniProzor::promeniJezikE()
           retranslate();
            ui->aEngleski->setChecked(false);
             ui->aNemacki->setChecked(false);
+             ui->aSpanski->setChecked(false);
           qDebug() << "Srpski";
     }
 
@@ -619,6 +634,7 @@ void GlavniProzor::promeniJezikN()
                 retranslate();
                ui->aEngleski->setChecked(false);
                 ui->aSrpski->setChecked(false);
+                 ui->aSpanski->setChecked(false);
                qDebug() << "Deutsch";
 
         }
@@ -633,7 +649,21 @@ void GlavniProzor::promeniJezikN()
            qDebug() << "English";
            ui->aNemacki->setChecked(false);
             ui->aSrpski->setChecked(false);
-}
+             ui->aSpanski->setChecked(false);
+    }
+            else if (ui->aSpanski->isChecked()){
+                bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+                qDebug("translation %d", ok);
+                 qApp->installTranslator(translator);
+                   ui->retranslateUi(this);
+                   retranslate();
+                   ui->aEngleski->setChecked(false);
+                   ui->aNemacki->setChecked(false);
+                    ui->aSrpski->setChecked(false);
+                   qDebug() << "Espanol";
+
+            }
+
     else {
         ui->aSrpski->setChecked(true);
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
@@ -643,6 +673,7 @@ void GlavniProzor::promeniJezikN()
            retranslate();
            ui->aEngleski->setChecked(false);
             ui->aNemacki->setChecked(false);
+             ui->aSpanski->setChecked(false);
           qDebug() << "Srpski";
     }
 
@@ -659,6 +690,7 @@ void GlavniProzor::promeniJezikS()
            retranslate();
            ui->aEngleski->setChecked(false);
             ui->aNemacki->setChecked(false);
+             ui->aSpanski->setChecked(false);
           qDebug() << "Srpski";
     }
     else if(ui->aEngleski->isChecked()){
@@ -671,6 +703,7 @@ void GlavniProzor::promeniJezikS()
            qDebug() << "English";
            ui->aNemacki->setChecked(false);
             ui->aSrpski->setChecked(false);
+             ui->aSpanski->setChecked(false);
 }
     else if(ui->aNemacki->isChecked()){
             bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
@@ -680,9 +713,22 @@ void GlavniProzor::promeniJezikS()
                 retranslate();
                ui->aEngleski->setChecked(false);
                 ui->aSrpski->setChecked(false);
+                 ui->aSpanski->setChecked(false);
                qDebug() << "Deutsch";
 
         }
+    else if (ui->aSpanski->isChecked()){
+        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           retranslate();
+           ui->aEngleski->setChecked(false);
+           ui->aNemacki->setChecked(false);
+            ui->aSrpski->setChecked(false);
+           qDebug() << "Espanol";
+
+    }
     else{
         ui->aSrpski->setChecked(true);
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
@@ -695,6 +741,58 @@ void GlavniProzor::promeniJezikS()
           qDebug() << "Srpski";
     }
 }
+void GlavniProzor::promeniJezikSpanski(){
+    if (ui->aSpanski->isChecked()){
+               bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+               qDebug("translation %d", ok);
+                qApp->installTranslator(translator);
+                  ui->retranslateUi(this);
+                  retranslate();
+                  ui->aEngleski->setChecked(false);
+                  ui->aNemacki->setChecked(false);
+                   ui->aSrpski->setChecked(false);
+                  qDebug() << "Espanol";
+
+           }
+
+       else if(ui->aNemacki->isChecked()){
+               bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
+               qDebug("translation %d", ok);
+                qApp->installTranslator(translator);
+                  ui->retranslateUi(this);
+                   retranslate();
+                  ui->aEngleski->setChecked(false);
+                   ui->aSrpski->setChecked(false);
+                    ui->aSpanski->setChecked(false);
+                  qDebug() << "Deutsch";
+
+           }
+       else if(ui->aEngleski->isChecked()){
+
+        bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
+        qDebug("translation %d", ok);
+         qApp->installTranslator(translator);
+           ui->retranslateUi(this);
+           retranslate();
+           qDebug() << "English";
+           ui->aNemacki->setChecked(false);
+            ui->aSrpski->setChecked(false);
+             ui->aSpanski->setChecked(false);
+}
+       else{
+           ui->aSrpski->setChecked(true);
+           bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+           qDebug("translation %d", ok);
+            qApp->installTranslator(translator);
+              ui->retranslateUi(this);
+               retranslate();
+              ui->aEngleski->setChecked(false);
+               ui->aNemacki->setChecked(false);
+                ui->aSpanski->setChecked(false);
+             qDebug() << "Srpski";
+       }
+}
+
 void GlavniProzor::retranslate()
 {
 
