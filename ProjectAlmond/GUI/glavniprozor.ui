@@ -105,6 +105,7 @@
      <addaction name="aSrpski"/>
      <addaction name="aEngleski"/>
      <addaction name="aNemacki"/>
+     <addaction name="aSpanski"/>
     </widget>
     <addaction name="aMreza"/>
     <addaction name="aSamoKrv"/>
@@ -274,6 +275,11 @@
   <action name="actionPretraga">
    <property name="text">
     <string>Pretrazi stablo</string>
+   </property>
+  </action>
+  <action name="aSpanski">
+   <property name="text">
+    <string>Español</string>
    </property>
   </action>
  </widget>

@@ -107,6 +107,8 @@ public:
 
     bool jeSupruznikOd(short sifraPrve, short sifraDruge);
 
+    bool jeBratSestraOd(short sifraPrve,short sifraDruge);
+
 private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
