@@ -589,4 +589,113 @@ std::vector<int> PorodicnoStablo::Nivoi()
 {
     return _nivoi;
 }
+std::vector<short>* PorodicnoStablo::PretragaPoImenu(const QString& Ime,int tip){
+    std::vector<short> *Osobe= new std::vector<short>();
+    if(tip==0){
+        //Sve cije je ime pre zadatog
+        for(auto imena:_indeksIme)
+            if(imena.first<Ime)
+                Osobe->push_back(imena.second->Sifra());
+    }
+    if(tip==1){
+        //Sve cije je ime jednako zadatom
+        auto iter=_indeksIme.equal_range(Ime);
+        for(auto it=iter.first;it!=iter.second;it++)
+                Osobe->push_back(it->second->Sifra());
+    }
+    if(tip==2){
+        //Sve cije je ime posle zadatog
+        for(auto imena:_indeksIme)
+            if(imena.first>Ime)
+                Osobe->push_back(imena.second->Sifra());
+    }
+    return Osobe;
+
+}
+std::vector<short>* PorodicnoStablo::PretragaPoPrezimenu(const QString& Prezime,int tip){
+    std::vector<short> *Osobe= new std::vector<short>();
+    if(tip==0){
+        //Sve cije je prezime pre zadatog
+        for(auto prezimena:_indeksSifraOsobe)
+            if(prezimena.second->Prezime()<Prezime)
+                Osobe->push_back(prezimena.first);
+    }
+    if(tip==1){
+        //Sve cije je prezime jednako zadatom
+        for(auto prezimena:_indeksSifraOsobe)
+            if(prezimena.second->Prezime()==Prezime)
+                Osobe->push_back(prezimena.first);
+    }
+    if(tip==2){
+        //Sve cije je prezime posle zadatog
+        for(auto prezimena:_indeksSifraOsobe)
+            if(prezimena.second->Prezime()>Prezime)
+                Osobe->push_back(prezimena.first);
+    }
+    return Osobe;
+}
+
+std::vector<short>* PorodicnoStablo::PretragaPoDatumuRodjenja(const QDate& DatRodj,int tip){
+    std::vector<short> *Osobe= new std::vector<short>();
+    if(tip==0){
+        //Sve ciji je datum rodj pre zadatog
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumRodjenja()<DatRodj)
+                Osobe->push_back(datum.first);
+    }
+    if(tip==1){
+        //Sve ciji je datum rodj jednak zadatom
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumRodjenja()==DatRodj)
+                Osobe->push_back(datum.first);
+    }
+    if(tip==2){
+        //Sve ciji je datum rodj posle zadatog
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumRodjenja()>DatRodj)
+                Osobe->push_back(datum.first);
+    }
+    return Osobe;
+}
+   std::vector<short>* PorodicnoStablo::PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip){
+       std::vector<short> *Osobe= new std::vector<short>();
+       if(tip==0){
+           //Sve ciji je datum smrti pre zadatog
+           for(auto datum:_indeksSifraOsobe)
+               if(datum.second->DatumSmrti()<DatSmrti)
+                   Osobe->push_back(datum.first);
+       }
+       if(tip==1){
+           //Sve ciji je datum smrti jednak zadatom
+           for(auto datum:_indeksSifraOsobe)
+               if(datum.second->DatumSmrti()==DatSmrti)
+                   Osobe->push_back(datum.first);
+       }
+       if(tip==2){
+           //Sve ciji je datum smrti posle zadatog
+           for(auto datum:_indeksSifraOsobe)
+               if(datum.second->DatumSmrti()>DatSmrti)
+                   Osobe->push_back(datum.first);
+       }
+       return Osobe;
+   }
+    std::vector<short>* PorodicnoStablo::PretragaPoPolu(const QChar& Pol,int tip){
+        std::vector<short> *Osobe= new std::vector<short>();
+        if(tip==0){
+            //Sve ciji je pol razlicit
+            for(auto pol:_indeksSifraOsobe)
+                if(pol.second->Pol()!=Pol)
+                    Osobe->push_back(pol.first);
+        }
+        if(tip==1){
+            //Sve ciji je pol jednak
+            for(auto pol:_indeksSifraOsobe)
+                if(pol.second->Pol()==Pol)
+                    Osobe->push_back(pol.first);
+        }
+
+        return Osobe;
+
+    }
+
 
