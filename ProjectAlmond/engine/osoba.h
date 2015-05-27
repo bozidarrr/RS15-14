@@ -27,7 +27,7 @@ public:
 
     const QString& Prezime() const;//vraca prezime
 
-    const QString* ImePrezime() const;//cini mi se da je korisno
+    const QString ImePrezime() const;//cini mi se da je korisno
 
     const QChar& Pol() const;
 
