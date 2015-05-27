@@ -17,9 +17,7 @@
 #include <QTextBrowser>
 #include "GUI/dijalogpretrage.h"
 #include <QDebug>
-
 #include "alati/uredjivanje.h"
-
 #include <iostream>
 
 
@@ -53,7 +51,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     obnoviSkoroOtvarane();
     //-------Pravi se stablo i korena osoba-------//
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
+                                (stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     QPointF centar(pogled->viewport()->rect().center());
     korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
     korena->setZValue(2);
@@ -67,7 +65,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
 GlavniProzor::~GlavniProzor()
 {
-    delete stablo;
+    //if (stablo != nullptr)
+    //    delete stablo;
     delete ui;
 
 }
@@ -142,7 +141,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
     connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
-    connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));//ovo jos doraditi
+    connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -233,7 +232,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
         {          
-            novaOsoba = new GOsoba(novaSifra, *(stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
+            novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
             _pozicijeOsoba[novaSifra] = novaOsoba;
@@ -419,7 +418,42 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     }
     postaviTrenutniFajl(imeFajla);
     ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
+    //RekonstruisiStablo();
     return true;
+}
+
+//Jos ne radi sve sto treba, ali se cini da je na dobrom putu
+void GlavniProzor::RekonstruisiStablo()
+{
+    _pozicijeOsoba.clear();
+    _pozicijeBrakova.clear();
+    int x = 100, y = 100;
+    for (auto a : stablo->Osobe())
+    {
+        GOsoba *g = new GOsoba(a.first, a.second->ImePrezime());
+        scena->addItem(g);
+        g->setPos(x,y);
+        x+=100; y+=100;
+        _pozicijeOsoba[a.first] = g;
+    }
+    for (auto b : stablo->Brakovi())
+    {
+        Brak *brak  = b.second;
+        QPointF prva(_pozicijeOsoba.at(brak->SifraNase())->pos());
+        QPointF druga(_pozicijeOsoba.at(brak->SifraTudje())->pos());
+        GRelacija *g = new GRelacija(b.first, prva, druga ,true);
+        _pozicijeBrakova[b.first] = g->pos();
+        scena->addItem(g);
+    }
+    for (auto d : stablo->Deca())
+    {
+        Dete * dete  = d.second;
+        dete->SifraRoditeljskogOdnosa();
+        QPointF prva(_pozicijeBrakova.at(dete->SifraRoditeljskogOdnosa()));
+        QPointF druga(_pozicijeOsoba.at(dete->SifraOsobe())->pos());
+        GRelacija *g = new GRelacija(d.first, prva, druga ,false);
+        scena->addItem(g);
+    }
 }
 
 void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
@@ -443,7 +477,6 @@ void GlavniProzor::writeSettings()
 {
     QSettings settings("MATF", "Project Almond"); //ne znam
     settings.setValue("skoroOtvarani", skoroOtvarani);
-    //settings.setValue("pozicijeOsoba", _pozicijeOsoba);
     settings.setValue("geometry", geometry());
 }
 
@@ -758,7 +791,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
         }
         if (izmeniOsobu(item->Sifra()) == item->Sifra())
         {
-            item->promeniIme(*(stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime()));
+            item->promeniIme((stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime()));
             setWindowModified(true);
         }
     }
@@ -971,11 +1004,20 @@ void GlavniProzor::izvrsiPretragu()
         default:
             trazene = nullptr;
         }
-        if (trazene == nullptr || trazene->size() == 0)
-            ui->zaInformacije->setText(tr("Nema osoba koje ispunjavaju uslove pretrage"));
+        if (trazene == nullptr)
+            ui->statusBar->showMessage(tr("Pretraga nije uradjena, pokusajte ponovo"));
         else
-            ui->zaInformacije->setText(tr("Ima ih"));//ovo zavrsiti, tj oznaciti te osobe itd
-        //napravicu metod ispisi sve trazene, oznaci ih...
+        {
+            if(trazene->size() == 0)
+                ui->zaInformacije->setText(tr("Nema osoba koje ispunjavaju uslove pretrage"));
+            else
+            {
+
+                ui->zaInformacije->setText(tr("Ima ih"));//ovo zavrsiti, tj oznaciti te osobe itd
+                //napravicu metod ispisi sve trazene, oznaci ih...
+            }
+            delete trazene;
+        }
     }
     delete d;
 }

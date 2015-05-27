@@ -60,11 +60,11 @@ const QString &Osoba::Prezime() const
 }
 
 //vraca vezano ime i prezime, moze biti korisno za GUI
-const QString *Osoba::ImePrezime() const
+const QString Osoba::ImePrezime() const
 {
-    QString* novi = new QString(_ime);
-    novi->append(" ");
-    novi->append(_prezime);
+    QString novi(_ime);
+    novi.append(" ");
+    novi.append(_prezime);
     return novi;
 }
 
