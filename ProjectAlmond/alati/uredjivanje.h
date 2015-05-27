@@ -9,7 +9,9 @@ public:
     uredjivanje(int sirina = 170);//ako je osoba sirine 100, damo joj jos 70
     ~uredjivanje();
 
-    std::vector<int> * IzracunajSirinuCelije(const std::vector<int> &m, const int maxPoCeliji) const;
+    std::vector<int> * IzracunajSirinuCelije(std::vector<int> &m, int maxPoCeliji);
+
+    int Sirina();
 
 
 private:
@@ -17,6 +19,8 @@ private:
 
     //za dat vektor iz engina,
     //koji ima broj krvih srodnika po nivou, racuna sirinu potrebnu da se lepo smeste
-    int IzracunajUkupnuSirinu(const std::vector<int> &m, const int maxPoCeliji) const;
+    int IzracunajUkupnuSirinu(std::vector<int> &m, int maxPoCeliji);
+
+    int _ukupnaSirina;
 };
 #endif // UREDJIVANJE_H
