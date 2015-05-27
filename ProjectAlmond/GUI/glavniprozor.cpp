@@ -56,7 +56,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
     korena->setZValue(2);
     scena->addItem(korena);
-    _pozicijeOsoba[korena->Sifra()] = korena;
+    _pozicijeOsoba[korena->Sifra()] = korena->pos();
+    _osobe[korena->Sifra()] = korena;
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
       retranslate();
     //-------Pravi se stablo i korena osoba-------//
@@ -99,7 +100,6 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
                 ui->zaInformacije->append(tr("Datum smrti: "));
                 ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
             }
-            //qDebug() << osoba->Nivo();
         }
     }
     if (tip == INFO_BRAK)
@@ -237,7 +237,8 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
             novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(2);
-            _pozicijeOsoba[novaSifra] = novaOsoba;
+            _pozicijeOsoba[novaSifra] = novaOsoba->pos();
+            _osobe[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
         }   
     }
@@ -378,6 +379,9 @@ bool GlavniProzor::nastaviti()
 
 bool GlavniProzor::snimiIzmene(const QString &imeFajla)
 {
+    //stablo -> upisi pozicije
+    stablo->zapamtiPozicijeOsoba(_pozicijeOsoba);
+    stablo->zapamtiPozicijeBrakova(_pozicijeBrakova);
     if (!stablo->IspisiFajl(imeFajla))
     {
         ui->statusBar->showMessage(tr("Snimanje otkazano."), 2000);
@@ -420,7 +424,8 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     }
     postaviTrenutniFajl(imeFajla);
     ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
-    //RekonstruisiStablo();
+    //stablo -> vrati mi pozicije
+    RekonstruisiStablo();
     return true;
 }
 
@@ -428,33 +433,44 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
 void GlavniProzor::RekonstruisiStablo()
 {
     _pozicijeOsoba.clear();
+    _osobe.clear();
     _pozicijeBrakova.clear();
-    int x = 100, y = 100;
+    _pozicijeOsoba = stablo->vratiPozicijeOsoba();
+    _pozicijeBrakova = stablo->vratiPozicijeBrakova();
     for (auto a : stablo->Osobe())
     {
         GOsoba *g = new GOsoba(a.first, a.second->ImePrezime());
         scena->addItem(g);
-        g->setPos(x,y);
-        x+=100; y+=100;
-        _pozicijeOsoba[a.first] = g;
+        g->setPos(_pozicijeOsoba.at(g->Sifra()));
+        _osobe[a.first] = g;
+        connect(stablo, SIGNAL(obrisanaOsoba(short)), g, SLOT(skloniSeSaScene(short)));
     }
     for (auto b : stablo->Brakovi())
     {
         Brak *brak  = b.second;
-        QPointF prva(_pozicijeOsoba.at(brak->SifraNase())->pos());
-        QPointF druga(_pozicijeOsoba.at(brak->SifraTudje())->pos());
+        QPointF prva(_pozicijeOsoba.at(brak->SifraNase()));
+        QPointF druga(_pozicijeOsoba.at(brak->SifraTudje()));
         GRelacija *g = new GRelacija(b.first, prva, druga ,true);
-        _pozicijeBrakova[b.first] = g->pos();
+        g->setPos(_pozicijeBrakova[b.first]);
         scena->addItem(g);
+
+        connect(_osobe.at(brak->SifraNase()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
+        connect(_osobe.at(brak->SifraTudje()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
+        connect(stablo, SIGNAL(obrisanaVezaBrak(short)), g, SLOT(ukloniSeSaScene(short)));
+
     }
     for (auto d : stablo->Deca())
     {
         Dete * dete  = d.second;
         dete->SifraRoditeljskogOdnosa();
         QPointF prva(_pozicijeBrakova.at(dete->SifraRoditeljskogOdnosa()));
-        QPointF druga(_pozicijeOsoba.at(dete->SifraOsobe())->pos());
+        QPointF druga(_pozicijeOsoba.at(dete->SifraOsobe()));
         GRelacija *g = new GRelacija(d.first, prva, druga ,false);
         scena->addItem(g);
+        /** dopuniti ovaj connect **/
+        //connect(dete->SifraRoditeljskogOdnosa(), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
+        connect(_osobe.at(dete->SifraOsobe()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
+        connect(stablo, SIGNAL(obrisanaVezaDete(short)), g, SLOT(ukloniSeSaScene(short)));
     }
 }
 
@@ -863,6 +879,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
             _pozicijeOsoba.erase(item->Sifra());
+            _osobe.erase(item->Sifra());
             setWindowModified(true);
         }
         else
@@ -999,7 +1016,7 @@ void GlavniProzor::urediStablo()
 
     pomeriOsobu(sifraKljucne, pozicija, 0);
 
-    pogled->centerOn(_pozicijeOsoba[sifraKljucne]);
+    pogled->centerOn(_osobe[sifraKljucne]);
 }
 
 //osoba te sifre se smesta sa svojim supruznicima u svoj pravougaounik
@@ -1012,14 +1029,16 @@ void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
     int smer = -1;
     if (ui->aPreciGore->isChecked())
         smer = 1;
-    _pozicijeOsoba[sifra]->setPos(pocetak);
-    _pozicijeOsoba[sifra]->obavestiRelacije();
+    _osobe[sifra]->setPos(pocetak);
+    _pozicijeOsoba[sifra] = pocetak;
+    _osobe[sifra]->obavestiRelacije();
     std::vector<short> *supruznici = stablo->ListaSupruznika(sifra);
     int broj = supruznici->size();
     for (int i = 0; i < broj; i++)
     {
-        _pozicijeOsoba[(*supruznici)[i]]->setPos(pocetak.x() + (i+1)*(*sirine)[nivo]/(broj+1), pocetak.y());
-        _pozicijeOsoba[supruznici->at(i)]->obavestiRelacije();
+        _osobe[(*supruznici)[i]]->setPos(pocetak.x() + (i+1)*(*sirine)[nivo]/(broj+1), pocetak.y());
+        _osobe[supruznici->at(i)]->obavestiRelacije();
+        _pozicijeOsoba[supruznici->at(i)] = _osobe[(*supruznici)[i]]->pos();
     }
     delete supruznici;
 
@@ -1047,7 +1066,7 @@ void GlavniProzor::prikaziSakrijTudje()
 {
     std::vector<short> *zaSakrivanje = stablo->NisuKrvniSrodnici();
     for (short sifra: *zaSakrivanje)
-        _pozicijeOsoba[sifra]->setVisible(!ui->aSamoKrv->isChecked());
+        _osobe[sifra]->setVisible(!ui->aSamoKrv->isChecked());
 //koliko ovo ima smisla ja ne znam
 
 //    if (ui->aSamoKrv->isChecked())

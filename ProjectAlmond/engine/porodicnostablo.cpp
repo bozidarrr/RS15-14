@@ -269,6 +269,7 @@ std::vector<short> *PorodicnoStablo::ListaSupruznika(const short sifra)
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
+
     std::cout << "Citam fajl" << imeFajla.toStdString() << std::endl;
     //otvaramo fajl
     QFile fajl(imeFajla);
@@ -282,6 +283,8 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     ulaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
+    mapaOsobe.clear();
+    mapaBrakovi.clear();
     SpaliCeloStablo();
 
     int maxSifraOsobe=-1;
@@ -376,6 +379,35 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 
     //-----------------------------POVEZIVANJE DECE-----------------------------------//
 
+    //sad ucitavamo jos i pozicije redom
+
+    //prvo za osobe
+    int broj = _indeksSifraOsobe.size();
+    for (int i=0;i<broj;i++)
+    {
+        qint32 sifra;
+        qreal x, y;
+        ulaz >> sifra;
+        ulaz >> x;
+        ulaz >> y;
+        mapaOsobe[(short)sifra] = QPointF(x, y);
+        std::cout << (short)sifra << " ";
+    }
+    std::cout << "ucitala osobe pozicije" << std::endl;
+    //pa za brakove
+    broj = _indeksSifraVeza.size();
+    for (int i=0;i<broj;i++)
+    {
+        qint32 sifra;
+        qreal x, y;
+        ulaz >> sifra;
+        ulaz >> x;
+        ulaz >> y;
+        mapaBrakovi[(short)sifra] = QPointF(x, y);
+        std::cout << (short)sifra << " ";
+    }
+    std::cout << "ucitala veze pozicije" << std::endl;
+
     std::cout<<"Uspesno Procitano"<<std::endl;
     fajl.close();
     return true;
@@ -428,6 +460,26 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
         izlaz<<(*dete.second);
         //  std::cout<<"ispisala decu\n";
     }
+
+    //sad ispisujemo i pozicije redom
+
+    //prvo za osobe
+    for (auto o : mapaOsobe)
+    {
+        izlaz << (qint32)o.first;
+        izlaz << (qreal)o.second.x();
+        izlaz << (qreal)o.second.y();
+    }
+    //pa za brakove
+    for (auto b : mapaBrakovi)
+    {
+        if (_indeksSifraVeza.find(b.first) == _indeksSifraVeza.end())
+            continue;//za svaki slucaj
+        izlaz << (qint32)b.first;
+        izlaz << (qreal)b.second.x();
+        izlaz << (qreal)b.second.y();
+    }
+
     fajl.close();
     std::cout<<"Uspesno ispisano" << std::endl;
     return true;
@@ -757,5 +809,29 @@ bool PorodicnoStablo::jeBratSestraOd(short sifraPrve, short sifraDruge)
 
     return false;
 }
-
+//ovo pozivam iz GUIja kako bih zapamtila i koordinate svakog elementa u fajl
+void PorodicnoStablo::zapamtiPozicijeOsoba(std::map<short, QPointF> &mapa)
+{
+    mapaOsobe.clear();
+    mapaOsobe = mapa;
+    for (auto m : mapa)
+        std::cout << m.first << " ";
+    std::cout <<"gotovo" <<std::endl;
+}
+void PorodicnoStablo::zapamtiPozicijeBrakova(std::map<short, QPointF> &mapa)
+{
+    mapaBrakovi.clear();
+    mapaBrakovi = mapa;
+    for (auto m : mapa)
+        std::cout << m.first << " ";
+    std::cout <<"gotovo" <<std::endl;
+}
+std::map<short, QPointF>& PorodicnoStablo::vratiPozicijeOsoba()
+{
+    return mapaOsobe;
+}
+std::map<short, QPointF>& PorodicnoStablo::vratiPozicijeBrakova()
+{
+    return mapaBrakovi;
+}
 

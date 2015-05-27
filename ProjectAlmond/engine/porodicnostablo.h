@@ -11,6 +11,7 @@
 #include <QString>
 #include <QFile>
 #include <iostream>
+#include <QPointF>
 
 /**
  * @brief The PorodicnoStablo class sluzi za pamcenje podataka o povezanosti clanova stabla, kao i njihovo indeksiranje.
@@ -109,7 +110,18 @@ public:
 
     bool jeBratSestraOd(short sifraPrve,short sifraDruge);
 
+    //nesto za ucitavanje//
+    void zapamtiPozicijeOsoba(std::map<short, QPointF> &mapa);
+    void zapamtiPozicijeBrakova(std::map<short, QPointF> &mapa);
+    std::map<short, QPointF>& vratiPozicijeOsoba();
+    std::map<short, QPointF>& vratiPozicijeBrakova();
+
+
+
 private:
+    std::map<short, QPointF> mapaOsobe;
+    std::map<short, QPointF> mapaBrakovi;
+
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//

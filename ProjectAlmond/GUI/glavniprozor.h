@@ -48,7 +48,9 @@ private:
     QString otvoreniFajl;
     QTranslator *translator;
 
-    std::map<short int, GOsoba*> _pozicijeOsoba;//<sifra_osobe, GOsoba>
+
+    std::map<short int, GOsoba*> _osobe;
+    std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, pozicija>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
     QPushButton *kreirajJedanAlat(QPushButton *alat, const char *ime, const char *info);
