@@ -69,13 +69,26 @@ public:
 
     void UkloniDeteSifrom(const short sifra);
 
-    //metod koji vraca true ako osoba ima bar jednog supruznika, trebace u GUI-ju
-    bool osobaImaBrakove(const short sifra) const;
+    //metod koji vraca broj supruznika osobe sa tom sifrom, trebace u GUI-ju
+    int osobaImaBrakova(const short sifra);
+    //vraca listu sve dece date osobe
+    std::vector<short>* ListaDece(const short sifra);
+    //vraca max broj supruznika koje neka osoba u stablu ima
+    int maxBrakova();
+    //vraca listu sifara supruznika
+    std::vector<short> *ListaSupruznika(const short sifra);
 
-    //vraca vektor sifara osoba kojima je na prosledjeni datum rodjendan
-    //usput azurira delimicno indeksRodjendan, koji ne prati izmene osoba automatski
+
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);
 
+    //----GETTERI ZA INDEKSE----//
+    std::map<short, Osoba*> Osobe();
+    std::map<short, Brak*> Brakovi();
+    std::map<short, Dete*> Deca();
+    const std::multimap<short, short> OsobaBrak() const;
+    const std::multimap<short,short> BrakDeca()const;
+    std::vector<int> Nivoi();
+    //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
 
@@ -108,7 +121,8 @@ private:
     void ObrisiBrakove(short sifra, bool iSupruznike);
     void ObrisiDecu(short sifra);
 
-    std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+    //std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
+    std::vector<int> _nivoi;
 
 signals:
     void obrisanaOsoba(short sifra);
@@ -117,7 +131,7 @@ signals:
 
 public Q_SLOTS:
     void azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra);
-    std::vector<int> kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
+    std::vector<short> sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
 
 };
 

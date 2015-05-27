@@ -15,7 +15,9 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
 {
     _kljucnaOsoba = new Osoba(ime, prezime, pol.at(0), rodjenje, smrt, krvniSrodnik);
     _kljucnaOsoba->Nivo(0);
+
     InicijalizujSveStrukture();
+        _nivoi.push_back(1);
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
     {
@@ -73,10 +75,10 @@ short int PorodicnoStablo::DodajDete(const short int sifraBraka, const short int
     short noviNivo = _indeksSifraVeza[sifraBraka]->Nivo()+1;
     _indeksSifraOsobe[sifraOsobe]->Nivo(noviNivo);
     //i ubacujemo u brojac
-    if (_nivoOsoba.find(noviNivo) == _nivoOsoba.end())
-        _nivoOsoba[noviNivo] = 1;
+    if (_nivoi.size() <= (unsigned)noviNivo)
+        _nivoi.push_back(1);
     else
-        _nivoOsoba[noviNivo] = _nivoOsoba[noviNivo] + 1;
+        _nivoi[noviNivo]++;
     Dete* novo=new Dete(sifraOsobe, sifraBraka, trivija);
     _indeksSifraDete[novo->Sifra()]=novo;
     _indeksBrakDeca.insert(std::make_pair(sifraBraka, sifraOsobe));
@@ -133,8 +135,13 @@ void PorodicnoStablo::UkloniOsobuSifrom(const short sifra)
     Osoba *zaBrisanje=_indeksSifraOsobe[sifra];
 
     if (zaBrisanje->JeKrvniSrodnik())
-        //brisemo njene supruznike
+    {//brisemo njene supruznike
         ObrisiBrakove(sifra, true);
+        //i smanjujemo broj ljudi u njenom nivou
+        _nivoi[zaBrisanje->Nivo()]--;
+        if (_nivoi[zaBrisanje->Nivo()] == 0)
+            _nivoi.pop_back();//ako je ovaj nula, moraju i svi posle biti nula
+    }
     //to ce obrisati i decu, jer supruznik nece biti krvni srodnik pa ce uci u else granu
     else
     {
@@ -176,7 +183,7 @@ void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
     for (auto iter = brakovi.first; iter != brakovi.second; iter++)
     {
         if (iter->second == sifra)
-            _indeksOsobaBrak.erase(iter);
+            _indeksOsobaBrak.erase(iter);//ovo valjda znaci da je za krvne srodnike uvek tacna informacija u indeksu?
     }
 }
 
@@ -185,11 +192,82 @@ void PorodicnoStablo::UkloniDeteSifrom(const short sifra)
     delete NadjiDeteSifrom(sifra);
 }
 
-bool PorodicnoStablo::osobaImaBrakove(const short sifra) const
+int PorodicnoStablo::osobaImaBrakova(const short sifra)
 {
     if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
-        return false;
-    return _indeksOsobaBrak.count(sifra) > 0;
+        return -1;
+    int count = 0;
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
+        short suprug = _indeksSifraVeza[b->second]->SifraTudje();
+         if (_indeksSifraOsobe.find(suprug) == _indeksSifraOsobe.end())
+             continue;
+         count++;
+    }
+    return count;
+}
+
+std::vector<short> *PorodicnoStablo::ListaDece(const short sifra)
+{
+    if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
+        return nullptr;
+
+    std::vector<short> *svaDeca = new std::vector<short>();
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
+        auto deca = _indeksBrakDeca.equal_range(b->second);
+        for (auto d = deca.first; d != deca.second; d++)
+        {
+            if (_indeksSifraOsobe.find(d->second) == _indeksSifraOsobe.end())
+                continue;
+            else
+                svaDeca->push_back(d->second);
+        }
+    }
+    return svaDeca;
+}
+
+int PorodicnoStablo::maxBrakova()
+{
+    int max = 0;
+    auto b = _indeksSifraOsobe.begin(), e = _indeksSifraOsobe.end();
+    for (;b!=e;b++)
+    {
+        Osoba *o = b->second;
+        if (o->JeKrvniSrodnik())
+        {
+            int broj = osobaImaBrakova(o->Sifra());
+            if (broj > max)
+                max = broj;
+        }
+    }
+    return max;
+}
+
+std::vector<short> *PorodicnoStablo::ListaSupruznika(const short sifra)
+{
+    if (_indeksSifraOsobe.find(sifra) == _indeksSifraOsobe.end())
+        return nullptr;
+    std::vector<short> *supruznici = new std::vector<short>();
+    auto brakovi = _indeksOsobaBrak.equal_range(sifra);
+    for (auto b = brakovi.first; b != brakovi.second; b++)
+    {
+        //b je sifra braka
+        if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
+            continue;
+        Brak *brak = _indeksSifraVeza[b->second];
+        short sifraTudje = brak->SifraTudje();
+        if (_indeksSifraOsobe.find(sifraTudje) == _indeksSifraOsobe.end())
+            continue;
+        supruznici->push_back(sifraTudje);
+    }
+    return  supruznici;
 }
 
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
@@ -368,7 +446,7 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksOsobaBrak.clear();
     _indeksRodjendan.clear();
     //_indeksRodjenje.clear();
-    _nivoOsoba.clear();
+    _nivoi.clear();
 }
 
 void PorodicnoStablo::SpaliCeloStablo()
@@ -474,13 +552,41 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
     return slavljenici;
 }
 
-std::vector<int> PorodicnoStablo::kodiranPutOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
+std::vector<short> PorodicnoStablo::sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene)
 {
-    TrazenjePuta pretraga(this,sifraPocetne,sifraTrazene);
-    std::vector<int> Kod(pretraga());
+    TrazenjePuta pretraga(this);
+    std::vector<short> Put(pretraga(sifraPocetne,sifraTrazene));
 
 
-    return Kod;
+    return Put;
 }
 
+
+std::map<short, Osoba*> PorodicnoStablo::Osobe()
+{
+    return _indeksSifraOsobe;
+}
+std::map<short, Brak*> PorodicnoStablo::Brakovi()
+{
+    return _indeksSifraVeza;
+}
+std::map<short, Dete*> PorodicnoStablo::Deca()
+{
+    return _indeksSifraDete;
+}
+
+const std::multimap<short, short> PorodicnoStablo::OsobaBrak()const
+{
+    return _indeksOsobaBrak;
+}
+
+const std::multimap<short, short> PorodicnoStablo::BrakDeca() const
+{
+    return _indeksBrakDeca;
+}
+
+std::vector<int> PorodicnoStablo::Nivoi()
+{
+    return _nivoi;
+}
 

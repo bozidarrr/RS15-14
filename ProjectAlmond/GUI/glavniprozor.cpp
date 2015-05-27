@@ -15,8 +15,12 @@
 #include <QTranslator>
 #include <QTransform>
 #include <QTextBrowser>
-
+#include "GUI/dijalogpretrage.h"
 #include <QDebug>
+
+#include "alati/uredjivanje.h"
+
+#include <iostream>
 
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
@@ -94,7 +98,7 @@ void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
                 ui->zaInformacije->append("Datum smrti: ");
                 ui->zaInformacije->append(datum.toString("dd.MM.yyyy."));
             }
-            qDebug() << osoba->Nivo();
+            //qDebug() << osoba->Nivo();
         }
     }
     if (tip == INFO_BRAK)
@@ -137,7 +141,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
     connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
-    connect(ui->actionRodjendan, SIGNAL(triggered()), this, SLOT(prikaziSlavljenike()));//ovo jos doraditi
+    connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));//ovo jos doraditi
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
@@ -266,6 +270,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
     {
         stablo->UkloniOsobuSifrom(sifra);
         ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
+        uredjeno = false;
         return sifra;
     }
     else
@@ -853,16 +858,82 @@ void GlavniProzor::urediStablo()
     //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
     //
     //na osnovu toga im preracunavam koordinate
+    //int dodajVisinu = 1;
     if (ui->aPreciGore->isChecked())
         qDebug() <<"uredi preci gore";
-    else
+    else{
         qDebug() << "uredi preci dole";
+        //dodajVisinu = -1;
+    }
+    std::vector<int> nivoi(stablo->Nivoi());
+    uredjivanje u;
+    sirine = u.IzracunajSirinuCelije(nivoi, stablo->maxBrakova()+1);
+
+//    for (int s : *sirine)
+//        qDebug() << s;
+
+    QPointF centar = pogled->mapToScene(pogled->viewport()->rect().center());
+
+    short sifraKljucne = stablo->KljucnaOsoba()->Sifra();
+
+    pomeriOsobu(sifraKljucne, QPointF(centar.x()-sirine->at(0)/2, centar.y()), 0);
+//    _pozicijeOsoba[sifraKljucne]->setPos(centar);
+//    _pozicijeOsoba[sifraKljucne]->obavestiRelacije();
+//    std::vector<short> *supruznici = stablo->ListaSupruznika(sifraKljucne);
+//    int broj = supruznici->size();
+//    for (int i = 0; i < broj; i++)
+//    {
+//        _pozicijeOsoba[(*supruznici)[i]]->setPos(centar.x() + (i+1)*(*sirine)[0]/(broj+1), centar.y());
+//        _pozicijeOsoba[supruznici->at(i)]->obavestiRelacije();
+//    }
+//    delete supruznici;
+//    //i sad pokrecemo pomeranje
+//    //tj korena i njeni supruznici (posto nema brace jel) se rasporede u prvu celiju
+//    //a ona poziva isti metod za svoju decu
+//    std::vector<short> *deca = stablo->ListaDece(sifraKljucne);
+//    broj = deca->size();
+//    for (int i = 0; i < broj; i++)
+//    {
+//        pomeriOsobu(deca->at(i), QPointF(centar.x() + i*sirine->at(1), centar.y() + 140));
+//    }
+//    delete deca;
 }
 
-void GlavniProzor::prikaziSlavljenike()
+//osoba te sifre se smesta sa svojim supruznicima u svoj pravougaounik
+void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
+{
+    /** TO DO **/
+    //ona i supruznici se rasporedjuju u pravougaonik koji pocinje na x, sirine koju imamo u vektoru
+    //for svako dete i
+    //pomeriOsobu (sifraDeteta, x + i*sirina[j+1])
+    int smer = -1;
+    if (ui->aPreciGore->isChecked())
+        smer = 1;
+    _pozicijeOsoba[sifra]->setPos(pocetak);
+    _pozicijeOsoba[sifra]->obavestiRelacije();
+    std::vector<short> *supruznici = stablo->ListaSupruznika(sifra);
+    int broj = supruznici->size();
+    for (int i = 0; i < broj; i++)
+    {
+        _pozicijeOsoba[(*supruznici)[i]]->setPos(pocetak.x() + (i+1)*(*sirine)[nivo]/(broj+1), pocetak.y());
+        _pozicijeOsoba[supruznici->at(i)]->obavestiRelacije();
+    }
+    delete supruznici;
+
+    std::vector<short> *deca = stablo->ListaDece(sifra);
+    broj = deca->size();
+    for (int i = 0; i < broj; i++)
+    {
+        pomeriOsobu(deca->at(i), QPointF(pocetak.x() + i*sirine->at(nivo+1), pocetak.y() + smer*140), nivo+1);
+    }
+    delete deca;
+}
+
+
+void GlavniProzor::prikaziSlavljenike(const QDate &datum)
 {
     //ovde sam mislila da uvedemo korisniku mogucnost da izabere datum, ne samo danasnji datum da bude
-    std::vector<short> *v = stablo->KomeJeSveRodjendan(QDate::currentDate());
+    std::vector<short> *v = stablo->KomeJeSveRodjendan(datum);
     for (short sifra : *v)
         qDebug() << sifra;
     //idemo po sifri i postavljamo im poseban stil
@@ -877,6 +948,22 @@ void GlavniProzor::prikaziSakrijTudje()
         qDebug() << "vratiti tudje";
     //for (QGraphicsItem osoba : scena->items())
     //ili sa grupama, videcu ovo
+}
+
+void GlavniProzor::izvrsiPretragu()
+{
+    DijalogPretrage *d = new DijalogPretrage(this);
+    if (d->exec())
+    {
+        int opcija, kriterijum;
+        QString podatak;
+        d->procitajPodatke(opcija, kriterijum, podatak);
+        qDebug() << "pretrazi";
+        qDebug() << opcija;
+        qDebug() << kriterijum;
+        qDebug() << podatak;
+    }
+    delete d;
 }
 
 QStringList GlavniProzor::skoroOtvarani;

@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="slike.qrc">
+   <iconset resource="../slike.qrc">
     <normaloff>:/images/images/ProjectAlmond.ico</normaloff>:/images/images/ProjectAlmond.ico</iconset>
   </property>
   <property name="iconSize">
@@ -121,7 +121,7 @@
     <addaction name="aTema"/>
     <addaction name="aAlati"/>
     <addaction name="aInformacije"/>
-    <addaction name="actionRodjendan"/>
+    <addaction name="actionPretraga"/>
    </widget>
    <widget class="QMenu" name="mPomoc">
     <property name="title">
@@ -271,14 +271,14 @@
     <string>Shift+W</string>
    </property>
   </action>
-  <action name="actionRodjendan">
+  <action name="actionPretraga">
    <property name="text">
-    <string>Rodjendan</string>
+    <string>Pretrazi stablo</string>
    </property>
   </action>
  </widget>
  <resources>
-  <include location="slike.qrc"/>
+  <include location="../slike.qrc"/>
  </resources>
  <connections/>
 </ui>

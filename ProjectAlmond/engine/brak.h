@@ -5,15 +5,10 @@
 #include<QString>
 #include<QDate>
 
-//#include"engine/osoba.h"
-//class Osoba;
-//class Dete;
-
 class Brak
 {
 public:
     Brak();
-    //Brak(Osoba* nasa, Osoba* tudja, std::string& trivija);
     Brak(const short sifraNase, const short sifraTudje, const QString &trivija);
     Brak(const Brak& drugi);
     ~Brak();
@@ -59,9 +54,6 @@ private:
     short int _sifra;
     short _sifraNase;
     short _sifraTudje;
-    //Osoba* _nasaOsoba;
-    //Osoba* _tudjaOsoba;
-    //std::vector<Dete *> _spisakDece;
     QString _trivija;
     /* QDate _datumUpoznavanja;
     QDate _datumVeze;

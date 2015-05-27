@@ -9,6 +9,7 @@ DialogNovaOsoba::DialogNovaOsoba(QWidget *parent) :
 {
     ui->setupUi(this);
     setModal(true);
+    setWindowTitle(tr("Unesite novu osobu"));
     ui->retranslateUi(this);
        retranslate();
     popuniDugmice();

@@ -78,6 +78,10 @@ private:
     void kreirajPogledZaStablo();
 
     bool uredjeno = true;
+    std::vector<int>* sirine;
+
+    //osobu te sifre postavlja gde treba
+    void pomeriOsobu(short int sifra, QPointF pocetak, int nivo);
 
 public Q_SLOTS:
     //-----Toolbar, Menubar...-----//
@@ -100,8 +104,10 @@ public Q_SLOTS:
     void urediStablo();
     //-----INTERAKCIJA-----//
     //-----Menjanje prikazanih osoba-----//
-    void prikaziSlavljenike();
+    void prikaziSlavljenike(const QDate &datum);
     void prikaziSakrijTudje();
+
+    void izvrsiPretragu();
 };
 
 #endif // GLAVNIPROZOR_H
