@@ -925,26 +925,57 @@ void GlavniProzor::prikaziSlavljenike(const QDate &datum)
 
 void GlavniProzor::prikaziSakrijTudje()
 {
-    if (ui->aSamoKrv->isChecked())
-        qDebug() << "sakriti tudje";
-    else
-        qDebug() << "vratiti tudje";
-    //for (QGraphicsItem osoba : scena->items())
-    //ili sa grupama, videcu ovo
+    std::vector<short> *zaSakrivanje = stablo->NisuKrvniSrodnici();
+    for (short sifra: *zaSakrivanje)
+        _pozicijeOsoba[sifra]->setVisible(!ui->aSamoKrv->isChecked());
+//koliko ovo ima smisla ja ne znam
+
+//    if (ui->aSamoKrv->isChecked())
+//        qDebug() << "sakriti tudje";
+//    else
+//        qDebug() << "vratiti tudje";
+
 }
 
 void GlavniProzor::izvrsiPretragu()
 {
     DijalogPretrage *d = new DijalogPretrage(this);
     if (d->exec())
-    {
-        int opcija, kriterijum;
+    {//0 ime, 1 prezime, 2 datum rodjenja, 3 datum smrti, 4 pol
+        int kriterijum;
+        int opcija;
         QString podatak;
         d->procitajPodatke(opcija, kriterijum, podatak);
-        qDebug() << "pretrazi";
-        qDebug() << opcija;
-        qDebug() << kriterijum;
-        qDebug() << podatak;
+//        qDebug() << "pretrazi";
+//        qDebug() << opcija;
+//        qDebug() << kriterijum;
+//        qDebug() << podatak;
+        std::vector<short> *trazene;
+        switch(opcija)
+        {
+        case 0:
+            trazene = stablo->PretragaPoImenu(podatak, kriterijum);
+            break;
+        case 1:
+            trazene = stablo->PretragaPoPrezimenu(podatak, kriterijum);
+            break;
+        case 2:
+            trazene = stablo->PretragaPoDatumuRodjenja(QDate::fromString(podatak, "dd.MM.yyyy."), kriterijum);
+            break;
+        case 3:
+            trazene = stablo->PretragaPoDatumuSmrti(QDate::fromString(podatak, "dd.MM.yyyy."), kriterijum);
+            break;
+        case 4:
+            trazene = stablo->PretragaPoPolu(podatak.at(0), kriterijum);
+            break;
+        default:
+            trazene = nullptr;
+        }
+        if (trazene == nullptr || trazene->size() == 0)
+            ui->zaInformacije->setText(tr("Nema osoba koje ispunjavaju uslove pretrage"));
+        else
+            ui->zaInformacije->setText(tr("Ima ih"));//ovo zavrsiti, tj oznaciti te osobe itd
+        //napravicu metod ispisi sve trazene, oznaci ih...
     }
     delete d;
 }

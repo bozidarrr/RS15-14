@@ -8,10 +8,9 @@ DijalogPretrage::DijalogPretrage(QWidget *parent) :
     ui(new Ui::DijalogPretrage)
 {
     ui->setupUi(this);
-
+    popuniDugmice();
     ui->unosDatum->setHidden(true);
     connect(ui->IzaberiOpciju, SIGNAL(currentIndexChanged(int)), this, SLOT(tekstIliDatum()));
-    //connect(ok, SIGNAL(clicked()), this, SLOT(procitajPodatke()));
 }
 
 DijalogPretrage::~DijalogPretrage()
@@ -40,7 +39,6 @@ void DijalogPretrage::tekstIliDatum()
 void DijalogPretrage::popuniDugmice()
 {
     ok = new QPushButton(tr("OK"));
-    ok->setEnabled(false);
     cancel = new QPushButton(tr("Ponisti"));
 
     ui->buttonBox->addButton(ok, QDialogButtonBox::AcceptRole);
@@ -48,4 +46,7 @@ void DijalogPretrage::popuniDugmice()
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    ok->show();
+    cancel->show();
 }

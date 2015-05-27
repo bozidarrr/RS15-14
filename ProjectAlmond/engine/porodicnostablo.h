@@ -91,18 +91,22 @@ public:
     //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
     bool IspisiFajl(const QString &imeFajla);//upisivanje u fajl, tj. cuvanje
+
+    //----GETERI ZA PRETRAGU----//
     std::vector<short>* PretragaPoImenu(const QString& Ime,int tip);
-     std::vector<short>* PretragaPoPrezimenu(const QString& Prezime,int tip);
-      std::vector<short>* PretragaPoDatumuRodjenja(const QDate& DatRodj,int tip);
-       std::vector<short>* PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip);
-        std::vector<short>* PretragaPoPolu(const QChar& Pol,int tip);
+    std::vector<short>* PretragaPoPrezimenu(const QString& Prezime,int tip);
+    std::vector<short>* PretragaPoDatumuRodjenja(const QDate& DatRodj,int tip);
+    std::vector<short>* PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip);
+    std::vector<short>* PretragaPoPolu(const QChar& Pol,int tip);
+    //----GETERI ZA PRETRAGU----//
+    std::vector<short>* NisuKrvniSrodnici();
 
 
 private:
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
     //-------------------INDEKSI------------------------//
-    std::multimap<QString, Osoba*> _indeksIme;
+    std::multimap<QString, Osoba*> _indeksIme;//OVAJ SE NE AZURIRA< PAZLJIVO KORISTITI
 
     //-----OVE STALNO AZURIRAMO------//
     //-----SAMO NJIH PISEMO/CITAMO---//

@@ -26,7 +26,6 @@ SOURCES += main.cpp\
     GUI/gosoba.cpp \
     GUI/grelacija.cpp \
     alati/trazenjeputa.cpp \
-    GUI/dialogpretrage.cpp \
     alati/uredjivanje.cpp \
     GUI/dijalogpretrage.cpp
 
@@ -44,7 +43,6 @@ HEADERS  += \
     GUI/gosoba.h \
     GUI/grelacija.h \
     alati/trazenjeputa.h \
-    GUI/dialogpretrage.h \
     alati/uredjivanje.h \
     GUI/dijalogpretrage.h
 
@@ -53,7 +51,6 @@ FORMS    += \
     GUI/dijalogrelacija.ui \
     GUI/dialognovaosoba.ui \
     GUI/glavniprozor.ui \
-    GUI/dialogpretrage.ui \
     GUI/dijalogpretrage.ui
 
 RESOURCES += \
