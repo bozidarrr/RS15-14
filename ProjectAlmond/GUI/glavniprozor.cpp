@@ -59,10 +59,11 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     _pozicijeOsoba[korena->Sifra()] = korena->pos();
     _osobe[korena->Sifra()] = korena;
     connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
-      retranslate();
+
     //-------Pravi se stablo i korena osoba-------//
 
-    //readSettings();
+   readSettings();
+   retranslate();
 }
 
 GlavniProzor::~GlavniProzor()
@@ -493,17 +494,56 @@ void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
 
 void GlavniProzor::writeSettings()
 {
-    QSettings settings("MATF", "Project Almond"); //ne znam
+    QSettings settings("RS15-14", "ProjectAlmond");
     settings.setValue("skoroOtvarani", skoroOtvarani);
     settings.setValue("geometry", geometry());
+    settings.setValue("preci",ui->aPreciGore->isChecked());
+    settings.setValue("prikaziInfo",ui->aInformacije->isChecked());
+    settings.setValue("prikaziDok",info->isVisible());
+    settings.setValue("prikaziAlate",ui->aAlati->isChecked());
+    settings.setValue("prikaziDok2",alati->isVisible());
+    settings.setValue("engleski",ui->aEngleski->isChecked());
+    settings.setValue("nemacki",ui->aNemacki->isChecked());
+    settings.setValue("srpski",ui->aSrpski->isChecked());
+    settings.setValue("spanski",ui->aSpanski->isChecked());
+
 }
 
 void GlavniProzor::readSettings()
 {
-    QSettings settings("MATF", "Project Almond");
-    //...
-    skoroOtvarani = settings.value("skoroOtvarani").toStringList();
+    QSettings settings("RS15-14", "ProjectAlmond");
+    if(settings.contains("skoroOtvarani"))
+        skoroOtvarani = settings.value("skoroOtvarani").toStringList();
     obnoviSkoroOtvarane();
+
+    QRect rect = settings.value("geometry",QRect(200, 200, 800, 800)).toRect();
+    move(rect.topLeft());
+    resize(rect.size());
+
+    bool podesi = settings.value("preci", true).toBool();
+    ui->aPreciGore->setChecked(podesi);
+
+    podesi= settings.value("prikaziInfo", true).toBool();
+    ui->aInformacije->setChecked(podesi);
+    podesi= settings.value("prikaziDok", true).toBool();
+    info->setVisible(podesi);
+    podesi= settings.value("prikaziAlate", true).toBool();
+    ui->aAlati->setChecked(podesi);
+    podesi= settings.value("prikaziDok2", true).toBool();
+    alati->setVisible(podesi);
+
+    podesi= settings.value("engleski", false).toBool();
+    ui->aEngleski->setChecked(podesi);
+    if(podesi)promeniJezikE();
+    podesi= settings.value("srpski", true).toBool();
+    ui->aSrpski->setChecked(podesi);
+    if(podesi)promeniJezikS();
+    podesi= settings.value("nemacki", false).toBool();
+    ui->aNemacki->setChecked(podesi);
+    if(podesi)promeniJezikN();
+    podesi= settings.value("spanski", false).toBool();
+    ui->aSpanski->setChecked(podesi);
+    if(podesi)promeniJezikSpanski();
 }
 
 void GlavniProzor::kreirajPogledZaStablo()
