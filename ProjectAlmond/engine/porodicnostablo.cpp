@@ -17,7 +17,7 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
     _kljucnaOsoba->Nivo(0);
 
     InicijalizujSveStrukture();
-        _nivoi.push_back(1);
+    _nivoi.push_back(1);
     _indeksIme.insert(std::make_pair(ime,_kljucnaOsoba));
     if (rodjenje.isValid())
     {
@@ -174,7 +174,7 @@ void PorodicnoStablo::UkloniBrakSifrom(const short sifra)
 {
     if (_indeksSifraVeza.find(sifra) == _indeksSifraVeza.end())
         return;
-//brise brak iz indeksa za nasu osobu (pozvan je ako se brise tudja osoba)
+    //brise brak iz indeksa za nasu osobu (pozvan je ako se brise tudja osoba)
     Brak *brak = _indeksSifraVeza[sifra];
     auto brakovi = _indeksOsobaBrak.equal_range(brak->SifraNase());
     for (auto iter = brakovi.first; iter != brakovi.second; iter++)
@@ -200,9 +200,9 @@ int PorodicnoStablo::osobaImaBrakova(const short sifra)
         if (_indeksSifraVeza.find(b->second) == _indeksSifraVeza.end())
             continue;
         short suprug = _indeksSifraVeza[b->second]->SifraTudje();
-         if (_indeksSifraOsobe.find(suprug) == _indeksSifraOsobe.end())
-             continue;
-         count++;
+        if (_indeksSifraOsobe.find(suprug) == _indeksSifraOsobe.end())
+            continue;
+        count++;
     }
     return count;
 }
@@ -349,7 +349,7 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz>>*d;
         _indeksSifraDete[d->Sifra()]=d;
         _indeksBrakDeca.insert(std::make_pair(d->SifraRoditeljskogOdnosa(), d->SifraOsobe()));
-         //std::cout<<"Procitala dete\n";
+        //std::cout<<"Procitala dete\n";
         if (d->Sifra() > maxSifraDeteta)
             maxSifraDeteta = d->Sifra();
     }
@@ -401,13 +401,13 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;
     //Kljucnu smo vec upisali
     izlaz << (qint32)(_indeksSifraOsobe.size()-1);
-   // std::cout<<"ispisala velicinu vektora osoba\n"<<_indeksSifraOsobe.size();
+    // std::cout<<"ispisala velicinu vektora osoba\n"<<_indeksSifraOsobe.size();
 
     for(auto osoba :_indeksSifraOsobe)
     {
         if ((osoba.second)->Sifra() != _kljucnaOsoba->Sifra())
             izlaz<<(*(osoba.second));
-     //   std::cout<<"ispisala osobu\n";
+        //   std::cout<<"ispisala osobu\n";
     }
 
     izlaz << (qint32)_indeksSifraVeza.size();
@@ -416,19 +416,19 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     for(auto brak :_indeksSifraVeza)
     {
         izlaz<<(*brak.second);
-      //  std::cout<<"ispisala vezu\n";
+        //  std::cout<<"ispisala vezu\n";
 
     }
 
     izlaz << (qint32)_indeksSifraDete.size();
 
-     //std::cout<<"ispisala velicinu vektora Dete\n"<<_indeksSifraDete.size();
+    //std::cout<<"ispisala velicinu vektora Dete\n"<<_indeksSifraDete.size();
     for(auto dete :_indeksSifraDete)
     {
         izlaz<<(*dete.second);
-       //  std::cout<<"ispisala decu\n";
+        //  std::cout<<"ispisala decu\n";
     }
-      fajl.close();
+    fajl.close();
     std::cout<<"Uspesno ispisano" << std::endl;
     return true;
 }
@@ -541,7 +541,7 @@ std::vector<short> *PorodicnoStablo::KomeJeSveRodjendan(const QDate &datum)
     {
         //proveravam da li osoba postoji
         if (_indeksSifraOsobe.find(iter->second) != _indeksSifraOsobe.end())
-                slavljenici->push_back(iter->second);
+            slavljenici->push_back(iter->second);
         else
             //ako je osoba izbrisana u medjuvremenu moze se izbrisati i iz indeksa
             _indeksRodjendan.erase(iter);
@@ -572,12 +572,12 @@ std::map<short, Dete*> PorodicnoStablo::Deca()
     return _indeksSifraDete;
 }
 
-const std::multimap<short, short> PorodicnoStablo::OsobaBrak()const
+const std::multimap<short, short>& PorodicnoStablo::OsobaBrak()const
 {
     return _indeksOsobaBrak;
 }
 
-const std::multimap<short, short> PorodicnoStablo::BrakDeca() const
+const std::multimap<short, short>& PorodicnoStablo::BrakDeca() const
 {
     return _indeksBrakDeca;
 }
@@ -654,54 +654,87 @@ std::vector<short>* PorodicnoStablo::PretragaPoDatumuRodjenja(const QDate& DatRo
     }
     return Osobe;
 }
-   std::vector<short>* PorodicnoStablo::PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip){
-       std::vector<short> *Osobe= new std::vector<short>();
-       if(tip==0){
-           //Sve ciji je datum smrti pre zadatog
-           for(auto datum:_indeksSifraOsobe)
-               if(datum.second->DatumSmrti()<DatSmrti)
-                   Osobe->push_back(datum.first);
-       }
-       if(tip==1){
-           //Sve ciji je datum smrti jednak zadatom
-           for(auto datum:_indeksSifraOsobe)
-               if(datum.second->DatumSmrti()==DatSmrti)
-                   Osobe->push_back(datum.first);
-       }
-       if(tip==2){
-           //Sve ciji je datum smrti posle zadatog
-           for(auto datum:_indeksSifraOsobe)
-               if(datum.second->DatumSmrti()>DatSmrti)
-                   Osobe->push_back(datum.first);
-       }
-       return Osobe;
-   }
-    std::vector<short>* PorodicnoStablo::PretragaPoPolu(const QChar& Pol,int tip){
-        std::vector<short> *Osobe= new std::vector<short>();
-        if(tip==0 || tip==2){
-            //Sve ciji je pol razlicit
-            for(auto pol:_indeksSifraOsobe)
-                if(pol.second->Pol()!=Pol)
-                    Osobe->push_back(pol.first);
-        }
-        if(tip==1){
-            //Sve ciji je pol jednak
-            for(auto pol:_indeksSifraOsobe)
-                if(pol.second->Pol()==Pol)
-                    Osobe->push_back(pol.first);
-        }
-
-        return Osobe;
-
+std::vector<short>* PorodicnoStablo::PretragaPoDatumuSmrti(const QDate& DatSmrti,int tip){
+    std::vector<short> *Osobe= new std::vector<short>();
+    if(tip==0){
+        //Sve ciji je datum smrti pre zadatog
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumSmrti()<DatSmrti)
+                Osobe->push_back(datum.first);
+    }
+    if(tip==1){
+        //Sve ciji je datum smrti jednak zadatom
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumSmrti()==DatSmrti)
+                Osobe->push_back(datum.first);
+    }
+    if(tip==2){
+        //Sve ciji je datum smrti posle zadatog
+        for(auto datum:_indeksSifraOsobe)
+            if(datum.second->DatumSmrti()>DatSmrti)
+                Osobe->push_back(datum.first);
+    }
+    return Osobe;
+}
+std::vector<short>* PorodicnoStablo::PretragaPoPolu(const QChar& Pol,int tip){
+    std::vector<short> *Osobe= new std::vector<short>();
+    if(tip==0 || tip==2){
+        //Sve ciji je pol razlicit
+        for(auto pol:_indeksSifraOsobe)
+            if(pol.second->Pol()!=Pol)
+                Osobe->push_back(pol.first);
+    }
+    if(tip==1){
+        //Sve ciji je pol jednak
+        for(auto pol:_indeksSifraOsobe)
+            if(pol.second->Pol()==Pol)
+                Osobe->push_back(pol.first);
     }
 
-    std::vector<short> *PorodicnoStablo::NisuKrvniSrodnici()
+    return Osobe;
+
+}
+
+std::vector<short> *PorodicnoStablo::NisuKrvniSrodnici()
+{
+    std::vector<short> *Osobe= new std::vector<short>();
+    for(auto osobe:_indeksSifraOsobe)
+        if(!osobe.second->JeKrvniSrodnik())
+            Osobe->push_back(osobe.first);
+    return Osobe;
+}
+
+bool PorodicnoStablo::jeDeteOd(short sifraPrve, short sifraDruge)
+{
+    auto ppp= _indeksOsobaBrak.equal_range(sifraPrve);
+    auto it=ppp.first;
+    for(;it!=ppp.second;++it)
     {
-        std::vector<short> *Osobe= new std::vector<short>();
-        for(auto osobe:_indeksSifraOsobe)
-            if(!osobe.second->JeKrvniSrodnik())
-                Osobe->push_back(osobe.first);
-        return Osobe;
+        auto pp2= _indeksBrakDeca.equal_range((*it).second);
+        auto it2=pp2.first;
+        for(;it2!=pp2.second;++it2){
+
+            if(NadjiDeteSifrom((*it2).second)->SifraOsobe()==sifraDruge)return true;
+        }
     }
+    return false;
+}
+
+bool PorodicnoStablo::jeRoditeljOd( short sifraPrve,  short sifraDruge)
+{
+    return jeDeteOd(sifraDruge,sifraPrve);
+}
+
+bool PorodicnoStablo::jeSupruznikOd(short sifraPrve, short sifraDruge)
+{
+    auto ppp= _indeksOsobaBrak.equal_range(sifraPrve);
+    auto it=ppp.first;
+    for(;it!=ppp.second;++it)
+    {
+        Brak* brak=NadjiBrakSifrom((*it).second);
+        if(brak->SifraNase()==sifraDruge||brak->SifraTudje()==sifraDruge)return true;
+    }
+    return false;
+}
 
 
