@@ -54,7 +54,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     //-------Pravi se stablo i korena osoba-------//
     GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
                                 *(stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
-    korena->setPos(pogled->mapToScene(pogled->viewport()->rect().center()));
+    QPointF centar(pogled->viewport()->rect().center());
+    korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
     korena->setZValue(2);
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = korena;
@@ -869,34 +870,16 @@ void GlavniProzor::urediStablo()
     uredjivanje u;
     sirine = u.IzracunajSirinuCelije(nivoi, stablo->maxBrakova()+1);
 
-//    for (int s : *sirine)
-//        qDebug() << s;
-
     QPointF centar = pogled->mapToScene(pogled->viewport()->rect().center());
 
-    short sifraKljucne = stablo->KljucnaOsoba()->Sifra();
 
-    pomeriOsobu(sifraKljucne, QPointF(centar.x()-sirine->at(0)/2, centar.y()), 0);
-//    _pozicijeOsoba[sifraKljucne]->setPos(centar);
-//    _pozicijeOsoba[sifraKljucne]->obavestiRelacije();
-//    std::vector<short> *supruznici = stablo->ListaSupruznika(sifraKljucne);
-//    int broj = supruznici->size();
-//    for (int i = 0; i < broj; i++)
-//    {
-//        _pozicijeOsoba[(*supruznici)[i]]->setPos(centar.x() + (i+1)*(*sirine)[0]/(broj+1), centar.y());
-//        _pozicijeOsoba[supruznici->at(i)]->obavestiRelacije();
-//    }
-//    delete supruznici;
-//    //i sad pokrecemo pomeranje
-//    //tj korena i njeni supruznici (posto nema brace jel) se rasporede u prvu celiju
-//    //a ona poziva isti metod za svoju decu
-//    std::vector<short> *deca = stablo->ListaDece(sifraKljucne);
-//    broj = deca->size();
-//    for (int i = 0; i < broj; i++)
-//    {
-//        pomeriOsobu(deca->at(i), QPointF(centar.x() + i*sirine->at(1), centar.y() + 140));
-//    }
-//    delete deca;
+    short sifraKljucne = stablo->KljucnaOsoba()->Sifra();
+    QPointF pozicija(centar.x() - 85*stablo->osobaImaBrakova(sifraKljucne), centar.y());
+    scena->setSceneRect(0,0,std::max(u.Sirina()+200, pogled->width()), std::max(pogled->height(), (int)nivoi.size()*200));
+
+    pomeriOsobu(sifraKljucne, pozicija, 0);
+
+    pogled->centerOn(_pozicijeOsoba[sifraKljucne]);
 }
 
 //osoba te sifre se smesta sa svojim supruznicima u svoj pravougaounik
