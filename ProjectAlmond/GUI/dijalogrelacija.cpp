@@ -7,7 +7,9 @@ DijalogRelacija::DijalogRelacija(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->retranslateUi(this);
-        retranslate();
+    retranslate();
+    setModal(true);
+    setWindowTitle(tr("Unesite podatke o novoj relaciji"));
 
     popuniDugmice();
 }

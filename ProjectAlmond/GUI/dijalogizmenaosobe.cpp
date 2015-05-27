@@ -12,6 +12,7 @@ DijalogIzmenaOsobe::DijalogIzmenaOsobe(Osoba *osoba, QWidget *parent) :
     ui->retranslateUi(this);
        retranslate();
     setModal(true);
+    setWindowTitle(tr("Izmenite podatke"));
     _osoba = osoba;
     popuniDugmice();
     popuniPolja();

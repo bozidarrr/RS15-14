@@ -104,8 +104,10 @@ public Q_SLOTS:
     void urediStablo();
     //-----INTERAKCIJA-----//
     //-----Menjanje prikazanih osoba-----//
-    void prikaziSlavljenike();
+    void prikaziSlavljenike(const QDate &datum);
     void prikaziSakrijTudje();
+
+    void izvrsiPretragu();
 };
 
 #endif // GLAVNIPROZOR_H
