@@ -797,14 +797,14 @@ void GlavniProzor::retranslate()
 {
 
 
-   // toolbar->tr("Alati");
-    //alati->tr("Alati");
-    //info ->tr("Informacije");
+  alati->setWindowTitle(tr("Alati"));
+
+    info ->setWindowTitle(tr("Informacije"));
 
 
 
-  //  Labela->setText(tr("Informacije"));
-    // Labela->setToolTip(tr("Ovde mozete pronaci informacije o trenutno aktivnoj osobi"));
+    ui->zaInformacije->setPlaceholderText(tr("Informacije"));
+    ui->zaInformacije->setToolTip(tr("Ovde mozete pronaci informacije o trenutno aktivnoj osobi"));
        this->setWindowTitle(tr("Project Almond[*]"));
 
      tbMuzZena->setToolTip(tr("Dodajte u stablo supruznika nekoj od osoba"));
