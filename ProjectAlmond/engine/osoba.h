@@ -7,20 +7,6 @@
 #include <QDate>
 #include<QDataStream>
 
-/**
- *  static short int _sledecaSifra;
-    int _sifra;
-    bool _nepoznata;
-    std::string _ime;
-    std::string _prezime;
-    char _pol;
-    QDate _datumRodjenja;
-    QDate _datumSmrti;
-    bool _krvniSrodnik;
- *
- *
-**/
-
 class Osoba
 {
 public:
@@ -69,13 +55,7 @@ public:
     //---metodi korisni u upotrebi---//
 
     //----metodi potrebni za brisanje----//
-    //bool Raskini(Brak* razvod);//posto se brise podatak o braku, zahteva se od osobe da ukloni pokazivac za brak iz svog spiska
-
-    //bool ObrisiPoreklo(); //brise podatke o relacionom objektu dete
-
-    //bool RaskiniSveVeze(); //brise sve veze, zarad pripreme za brisanje na vecoj skali
-
-    bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
+      bool VecSeBrisem(); //proverava da li je vec pozvan destruktor, da ne bi dva puta oslobadjali
     //void PreskociRazvezivanje();
     //----metodi potrebni za brisanje----//
 

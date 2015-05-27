@@ -19,7 +19,7 @@ GRelacija::~GRelacija()
 QRectF GRelacija::boundingRect() const
 {
     qreal d = 1;
-    return QRectF(-20-d, -20-d, 40+d, 40+d);
+    return QRectF(-30-d, -30-d, 60+d, 60+d);
 }
 
 void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -27,7 +27,6 @@ void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->setPen(Qt::darkGreen);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);
-    //painter->drawRect(-20, -20, 40, 40);
     QRect okvir(-30, -30, 60, 60);
     QPixmap slika;
     if(_brak)

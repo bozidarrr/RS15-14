@@ -70,11 +70,13 @@ public:
     void UkloniDeteSifrom(const short sifra);
 
     //metod koji vraca broj supruznika osobe sa tom sifrom, trebace u GUI-ju
-    int osobaImaBrakova(const short sifra) const;
+    int osobaImaBrakova(const short sifra);
     //vraca listu sve dece date osobe
-    std::vector<short>* ListaDece(const short sifra) const;
+    std::vector<short>* ListaDece(const short sifra);
     //vraca max broj supruznika koje neka osoba u stablu ima
-    int maxBrakova() const;
+    int maxBrakova();
+    //vraca listu sifara supruznika
+    std::vector<short> *ListaSupruznika(const short sifra);
 
 
     std::vector<short>* KomeJeSveRodjendan(const QDate& datum);

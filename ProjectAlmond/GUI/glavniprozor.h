@@ -81,7 +81,7 @@ private:
     std::vector<int>* sirine;
 
     //osobu te sifre postavlja gde treba
-    void pomeriOsobu(short int sifra, int x);
+    void pomeriOsobu(short int sifra, QPointF pocetak, int nivo);
 
 public Q_SLOTS:
     //-----Toolbar, Menubar...-----//
