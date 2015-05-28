@@ -5,10 +5,10 @@
 
 PorodicnoStablo::PorodicnoStablo()
 {
-    _kljucnaOsoba = new Osoba();
+    _kljucnaOsoba = nullptr;
     InicijalizujSveStrukture();
-    (_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
-    _nivoi.push_back(1);
+    //(_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
+    //_nivoi.push_back(1);
 }
 
 PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol,
@@ -40,7 +40,7 @@ Osoba * PorodicnoStablo::KljucnaOsoba()
 {
     return _kljucnaOsoba;
 }
-
+/*
 short int PorodicnoStablo::DodajKljucnuOsobu(const QString &ime, const QString &prezime, const QString &pol,
                             const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
 {
@@ -57,7 +57,7 @@ short int PorodicnoStablo::DodajKljucnuOsobu(const QString &ime, const QString &
     std::cout << _kljucnaOsoba->Sifra() << std::endl;
     std::cout << _kljucnaOsoba->Ime().toStdString() << std::endl;
     return _kljucnaOsoba->Sifra();
-}
+}*/
 
 //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
 short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
@@ -453,7 +453,8 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
     QDataStream izlaz(&fajl);
     izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
 
-    izlaz <<* _kljucnaOsoba;
+    if (_kljucnaOsoba != nullptr)//ako je prazno stablo!!!
+        izlaz <<* _kljucnaOsoba;
     std::cout<<"ispisala kjucnu\n";
 
     //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;

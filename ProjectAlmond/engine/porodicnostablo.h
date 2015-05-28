@@ -28,7 +28,7 @@ public:
     Osoba * KljucnaOsoba();
 
     //dodaje kljucnu osobu, ovo samo kada je prazno
-    short int DodajKljucnuOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik = true);
+    //short int DodajKljucnuOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik = true);
 
 
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!

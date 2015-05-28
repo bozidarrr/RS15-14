@@ -134,11 +134,18 @@
      <string>O programu</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuSamo_test">
+    <property name="title">
+     <string>Samo test</string>
+    </property>
+    <addaction name="aKljucna"/>
+   </widget>
    <addaction name="mFajlovi"/>
    <addaction name="mPodesavanja"/>
    <addaction name="mPrikaz"/>
    <addaction name="mOProgramu"/>
    <addaction name="mPomoc"/>
+   <addaction name="menuSamo_test"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="aNovoStablo">
@@ -283,6 +290,11 @@
    </property>
    <property name="text">
     <string>Español</string>
+   </property>
+  </action>
+  <action name="aKljucna">
+   <property name="text">
+    <string>Dodajte kjucnu osobu</string>
    </property>
   </action>
  </widget>
