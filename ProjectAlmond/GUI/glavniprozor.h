@@ -114,9 +114,11 @@ public Q_SLOTS:
     void prikaziSakrijTudje();
 
     void izvrsiPretragu();
-
-
+    //ovo dole se poziva kada se neki brak obrise
     void izbrisiVezuIzIndeksa(short sifra);
+    //kreiranje kljucne osobe, to je moguce samo kada je stablo prazno
+    //na samom pocetku ili kada se tokom rada izbrise kljucna, a to znaci celo stablo
+    void napraviKljucnuOsobu();
 };
 
 #endif // GLAVNIPROZOR_H

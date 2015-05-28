@@ -43,6 +43,11 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     //i ovo cemo menjati, pravi se kad se unese prva osoba
     stablo = new PorodicnoStablo("Pera", "Detlic", "m",
                                  QDate::currentDate(), QDate::currentDate(), true);
+    //stablo = new PorodicnoStablo();//pravi prazno stablo, pa ako se ucita postojece krenemo odatle
+    //ili se pravi novo sto znaci da treba pozvati dijalog i napraviti kljucnu i postaviti je u stablu
+
+
+
 
     kreirajToolbar();
     kreirajMestoZaInfo();    
@@ -62,16 +67,54 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     //-------Pravi se stablo i korena osoba-------//
 
+       // napraviKljucnuOsobu();
+
    readSettings();
    retranslate();
 }
 
 GlavniProzor::~GlavniProzor()
 {
-    if (stablo != nullptr)
-        delete stablo;
+    //if (stablo != nullptr)
+    //    delete stablo;
     delete ui;
 
+}
+
+void GlavniProzor::napraviKljucnuOsobu()
+{
+    short int novaSifra = -1;
+    GOsoba *kljucna = nullptr;
+    DialogNovaOsoba *d = new DialogNovaOsoba(this);
+    if (d->exec())
+    {
+        QString ime, prezime;
+        QDate rodjenje, smrt;
+        QString pol;
+
+        if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
+        {
+            novaSifra = stablo->DodajKljucnuOsobu(ime, prezime, pol, rodjenje, smrt, true);
+
+        }
+        else
+            ui->statusBar->showMessage("Podaci moraju biti poznati za korenu osobu");
+        if (novaSifra >= 0)
+        {
+            qDebug() << "novaSifra";
+            kljucna = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
+            QPointF centar(pogled->viewport()->rect().center());
+            kljucna->setPos(pogled->mapToScene(centar.x(), centar.y()));
+            kljucna->setZValue(2);
+            scena->addItem(kljucna);
+            _pozicijeOsoba[kljucna->Sifra()] = kljucna->pos();
+            _osobe[kljucna->Sifra()] = kljucna;
+            connect(stablo, SIGNAL(obrisanaOsoba(short)), kljucna, SLOT(skloniSeSaScene(short)));
+
+            //AKO JE SVE PROSLO KAKO TREBA, TEK SADA OMOGUCITI OSTALE AKTIVNOSTI?
+        }
+    }
+    delete d;
 }
 
 void GlavniProzor::popuniInformacije(short sifra, TipZaInfo tip)
@@ -435,6 +478,7 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
     //stablo -> vrati mi pozicije
     RekonstruisiStablo();
+    uredjeno = false;
     return true;
 }
 
