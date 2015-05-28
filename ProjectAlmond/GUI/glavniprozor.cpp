@@ -211,7 +211,7 @@ void GlavniProzor::kreirajToolbar()
     tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili odnosu");
     tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
     tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
-
+    tbSrodstvo=kreirajJedanAlat(tbSrodstvo,"Srodstvo","Odredite tip srodstva izmedju dve odabrane osobe");
     tbUredi->setCheckable(false);
 
     grpToolBar->addButton(tbRoditeljDete);
@@ -221,6 +221,7 @@ void GlavniProzor::kreirajToolbar()
     grpToolBar->addButton(tbDetalji);
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
+    grpToolBar->addButton(tbSrodstvo);
 
     toolbar->addWidget(tbMuzZena);
     toolbar->addWidget(tbRoditeljDete);
@@ -231,7 +232,10 @@ void GlavniProzor::kreirajToolbar()
     toolbar->addWidget(tbBrisi);
     toolbar->addSeparator();
     toolbar->addWidget(tbUredi);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbSrodstvo);
     toolbar->addWidget(tbDetalji);
+
 
     tbDetalji->setChecked(true);
 
@@ -937,7 +941,7 @@ void GlavniProzor::retranslate()
     tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili odnosu"));
     tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
     tbUredi->setToolTip(tr("Rasporedite cvorove stabla automatski"));
-
+    tbSrodstvo->setToolTip(tr("Odredite tip srodstva izmedju dve odabrane osobe"));
 }
 
 void GlavniProzor::osveziPrikazAlata(bool Vidljivost)
@@ -1098,6 +1102,27 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             _pozicijeBrakova[brak.first] = _brakovi.at(brak.first)->pos();
         setWindowModified(true);
     }
+    if(tbSrodstvo->isChecked())
+    {
+        GOsoba *item = qgraphicsitem_cast<GOsoba*>(pogled->itemAt(prva));
+        if (item == nullptr)
+        {
+            tbDetalji->setChecked(true);
+            return;
+        }
+        GOsoba *item2 = qgraphicsitem_cast<GOsoba*>(pogled->itemAt(druga));
+        if (item2 == nullptr)
+        {
+            tbDetalji->setChecked(true);
+            return;
+        }
+        TrazenjePuta t(stablo);
+        t.OsveziMatricuPuteva();
+        ui->zaInformacije->clear();
+        ui->zaInformacije->append(stablo->NadjiOsobuSifrom(item2->Sifra())->ImePrezime() +" je "+t.tipSrodstva(item->Sifra(),item2->Sifra())+
+                                  " od osobe "+stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime());
+
+    }
     tbDetalji->setChecked(true);
 }
 
@@ -1106,7 +1131,7 @@ void GlavniProzor::urediStablo()
     if (uredjeno)//popravice se ovo
         return;
     //idemo po nivoima
-    //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
+    //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)>>da bi ovi iz Dubaia kupili nas program :P
     //
     //na osnovu toga im preracunavam koordinate
     if (ui->aPreciGore->isChecked())

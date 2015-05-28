@@ -828,14 +828,14 @@ bool PorodicnoStablo::jeBratSestraOd(short sifraPrve, short sifraDruge)
 
     for(;it!=ie;++it)
     {
-        if(jeDeteOd(sifraPrve,(*it).first))
+        if(jeRoditeljOd(sifraPrve,(*it).first))
         {
             sifraOca=(*it).first;
             break;
         }
     }
 
-    if(sifraOca!=-1 && jeDeteOd(sifraDruge,sifraOca))return true;
+    if(sifraOca!=-1 && jeRoditeljOd(sifraDruge,sifraOca))return true;
 
 
     return false;
