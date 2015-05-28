@@ -64,7 +64,7 @@ private:
     void obnoviSkoroOtvarane();//recentFileList
     bool otvoriFajl(const QString &imeFajla);//otvaranje fajla
     void postaviTrenutniFajl(const QString &imeFajla);
-    void writeSettings();//cuva pozicije widgeta, recent files, itd... Smisliti prevod imena :)
+    void writeSettings();//cuva pozicije widgeta, recent files...
     void readSettings();//cita ovo gore pri konstrukciji
 
     void RekonstruisiStablo();//nakon sto podatke ucitamo u enginu
@@ -75,8 +75,7 @@ private:
     short ukloniOsobu(short sifra);
     short dodajNovoDete(GRelacija *brak, GOsoba *dete);
     short dodajNoviBrak(GOsoba *prva, GOsoba *druga);
-    //GRelacija* dodajNovoDete(GRelacija *brak, GOsoba *dete);
-    //GRelacija* dodajNoviBrak(GOsoba *prva, GOsoba *druga);
+
 
     Stablo *pogled;
     QGraphicsScene *scena;
@@ -109,9 +108,7 @@ public Q_SLOTS:
     void vucenoStablo(QPoint prva, QPoint druga);
     void urediStablo();
     //-----INTERAKCIJA-----//
-    //-----Menjanje prikazanih osoba-----//
-    void prikaziSlavljenike(const QDate &datum);
-    void prikaziSakrijTudje();
+
 
     void izvrsiPretragu();
     //ovo dole se poziva kada se neki brak obrise

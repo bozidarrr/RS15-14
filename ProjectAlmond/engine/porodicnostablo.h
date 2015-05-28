@@ -27,31 +27,11 @@ public:
 
     Osoba * KljucnaOsoba();
 
-    //dodaje kljucnu osobu, ovo samo kada je prazno
-    //short int DodajKljucnuOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik = true);
-
-
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
     short int DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate rodjenje, const QDate smrt, bool krvniSrodnik);
     //slicno, samo pravi NN lice
     short int DodajNNLice(bool krvniSrodnik);
 
-    /*
-    na ovo sam mislila
-    short int DodajBS(short int sifraOsobe, std::string trivija="")
-    {
-        Osoba* osoba = NadjiOsobuSifrom(sifraOsobe);
-        if (osoba->RoditeljskiOdnos() == nullptr)
-            {
-                ne znam,
-                short int sifraBraka = DodajBrak(DodajNNLice(), DodajNNLice());
-                DodajDete(sifraOsobe, sifraBraka); -- ova nasa kojoj dodajemo brata, ne ide ovako, ali nebitno
-                return DodajDete(sifraBraka); -- onaj novi
-            }
-        return DodajDete(osoba->RoditeljskiOdnos().Sifra(), trivija);
-    }
-    Mislim da nije problem da ostavimo opciju brat sestra u GUI-u, nije tesko, a cini mi se da bi bilo zgodno imati
-    */
 
     //dodaje relaciju dete, od braka do osobe
     short int DodajDete(const short sifraBraka, const short sifraOsobe, const QString &trivija="");
@@ -149,8 +129,8 @@ private:
     void ObrisiBrakove(short sifra, bool iSupruznike);//ako je krvni srodnik, brise mu supruznika; ako nije, brise bas brak
     void ObrisiDecu(short sifra);//poziva brisanje svakog deteta date osobe
 
-    //std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
-    std::vector<int> _nivoi;//VELIKI PROBLEM - dodati da se i ovo ucitava!!!
+
+    std::vector<int> _nivoi;
 
 signals:
     void obrisanaOsoba(short sifra);

@@ -34,10 +34,10 @@ std::vector<short>& TrazenjePuta::operator()(short sifraPocetne,short sifraTraze
     std::reverse(_put.begin(),_put.end());
 
     //std::cout<<sifraPocetne<<" --> "<<sifraTrazene<<std::endl;
-    std::cout<<"Put izmedju trazenih osoba: ";
+   /* std::cout<<"Put izmedju trazenih osoba: ";
     for(int i=0;i<_put.size();i++)std::cout<<_put[i]<<' ';
     std::cout<<std::endl;
-
+*/
     return _put;
 }
 
