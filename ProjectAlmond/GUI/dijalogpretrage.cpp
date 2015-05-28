@@ -20,7 +20,7 @@ DijalogPretrage::~DijalogPretrage()
 
 void DijalogPretrage::procitajPodatke(int &opcija, int &kriterijum, QString &podatak)
 {
-    opcija = ui->IzaberiOpciju->currentIndex();//0 ime, 1 prezime, 2 datum rodjenja, 3 datum smrti, 4 pol NAPRAVITI NEKI ENUM ILI NESTO
+    opcija = ui->IzaberiOpciju->currentIndex();//0 ime, 1 prezime, 2 datum rodjenja, 3 datum smrti, 4 pol
     kriterijum = ui->IzaberiKriterijum->currentIndex();//< = >
     if (opcija == 2 || opcija == 3)
         podatak = ui->unosDatum->date().toString("dd.MM.yyyy.");
@@ -31,7 +31,7 @@ void DijalogPretrage::procitajPodatke(int &opcija, int &kriterijum, QString &pod
 void DijalogPretrage::tekstIliDatum()
 {
     int k = ui->IzaberiOpciju->currentIndex();
-    qDebug() << k;
+    //qDebug() << k;
     ui->unosDatum->setVisible(k == 3 || k == 2);
     ui->unosText->setVisible(k == 0 || k == 1 || k == 4);
 }
