@@ -112,6 +112,7 @@ QDataStream& operator<<(QDataStream &out,Brak& brak)
     out << qint32(brak.SifraNase());
     out << qint32(brak.SifraTudje());
     out << brak._trivija;
+    out << qint32(brak._nivo);
     return out;
 }
 
@@ -126,6 +127,8 @@ QDataStream& operator>>(QDataStream &in,Brak& brak)
     in >> broj;
     brak._sifraTudje=(short)broj;
     in >> brak._trivija;
+    in >> broj;
+    brak._nivo = short(broj);
     return in;
 }
 

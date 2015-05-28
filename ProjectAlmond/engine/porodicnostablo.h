@@ -119,8 +119,8 @@ public:
 
 
 private:
-    std::map<short, QPointF> mapaOsobe;
-    std::map<short, QPointF> mapaBrakovi;
+    std::map<short, QPointF> mapaOsobe;//za ucitavnje
+    std::map<short, QPointF> mapaBrakovi;// i iscitavanje
 
     Osoba *_kljucnaOsoba;//osoba cije se porodicno stablo kreira
 
@@ -134,20 +134,17 @@ private:
     std::map<short int, Dete* > _indeksSifraDete;//mapa koja vezuje sifru deteta za konkretan relacioni objekat dete
     //-----OVE STALNO AZURIRAMO------//
     //-----OVE DOLE NE!!!! zato uvek konsultovati prva tri------//
-    //mozda da umesto brisanja iz ovih uvedemo ivalidaciju, tipa promenimo vrednost_sifru na -1... //
-    //uvesti periodicno osvezavanje ovih indeksa?...//
     std::multimap<short int, short int> _indeksOsobaBrak;//mapa koja vezuje sifru osobe sa siframa njenih brakova
     std::multimap<short int, short int> _indeksBrakDeca;//mapa koja vezuje sifru braka sa siframa njegove dece(ali osoba!)
-    //std::multimap<QDate, short> _indeksRodjenje;//mapa koja vezuje datum i sve osobe rodjene tog dana !Da li nam i ovaj treba?
     std::multimap<int, short> _indeksRodjendan;//mapa vezuje dan [1,366] sa sifrom osobe rodjenom tog dana
 
 
     //--------------------INDEKSI------------------------//
 
     void InicijalizujSveStrukture();
-    void SpaliCeloStablo();
-    void ObrisiBrakove(short sifra, bool iSupruznike);
-    void ObrisiDecu(short sifra);
+    void SpaliCeloStablo();//kao destruktor, unistava sve iz stabla ali ne i njega
+    void ObrisiBrakove(short sifra, bool iSupruznike);//ako je krvni srodnik, brise mu supruznika; ako nije, brise bas brak
+    void ObrisiDecu(short sifra);//poziva brisanje svakog deteta date osobe
 
     //std::map<short, int> _nivoOsoba; //vezuje nivo, pocev od nultog (korena), sa brojem krvnih srodnika u njemu
     std::vector<int> _nivoi;//VELIKI PROBLEM - dodati da se i ovo ucitava!!!
@@ -160,6 +157,7 @@ signals:
 public Q_SLOTS:
     void azurirajIndeksRodj(const QDate &stari, const QDate &novi, const short sifra);
     std::vector<short> sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,int sifraTrazene);
+
 
 };
 

@@ -408,6 +408,14 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     }
     std::cout << "ucitala veze pozicije" << std::endl;
 
+    //i ucitavam _nivoe
+    ulaz >> velicina;
+    for (int i = 0; i < velicina; i++)
+    {
+        qint32 broj;
+        ulaz >> broj;
+        _nivoi.push_back((int)broj);
+    }
     std::cout<<"Uspesno Procitano"<<std::endl;
     fajl.close();
     return true;
@@ -480,6 +488,11 @@ bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke ko
         izlaz << (qreal)b.second.y();
     }
 
+    //i ispisujemo _nivoe
+    izlaz << (qint32)_nivoi.size();
+    for (auto n : _nivoi)
+        izlaz << (qint32)n;
+
     fajl.close();
     std::cout<<"Uspesno ispisano" << std::endl;
     return true;
@@ -494,7 +507,6 @@ void PorodicnoStablo::InicijalizujSveStrukture()
     _indeksBrakDeca.clear();
     _indeksOsobaBrak.clear();
     _indeksRodjendan.clear();
-    //_indeksRodjenje.clear();
     _nivoi.clear();
 }
 
@@ -610,7 +622,6 @@ std::vector<short> PorodicnoStablo::sifreNaPutuOdOsobeDoOsobe(int sifraPocetne,i
     return Put;
 }
 
-
 std::map<short, Osoba*>& PorodicnoStablo::Osobe()
 {
     return _indeksSifraOsobe;
@@ -637,6 +648,7 @@ const std::multimap<short, short>& PorodicnoStablo::BrakDeca() const
 std::vector<int> PorodicnoStablo::Nivoi()
 {
     return _nivoi;
+
 }
 std::vector<short>* PorodicnoStablo::PretragaPoImenu(const QString& Ime,int tip){
     std::vector<short> *Osobe= new std::vector<short>();
