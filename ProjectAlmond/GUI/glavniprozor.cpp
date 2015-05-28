@@ -324,18 +324,20 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
         {
             novaRelacija = new GRelacija(novaSifra, prva->pos(), druga->pos(), true);
             _pozicijeBrakova[novaSifra] = novaRelacija->pos();
+            _brakovi[novaSifra] = novaRelacija;
         }
 
         if (novaRelacija != nullptr)
         {
             novaRelacija->setZValue(2);
             scena->addItem(novaRelacija);
+            connect(novaRelacija, SIGNAL(obrisiMe(short)), this, SLOT(izbrisiVezuIzIndeksa(short)));
             connect(prva, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriPrvu(QPointF)));
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
-        TrazenjePuta t(stablo);
-        t.OsveziMatricuPuteva();
+        //TrazenjePuta t(stablo);
+        //t.OsveziMatricuPuteva();
 
         //qDebug()<<t.tipSrodstva(0,1);//moram da nastavim posle, neka ostane ovde
 
@@ -442,6 +444,7 @@ void GlavniProzor::RekonstruisiStablo()
     _pozicijeOsoba.clear();
     _osobe.clear();
     _pozicijeBrakova.clear();
+    _brakovi.clear();
     _pozicijeOsoba = stablo->vratiPozicijeOsoba();
     _pozicijeBrakova = stablo->vratiPozicijeBrakova();
     for (auto a : stablo->Osobe())
@@ -460,12 +463,14 @@ void GlavniProzor::RekonstruisiStablo()
         QPointF druga(_pozicijeOsoba.at(brak->SifraTudje()));
         GRelacija *g = new GRelacija(b.first, prva, druga ,true);
         g->setPos(_pozicijeBrakova[b.first]);
+        _brakovi[b.first] = g;
         g->setZValue(1);
         scena->addItem(g);
 
         connect(_osobe.at(brak->SifraNase()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
         connect(_osobe.at(brak->SifraTudje()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
         connect(stablo, SIGNAL(obrisanaVezaBrak(short)), g, SLOT(ukloniSeSaScene(short)));
+        connect(g, SIGNAL(obrisiMe(short)), this, SLOT(izbrisiVezuIzIndeksa(short)));
 
     }
     for (auto d : stablo->Deca())
@@ -478,7 +483,7 @@ void GlavniProzor::RekonstruisiStablo()
         scena->addItem(g);
         g->setZValue(1);
         /** dopuniti ovaj connect **/
-        //connect(dete->SifraRoditeljskogOdnosa(), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
+        connect(_brakovi.at(dete->SifraRoditeljskogOdnosa()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriPrvu(QPointF)));
         connect(_osobe.at(dete->SifraOsobe()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
         connect(stablo, SIGNAL(obrisanaVezaDete(short)), g, SLOT(ukloniSeSaScene(short)));
     }
@@ -1034,6 +1039,11 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         item->moveBy(druga.x()-prva.x(), druga.y()-prva.y());
         uredjeno = false;
         item->obavestiRelacije();
+        //azuriramo pozicije
+        _pozicijeOsoba[item->Sifra()] = item->pos();
+        //i moze ovo efikasnije al da vidim da li radi
+        for(auto brak:_pozicijeBrakova)
+            _pozicijeBrakova[brak.first] = _brakovi.at(brak.first)->pos();
         setWindowModified(true);
     }
     tbDetalji->setChecked(true);
@@ -1047,12 +1057,10 @@ void GlavniProzor::urediStablo()
     //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
     //
     //na osnovu toga im preracunavam koordinate
-    //int dodajVisinu = 1;
     if (ui->aPreciGore->isChecked())
         qDebug() <<"uredi preci gore";
     else{
         qDebug() << "uredi preci dole";
-        //dodajVisinu = -1;
     }
     std::vector<int> nivoi(stablo->Nivoi());
     uredjivanje u;
@@ -1066,6 +1074,10 @@ void GlavniProzor::urediStablo()
     scena->setSceneRect(0,0,std::max(u.Sirina()+200, pogled->width()), std::max(pogled->height(), (int)nivoi.size()*200));
 
     pomeriOsobu(sifraKljucne, pozicija, 0);
+
+    //i moze ovo efikasnije al da vidim da li radi
+    for(auto brak:_pozicijeBrakova)
+        _pozicijeBrakova[brak.first] = _brakovi.at(brak.first)->pos();
 
     pogled->centerOn(_osobe[sifraKljucne]);
 }
@@ -1083,6 +1095,8 @@ void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
     _osobe[sifra]->setPos(pocetak);
     _pozicijeOsoba[sifra] = pocetak;
     _osobe[sifra]->obavestiRelacije();
+
+    setWindowModified(true);
     std::vector<short> *supruznici = stablo->ListaSupruznika(sifra);
     int broj = supruznici->size();
     for (int i = 0; i < broj; i++)
@@ -1169,14 +1183,27 @@ void GlavniProzor::izvrsiPretragu()
                 ui->zaInformacije->setText(tr("Nema osoba koje ispunjavaju uslove pretrage"));
             else
             {
+                ui->zaInformacije->setText(tr("Osobe koje ispunjavaju uslove pretrage su:"));
 
-                ui->zaInformacije->setText(tr("Ima ih"));//ovo zavrsiti, tj oznaciti te osobe itd
-                //napravicu metod ispisi sve trazene, oznaci ih...
+                for (short sifra : *trazene)
+                {
+                    ui->zaInformacije->append(stablo->NadjiOsobuSifrom(sifra)->ImePrezime());
+                    _osobe.at(sifra)->promeniStil(GOsoba::SELEKTOVANA);//necemo ovako, samo da se vidi za sad nesto
+                }
             }
             delete trazene;
         }
     }
     delete d;
+}
+
+void GlavniProzor::izbrisiVezuIzIndeksa(short sifra)
+{
+    //ako se ukloni veza iz stabla mora se ukloniti iz ovih struktura takodje
+    if (_brakovi.find(sifra) != _brakovi.end())
+        _brakovi.erase(sifra);
+    if (_pozicijeBrakova.find(sifra) != _pozicijeBrakova.end())
+        _pozicijeBrakova.erase(sifra);
 }
 
 QStringList GlavniProzor::skoroOtvarani;

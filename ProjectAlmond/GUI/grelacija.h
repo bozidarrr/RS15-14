@@ -39,6 +39,7 @@ public Q_SLOTS:
 
 signals:
     void pomerilaSe(QPointF);
+    void obrisiMe(short);
 
 private:
     short _sifra;

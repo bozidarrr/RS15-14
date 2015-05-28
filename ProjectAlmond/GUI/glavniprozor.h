@@ -50,6 +50,7 @@ private:
 
 
     std::map<short int, GOsoba*> _osobe;
+    std::map<short, GRelacija*> _brakovi;
     std::map<short int, QPointF> _pozicijeOsoba;//<sifra_osobe, pozicija>
     std::map<short int, QPointF> _pozicijeBrakova;//<sifra_braka, pozicija>
 
@@ -113,6 +114,9 @@ public Q_SLOTS:
     void prikaziSakrijTudje();
 
     void izvrsiPretragu();
+
+
+    void izbrisiVezuIzIndeksa(short sifra);
 };
 
 #endif // GLAVNIPROZOR_H

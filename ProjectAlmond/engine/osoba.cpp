@@ -164,6 +164,7 @@ QDataStream& operator<<(QDataStream &out,Osoba& osoba)
     out << osoba._datumRodjenja.toString("dd.MM.yyyy.");
     out << osoba._datumSmrti.toString("dd.MM.yyyy.");
     out << osoba._krvniSrodnik;
+    out << (qint32)osoba._nivo;
     return out;
 }
 
@@ -183,7 +184,8 @@ QDataStream& operator>>(QDataStream &out,Osoba& osoba)
     out >> datum;
     osoba._datumSmrti = QDate::fromString(datum, "dd.MM.yyyy.");
     out >> osoba._krvniSrodnik;
-
+    out >> sif;
+    osoba._nivo = (short)sif;
     return out;
 }
 

@@ -63,6 +63,7 @@ void GRelacija::ukloniSeSaScene(short sifra)
         return;
     if (scene() != 0)
         scene()->removeItem(this);
+    emit obrisiMe(_sifra);
     deleteLater();
 }
 
