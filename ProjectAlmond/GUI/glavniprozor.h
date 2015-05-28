@@ -35,7 +35,7 @@ private:
     Ui::GlavniProzor *ui;
 
     QButtonGroup *grpToolBar;
-    QPushButton *tbOsoba, *tbMuzZena, *tbBratSestra, *tbRoditeljDete, *tbPomeranje, *tbDetalji, *tbBrisi, *tbMenjaj, *tbUredi;
+    QPushButton *tbOsoba, *tbMuzZena, *tbBratSestra, *tbRoditeljDete, *tbPomeranje, *tbDetalji, *tbBrisi, *tbMenjaj, *tbUredi,*tbSrodstvo;
     QToolBar *toolbar;
     QLabel *Labela;
     PorodicnoStablo *stablo;
