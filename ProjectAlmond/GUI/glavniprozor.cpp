@@ -41,21 +41,17 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
 
     //i ovo cemo menjati, pravi se kad se unese prva osoba
-    stablo = new PorodicnoStablo("Pera", "Detlic", "m",
-                                 QDate::currentDate(), QDate::currentDate(), true);
-    //stablo = new PorodicnoStablo();//pravi prazno stablo, pa ako se ucita postojece krenemo odatle
+    //stablo = new PorodicnoStablo("Pera", "Detlic", "m",
+    //                             QDate::currentDate(), QDate::currentDate(), true);
+    stablo = new PorodicnoStablo();//pravi prazno stablo, pa ako se ucita postojece krenemo odatle
     //ili se pravi novo sto znaci da treba pozvati dijalog i napraviti kljucnu i postaviti je u stablu
-
-
-
-
     kreirajToolbar();
     kreirajMestoZaInfo();    
     kreirajPogledZaStablo();
     kreirajOpcije();
     obnoviSkoroOtvarane();
     //-------Pravi se stablo i korena osoba-------//
-    GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
+  /**  GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
                                 (stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     QPointF centar(pogled->viewport()->rect().center());
     korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
@@ -63,11 +59,12 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     scena->addItem(korena);
     _pozicijeOsoba[korena->Sifra()] = korena->pos();
     _osobe[korena->Sifra()] = korena;
-    connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));
+    connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));**/
 
     //-------Pravi se stablo i korena osoba-------//
 
-       // napraviKljucnuOsobu();
+    connect(ui->aKljucna, SIGNAL(triggered()), this, SLOT(napraviKljucnuOsobu()));
+//       napraviKljucnuOsobu();
 
    readSettings();
    retranslate();
@@ -85,6 +82,7 @@ void GlavniProzor::napraviKljucnuOsobu()
 {
     short int novaSifra = -1;
     GOsoba *kljucna = nullptr;
+
     DialogNovaOsoba *d = new DialogNovaOsoba(this);
     if (d->exec())
     {
@@ -94,8 +92,9 @@ void GlavniProzor::napraviKljucnuOsobu()
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
         {
-            novaSifra = stablo->DodajKljucnuOsobu(ime, prezime, pol, rodjenje, smrt, true);
-
+            delete stablo;
+            stablo = new PorodicnoStablo(ime, prezime, pol, rodjenje, smrt, true);
+            novaSifra = stablo->KljucnaOsoba()->Sifra();
         }
         else
             ui->statusBar->showMessage("Podaci moraju biti poznati za korenu osobu");
@@ -111,7 +110,7 @@ void GlavniProzor::napraviKljucnuOsobu()
             _osobe[kljucna->Sifra()] = kljucna;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), kljucna, SLOT(skloniSeSaScene(short)));
 
-            //AKO JE SVE PROSLO KAKO TREBA, TEK SADA OMOGUCITI OSTALE AKTIVNOSTI?
+            ui->aKljucna->setDisabled(true);
         }
     }
     delete d;
@@ -478,6 +477,7 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
     //stablo -> vrati mi pozicije
     RekonstruisiStablo();
+    ui->aKljucna->setEnabled(_osobe.empty());
     uredjeno = false;
     return true;
 }
