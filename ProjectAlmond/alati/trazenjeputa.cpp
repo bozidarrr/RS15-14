@@ -144,6 +144,24 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
                 return QString("sestra");
             else
                 return QString("brat");}
+        else if(razlika==-1)
+        {
+            if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()!='M')
+            {
+                if(trazenaJeZensko)
+                    return QString("ujna");
+                else
+                    return QString("teca");
+            }
+            else
+            {
+                if(trazenaJeZensko)
+                    return QString("strina");
+                else
+                    return QString("teca");
+            }
+
+        }
 
         break;
     case 4:
@@ -253,7 +271,7 @@ void TrazenjePuta::OsveziMatricuPuteva()
 
 
     }
-    std::cout<<_stablo->Brakovi().size()<<std::endl;
+  // std::cout<<_stablo->Brakovi().size()<<std::endl;
     std::map<short, Brak*>::iterator brak=_stablo->Brakovi().begin();
     std::map<short, Brak*>::iterator krajBraka=_stablo->Brakovi().end();
     //postavljanje direktnih veza
@@ -294,7 +312,7 @@ void TrazenjePuta::OsveziMatricuPuteva()
     for(int k=0;k<n;k++){
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-                if(_duzine[i][k]!=-1 && _duzine[k][j]!=-1 &&(_duzine[i][j]==-1 || _duzine[i][j]>_duzine[i][k]+_duzine[k][j]))
+                if(_duzine[i][k]!=-1 && _duzine[k][j]!=-1 && (_duzine[i][j]==-1 || _duzine[i][j]>_duzine[i][k]+_duzine[k][j]))
                 {
                     _duzine[i][j]=_duzine[i][k]+_duzine[k][j];
                     _putevi[i][j]=k;

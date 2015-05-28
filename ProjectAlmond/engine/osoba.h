@@ -47,6 +47,7 @@ public:
     void PromeniDatumRodjenja(const QDate &datum);
     void PromeniDatumSmrti(const QDate &datum);
     void PostaviRoditeljskuSifru(const short sifra);//racunamo da se ovo radi jednaput
+    bool JeNepoznata();
     //----geteri i seteri------//
 
     //---metodi korisni u upotrebi---//
