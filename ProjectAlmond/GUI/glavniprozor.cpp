@@ -245,7 +245,7 @@ void GlavniProzor::kreirajMestoZaInfo()
     info = new QDockWidget(tr("Informacije"));
     /** bilo bi lepo da je malo uzi :) **/
     info->setWidget(ui->zaInformacije);
-    ui->zaInformacije->setPlaceholderText("Informacije");
+    ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
@@ -489,7 +489,7 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     return true;
 }
 
-//Jos ne radi sve sto treba, ali se cini da je na dobrom putu
+
 void GlavniProzor::RekonstruisiStablo()
 {
     _pozicijeOsoba.clear();
@@ -627,24 +627,20 @@ void GlavniProzor::kreirajPogledZaStablo()
 
 void GlavniProzor::novoStablo()
 {
-    //TO DO
-    //    if (nastaviti())
-    //        //qDebug() << "treba otvoriti novi fajl";
-    //    else
-    //        //qDebug() << "ne otvarati";
+
     GlavniProzor *w = new GlavniProzor();
     w->show();
 }
 
 void GlavniProzor::otvoriPostojeceStablo()
 {
-    //TO DO
+
     if (nastaviti())
     {
         ////qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
-                                                        tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
+                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"));
         if (!imeFajla.isEmpty())
         {
             ////qDebug() << "nasli fajl i treba  ga otvoriti";
@@ -679,7 +675,7 @@ bool GlavniProzor::sacuvajKao()
 {
     QString ekst("*.alm");
     QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo."),
-                                               ".", tr("Project Almond (*.alm)"),&ekst); //EKSTENZIJE
+                                               ".", tr("Project Almond (*.alm)"),&ekst);
     if (ime.isEmpty())
         return false;
     return snimiIzmene(ime);
@@ -1023,7 +1019,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText(tr("Informacije"));
-    if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
+    if (tbMuzZena->isChecked())
     {
         GOsoba *novaOsoba;
         GOsoba *staraOsoba = qgraphicsitem_cast<GOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
@@ -1130,8 +1126,8 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         TrazenjePuta t(stablo);
         t.OsveziMatricuPuteva();
         ui->zaInformacije->clear();
-        ui->zaInformacije->append(stablo->NadjiOsobuSifrom(item2->Sifra())->ImePrezime() +" je "+t.tipSrodstva(item->Sifra(),item2->Sifra())+
-                                  " od osobe "+stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime());
+        ui->zaInformacije->append(stablo->NadjiOsobuSifrom(item2->Sifra())->ImePrezime() +tr(" je ")+t.tipSrodstva(item->Sifra(),item2->Sifra())+
+                                  tr(" od osobe ")+stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime());
 
     }
     tbDetalji->setChecked(true);
@@ -1246,7 +1242,7 @@ void GlavniProzor::izvrsiPretragu()
                 for (short sifra : *trazene)
                 {
                     ui->zaInformacije->append(stablo->NadjiOsobuSifrom(sifra)->ImePrezime());
-                    _osobe.at(sifra)->dodajStil(GOsoba::SELEKTOVANA);//necemo ovako, samo da se vidi za sad nesto
+                    _osobe.at(sifra)->dodajStil(GOsoba::ODABRANA);
                 }
             }
             delete trazene;

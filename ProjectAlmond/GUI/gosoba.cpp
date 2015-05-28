@@ -18,16 +18,12 @@ QRectF GOsoba::boundingRect() const
     return QRectF(-_sirina/2-d, -_visina/2-d, _sirina+d, _visina+d);
 }
 
-//QPainterPath gOsoba::shape() const
-//{
-//    return QPainterPath();
-//}
 
 void GOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
-    //enum Stil { MUSKA = 0, ZENSKA=1, KORENA = 2, SELEKTOVANA = 4, NASA = 8, NEPOZNATA=16, SLAVLJENIK = 32};
+
    if(!(_ukljuceniFlegovi & SELEKTOVANA))//nije selektovana
    {
        _osnovnaBoja=Qt::darkGreen;
@@ -87,12 +83,11 @@ void GOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setRenderHint(QPainter::Antialiasing,false);
     painter->drawRoundedRect( rect.translated(0.5,0.5), 3.0, 3.0 );
     painter->setPen(_bojaTeksta);
-    painter->drawText(rect, Qt::AlignCenter | Qt::TextWordWrap, _ime);//doterati malo
+    painter->drawText(rect, Qt::AlignCenter | Qt::TextWordWrap, _ime);
 }
 
 int GOsoba::type() const
 {
-    //ovo da bi qgraphicscast funkcionisao
     return Type;
 }
 

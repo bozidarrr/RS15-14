@@ -7,6 +7,7 @@
 #include "engine/porodicnostablo.h"
 class TrazenjePuta:public QObject
 {
+    Q_OBJECT
 public:
     /*!
      * \brief TrazenjePuta kreira objekat za trazenje puteva i odnosa u stablu

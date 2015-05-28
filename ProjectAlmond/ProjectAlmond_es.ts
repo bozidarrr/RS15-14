@@ -368,16 +368,17 @@
         <location filename="GUI/glavniprozor.ui" line="242"/>
         <location filename="GUI/glavniprozor.cpp" line="188"/>
         <location filename="GUI/glavniprozor.cpp" line="233"/>
-        <location filename="GUI/glavniprozor.cpp" line="926"/>
+        <location filename="GUI/glavniprozor.cpp" line="922"/>
         <source>Alati</source>
         <translation>los útiles</translation>
     </message>
     <message>
         <location filename="GUI/glavniprozor.ui" line="253"/>
         <location filename="GUI/glavniprozor.cpp" line="245"/>
+        <location filename="GUI/glavniprozor.cpp" line="248"/>
+        <location filename="GUI/glavniprozor.cpp" line="924"/>
         <location filename="GUI/glavniprozor.cpp" line="928"/>
-        <location filename="GUI/glavniprozor.cpp" line="932"/>
-        <location filename="GUI/glavniprozor.cpp" line="1025"/>
+        <location filename="GUI/glavniprozor.cpp" line="1021"/>
         <source>Informacije</source>
         <translation>información</translation>
     </message>
@@ -408,7 +409,7 @@
     </message>
     <message>
         <location filename="GUI/glavniprozor.cpp" line="33"/>
-        <location filename="GUI/glavniprozor.cpp" line="934"/>
+        <location filename="GUI/glavniprozor.cpp" line="930"/>
         <source>Project Almond[*]</source>
         <translation>Project Almond[*]</translation>
     </message>
@@ -423,12 +424,12 @@
         <translation>Fecha de la muerte:</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="936"/>
+        <location filename="GUI/glavniprozor.cpp" line="932"/>
         <source>Dodajte u stablo supruznika nekoj od osoba</source>
         <translation>Añadir a los árboles cónyuge a una persona</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="937"/>
+        <location filename="GUI/glavniprozor.cpp" line="933"/>
         <source>Dodajte u neku vezu novo dete</source>
         <translation>Añadir un nuevo niño a la relación</translation>
     </message>
@@ -437,27 +438,27 @@
         <translation type="obsolete">Añadir al árbol un hermano o hermana a alguna persona</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="939"/>
+        <location filename="GUI/glavniprozor.cpp" line="935"/>
         <source>Pomerite rucicom odabranu osobu ili relaciju na crtezu</source>
         <translation>Muévete con la mano a una persona o relación seleccionada en la pantalla</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="940"/>
+        <location filename="GUI/glavniprozor.cpp" line="936"/>
         <source>Detalji o odabranoj osobi ili odnosu</source>
         <translation>Los detalles sobre persona o relación seleccionada</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="941"/>
+        <location filename="GUI/glavniprozor.cpp" line="937"/>
         <source>Izmenite podatke o odabranoj osobi ili odnosu</source>
         <translation>Cambia la información sobre la persona o relación seleccionada</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="942"/>
+        <location filename="GUI/glavniprozor.cpp" line="938"/>
         <source>Obrisite osobu ili relaciju iz stabla</source>
         <translation>Retire persona o relación del árbol</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="943"/>
+        <location filename="GUI/glavniprozor.cpp" line="939"/>
         <source>Rasporedite cvorove stabla automatski</source>
         <translation>Organizar los nodos del árbol de forma automática</translation>
     </message>
@@ -549,74 +550,84 @@
         <translation>Archivo cargado correctamente.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="646"/>
+        <location filename="GUI/glavniprozor.cpp" line="642"/>
         <source>Otvorite postojece stablo.</source>
         <translation>abre árbol existente.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="647"/>
+        <location filename="GUI/glavniprozor.cpp" line="643"/>
         <source>ProjectAlmond (*.alm)</source>
         <translation>ProjectAlmond(*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="681"/>
+        <location filename="GUI/glavniprozor.cpp" line="677"/>
         <source>Sacuvajte stablo.</source>
         <translation>guarda el árbol.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="682"/>
+        <location filename="GUI/glavniprozor.cpp" line="678"/>
         <source>Project Almond (*.alm)</source>
         <translation>Project Almond (*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="933"/>
+        <location filename="GUI/glavniprozor.cpp" line="929"/>
         <source>Ovde mozete pronaci informacije o trenutno aktivnoj osobi</source>
         <translation>Aquí puede encontrar información sobre la persona activa en el momento</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="938"/>
+        <location filename="GUI/glavniprozor.cpp" line="934"/>
         <source>Dodajte osobu koja ce biti koren stabla</source>
         <translation>Añadir una nueva persona raíz</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="944"/>
+        <location filename="GUI/glavniprozor.cpp" line="940"/>
         <source>Odredite tip srodstva izmedju dve odabrane osobe</source>
         <translation>Determinar el tipo de relación entre dos personas seleccionadas</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1038"/>
+        <location filename="GUI/glavniprozor.cpp" line="1034"/>
         <source>Moguce je dodati supruznika samo krvnim srodnicima.</source>
         <translation>Es posible añadir un cónyuge solamente a los parientes sanguíneos.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1050"/>
+        <location filename="GUI/glavniprozor.cpp" line="1046"/>
         <source>Dodavanje nove osobe u stablo je proslo uspesno.</source>
         <translation>Añadiendo nueva persona al árbol completado con éxito.</translation>
     </message>
     <message>
+        <location filename="GUI/glavniprozor.cpp" line="1056"/>
         <location filename="GUI/glavniprozor.cpp" line="1060"/>
-        <location filename="GUI/glavniprozor.cpp" line="1064"/>
         <source>Dodavanje nove osobe i relacije otkazano.</source>
         <translation>Añadiendo nueva persona y la relación cancelado.</translation>
     </message>
     <message>
+        <location filename="GUI/glavniprozor.cpp" line="1084"/>
         <location filename="GUI/glavniprozor.cpp" line="1088"/>
-        <location filename="GUI/glavniprozor.cpp" line="1092"/>
         <source>Dodavanje novog deteta otkazano.</source>
         <translation>Añadiendo nuevo hijo cancelado.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1237"/>
+        <location filename="GUI/glavniprozor.cpp" line="1129"/>
+        <source> je </source>
+        <translation> es </translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="1130"/>
+        <source> od osobe </source>
+        <translation> de persona </translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="1233"/>
         <source>Pretraga nije uradjena, pokusajte ponovo</source>
         <translation>Buscera no esta echa, intentar denuevo</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1241"/>
+        <location filename="GUI/glavniprozor.cpp" line="1237"/>
         <source>Nema osoba koje ispunjavaju uslove pretrage</source>
         <translation>Ninguna persona se ajusta a los criterios</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1244"/>
+        <location filename="GUI/glavniprozor.cpp" line="1240"/>
         <source>Osobe koje ispunjavaju uslove pretrage su:</source>
         <translation>Las personas que llenan los criterios de la buscera son:</translation>
     </message>
@@ -635,114 +646,114 @@
     <message>
         <location filename="alati/trazenjeputa.cpp" line="70"/>
         <source>cerka</source>
-        <translation type="unfinished"></translation>
+        <translation>hija</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="72"/>
         <source>sin</source>
-        <translation type="unfinished"></translation>
+        <translation>hijo</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="75"/>
         <source>majka</source>
-        <translation type="unfinished"></translation>
+        <translation>madre</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="77"/>
         <source>otac</source>
-        <translation type="unfinished"></translation>
+        <translation>padre</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="82"/>
         <source>zena</source>
-        <translation type="unfinished"></translation>
+        <translation>esposa</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="84"/>
         <source>muz</source>
-        <translation type="unfinished"></translation>
+        <translation>marido</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="89"/>
         <source>snaja</source>
-        <translation type="unfinished"></translation>
+        <translation>hijastra</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="91"/>
         <source>zet</source>
-        <translation type="unfinished"></translation>
+        <translation>yerno</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="97"/>
         <source>svekrva</source>
-        <translation type="unfinished"></translation>
+        <translation>suegra</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="99"/>
         <source>svekar</source>
-        <translation type="unfinished"></translation>
+        <translation>suegro</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="104"/>
         <source>tasta</source>
-        <translation type="unfinished"></translation>
+        <translation>suegra</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="106"/>
         <source>tast</source>
-        <translation type="unfinished"></translation>
+        <translation>suegro</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="116"/>
         <location filename="alati/trazenjeputa.cpp" line="123"/>
         <source>tetka</source>
-        <translation type="unfinished"></translation>
+        <translation>tía</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="118"/>
         <source>ujak</source>
-        <translation type="unfinished"></translation>
+        <translation>tío</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="125"/>
         <source>stric</source>
-        <translation type="unfinished"></translation>
+        <translation>tío</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="133"/>
         <source>baba</source>
-        <translation type="unfinished"></translation>
+        <translation>abuela</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="135"/>
         <source>deda</source>
-        <translation type="unfinished"></translation>
+        <translation>abuelo</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="140"/>
         <source>unuka</source>
-        <translation type="unfinished"></translation>
+        <translation>nieta</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="142"/>
         <source>unuk</source>
-        <translation type="unfinished"></translation>
+        <translation>nieto</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="146"/>
         <source>sestra</source>
-        <translation type="unfinished"></translation>
+        <translation>hermana</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="148"/>
         <source>brat</source>
-        <translation type="unfinished"></translation>
+        <translation>hermano</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="154"/>
         <location filename="alati/trazenjeputa.cpp" line="205"/>
         <source>ujna</source>
-        <translation type="unfinished"></translation>
+        <translation>tía</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="156"/>
@@ -750,84 +761,84 @@
         <location filename="alati/trazenjeputa.cpp" line="207"/>
         <location filename="alati/trazenjeputa.cpp" line="214"/>
         <source>teca</source>
-        <translation type="unfinished"></translation>
+        <translation>tío</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="161"/>
         <location filename="alati/trazenjeputa.cpp" line="212"/>
         <source>strina</source>
-        <translation type="unfinished"></translation>
+        <translation>tía</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="172"/>
         <source>prababa</source>
-        <translation type="unfinished"></translation>
+        <translation>bisabuela</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="174"/>
         <source>pradeda</source>
-        <translation type="unfinished"></translation>
+        <translation>bisabuelo</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="178"/>
         <source>praunuka</source>
-        <translation type="unfinished"></translation>
+        <translation>bisnieta</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="180"/>
         <source>praunuk</source>
-        <translation type="unfinished"></translation>
+        <translation>bisnieto</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="187"/>
         <source>sestricina</source>
-        <translation type="unfinished"></translation>
+        <translation>sobrina</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="189"/>
         <source>sestric</source>
-        <translation type="unfinished"></translation>
+        <translation>sobrino</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="194"/>
         <source>bratanica</source>
-        <translation type="unfinished"></translation>
+        <translation>sobrina</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="196"/>
         <source>bratanac</source>
-        <translation type="unfinished"></translation>
+        <translation>sobrino</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="223"/>
         <source>cukunbaba</source>
-        <translation type="unfinished"></translation>
+        <translation>bisabuela</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="225"/>
         <source>cukundeda</source>
-        <translation type="unfinished"></translation>
+        <translation>bisabuelo</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="229"/>
         <source>cukununuka</source>
-        <translation type="unfinished"></translation>
+        <translation>bisnieta</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="231"/>
         <source>cukununuk</source>
-        <translation type="unfinished"></translation>
+        <translation>bisnieto</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="238"/>
         <source>daleka rodjaka</source>
-        <translation type="unfinished"></translation>
+        <translation>prima lejano</translation>
     </message>
     <message>
         <location filename="alati/trazenjeputa.cpp" line="240"/>
         <location filename="alati/trazenjeputa.cpp" line="247"/>
         <source>daleki rodjak</source>
-        <translation type="unfinished"></translation>
+        <translation>primo lejano</translation>
     </message>
 </context>
 </TS>

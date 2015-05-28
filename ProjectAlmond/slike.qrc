@@ -12,5 +12,6 @@
         <file>images/DeteUokvireno.png</file>
         <file>images/BrakUokviren.png</file>
         <file>images/Srodstvo.ico</file>
+        <file>images/SplashScreen.png</file>
     </qresource>
 </RCC>
