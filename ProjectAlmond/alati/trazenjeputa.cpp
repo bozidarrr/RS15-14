@@ -1,5 +1,7 @@
 #include "trazenjeputa.h"
 
+
+
 TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
     :_stablo(stablo),_putevi(nullptr),_duzine(nullptr),_sifre(nullptr),_n(0)
 {}
@@ -45,7 +47,7 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
 {
     std::vector<short>& osobeIzmedju=operator()(sifraPocetne,sifraTrazene);
     int duzinaPuta=osobeIzmedju.size();
-    if(duzinaPuta<2)return QString("greska");
+    if(duzinaPuta<2)return QString(tr("greska"));
     bool trazenaJeZensko=_stablo->NadjiOsobuSifrom(sifraTrazene)->Pol()!='M';
     //bool trazenaJeNasa=_stablo->NadjiOsobuSifrom(sifraTrazene)->JeKrvniSrodnik();
     std::vector<short>::const_iterator prva=osobeIzmedju.cbegin();
@@ -65,43 +67,43 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
     case 2:
         if(_stablo->jeDeteOd(sifraPocetne,sifraTrazene))
             if(trazenaJeZensko)
-                return QString("cerka");
+                return QString(tr("cerka"));
             else
-                return QString("sin");
+                return QString(tr("sin"));
         else if(_stablo->jeRoditeljOd(sifraPocetne,sifraTrazene))
             if(trazenaJeZensko)
-                return QString("majka");
+                return QString(tr("majka"));
             else
-                return QString("otac");
+                return QString(tr("otac"));
 
 
          else
             if(trazenaJeZensko)
-                return QString("zena");
+                return QString(tr("zena"));
             else
-                return QString("muz");
+                return QString(tr("muz"));
         break;
     case 3:
         if(_stablo->jeDeteOd(sifraPocetne,osobeIzmedju[1]) && _stablo->jeSupruznikOd(osobeIzmedju[1],sifraTrazene)){
             if(trazenaJeZensko)
-                return QString("snaja");
+                return QString(tr("snaja"));
             else
-                return QString("zet");
+                return QString(tr("zet"));
 
         }
        else if(_stablo->jeSupruznikOd(sifraPocetne,osobeIzmedju[1]) && _stablo->jeRoditeljOd(osobeIzmedju[1],sifraTrazene)){
             if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()=='M'){
                 if(trazenaJeZensko)
-                    return QString("svekrva");
+                    return QString(tr("svekrva"));
                 else
-                    return QString("svekar");
+                    return QString(tr("svekar"));
             }
             else
             {
                 if(trazenaJeZensko)
-                    return QString("tasta");
+                    return QString(tr("tasta"));
                 else
-                    return QString("tast");
+                    return QString(tr("tast"));
             }
 
 
@@ -111,16 +113,16 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
             if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()!='M')
             {
                 if(trazenaJeZensko)
-                    return QString("tetka");
+                    return QString(tr("tetka"));
                 else
-                    return QString("ujak");
+                    return QString(tr("ujak"));
             }
             else
             {
                 if(trazenaJeZensko)
-                    return QString("tetka");
+                    return QString(tr("tetka"));
                 else
-                    return QString("stric");
+                    return QString(tr("stric"));
             }
 
         }
@@ -128,37 +130,37 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
         else if(razlika==-2)
         {
             if(trazenaJeZensko)
-                return QString("baba");
+                return QString(tr("baba"));
             else
-                return QString("deda");
+                return QString(tr("deda"));
         }
         else if(razlika==2)
         {
             if(trazenaJeZensko)
-                return QString("unuka");
+                return QString(tr("unuka"));
             else
-                return QString("unuk");
+                return QString(tr("unuk"));
         }
         else if(_stablo->jeBratSestraOd(sifraPocetne,sifraTrazene)){
             if(trazenaJeZensko)
-                return QString("sestra");
+                return QString(tr("sestra"));
             else
-                return QString("brat");}
+                return QString(tr("brat"));}
         else if(razlika==-1)
         {
             if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()!='M')
             {
                 if(trazenaJeZensko)
-                    return QString("ujna");
+                    return QString(tr("ujna"));
                 else
-                    return QString("teca");
+                    return QString(tr("teca"));
             }
             else
             {
                 if(trazenaJeZensko)
-                    return QString("strina");
+                    return QString(tr("strina"));
                 else
-                    return QString("teca");
+                    return QString(tr("teca"));
             }
 
         }
@@ -167,31 +169,31 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
     case 4:
         if(razlika==-3){
             if(trazenaJeZensko)
-                return QString("prababa");
+                return QString(tr("prababa"));
             else
-                return QString("pradeda");
+                return QString(tr("pradeda"));
         }
         else if(razlika==3){
             if(trazenaJeZensko)
-                return QString("praunuka");
+                return QString(tr("praunuka"));
             else
-                return QString("praunuk");
+                return QString(tr("praunuk"));
         }
         else if(_stablo->jeBratSestraOd(sifraPocetne,osobeIzmedju[2]) && _stablo->jeDeteOd(osobeIzmedju[2],sifraTrazene))
         {
             if(_stablo->NadjiOsobuSifrom(osobeIzmedju[2])->Pol()!='M')
             {
                 if(trazenaJeZensko)
-                    return QString("sestricina");
+                    return QString(tr("sestricina"));
                 else
-                    return QString("sestric");
+                    return QString(tr("sestric"));
             }
             else
             {
                 if(trazenaJeZensko)
-                    return QString("bratanica");
+                    return QString(tr("bratanica"));
                 else
-                    return QString("bratanac");
+                    return QString(tr("bratanac"));
             }
 
         }
@@ -200,16 +202,16 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
             if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()!='M')
             {
                 if(trazenaJeZensko)
-                    return QString("ujna");
+                    return QString(tr("ujna"));
                 else
-                    return QString("teca");
+                    return QString(tr("teca"));
             }
             else
             {
                 if(trazenaJeZensko)
-                    return QString("strina");
+                    return QString(tr("strina"));
                 else
-                    return QString("teca");
+                    return QString(tr("teca"));
             }
 
         }
@@ -218,31 +220,31 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
     case 5:
         if(razlika==4){
             if(trazenaJeZensko)
-                return QString("cukunbaba");
+                return QString(tr("cukunbaba"));
             else
-                return QString("cukundeda");
+                return QString(tr("cukundeda"));
         }
         else if(razlika==-3){
             if(trazenaJeZensko)
-                return QString("cukununuka");
+                return QString(tr("cukununuka"));
             else
-                return QString("cukununuk");
+                return QString(tr("cukununuk"));
         }
 
 
         break;
     default:
         if(trazenaJeZensko)
-            return QString("daleka rodjaka");
+            return QString(tr("daleka rodjaka"));
         else
-            return QString("daleki rodjak");
+            return QString(tr("daleki rodjak"));
         break;
 
     }
 
 
 
-    return QString("daleki rodjak");
+    return QString(tr("daleki rodjak"));
 }
 
 void TrazenjePuta::OsveziMatricuPuteva()
