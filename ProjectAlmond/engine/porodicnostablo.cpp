@@ -654,12 +654,12 @@ std::map<short, Dete*> &PorodicnoStablo::Deca()
     return _indeksSifraDete;
 }
 
-const std::multimap<short, short>& PorodicnoStablo::OsobaBrak()const
+std::multimap<short, short>& PorodicnoStablo::OsobaBrak()
 {
     return _indeksOsobaBrak;
 }
 
-const std::multimap<short, short>& PorodicnoStablo::BrakDeca() const
+std::multimap<short, short>& PorodicnoStablo::BrakDeca()
 {
     return _indeksBrakDeca;
 }
@@ -797,7 +797,7 @@ bool PorodicnoStablo::jeDeteOd(short sifraPrve, short sifraDruge)
         auto it2=pp2.first;
         for(;it2!=pp2.second;++it2){
 
-            if(NadjiDeteSifrom((*it2).second)->SifraOsobe()==sifraDruge)return true;
+            if((*it2).second==sifraDruge)return true;
         }
     }
     return false;

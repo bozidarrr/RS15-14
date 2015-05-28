@@ -1,22 +1,28 @@
 #include "trazenjeputa.h"
 
 TrazenjePuta::TrazenjePuta(PorodicnoStablo* stablo)
-    :_stablo(stablo),_putevi(nullptr),_duzine(nullptr),_sifre(nullptr)
+    :_stablo(stablo),_putevi(nullptr),_duzine(nullptr),_sifre(nullptr),_n(0)
 {}
 TrazenjePuta::~TrazenjePuta()
 {
-    if(_duzine!=nullptr)
-        delete []_duzine;
-    if(_putevi!=nullptr)
-        delete []_putevi;
+    if(_duzine!=nullptr){
+        for(int i=0;i<_n;i++)
+            delete[] _duzine[i];
+        delete [] _duzine;
+    }
+    if(_putevi!=nullptr){
+        for(int i=0;i<_n;i++)
+            delete[] _putevi[i];
+        delete [] _putevi;
+    }
     if(_sifre!=nullptr)
         delete []_sifre;
 }
 
-std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazene)const
+std::vector<short>& TrazenjePuta::operator()(short sifraPocetne,short sifraTrazene)
 {
 
-    std::vector<short> _put;
+    _put.clear();
     int tren=rBr(sifraTrazene),kraj=rBr(sifraPocetne);
     while(tren!=kraj)
     {
@@ -26,16 +32,22 @@ std::vector<short> TrazenjePuta::operator()(short sifraPocetne,short sifraTrazen
     _put.push_back(_sifre[kraj]);
 
     std::reverse(_put.begin(),_put.end());
+
+    //std::cout<<sifraPocetne<<" --> "<<sifraTrazene<<std::endl;
+    //std::cout<<"Put izmedju trazenih osoba: ";
+   /* for(int i=0;i<_put.size();i++)std::cout<<_put[i]<<' ';
+    std::cout<<std::endl;*/
+
     return _put;
 }
 
-QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
+QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene)
 {
-    std::vector<short> osobeIzmedju(operator()(sifraPocetne,sifraTrazene));
+    std::vector<short>& osobeIzmedju=operator()(sifraPocetne,sifraTrazene);
     int duzinaPuta=osobeIzmedju.size();
     if(duzinaPuta<2)return QString("greska");
     bool trazenaJeZensko=_stablo->NadjiOsobuSifrom(sifraTrazene)->Pol()=='Z';
-
+    //bool trazenaJeNasa=_stablo->NadjiOsobuSifrom(sifraTrazene)->JeKrvniSrodnik();
     std::vector<short>::const_iterator prva=osobeIzmedju.cbegin();
     std::vector<short>::const_iterator druga=osobeIzmedju.cbegin();
     std::vector<short>::const_iterator kraj=osobeIzmedju.cend();
@@ -68,11 +80,19 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
                 return QString("muz");
         break;
     case 3:
-        if(_stablo->jeBratSestraOd(sifraPocetne,sifraTrazene))
+        if(_stablo->jeBratSestraOd(sifraPocetne,sifraTrazene)){
             if(trazenaJeZensko)
                 return QString("sestra");
             else
-                return QString("brat");
+                return QString("brat");}
+        else if(_stablo->jeDeteOd(sifraPocetne,osobeIzmedju[1]) && _stablo->jeSupruznikOd(osobeIzmedju[1],sifraTrazene)){
+            if(trazenaJeZensko)
+                return QString("snaja");
+            else
+                return QString("zet");
+
+        }
+
         else if(razlika<0)
         {
             if(trazenaJeZensko)
@@ -140,6 +160,39 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
 
 
         break;
+    case 5:
+        if(razlika==4){
+            if(trazenaJeZensko)
+                return QString("cukunbaba");
+            else
+                return QString("cukundeda");
+        }
+        else if(razlika==-3){
+            if(trazenaJeZensko)
+                return QString("cukununuka");
+            else
+                return QString("cukununuk");
+        }
+        else if(razlika==1)
+        {
+            if(_stablo->NadjiOsobuSifrom(osobeIzmedju[1])->Pol()=='Z')
+            {
+                if(trazenaJeZensko)
+                    return QString("ujna");
+                else
+                    return QString("teca");
+            }
+            else
+            {
+                if(trazenaJeZensko)
+                    return QString("strina");
+                else
+                    return QString("teca");
+            }
+
+        }
+
+        break;
     default:
         if(trazenaJeZensko)
             return QString("daleka rodjaka");
@@ -156,28 +209,29 @@ QString TrazenjePuta::tipSrodstva(short sifraPocetne, short sifraTrazene) const
 
 void TrazenjePuta::OsveziMatricuPuteva()
 {
-    int n=_stablo->Osobe().size(),i,j;
+    int n=_stablo->Osobe().size();
 
     InicijalizujMatricu(&_duzine,n);
     InicijalizujMatricu(&_putevi,n);
+    _n=n;
     _sifre=new short[n];
 
     auto it=_stablo->Osobe().cbegin();
 
-    for(i=0;i<n;++i,++it)
+    for(int i=0;i<n;++i,++it)
     {
         _sifre[i]=(*it).first;
 
     }
 
 
-    for( i=0;i<n;i++){
-        for( j=0;j<n;j++){
+    for(int i=0;i<n;i++){
 
-            _duzine[i][i]=0;
-            _putevi[i][i]=_sifre[i];
 
-        }
+        _duzine[i][i]=0;
+        _putevi[i][i]=_sifre[i];
+
+
     }
     std::cout<<_stablo->Brakovi().size()<<std::endl;
     std::map<short, Brak*>::iterator brak=_stablo->Brakovi().begin();
@@ -196,20 +250,24 @@ void TrazenjePuta::OsveziMatricuPuteva()
         _duzine[rb2][rb1]=1;
         _putevi[rb1][rb2]=rb1;
         _putevi[rb2][rb1]=rb2;
+        std::cout<<"SIFRA BRAKA KOJI GLEDAM: "<<(*brak).first<<std::endl;
+        std::pair<std::multimap<short,short>::iterator,std::multimap<short,short>::iterator> decaBraka=_stablo->BrakDeca().equal_range((*brak).first);
+        std::multimap<short,short>::iterator i=decaBraka.first;
+        for(;i!=decaBraka.second;++i){
 
-        auto decaBraka=_stablo->BrakDeca().equal_range((*brak).first);
-        std::multimap<short,short>::const_iterator i;
-        for(i=decaBraka.first;i!=decaBraka.second;++i){
-            rbd=rBr((_stablo->NadjiDeteSifrom((*i).second))->SifraOsobe());
-            _duzine[rb1][rbd]=1;
-            _duzine[rb2][rbd]=1;
-            _duzine[rbd][rb1]=1;
-            _duzine[rbd][rb2]=1;
-            _putevi[rb1][rbd]=rb1;
-            _putevi[rb2][rbd]=rb2;
-            _putevi[rbd][rb1]=rbd;
-            _putevi[rbd][rb2]=rbd;
-        }
+            Osoba * osoba=_stablo->NadjiOsobuSifrom((*i).second);
+            if(osoba!=nullptr){
+                rbd=rBr(osoba->Sifra());
+                if(rbd>0){
+                    _duzine[rb1][rbd]=1;
+                    _duzine[rb2][rbd]=1;
+                    _duzine[rbd][rb1]=1;
+                    _duzine[rbd][rb2]=1;
+                    _putevi[rb1][rbd]=rb1;
+                    _putevi[rb2][rbd]=rb2;
+                    _putevi[rbd][rb1]=rbd;
+                    _putevi[rbd][rb2]=rbd;}
+            }}
 
     }
 
@@ -245,6 +303,8 @@ void TrazenjePuta::OsveziMatricuPuteva()
         }
         std::cout<<std::endl;
     }
+
+
     //ovime sam popunio matricu duzina i putanja, sada mogu da je koristim pozivima funkcija
 
     /*
@@ -265,8 +325,10 @@ void TrazenjePuta::OsveziMatricuPuteva()
 
 void TrazenjePuta::InicijalizujMatricu(short ***m, int n)
 {
-    if(*m!=nullptr){
-        delete[] *m;
+    if((*m)!=nullptr&&_n!=n){
+        for(int i=0;i<_n;i++)
+            delete[] (*m)[i];
+        delete [] (*m);
     }
     *m=new short*[n];
     for(int i=0;i<n;++i)
@@ -281,8 +343,8 @@ void TrazenjePuta::InicijalizujMatricu(short ***m, int n)
 
 int TrazenjePuta::rBr( short sifra) const
 {
-    int n=_stablo->Osobe().size();
-    for(int i=0;i<n;i++)
+
+    for(int i=0;i<_n;i++)
     {
         if(_sifre[i]==sifra)return i;
 

@@ -46,12 +46,12 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     stablo = new PorodicnoStablo();//pravi prazno stablo, pa ako se ucita postojece krenemo odatle
     //ili se pravi novo sto znaci da treba pozvati dijalog i napraviti kljucnu i postaviti je u stablu
     kreirajToolbar();
-    kreirajMestoZaInfo();    
+    kreirajMestoZaInfo();
     kreirajPogledZaStablo();
     kreirajOpcije();
     obnoviSkoroOtvarane();
     //-------Pravi se stablo i korena osoba-------//
-  /**  GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
+    /**  GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
                                 (stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
     QPointF centar(pogled->viewport()->rect().center());
     korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
@@ -64,10 +64,10 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     //-------Pravi se stablo i korena osoba-------//
 
     connect(ui->aKljucna, SIGNAL(triggered()), this, SLOT(napraviKljucnuOsobu()));
-//       napraviKljucnuOsobu();
+    //       napraviKljucnuOsobu();
 
-   readSettings();
-   retranslate();
+    readSettings();
+    retranslate();
 }
 
 GlavniProzor::~GlavniProzor()
@@ -276,14 +276,14 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         else
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
         if (novaSifra >= 0)
-        {          
+        {
             novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(3);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
             _osobe[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
-        }   
+        }
     }
     delete d;
     return novaOsoba;
@@ -347,6 +347,9 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
             connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaDete(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
+
+
+
     }
     delete d;
     return novaSifra;
@@ -378,10 +381,15 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
-        //TrazenjePuta t(stablo);
-        //t.OsveziMatricuPuteva();
 
-        //qDebug()<<t.tipSrodstva(0,1);//moram da nastavim posle, neka ostane ovde
+        for(auto i=_brakovi.begin();i!=_brakovi.end();++i)
+        {
+            std::cout<<(*i).first<<' '<<(*i).second<<std::endl;
+        }
+
+
+
+
 
     }
     delete d;
@@ -454,8 +462,8 @@ void GlavniProzor::obnoviSkoroOtvarane()
         if (j < GlavniProzor::skoroOtvarani.count())
         {
             QString text = tr("&%1 %2")
-                           .arg(j + 1)
-                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());
+                    .arg(j + 1)
+                    .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());
             skoroOtvaraniAkcije[j]->setText(text);
             skoroOtvaraniAkcije[j]->setData(GlavniProzor::skoroOtvarani[j]);
             skoroOtvaraniAkcije[j]->setVisible(true);
@@ -617,10 +625,10 @@ void GlavniProzor::kreirajPogledZaStablo()
 void GlavniProzor::novoStablo()
 {
     //TO DO
-//    if (nastaviti())
-//        qDebug() << "treba otvoriti novi fajl";
-//    else
-//        qDebug() << "ne otvarati";
+    //    if (nastaviti())
+    //        qDebug() << "treba otvoriti novi fajl";
+    //    else
+    //        qDebug() << "ne otvarati";
     GlavniProzor *w = new GlavniProzor();
     w->show();
 }
@@ -689,51 +697,51 @@ void GlavniProzor::promeniJezikE()
 {
     if(ui->aEngleski->isChecked()){
 
-             bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
-             qDebug("translation %d", ok);
-              qApp->installTranslator(translator);
-                ui->retranslateUi(this);
-                 retranslate();
-                qDebug() << "English";
-                ui->aNemacki->setChecked(false);
-                 ui->aSrpski->setChecked(false);
-                  ui->aSpanski->setChecked(false);
+        bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
     }
     else if(ui->aNemacki->isChecked()){
         bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-           qDebug() << "Deutsch";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Deutsch";
 
     }
     else if (ui->aSpanski->isChecked()){
         bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-           qDebug() << "Espanol";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        qDebug() << "Espanol";
 
     }
     else {
         ui->aSrpski->setChecked(true);
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-          retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Srpski";
     }
 
 }
@@ -741,54 +749,54 @@ void GlavniProzor::promeniJezikE()
 void GlavniProzor::promeniJezikN()
 {
     if(ui->aNemacki->isChecked()){
-            bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-            qDebug("translation %d", ok);
-             qApp->installTranslator(translator);
-               ui->retranslateUi(this);
-                retranslate();
-               ui->aEngleski->setChecked(false);
-                ui->aSrpski->setChecked(false);
-                 ui->aSpanski->setChecked(false);
-               qDebug() << "Deutsch";
+        bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Deutsch";
 
-        }
+    }
 
     else if(ui->aEngleski->isChecked()){
 
         bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-            retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
     }
-            else if (ui->aSpanski->isChecked()){
-                bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-                qDebug("translation %d", ok);
-                 qApp->installTranslator(translator);
-                   ui->retranslateUi(this);
-                   retranslate();
-                   ui->aEngleski->setChecked(false);
-                   ui->aNemacki->setChecked(false);
-                    ui->aSrpski->setChecked(false);
-                   qDebug() << "Espanol";
+    else if (ui->aSpanski->isChecked()){
+        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        qDebug() << "Espanol";
 
-            }
+    }
 
     else {
         ui->aSrpski->setChecked(true);
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Srpski";
     }
 
 }
@@ -799,119 +807,119 @@ void GlavniProzor::promeniJezikS()
     {
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Srpski";
     }
     else if(ui->aEngleski->isChecked()){
 
         bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-}
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+    }
     else if(ui->aNemacki->isChecked()){
-            bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-            qDebug("translation %d", ok);
-             qApp->installTranslator(translator);
-               ui->retranslateUi(this);
-                retranslate();
-               ui->aEngleski->setChecked(false);
-                ui->aSrpski->setChecked(false);
-                 ui->aSpanski->setChecked(false);
-               qDebug() << "Deutsch";
+        bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Deutsch";
 
-        }
+    }
     else if (ui->aSpanski->isChecked()){
         bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-           qDebug() << "Espanol";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        qDebug() << "Espanol";
 
     }
     else{
         ui->aSrpski->setChecked(true);
         bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-            retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-          qDebug() << "Srpski";
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        qDebug() << "Srpski";
     }
 }
 void GlavniProzor::promeniJezikSpanski(){
     if (ui->aSpanski->isChecked()){
-               bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-               qDebug("translation %d", ok);
-                qApp->installTranslator(translator);
-                  ui->retranslateUi(this);
-                  retranslate();
-                  ui->aEngleski->setChecked(false);
-                  ui->aNemacki->setChecked(false);
-                   ui->aSrpski->setChecked(false);
-                  qDebug() << "Espanol";
+        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        qDebug() << "Espanol";
 
-           }
+    }
 
-       else if(ui->aNemacki->isChecked()){
-               bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-               qDebug("translation %d", ok);
-                qApp->installTranslator(translator);
-                  ui->retranslateUi(this);
-                   retranslate();
-                  ui->aEngleski->setChecked(false);
-                   ui->aSrpski->setChecked(false);
-                    ui->aSpanski->setChecked(false);
-                  qDebug() << "Deutsch";
+    else if(ui->aNemacki->isChecked()){
+        bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Deutsch";
 
-           }
-       else if(ui->aEngleski->isChecked()){
+    }
+    else if(ui->aEngleski->isChecked()){
 
         bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
         qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-}
-       else{
-           ui->aSrpski->setChecked(true);
-           bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-           qDebug("translation %d", ok);
-            qApp->installTranslator(translator);
-              ui->retranslateUi(this);
-               retranslate();
-              ui->aEngleski->setChecked(false);
-               ui->aNemacki->setChecked(false);
-                ui->aSpanski->setChecked(false);
-             qDebug() << "Srpski";
-       }
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+    }
+    else{
+        ui->aSrpski->setChecked(true);
+        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
+        qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        qDebug() << "Srpski";
+    }
 }
 
 void GlavniProzor::retranslate()
 {
 
 
-  alati->setWindowTitle(tr("Alati"));
+    alati->setWindowTitle(tr("Alati"));
 
     info ->setWindowTitle(tr("Informacije"));
 
@@ -919,16 +927,16 @@ void GlavniProzor::retranslate()
 
     ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     ui->zaInformacije->setToolTip(tr("Ovde mozete pronaci informacije o trenutno aktivnoj osobi"));
-       this->setWindowTitle(tr("Project Almond[*]"));
+    this->setWindowTitle(tr("Project Almond[*]"));
 
-     tbMuzZena->setToolTip(tr("Dodajte u stablo supruznika nekoj od osoba"));
-     tbRoditeljDete->setToolTip(tr("Dodajte u neku vezu novo dete"));
-     tbBratSestra->setToolTip(tr("Dodajte u stablo brata ili sestru nekoj osobi"));
-     tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
-     tbDetalji->setToolTip(tr("Detalji o odabranoj osobi ili odnosu"));
-     tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili odnosu"));
-     tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
-     tbUredi->setToolTip(tr("Rasporedite cvorove stabla automatski"));
+    tbMuzZena->setToolTip(tr("Dodajte u stablo supruznika nekoj od osoba"));
+    tbRoditeljDete->setToolTip(tr("Dodajte u neku vezu novo dete"));
+    tbBratSestra->setToolTip(tr("Dodajte u stablo brata ili sestru nekoj osobi"));
+    tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
+    tbDetalji->setToolTip(tr("Detalji o odabranoj osobi ili odnosu"));
+    tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili odnosu"));
+    tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
+    tbUredi->setToolTip(tr("Rasporedite cvorove stabla automatski"));
 
 }
 
@@ -1176,12 +1184,12 @@ void GlavniProzor::prikaziSakrijTudje()
     std::vector<short> *zaSakrivanje = stablo->NisuKrvniSrodnici();
     for (short sifra: *zaSakrivanje)
         _osobe[sifra]->setVisible(!ui->aSamoKrv->isChecked());
-//koliko ovo ima smisla ja ne znam
+    //koliko ovo ima smisla ja ne znam
 
-//    if (ui->aSamoKrv->isChecked())
-//        qDebug() << "sakriti tudje";
-//    else
-//        qDebug() << "vratiti tudje";
+    //    if (ui->aSamoKrv->isChecked())
+    //        qDebug() << "sakriti tudje";
+    //    else
+    //        qDebug() << "vratiti tudje";
 
 }
 
@@ -1194,10 +1202,10 @@ void GlavniProzor::izvrsiPretragu()
         int opcija;
         QString podatak;
         d->procitajPodatke(opcija, kriterijum, podatak);
-//        qDebug() << "pretrazi";
-//        qDebug() << opcija;
-//        qDebug() << kriterijum;
-//        qDebug() << podatak;
+        //        qDebug() << "pretrazi";
+        //        qDebug() << opcija;
+        //        qDebug() << kriterijum;
+        //        qDebug() << podatak;
         std::vector<short> *trazene;
         switch(opcija)
         {

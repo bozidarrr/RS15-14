@@ -89,8 +89,8 @@ public:
     std::map<short, Osoba*> &Osobe();
     std::map<short, Brak *> &Brakovi();
     std::map<short, Dete*> &Deca();
-    const std::multimap<short, short>& OsobaBrak() const;
-    const std::multimap<short,short>& BrakDeca()const;
+    std::multimap<short, short>& OsobaBrak();
+    std::multimap<short,short>& BrakDeca();
     std::vector<int> Nivoi();
     //----GETTERI ZA INDEKSE----//
     bool ProcitajFajl(const QString &imeFajla);//citanje fajla
