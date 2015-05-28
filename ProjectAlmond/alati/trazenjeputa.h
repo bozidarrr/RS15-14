@@ -3,8 +3,9 @@
 #include <vector>
 #include <map>
 #include <QString>
+
 #include "engine/porodicnostablo.h"
-class TrazenjePuta
+class TrazenjePuta:public QObject
 {
 public:
     /*!

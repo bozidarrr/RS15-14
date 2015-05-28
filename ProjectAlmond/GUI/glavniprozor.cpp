@@ -35,7 +35,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
     translator = new QTranslator();
 
     translator->load(":/jezici/ProjectAlmond_sr.qm");
-   // qDebug("translation %d", ok);
+    // qDebug("translation %d", ok);
     qApp->installTranslator(translator);
     ui->retranslateUi(this);
 
@@ -701,7 +701,7 @@ void GlavniProzor::promeniJezikE()
 {
     if(ui->aEngleski->isChecked()){
 
-       translator->load(":/jezici/ProjectAlmond_en.qm");
+        translator->load(":/jezici/ProjectAlmond_en.qm");
         //qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
@@ -724,7 +724,7 @@ void GlavniProzor::promeniJezikE()
 
     }
     else if (ui->aSpanski->isChecked()){
-       translator->load(":/jezici/ProjectAlmond_es.qm");
+        translator->load(":/jezici/ProjectAlmond_es.qm");
         //qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
@@ -767,7 +767,7 @@ void GlavniProzor::promeniJezikN()
 
     else if(ui->aEngleski->isChecked()){
 
-      translator->load(":/jezici/ProjectAlmond_en.qm");
+        translator->load(":/jezici/ProjectAlmond_en.qm");
         //qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
@@ -778,8 +778,8 @@ void GlavniProzor::promeniJezikN()
         ui->aSpanski->setChecked(false);
     }
     else if (ui->aSpanski->isChecked()){
-       translator->load(":/jezici/ProjectAlmond_es.qm");
-       // qDebug("translation %d", ok);
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -792,8 +792,8 @@ void GlavniProzor::promeniJezikN()
 
     else {
         ui->aSrpski->setChecked(true);
-       translator->load(":/jezici/ProjectAlmond_sr.qm");
-      //  qDebug("translation %d", ok);
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //  qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -810,7 +810,7 @@ void GlavniProzor::promeniJezikS()
     if(ui->aSrpski->isChecked())
     {
         translator->load(":/jezici/ProjectAlmond_sr.qm");
-      //  qDebug("translation %d", ok);
+        //  qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -822,7 +822,7 @@ void GlavniProzor::promeniJezikS()
     else if(ui->aEngleski->isChecked()){
 
         translator->load(":/jezici/ProjectAlmond_en.qm");
-       // qDebug("translation %d", ok);
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -833,7 +833,7 @@ void GlavniProzor::promeniJezikS()
     }
     else if(ui->aNemacki->isChecked()){
         translator->load(":/jezici/ProjectAlmond_de.qm");
-       // qDebug("translation %d", ok);
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -844,8 +844,8 @@ void GlavniProzor::promeniJezikS()
 
     }
     else if (ui->aSpanski->isChecked()){
-       translator->load(":/jezici/ProjectAlmond_es.qm");
-       // qDebug("translation %d", ok);
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -869,8 +869,8 @@ void GlavniProzor::promeniJezikS()
 }
 void GlavniProzor::promeniJezikSpanski(){
     if (ui->aSpanski->isChecked()){
-       translator->load(":/jezici/ProjectAlmond_es.qm");
-       // qDebug("translation %d", ok);
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -896,7 +896,7 @@ void GlavniProzor::promeniJezikSpanski(){
     else if(ui->aEngleski->isChecked()){
 
         translator->load(":/jezici/ProjectAlmond_en.qm");
-       // qDebug("translation %d", ok);
+        // qDebug("translation %d", ok);
         qApp->installTranslator(translator);
         ui->retranslateUi(this);
         retranslate();
@@ -956,7 +956,7 @@ void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
 
 void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
-         for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
+    for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
 
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText("Informacije");
@@ -1122,6 +1122,10 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         {
             tbDetalji->setChecked(true);
             return;
+        }
+        if(item->Sifra()==item2->Sifra()){
+
+            tbDetalji->setChecked(true);return;
         }
         TrazenjePuta t(stablo);
         t.OsveziMatricuPuteva();

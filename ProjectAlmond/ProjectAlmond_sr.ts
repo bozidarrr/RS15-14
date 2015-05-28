@@ -366,18 +366,18 @@
     </message>
     <message>
         <location filename="GUI/glavniprozor.ui" line="242"/>
-        <location filename="GUI/glavniprozor.cpp" line="203"/>
-        <location filename="GUI/glavniprozor.cpp" line="248"/>
-        <location filename="GUI/glavniprozor.cpp" line="940"/>
+        <location filename="GUI/glavniprozor.cpp" line="188"/>
+        <location filename="GUI/glavniprozor.cpp" line="233"/>
+        <location filename="GUI/glavniprozor.cpp" line="926"/>
         <source>Alati</source>
         <translation>Alati</translation>
     </message>
     <message>
         <location filename="GUI/glavniprozor.ui" line="253"/>
-        <location filename="GUI/glavniprozor.cpp" line="260"/>
-        <location filename="GUI/glavniprozor.cpp" line="942"/>
-        <location filename="GUI/glavniprozor.cpp" line="946"/>
-        <location filename="GUI/glavniprozor.cpp" line="1039"/>
+        <location filename="GUI/glavniprozor.cpp" line="245"/>
+        <location filename="GUI/glavniprozor.cpp" line="928"/>
+        <location filename="GUI/glavniprozor.cpp" line="932"/>
+        <location filename="GUI/glavniprozor.cpp" line="1025"/>
         <source>Informacije</source>
         <translation>Informacije</translation>
     </message>
@@ -408,27 +408,27 @@
     </message>
     <message>
         <location filename="GUI/glavniprozor.cpp" line="33"/>
-        <location filename="GUI/glavniprozor.cpp" line="948"/>
+        <location filename="GUI/glavniprozor.cpp" line="934"/>
         <source>Project Almond[*]</source>
         <translation>Project Almond[*]</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="138"/>
+        <location filename="GUI/glavniprozor.cpp" line="124"/>
         <source>Datum rodjenja:</source>
         <translation>Datum rođenja:</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="144"/>
+        <location filename="GUI/glavniprozor.cpp" line="130"/>
         <source>Datum smrti: </source>
         <translation>Datum smrti:</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="950"/>
+        <location filename="GUI/glavniprozor.cpp" line="936"/>
         <source>Dodajte u stablo supruznika nekoj od osoba</source>
         <translation>Dodajte u stablo supružnika nekoj od osoba</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="951"/>
+        <location filename="GUI/glavniprozor.cpp" line="937"/>
         <source>Dodajte u neku vezu novo dete</source>
         <translation>Dodajte u neku vezu novo dete</translation>
     </message>
@@ -437,192 +437,397 @@
         <translation type="obsolete">Dodajte u stablo brata ili sestru nekoj osobi</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="953"/>
+        <location filename="GUI/glavniprozor.cpp" line="939"/>
         <source>Pomerite rucicom odabranu osobu ili relaciju na crtezu</source>
         <translation>Pomerite ručicom odabranu osobu ili relaciju na crtežu</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="954"/>
+        <location filename="GUI/glavniprozor.cpp" line="940"/>
         <source>Detalji o odabranoj osobi ili odnosu</source>
         <translation>Detalji o odabranoj osobi ili odnosu</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="955"/>
+        <location filename="GUI/glavniprozor.cpp" line="941"/>
         <source>Izmenite podatke o odabranoj osobi ili odnosu</source>
         <translation>Izmeniti podatke o odabranoj osobi ili odnosu</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="956"/>
+        <location filename="GUI/glavniprozor.cpp" line="942"/>
         <source>Obrisite osobu ili relaciju iz stabla</source>
         <translation>Obrišite osobu ili relaciju iz stabla</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="957"/>
+        <location filename="GUI/glavniprozor.cpp" line="943"/>
         <source>Rasporedite cvorove stabla automatski</source>
         <translation>Rasporedite čvorove stabla automatski</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="309"/>
+        <location filename="GUI/glavniprozor.cpp" line="294"/>
         <source>Jeste li sigurni da zelite da uklonite korenu osobu? To ce prouzrokovati brisanje celog stabla!</source>
         <translation>Jeste li sigurni da želite da uklonite korenu osobu? To će prouzrokovati brisanje celog stabla!</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="313"/>
+        <location filename="GUI/glavniprozor.cpp" line="298"/>
         <source>Jeste li sigurni da zelite da uklonite selektovanu osobu,a time i sve njene supruznike i potomke?</source>
         <translation>Jeste li sigurni da želite da uklonite selektovanu osobu,a time i sve njene supružnike i potomke?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="316"/>
+        <location filename="GUI/glavniprozor.cpp" line="301"/>
         <source>Jeste li sigurni da zelite da uklonite selektovanu osobu i njene potomke?</source>
         <translation>Jeste li sigurni da želite da uklonite selektovanu osobu i njene potomke?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="319"/>
-        <location filename="GUI/glavniprozor.cpp" line="438"/>
+        <location filename="GUI/glavniprozor.cpp" line="304"/>
+        <location filename="GUI/glavniprozor.cpp" line="423"/>
         <source>Da</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="321"/>
-        <location filename="GUI/glavniprozor.cpp" line="440"/>
+        <location filename="GUI/glavniprozor.cpp" line="306"/>
+        <location filename="GUI/glavniprozor.cpp" line="425"/>
         <source>Ne</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="324"/>
+        <location filename="GUI/glavniprozor.cpp" line="309"/>
         <source>Uklanjanje osobe</source>
         <translation>Uklanjanje osobe</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="332"/>
+        <location filename="GUI/glavniprozor.cpp" line="317"/>
         <source>Uspesno izvrseno uklanjanje izabrane osobe.</source>
         <translation>Uspešno izvršeno uklanjanje izabrane osobe.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="337"/>
+        <location filename="GUI/glavniprozor.cpp" line="322"/>
         <source>Osoba nije uklonjena.</source>
         <translation>Osoba nije uklonjena.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="421"/>
+        <location filename="GUI/glavniprozor.cpp" line="406"/>
         <source>Uspesno unete izmene.</source>
         <translation>Uspešno unete izmene.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="434"/>
+        <location filename="GUI/glavniprozor.cpp" line="419"/>
         <source>Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?</source>
         <translation>Postoje nesačuvane izmene u trenutnom stablu. Da li želite da ih snimite?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="437"/>
+        <location filename="GUI/glavniprozor.cpp" line="422"/>
         <source>Project Almond</source>
         <translation>Project Almond</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="441"/>
+        <location filename="GUI/glavniprozor.cpp" line="426"/>
         <source>Odustani</source>
         <translation>Odustanite</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="460"/>
+        <location filename="GUI/glavniprozor.cpp" line="445"/>
         <source>Snimanje otkazano.</source>
         <translation>Snimanje otkazano.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="464"/>
+        <location filename="GUI/glavniprozor.cpp" line="449"/>
         <source>Fajl je sacuvan.</source>
         <translation>Fajl je sačuvan.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="478"/>
+        <location filename="GUI/glavniprozor.cpp" line="463"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="495"/>
+        <location filename="GUI/glavniprozor.cpp" line="480"/>
         <source>Ucitavanje fajla otkazano.</source>
         <translation>Učitavanje fajla otkazano.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="499"/>
+        <location filename="GUI/glavniprozor.cpp" line="484"/>
         <source>Fajl uspesno ucitan.</source>
         <translation>Fajl uspešno učitan.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="661"/>
+        <location filename="GUI/glavniprozor.cpp" line="646"/>
         <source>Otvorite postojece stablo.</source>
         <translation>Otvorite postojeće stablo.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="662"/>
+        <location filename="GUI/glavniprozor.cpp" line="647"/>
         <source>ProjectAlmond (*.alm)</source>
         <translation>ProjectAlmond(*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="695"/>
+        <location filename="GUI/glavniprozor.cpp" line="681"/>
         <source>Sacuvajte stablo.</source>
         <translation>Sačuvajte stablo.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="696"/>
+        <location filename="GUI/glavniprozor.cpp" line="682"/>
         <source>Project Almond (*.alm)</source>
         <translation>Project Almond (*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="947"/>
+        <location filename="GUI/glavniprozor.cpp" line="933"/>
         <source>Ovde mozete pronaci informacije o trenutno aktivnoj osobi</source>
         <translation>Ovde možete pronaći informacije o trenutno aktivnoj osobi</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="952"/>
+        <location filename="GUI/glavniprozor.cpp" line="938"/>
         <source>Dodajte osobu koja ce biti koren stabla</source>
         <translation>Dodajte novu ključnu osobu</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="958"/>
+        <location filename="GUI/glavniprozor.cpp" line="944"/>
         <source>Odredite tip srodstva izmedju dve odabrane osobe</source>
         <translation>Odredite tip srodstva između dve odabrane osobe</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1052"/>
+        <location filename="GUI/glavniprozor.cpp" line="1038"/>
         <source>Moguce je dodati supruznika samo krvnim srodnicima.</source>
         <translation>Moguće je dodati supružnika samo krvnim srodnicima.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1064"/>
+        <location filename="GUI/glavniprozor.cpp" line="1050"/>
         <source>Dodavanje nove osobe u stablo je proslo uspesno.</source>
         <translation>Dodavanje nove osobe u stablo je proslo uspešno.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1074"/>
-        <location filename="GUI/glavniprozor.cpp" line="1078"/>
+        <location filename="GUI/glavniprozor.cpp" line="1060"/>
+        <location filename="GUI/glavniprozor.cpp" line="1064"/>
         <source>Dodavanje nove osobe i relacije otkazano.</source>
         <translation>Dodavanje nove osobe i relacije otkazano.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1102"/>
-        <location filename="GUI/glavniprozor.cpp" line="1106"/>
+        <location filename="GUI/glavniprozor.cpp" line="1088"/>
+        <location filename="GUI/glavniprozor.cpp" line="1092"/>
         <source>Dodavanje novog deteta otkazano.</source>
         <translation>Dodavanje novog deteta otkazano.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1247"/>
+        <location filename="GUI/glavniprozor.cpp" line="1237"/>
         <source>Pretraga nije uradjena, pokusajte ponovo</source>
         <translation>Pretraga nije urađena, pokušajte ponovo</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1251"/>
+        <location filename="GUI/glavniprozor.cpp" line="1241"/>
         <source>Nema osoba koje ispunjavaju uslove pretrage</source>
         <translation>Nema osoba koje ispunjavaju uslove pretrage</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1254"/>
+        <location filename="GUI/glavniprozor.cpp" line="1244"/>
         <source>Osobe koje ispunjavaju uslove pretrage su:</source>
         <translation>Osobe koje ispunjavaju uslove pretrage su:</translation>
     </message>
     <message>
         <source>Ima ih</source>
         <translation type="obsolete">Ima ih</translation>
+    </message>
+</context>
+<context>
+    <name>TrazenjePuta</name>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="50"/>
+        <source>greska</source>
+        <translation>greška</translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="70"/>
+        <source>cerka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="72"/>
+        <source>sin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="75"/>
+        <source>majka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="77"/>
+        <source>otac</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="82"/>
+        <source>zena</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="84"/>
+        <source>muz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="89"/>
+        <source>snaja</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="91"/>
+        <source>zet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="97"/>
+        <source>svekrva</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="99"/>
+        <source>svekar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="104"/>
+        <source>tasta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="106"/>
+        <source>tast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="116"/>
+        <location filename="alati/trazenjeputa.cpp" line="123"/>
+        <source>tetka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="118"/>
+        <source>ujak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="125"/>
+        <source>stric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="133"/>
+        <source>baba</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="135"/>
+        <source>deda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="140"/>
+        <source>unuka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="142"/>
+        <source>unuk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="146"/>
+        <source>sestra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="148"/>
+        <source>brat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="154"/>
+        <location filename="alati/trazenjeputa.cpp" line="205"/>
+        <source>ujna</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="156"/>
+        <location filename="alati/trazenjeputa.cpp" line="163"/>
+        <location filename="alati/trazenjeputa.cpp" line="207"/>
+        <location filename="alati/trazenjeputa.cpp" line="214"/>
+        <source>teca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="161"/>
+        <location filename="alati/trazenjeputa.cpp" line="212"/>
+        <source>strina</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="172"/>
+        <source>prababa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="174"/>
+        <source>pradeda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="178"/>
+        <source>praunuka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="180"/>
+        <source>praunuk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="187"/>
+        <source>sestricina</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="189"/>
+        <source>sestric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="194"/>
+        <source>bratanica</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="196"/>
+        <source>bratanac</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="223"/>
+        <source>cukunbaba</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="225"/>
+        <source>cukundeda</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="229"/>
+        <source>cukununuka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="231"/>
+        <source>cukununuk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="238"/>
+        <source>daleka rodjaka</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="alati/trazenjeputa.cpp" line="240"/>
+        <location filename="alati/trazenjeputa.cpp" line="247"/>
+        <source>daleki rodjak</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
