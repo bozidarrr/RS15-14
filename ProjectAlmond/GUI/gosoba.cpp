@@ -24,15 +24,13 @@ QRectF GOsoba::boundingRect() const
 
 void GOsoba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //samo da se vidi nesto
-    //QColor color(Qt::darkGreen);
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     painter->setBrush(_osnovnaBoja);
     QRectF rect(-_sirina/2, -_visina/2, _sirina, _visina);
     painter->setRenderHint(QPainter::Antialiasing,false);
     painter->drawRoundedRect( rect.translated(0.5,0.5), 3.0, 3.0 );
-    //painter->drawRoundedRect(-40, -20, 80, 40, 2, 2);
     painter->setPen(Qt::green);
-    //painter->drawText(-40, 0, _ime);
     painter->drawText(rect, Qt::AlignCenter | Qt::TextWordWrap, _ime);//doterati malo
 }
 

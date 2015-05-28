@@ -68,8 +68,8 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
 GlavniProzor::~GlavniProzor()
 {
-    //if (stablo != nullptr)
-    //    delete stablo;
+    if (stablo != nullptr)
+        delete stablo;
     delete ui;
 
 }

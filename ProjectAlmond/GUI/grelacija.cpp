@@ -10,23 +10,31 @@ GRelacija::GRelacija(short sifra, QPointF prva, QPointF druga, bool brak)
 GRelacija::~GRelacija()
 {}
 
-//QPainterPath GRelacija::shape() const
-//{
-//    QPainterPath putanja;
-//    putanja.
-//}
+QPainterPath GRelacija::shape() const//pojma nemam da li je ovo dobro
+{
+    QPainterPath putanja;
+    putanja.addRect(-30, -30, 60, 60);
+    return putanja;
+}
 
 QRectF GRelacija::boundingRect() const
 {
     qreal d = 1;
+//    qreal x = std::min(_prva.x(), _druga.x());
+//    qreal y = std::min(_prva.y(), _druga.y());
+//    qreal w = std::abs(_prva.x() - _druga.x());
+//    qreal h = std::abs(_prva.y() - _druga.y());
     return QRectF(-30-d, -30-d, 60+d, 60+d);
 }
 
 void GRelacija::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     painter->setPen(Qt::darkGreen);
     painter->drawLine(mapFromScene(_prva), mapFromScene(_druga));
     painter->setBrush(Qt::darkGreen);
+    painter->setRenderHint(QPainter::Antialiasing,false);
     QRect okvir(-30, -30, 60, 60);
     QPixmap slika;
     if(_brak)
