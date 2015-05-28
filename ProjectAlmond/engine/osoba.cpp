@@ -8,8 +8,8 @@
 short int Osoba::_sledecaSifra=0;
 
 Osoba::Osoba()
-    :_sifra(),_nepoznata(),_ime(),_prezime(),
-    _pol(),_datumRodjenja(),_datumSmrti(),_krvniSrodnik()
+    :_sifra(),_nepoznata(false),_ime(),_prezime(),
+    _pol(),_datumRodjenja(),_datumSmrti(),_krvniSrodnik(true)
 {
     _sifraRoditeljskeVeze = -1;
 }

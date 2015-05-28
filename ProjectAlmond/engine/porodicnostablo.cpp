@@ -8,6 +8,7 @@ PorodicnoStablo::PorodicnoStablo()
     _kljucnaOsoba = new Osoba();
     InicijalizujSveStrukture();
     (_indeksSifraOsobe[_kljucnaOsoba->Sifra()])=_kljucnaOsoba;
+    _nivoi.push_back(1);
 }
 
 PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, const QString &pol,
@@ -40,6 +41,23 @@ Osoba * PorodicnoStablo::KljucnaOsoba()
     return _kljucnaOsoba;
 }
 
+short int PorodicnoStablo::DodajKljucnuOsobu(const QString &ime, const QString &prezime, const QString &pol,
+                            const QDate &rodjenje, const QDate &smrt, bool krvniSrodnik)
+{
+    //ako je sve bilo brisano dodajemo bas osobu
+    if (_kljucnaOsoba == nullptr)
+        return DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
+    //a ako je stablo kreirano sa Osoba() za kljucnu, treba joj samo postaviti podatke
+    std::cout << "menjam kljucnu" << std::endl;
+    _kljucnaOsoba->PromeniIme(ime);
+    _kljucnaOsoba->PromeniPrezime(prezime);
+    _kljucnaOsoba->PromeniDatumRodjenja(rodjenje);
+    _kljucnaOsoba->PromeniDatumSmrti(smrt);
+    _kljucnaOsoba->PromeniPol(pol.at(0));
+    std::cout << _kljucnaOsoba->Sifra() << std::endl;
+    std::cout << _kljucnaOsoba->Ime().toStdString() << std::endl;
+    return _kljucnaOsoba->Sifra();
+}
 
 //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
 short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
