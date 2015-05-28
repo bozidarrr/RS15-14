@@ -125,6 +125,11 @@ void Osoba::PostaviRoditeljskuSifru(const short sifra)
     _sifraRoditeljskeVeze = sifra;
 }
 
+bool Osoba::JeNepoznata()
+{
+    return _nepoznata;
+}
+
 void Osoba::postaviSledecuSifru(int sifra)
 {
     _sledecaSifra=sifra;

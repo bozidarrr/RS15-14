@@ -63,7 +63,7 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     //-------Pravi se stablo i korena osoba-------//
 
-    connect(ui->aKljucna, SIGNAL(triggered()), this, SLOT(napraviKljucnuOsobu()));
+    connect(tbBratSestra, SIGNAL(clicked()), this, SLOT(napraviKljucnuOsobu()));
     //       napraviKljucnuOsobu();
 
     readSettings();
@@ -109,8 +109,9 @@ void GlavniProzor::napraviKljucnuOsobu()
             _pozicijeOsoba[kljucna->Sifra()] = kljucna->pos();
             _osobe[kljucna->Sifra()] = kljucna;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), kljucna, SLOT(skloniSeSaScene(short)));
-
-            ui->aKljucna->setDisabled(true);
+            kljucna->dodajStil((pol!=QChar('M'))?GOsoba::ZENSKA:GOsoba::MUSKA);
+            kljucna->dodajStil(GOsoba::KORENA);
+            tbBratSestra->setDisabled(true);
         }
     }
     delete d;
@@ -205,7 +206,7 @@ void GlavniProzor::kreirajToolbar()
 
     tbMuzZena=kreirajJedanAlat(tbMuzZena,"RelacijaSupruznici","Dodajte u stablo supruznika nekoj od osoba");
     tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Dodajte u neku vezu novo dete");
-    tbBratSestra=kreirajJedanAlat(tbBratSestra,"RelacijaBratSestra","Dodajte u stablo brata ili sestru nekoj osobi");
+    tbBratSestra=kreirajJedanAlat(tbBratSestra,"NovaOsoba","Kreiraj osobu koja je koren porodicnog stabla");
     tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
     tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi ili odnosu");
     tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili odnosu");
@@ -213,19 +214,21 @@ void GlavniProzor::kreirajToolbar()
     tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
     tbSrodstvo=kreirajJedanAlat(tbSrodstvo,"Srodstvo","Odredite tip srodstva izmedju dve odabrane osobe");
     tbUredi->setCheckable(false);
+    tbBratSestra->setCheckable(false);
 
     grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbMuzZena);
-    grpToolBar->addButton(tbBratSestra);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
     grpToolBar->addButton(tbSrodstvo);
 
+    toolbar->addWidget(tbBratSestra);
+    toolbar->addSeparator();
     toolbar->addWidget(tbMuzZena);
     toolbar->addWidget(tbRoditeljDete);
-    toolbar->addWidget(tbBratSestra);
+
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbMenjaj);
@@ -274,16 +277,22 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         QString ime, prezime;
         QDate rodjenje, smrt;
         QString pol;
-
+        bool jeNN=false;
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
+        {jeNN=false;
             novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
-        else
+        }
+        else{
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
+            jeNN=true;
+        }
         if (novaSifra >= 0)
         {
             novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(3);
+            novaOsoba->dodajStil((pol!=QChar('M'))?GOsoba::ZENSKA:GOsoba::MUSKA);
+            if(jeNN)novaOsoba->dodajStil(GOsoba::NEPOZNATA);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
             _osobe[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
@@ -318,6 +327,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
     poruka->exec();
     if (poruka->clickedButton() == da)
     {
+        if(sifra==stablo->KljucnaOsoba()->Sifra())tbBratSestra->setEnabled(true);
         stablo->UkloniOsobuSifrom(sifra);
         ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
         uredjeno = false;
@@ -506,8 +516,11 @@ void GlavniProzor::RekonstruisiStablo()
     for (auto a : stablo->Osobe())
     {
         GOsoba *g = new GOsoba(a.first, a.second->ImePrezime());
+        g->dodajStil((a.second->Pol()=='M')?GOsoba::MUSKA:GOsoba::ZENSKA);
+        if(a.second->JeNepoznata())g->dodajStil(GOsoba::NEPOZNATA);
         scena->addItem(g);
         g->setPos(_pozicijeOsoba.at(g->Sifra()));
+        if(a.first==stablo->KljucnaOsoba()->Sifra())g->dodajStil(GOsoba::KORENA);
         g->setZValue(2);
         _osobe[a.first] = g;
         connect(stablo, SIGNAL(obrisanaOsoba(short)), g, SLOT(skloniSeSaScene(short)));
@@ -543,6 +556,7 @@ void GlavniProzor::RekonstruisiStablo()
         connect(_osobe.at(dete->SifraOsobe()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
         connect(stablo, SIGNAL(obrisanaVezaDete(short)), g, SLOT(ukloniSeSaScene(short)));
     }
+    tbBratSestra->setEnabled(true);
 }
 
 void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
@@ -956,6 +970,8 @@ void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
 
 void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
+         for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
+
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText("Informacije");
     if (tbDetalji->isChecked())
@@ -968,7 +984,10 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             return;
         }
         if (osoba)
+        {
             popuniInformacije(osoba->Sifra(), INFO_OSOBA);
+            osoba->dodajStil(GOsoba::ODABRANA);
+        }
         if (relacija)
         {
             if (relacija->BrakJe())
@@ -985,7 +1004,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             tbDetalji->setChecked(true);
             return;
         }
-        item->promeniStil(GOsoba::SELEKTOVANA);
+        item->dodajStil(GOsoba::SELEKTOVANA);
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
             _pozicijeOsoba.erase(item->Sifra());
@@ -993,7 +1012,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             setWindowModified(true);
         }
         else
-            item->promeniStil(GOsoba::OBICNA);
+            item->oduzmiStil(GOsoba::SELEKTOVANA);
     }
     if (tbMenjaj->isChecked())
     {
@@ -1014,6 +1033,8 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 
 void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 {
+    for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
+
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
@@ -1124,6 +1145,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 
     }
     tbDetalji->setChecked(true);
+    pogled->update(pogled->geometry());
 }
 
 void GlavniProzor::urediStablo()
@@ -1265,7 +1287,7 @@ void GlavniProzor::izvrsiPretragu()
                 for (short sifra : *trazene)
                 {
                     ui->zaInformacije->append(stablo->NadjiOsobuSifrom(sifra)->ImePrezime());
-                    _osobe.at(sifra)->promeniStil(GOsoba::SELEKTOVANA);//necemo ovako, samo da se vidi za sad nesto
+                    _osobe.at(sifra)->dodajStil(GOsoba::SELEKTOVANA);//necemo ovako, samo da se vidi za sad nesto
                 }
             }
             delete trazene;
