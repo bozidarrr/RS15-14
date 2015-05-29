@@ -650,7 +650,8 @@ void GlavniProzor::izveziUPDF()
     pdfPrinter.setOutputFormat( QPrinter::PdfFormat );
     pdfPrinter.setPaperSize( QSize(scena->width(), scena->height()), QPrinter::Point );
     pdfPrinter.setFullPage(true);
-    pdfPrinter.setOutputFileName( ime+".pdf" );
+    if(!ime.endsWith(".pdf"))ime+=".pdf";
+    pdfPrinter.setOutputFileName( ime );
 
     QPainter pdfPainter;
     pdfPainter.begin( &pdfPrinter);
@@ -687,7 +688,8 @@ bool GlavniProzor::sacuvajKao()
 {
     QString ekst("*.alm");
     QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo."),
-                                               ".", tr("Project Almond (*.alm)"),&ekst)+".alm";
+                                               ".", tr("Project Almond (*.alm)"),&ekst);
+    if(!ime.endsWith(".alm") )ime+=".alm";
     if (ime.isEmpty())
         return false;
     return snimiIzmene(ime);
