@@ -28,7 +28,7 @@ public:
     Osoba * KljucnaOsoba();
 
     //dodaje novu osobu u stablo,ocekuje se da posle poziva sledi i poziv za dodavanje deteta ili braka, da bi stablo bilo povezano u svakom momentu!!!
-    short int DodajOsobu(const QString &ime, const QString &prezime, const QString &pol, const QDate rodjenje, const QDate smrt, bool krvniSrodnik);
+    short int DodajOsobu(const QString &ime, const QString &prezime, const QChar &pol, const QDate rodjenje, const QDate smrt, bool krvniSrodnik);
     //slicno, samo pravi NN lice
     short int DodajNNLice(bool krvniSrodnik);
 

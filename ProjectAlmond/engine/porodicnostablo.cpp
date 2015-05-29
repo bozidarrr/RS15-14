@@ -2,6 +2,7 @@
 #include <QDataStream>
 #include <iostream>
 #include "alati/trazenjeputa.h"
+#include <QMessageBox>
 
 PorodicnoStablo::PorodicnoStablo()
 {
@@ -22,7 +23,7 @@ PorodicnoStablo::PorodicnoStablo(const QString &ime, const QString &prezime, con
     if (rodjenje.isValid())
     {
 
-        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), _kljucnaOsoba->Sifra()));//ne azurira pri promeni kasnijoj!
+        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), _kljucnaOsoba->Sifra()));
     }
     _indeksSifraOsobe[_kljucnaOsoba->Sifra()]=_kljucnaOsoba;
 }
@@ -47,16 +48,15 @@ short int PorodicnoStablo::DodajNNLice(bool krvniSrodnik)
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
 }
-short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime, const QString &pol,
+short int PorodicnoStablo::DodajOsobu(const QString &ime, const QString &prezime, const QChar &pol,
                                       const QDate rodjenje, const QDate smrt, bool krvniSrodnik)
 {
-    QChar p = pol.at(0);
-    Osoba* nova=new Osoba(ime, prezime, p, rodjenje, smrt, krvniSrodnik);
+    Osoba* nova=new Osoba(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
     _indeksIme.insert(std::make_pair(ime, nova));
     if (rodjenje.isValid())
     {
 
-        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), nova->Sifra()));//ne azurira pri promeni kasnijoj!
+        _indeksRodjendan.insert(std::make_pair(rodjenje.dayOfYear(), nova->Sifra()));
     }
     _indeksSifraOsobe[nova->Sifra()]=nova;
     return nova->Sifra();
@@ -265,7 +265,6 @@ std::vector<short> *PorodicnoStablo::ListaSupruznika(const short sifra)
 bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
 {
 
-    //std::cout << "Citam fajl" << imeFajla.toStdString() << std::endl;
     //otvaramo fajl
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::ReadOnly)) {
@@ -361,9 +360,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
     //----------------------POSTAVLJANJE STATICKOG PODATKA ZA DODELU SLEDECE SIFRE NA OSNOVU MAKSIMUMA UCITANIH------------------------//
 
 
-    //sad ucitavamo jos i pozicije redom
+    //ucitavanje pozicija redom
 
-    //prvo za osobe
+    //za osobe
     int broj = _indeksSifraOsobe.size();
     for (int i=0;i<broj;i++)
     {
@@ -373,10 +372,8 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz >> x;
         ulaz >> y;
         mapaOsobe[(short)sifra] = QPointF(x, y);
-        //std::cout << (short)sifra << " ";
     }
-    //std::cout << "ucitala osobe pozicije" << std::endl;
-    //pa za brakove
+    //za brakove
     broj = _indeksSifraVeza.size();
     for (int i=0;i<broj;i++)
     {
@@ -386,11 +383,9 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz >> x;
         ulaz >> y;
         mapaBrakovi[(short)sifra] = QPointF(x, y);
-        //std::cout << (short)sifra << " ";
     }
-    //std::cout << "ucitala veze pozicije" << std::endl;
 
-    //i ucitavam _nivoe
+    //ucitavanje nivoa
     ulaz >> velicina;
     for (int i = 0; i < velicina; i++)
     {
@@ -398,41 +393,34 @@ bool PorodicnoStablo::ProcitajFajl(const QString &imeFajla)
         ulaz >> broj;
         _nivoi.push_back((int)broj);
     }
-    //std::cout<<"Uspesno Procitano"<<std::endl;
     fajl.close();
     return true;
 }
 
 
 
-bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//cuvam samo podatke koji su mi potrebni, da bi fajlovi bili manji
-{//time gubim na performansama pri ucitavanju, ali posto je cuvanje bitnije od ucitavanja (koje radimo prilicno retko), deluje mi bolje ovako
-if (_kljucnaOsoba == nullptr){
-    return false;
-}
-    //std::cout << "Pisem u fajl"<<std::endl;
+bool PorodicnoStablo::IspisiFajl(const QString &imeFajla)//samo podaci koji su potrebni da se kasnije sve rekonstruise
+{
+    if (_kljucnaOsoba == nullptr){
+        return false;
+    }
     QFile fajl(imeFajla);
     if (!fajl.open(QIODevice::WriteOnly)) {
         //std::cout << "Ne moze da upise u fajl" << std::endl; //bice warning
         return false;
     }
     QDataStream izlaz(&fajl);
-    izlaz.setVersion(QDataStream::Qt_4_1);// DA LI OVAJ, ILI NEKI DRUGI?? iskreno pojma nemam u kojem radimo mi zapravo
+    izlaz.setVersion(QDataStream::Qt_4_1);
 
-    if (_kljucnaOsoba != nullptr)//ako je prazno stablo!!!
         izlaz <<* _kljucnaOsoba;
-    //std::cout<<"ispisala kjucnu\n";
 
-    //std::cout << "imam osoba " << _indeksSifraOsobe.size() << std::endl;
     //Kljucnu smo vec upisali
     izlaz << (qint32)(_indeksSifraOsobe.size()-1);
-    // //std::cout<<"ispisala velicinu vektora osoba\n"<<_indeksSifraOsobe.size();
 
     for(auto osoba :_indeksSifraOsobe)
     {
         if ((osoba.second)->Sifra() != _kljucnaOsoba->Sifra())
             izlaz<<(*(osoba.second));
-        //   //std::cout<<"ispisala osobu\n";
     }
 
     izlaz << (qint32)_indeksSifraVeza.size();
@@ -454,16 +442,16 @@ if (_kljucnaOsoba == nullptr){
         //  //std::cout<<"ispisala decu\n";
     }
 
-    //sad ispisujemo i pozicije redom
+    //pozicije redom
 
-    //prvo za osobe
+    //osobe
     for (auto o : mapaOsobe)
     {
         izlaz << (qint32)o.first;
         izlaz << (qreal)o.second.x();
         izlaz << (qreal)o.second.y();
     }
-    //pa za brakove
+    //brakove
     for (auto b : mapaBrakovi)
     {
         if (_indeksSifraVeza.find(b.first) == _indeksSifraVeza.end())
@@ -473,13 +461,12 @@ if (_kljucnaOsoba == nullptr){
         izlaz << (qreal)b.second.y();
     }
 
-    //i ispisujemo _nivoe
+    // _nivoe
     izlaz << (qint32)_nivoi.size();
     for (auto n : _nivoi)
         izlaz << (qint32)n;
 
     fajl.close();
-    //std::cout<<"Uspesno ispisano" << std::endl;
     return true;
 }
 

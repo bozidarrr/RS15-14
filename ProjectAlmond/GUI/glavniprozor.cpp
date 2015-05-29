@@ -74,7 +74,7 @@ void GlavniProzor::napraviKljucnuOsobu()
     {
         QString ime, prezime;
         QDate rodjenje, smrt;
-        QString pol;
+        QChar pol;
 
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
         {
@@ -86,7 +86,6 @@ void GlavniProzor::napraviKljucnuOsobu()
             ui->statusBar->showMessage("Podaci moraju biti poznati za korenu osobu");
         if (novaSifra >= 0)
         {
-            //qDebug() << "novaSifra";
             kljucna = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             QPointF centar(pogled->viewport()->rect().center());
             kljucna->setPos(pogled->mapToScene(centar.x(), centar.y()));
@@ -261,7 +260,7 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
     {
         QString ime, prezime;
         QDate rodjenje, smrt;
-        QString pol;
+        QChar pol;
         bool jeNN=false;
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
         {jeNN=false;
@@ -346,9 +345,6 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
             connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaDete(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
-
-
-
     }
     delete d;
     return novaSifra;
@@ -380,16 +376,6 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
-
-        for(auto i=_brakovi.begin();i!=_brakovi.end();++i)
-        {
-            std::cout<<(*i).first<<' '<<(*i).second<<std::endl;
-        }
-
-
-
-
-
     }
     delete d;
 
@@ -482,7 +468,7 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     }
     postaviTrenutniFajl(imeFajla);
     ui->statusBar->showMessage(tr("Fajl uspesno ucitan."), 2000);
-    //stablo -> vrati mi pozicije
+    //stablo -> vrati pozicije
     RekonstruisiStablo();
     ui->aKljucna->setEnabled(_osobe.empty());
     uredjeno = false;
@@ -1049,7 +1035,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
             }
             else
             {
-                /*! ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
+                /* ako smo odustali od pravljenja braka, ne treba ni osobu dodati,
                  * tj, treba je obrisati iz stabla
                 */
                 stablo->UkloniOsobuSifrom(novaOsoba->Sifra());
@@ -1163,7 +1149,6 @@ void GlavniProzor::urediStablo()
 //osoba te sifre se smesta sa svojim supruznicima u svoj pravougaounik
 void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
 {
-    /** TO DO **/
     //ona i supruznici se rasporedjuju u pravougaonik koji pocinje na x, sirine koju imamo u vektoru
     //for svako dete i
     //pomeriOsobu (sifraDeteta, x + i*sirina[j+1])
@@ -1204,10 +1189,6 @@ void GlavniProzor::izvrsiPretragu()
         int opcija;
         QString podatak;
         d->procitajPodatke(opcija, kriterijum, podatak);
-        //        //qDebug() << "pretrazi";
-        //        //qDebug() << opcija;
-        //        //qDebug() << kriterijum;
-        //        //qDebug() << podatak;
         std::vector<short> *trazene;
         switch(opcija)
         {
