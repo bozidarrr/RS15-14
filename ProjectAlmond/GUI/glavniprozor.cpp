@@ -20,6 +20,8 @@
 #include "alati/uredjivanje.h"
 #include <iostream>
 #include "alati/trazenjeputa.h"
+#include <QtPrintSupport/QPrinter>
+
 
 GlavniProzor::GlavniProzor(QWidget *parent) :
     QMainWindow(parent),
@@ -172,7 +174,7 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
     connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikSpanski()));
     connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));
-
+    connect(ui->aUPDF,SIGNAL(triggered()),this,SLOT(izveziUPDF()));
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
     {
         skoroOtvaraniAkcije[i] = new QAction(this);
@@ -626,13 +628,37 @@ void GlavniProzor::otvoriPostojeceStablo()
         ////qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
-                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"));
+                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"))+".alm";
         if (!imeFajla.isEmpty())
         {
             ////qDebug() << "nasli fajl i treba  ga otvoriti";
             otvoriFajl(imeFajla);
         }
     }
+}
+
+void GlavniProzor::izveziUPDF()
+{
+    QString ekst("*.pdf");
+    QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo u pdf formatu."),
+                                               ".", tr("Printable data format (*.pdf)"),&ekst);
+    if (ime.isEmpty()){
+         ui->statusBar->showMessage(tr("Odustali ste od stampanja."), 2000);
+        return;
+}
+    QPrinter pdfPrinter;
+    pdfPrinter.setOutputFormat( QPrinter::PdfFormat );
+    pdfPrinter.setPaperSize( QSize(scena->width(), scena->height()), QPrinter::Point );
+    pdfPrinter.setFullPage(true);
+    pdfPrinter.setOutputFileName( ime+".pdf" );
+
+    QPainter pdfPainter;
+    pdfPainter.begin( &pdfPrinter);
+    scena->render( &pdfPainter );
+    pdfPainter.end();
+    ui->statusBar->showMessage(tr("Stampanje uspesno."), 2000);
+
+
 }
 
 void GlavniProzor::closeEvent(QCloseEvent *event)
@@ -661,7 +687,7 @@ bool GlavniProzor::sacuvajKao()
 {
     QString ekst("*.alm");
     QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo."),
-                                               ".", tr("Project Almond (*.alm)"),&ekst);
+                                               ".", tr("Project Almond (*.alm)"),&ekst)+".alm";
     if (ime.isEmpty())
         return false;
     return snimiIzmene(ime);

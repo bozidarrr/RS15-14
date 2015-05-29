@@ -92,6 +92,7 @@ public Q_SLOTS:
     void prikaziToolbar();
     void novoStablo();//File|New
     void otvoriPostojeceStablo();//File|Open
+    void izveziUPDF();//File|Export to PDF
     void closeEvent(QCloseEvent *event);//File|Exit
     bool sacuvaj();//File|Save
     bool sacuvajKao();//File|SaveAs

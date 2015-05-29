@@ -72,7 +72,7 @@
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="GUI/dialognovaosoba.cpp" line="100"/>
+        <location filename="GUI/dialognovaosoba.cpp" line="72"/>
         <source>M|m|Z|z</source>
         <translation>M|m|F|f</translation>
     </message>
@@ -200,12 +200,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="GUI/dijalogpretrage.cpp" line="41"/>
+        <location filename="GUI/dijalogpretrage.cpp" line="47"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="GUI/dijalogpretrage.cpp" line="42"/>
+        <location filename="GUI/dijalogpretrage.cpp" line="48"/>
         <source>Ponisti</source>
         <translation>Cancel</translation>
     </message>
@@ -251,17 +251,17 @@
         <translation>Files</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="99"/>
+        <location filename="GUI/glavniprozor.ui" line="101"/>
         <source>Podesavanja</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="103"/>
+        <location filename="GUI/glavniprozor.ui" line="105"/>
         <source>Odaberite jezik</source>
         <translation>Choose language</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="116"/>
+        <location filename="GUI/glavniprozor.ui" line="118"/>
         <source>Prikaz</source>
         <translation>View</translation>
     </message>
@@ -270,27 +270,27 @@
         <translation type="obsolete">Help</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="124"/>
+        <location filename="GUI/glavniprozor.ui" line="126"/>
         <source>O programu</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="135"/>
+        <location filename="GUI/glavniprozor.ui" line="137"/>
         <source>Novo stablo</source>
         <translation>New tree</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="138"/>
+        <location filename="GUI/glavniprozor.ui" line="140"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="143"/>
+        <location filename="GUI/glavniprozor.ui" line="145"/>
         <source>Otvorite fajl</source>
         <translation>Open file</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="146"/>
+        <location filename="GUI/glavniprozor.ui" line="148"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
@@ -300,120 +300,125 @@
         <translation>Recently opened files</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="151"/>
+        <location filename="GUI/glavniprozor.ui" line="153"/>
         <source>Sacuvajte izmene</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="154"/>
+        <location filename="GUI/glavniprozor.ui" line="156"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="159"/>
+        <location filename="GUI/glavniprozor.ui" line="161"/>
         <source>Sacuvajte kao...</source>
         <translation>Save as...</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="164"/>
+        <location filename="GUI/glavniprozor.ui" line="166"/>
         <source>Ugasite program</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="167"/>
+        <location filename="GUI/glavniprozor.ui" line="169"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="175"/>
+        <location filename="GUI/glavniprozor.ui" line="177"/>
         <source>Prikazi mrezu</source>
         <translation>Show grid</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="183"/>
+        <location filename="GUI/glavniprozor.ui" line="185"/>
         <source>Prikazuj samo krvne srodnike</source>
         <translation>Show only blood relatives</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="194"/>
+        <location filename="GUI/glavniprozor.ui" line="196"/>
         <source>Srpski</source>
         <translation>Serbian</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="202"/>
+        <location filename="GUI/glavniprozor.ui" line="204"/>
         <source>English</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="210"/>
+        <location filename="GUI/glavniprozor.ui" line="212"/>
         <source>Deutsch</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="215"/>
+        <location filename="GUI/glavniprozor.ui" line="217"/>
         <source>Omoguci animacije</source>
         <translation>Enable animations</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="226"/>
+        <location filename="GUI/glavniprozor.ui" line="228"/>
         <source>Preci su sa gornje strane</source>
         <translation>Ancestors on top</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="231"/>
+        <location filename="GUI/glavniprozor.ui" line="233"/>
         <source>Aktivna tema</source>
         <translation>Active theme</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="242"/>
-        <location filename="GUI/glavniprozor.cpp" line="188"/>
-        <location filename="GUI/glavniprozor.cpp" line="233"/>
-        <location filename="GUI/glavniprozor.cpp" line="922"/>
+        <location filename="GUI/glavniprozor.ui" line="244"/>
+        <location filename="GUI/glavniprozor.cpp" line="189"/>
+        <location filename="GUI/glavniprozor.cpp" line="234"/>
+        <location filename="GUI/glavniprozor.cpp" line="934"/>
         <source>Alati</source>
         <translation>Tools</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="253"/>
-        <location filename="GUI/glavniprozor.cpp" line="245"/>
-        <location filename="GUI/glavniprozor.cpp" line="248"/>
-        <location filename="GUI/glavniprozor.cpp" line="924"/>
-        <location filename="GUI/glavniprozor.cpp" line="928"/>
-        <location filename="GUI/glavniprozor.cpp" line="1021"/>
+        <location filename="GUI/glavniprozor.ui" line="255"/>
+        <location filename="GUI/glavniprozor.cpp" line="246"/>
+        <location filename="GUI/glavniprozor.cpp" line="249"/>
+        <location filename="GUI/glavniprozor.cpp" line="936"/>
+        <location filename="GUI/glavniprozor.cpp" line="940"/>
+        <location filename="GUI/glavniprozor.cpp" line="1033"/>
         <source>Informacije</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="258"/>
+        <location filename="GUI/glavniprozor.ui" line="260"/>
         <source>Zatvorite fajl</source>
         <translation>Close file</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="261"/>
+        <location filename="GUI/glavniprozor.ui" line="263"/>
         <source>Shift+W</source>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="266"/>
+        <location filename="GUI/glavniprozor.ui" line="268"/>
         <source>Pretrazi stablo</source>
         <translation>Search the tree</translation>
     </message>
     <message utf8="true">
-        <location filename="GUI/glavniprozor.ui" line="274"/>
+        <location filename="GUI/glavniprozor.ui" line="276"/>
         <source>Español</source>
         <translation>Spanish</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.ui" line="279"/>
+        <location filename="GUI/glavniprozor.ui" line="281"/>
         <source>Dodajte kjucnu osobu</source>
         <translation>Add new root person</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="294"/>
+        <location filename="GUI/glavniprozor.ui" line="286"/>
+        <source>Izvezite u .pdf format</source>
+        <translation>Export data to PDF</translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="295"/>
         <source>Jeste li sigurni da zelite da uklonite korenu osobu? To ce prouzrokovati brisanje celog stabla!</source>
         <translation>Are you sure you want to remove root person? That will produce deleting entire tree!</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="298"/>
+        <location filename="GUI/glavniprozor.cpp" line="299"/>
         <source>Jeste li sigurni da zelite da uklonite selektovanu osobu,a time i sve njene supruznike i potomke?</source>
         <translation>Are you sure you want to remove selected person, by that you will remove all of his/hers spouses and descendants?</translation>
     </message>
@@ -422,24 +427,24 @@
         <translation type="obsolete">Are you sure you want to remove selected person?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="304"/>
-        <location filename="GUI/glavniprozor.cpp" line="423"/>
+        <location filename="GUI/glavniprozor.cpp" line="305"/>
+        <location filename="GUI/glavniprozor.cpp" line="411"/>
         <source>Da</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="306"/>
-        <location filename="GUI/glavniprozor.cpp" line="425"/>
+        <location filename="GUI/glavniprozor.cpp" line="307"/>
+        <location filename="GUI/glavniprozor.cpp" line="413"/>
         <source>Ne</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="309"/>
+        <location filename="GUI/glavniprozor.cpp" line="310"/>
         <source>Uklanjanje osobe</source>
         <translation>Removing person</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="317"/>
+        <location filename="GUI/glavniprozor.cpp" line="318"/>
         <source>Uspesno izvrseno uklanjanje izabrane osobe.</source>
         <translation>Successfully removed selected person.</translation>
     </message>
@@ -448,28 +453,28 @@
         <translation type="obsolete">Person isn&apos;t removed</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="33"/>
-        <location filename="GUI/glavniprozor.cpp" line="930"/>
+        <location filename="GUI/glavniprozor.cpp" line="35"/>
+        <location filename="GUI/glavniprozor.cpp" line="942"/>
         <source>Project Almond[*]</source>
         <translation>Project Almond[*]</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="124"/>
+        <location filename="GUI/glavniprozor.cpp" line="125"/>
         <source>Datum rodjenja:</source>
         <translation>Date of birth:</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="130"/>
+        <location filename="GUI/glavniprozor.cpp" line="131"/>
         <source>Datum smrti: </source>
         <translation>Date of death:</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="932"/>
+        <location filename="GUI/glavniprozor.cpp" line="944"/>
         <source>Dodajte u stablo supruznika nekoj od osoba</source>
         <translation>Add in a tree spouse to some person</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="933"/>
+        <location filename="GUI/glavniprozor.cpp" line="945"/>
         <source>Dodajte u neku vezu novo dete</source>
         <translation>Add a new child to some relationship</translation>
     </message>
@@ -478,164 +483,184 @@
         <translation type="obsolete">Add to a tree brother or sister to some person</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="935"/>
+        <location filename="GUI/glavniprozor.cpp" line="947"/>
         <source>Pomerite rucicom odabranu osobu ili relaciju na crtezu</source>
         <translation>Move with a hand selected person or relation on the screen</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="936"/>
+        <location filename="GUI/glavniprozor.cpp" line="948"/>
         <source>Detalji o odabranoj osobi ili odnosu</source>
         <translation>Details about selected person or relation</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="937"/>
+        <location filename="GUI/glavniprozor.cpp" line="949"/>
         <source>Izmenite podatke o odabranoj osobi ili odnosu</source>
         <translation>Change information about selected person or relation</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="938"/>
+        <location filename="GUI/glavniprozor.cpp" line="950"/>
         <source>Obrisite osobu ili relaciju iz stabla</source>
         <translation>Remove person or relation from the tree</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="939"/>
+        <location filename="GUI/glavniprozor.cpp" line="951"/>
         <source>Rasporedite cvorove stabla automatski</source>
         <translation>Arrange the nodes of the tree automatically</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="301"/>
+        <location filename="GUI/glavniprozor.cpp" line="302"/>
         <source>Jeste li sigurni da zelite da uklonite selektovanu osobu i njene potomke?</source>
         <translation>Are you sure you want to remove a selected person and its descendants ?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="322"/>
+        <location filename="GUI/glavniprozor.cpp" line="323"/>
         <source>Osoba nije uklonjena.</source>
         <translation>Person not removed.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="406"/>
+        <location filename="GUI/glavniprozor.cpp" line="394"/>
         <source>Uspesno unete izmene.</source>
         <translation>Changes successfully added.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="419"/>
+        <location filename="GUI/glavniprozor.cpp" line="407"/>
         <source>Postoje nesacuvane izmene u trenutnom stablu. Da li zelite da ih snimite?</source>
         <translation>There are unsaved changes in current tree. Would you like to save them?</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="422"/>
+        <location filename="GUI/glavniprozor.cpp" line="410"/>
         <source>Project Almond</source>
         <translation>Project Almond</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="426"/>
+        <location filename="GUI/glavniprozor.cpp" line="414"/>
         <source>Odustani</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="445"/>
+        <location filename="GUI/glavniprozor.cpp" line="433"/>
         <source>Snimanje otkazano.</source>
         <translation>Saving canceled.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="449"/>
+        <location filename="GUI/glavniprozor.cpp" line="437"/>
         <source>Fajl je sacuvan.</source>
         <translation>File saved.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="463"/>
+        <location filename="GUI/glavniprozor.cpp" line="451"/>
         <source>&amp;%1 %2</source>
         <translation>&amp;%1 %2</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="480"/>
+        <location filename="GUI/glavniprozor.cpp" line="468"/>
         <source>Ucitavanje fajla otkazano.</source>
         <translation>Canceled loading file.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="484"/>
+        <location filename="GUI/glavniprozor.cpp" line="472"/>
         <source>Fajl uspesno ucitan.</source>
         <translation>File successfully loaded.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="642"/>
+        <location filename="GUI/glavniprozor.cpp" line="630"/>
         <source>Otvorite postojece stablo.</source>
         <translation>Open existing tree.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="643"/>
+        <location filename="GUI/glavniprozor.cpp" line="631"/>
         <source>ProjectAlmond (*.alm)</source>
         <translation>ProjectAlmond (*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="677"/>
+        <location filename="GUI/glavniprozor.cpp" line="643"/>
+        <source>Sacuvajte stablo u pdf formatu.</source>
+        <translation>Export data to PDF.</translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="644"/>
+        <source>Printable data format (*.pdf)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="646"/>
+        <source>Odustali ste od stampanja.</source>
+        <translation>Exporting canceled.</translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="659"/>
+        <source>Stampanje uspesno.</source>
+        <translation>Exporting data successful.</translation>
+    </message>
+    <message>
+        <location filename="GUI/glavniprozor.cpp" line="689"/>
         <source>Sacuvajte stablo.</source>
         <translation>Saved tree.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="678"/>
+        <location filename="GUI/glavniprozor.cpp" line="690"/>
         <source>Project Almond (*.alm)</source>
         <translation>Project Almond (*.alm)</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="929"/>
+        <location filename="GUI/glavniprozor.cpp" line="941"/>
         <source>Ovde mozete pronaci informacije o trenutno aktivnoj osobi</source>
         <translation>Here you can find information about person active at the moment</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="934"/>
+        <location filename="GUI/glavniprozor.cpp" line="946"/>
         <source>Dodajte osobu koja ce biti koren stabla</source>
         <translation>Add new root person</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="940"/>
+        <location filename="GUI/glavniprozor.cpp" line="952"/>
         <source>Odredite tip srodstva izmedju dve odabrane osobe</source>
         <translation>Determine the type of relation between the two selected persons</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1034"/>
+        <location filename="GUI/glavniprozor.cpp" line="1046"/>
         <source>Moguce je dodati supruznika samo krvnim srodnicima.</source>
         <translation>It is possible to add a spouse only to blood relatives.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1046"/>
+        <location filename="GUI/glavniprozor.cpp" line="1058"/>
         <source>Dodavanje nove osobe u stablo je proslo uspesno.</source>
         <translation>Adding new person to the tree completed successfully.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1056"/>
-        <location filename="GUI/glavniprozor.cpp" line="1060"/>
+        <location filename="GUI/glavniprozor.cpp" line="1068"/>
+        <location filename="GUI/glavniprozor.cpp" line="1072"/>
         <source>Dodavanje nove osobe i relacije otkazano.</source>
         <translation>Adding new person and relation canceled.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1084"/>
-        <location filename="GUI/glavniprozor.cpp" line="1088"/>
+        <location filename="GUI/glavniprozor.cpp" line="1096"/>
+        <location filename="GUI/glavniprozor.cpp" line="1100"/>
         <source>Dodavanje novog deteta otkazano.</source>
         <translation>Adding new child canceled.</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1129"/>
+        <location filename="GUI/glavniprozor.cpp" line="1141"/>
         <source> je </source>
         <translation> is </translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1130"/>
+        <location filename="GUI/glavniprozor.cpp" line="1142"/>
         <source> od osobe </source>
         <translation> to person </translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1233"/>
+        <location filename="GUI/glavniprozor.cpp" line="1240"/>
         <source>Pretraga nije uradjena, pokusajte ponovo</source>
         <translation>Searching failed, try again</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1237"/>
+        <location filename="GUI/glavniprozor.cpp" line="1244"/>
         <source>Nema osoba koje ispunjavaju uslove pretrage</source>
         <translation>No person fits the criteria</translation>
     </message>
     <message>
-        <location filename="GUI/glavniprozor.cpp" line="1240"/>
+        <location filename="GUI/glavniprozor.cpp" line="1247"/>
         <source>Osobe koje ispunjavaju uslove pretrage su:</source>
         <translation>The persons who meet the selected criteria are:</translation>
     </message>

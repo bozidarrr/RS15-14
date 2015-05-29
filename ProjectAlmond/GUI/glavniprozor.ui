@@ -91,6 +91,8 @@
     <addaction name="aSacuvaj"/>
     <addaction name="aIzvezi"/>
     <addaction name="separator"/>
+    <addaction name="aUPDF"/>
+    <addaction name="separator"/>
     <addaction name="aZatvori"/>
     <addaction name="aUgasi"/>
    </widget>
@@ -277,6 +279,11 @@
   <action name="aKljucna">
    <property name="text">
     <string>Dodajte kjucnu osobu</string>
+   </property>
+  </action>
+  <action name="aUPDF">
+   <property name="text">
+    <string>Izvezite u .pdf format</string>
    </property>
   </action>
  </widget>
