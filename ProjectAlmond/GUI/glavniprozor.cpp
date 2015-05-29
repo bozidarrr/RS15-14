@@ -628,7 +628,7 @@ void GlavniProzor::otvoriPostojeceStablo()
         ////qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
-                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"))+".alm";
+                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"));
         if (!imeFajla.isEmpty())
         {
             ////qDebug() << "nasli fajl i treba  ga otvoriti";
