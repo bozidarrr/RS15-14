@@ -34,52 +34,38 @@ GlavniProzor::GlavniProzor(QWidget *parent) :
 
     translator = new QTranslator();
 
-    bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-    qDebug("translation %d", ok);
+    translator->load(":/jezici/ProjectAlmond_sr.qm");
+    // qDebug("translation %d", ok);
     qApp->installTranslator(translator);
     ui->retranslateUi(this);
 
 
-    //i ovo cemo menjati, pravi se kad se unese prva osoba
-    //stablo = new PorodicnoStablo("Pera", "Detlic", "m",
-    //                             QDate::currentDate(), QDate::currentDate(), true);
-    stablo = new PorodicnoStablo();//pravi prazno stablo, pa ako se ucita postojece krenemo odatle
-    //ili se pravi novo sto znaci da treba pozvati dijalog i napraviti kljucnu i postaviti je u stablu
+
+    stablo = new PorodicnoStablo();
+
     kreirajToolbar();
-    kreirajMestoZaInfo();    
+    kreirajMestoZaInfo();
     kreirajPogledZaStablo();
     kreirajOpcije();
     obnoviSkoroOtvarane();
-    //-------Pravi se stablo i korena osoba-------//
-  /**  GOsoba *korena = new GOsoba(stablo->KljucnaOsoba()->Sifra(),
-                                (stablo->KljucnaOsoba()->ImePrezime()));//DOPUNITI
-    QPointF centar(pogled->viewport()->rect().center());
-    korena->setPos(pogled->mapToScene(centar.x(), centar.y()));
-    korena->setZValue(2);
-    scena->addItem(korena);
-    _pozicijeOsoba[korena->Sifra()] = korena->pos();
-    _osobe[korena->Sifra()] = korena;
-    connect(stablo, SIGNAL(obrisanaOsoba(short)), korena, SLOT(skloniSeSaScene(short)));**/
 
-    //-------Pravi se stablo i korena osoba-------//
+    connect(tbBratSestra, SIGNAL(clicked()), this, SLOT(napraviKljucnuOsobu()));
 
-    connect(ui->aKljucna, SIGNAL(triggered()), this, SLOT(napraviKljucnuOsobu()));
-//       napraviKljucnuOsobu();
-
-   readSettings();
-   retranslate();
+    readSettings();
+    retranslate();
 }
 
 GlavniProzor::~GlavniProzor()
 {
-    //if (stablo != nullptr)
-    //    delete stablo;
+
     delete ui;
 
 }
 
 void GlavniProzor::napraviKljucnuOsobu()
 {
+    if (!nastaviti())
+        return;
     short int novaSifra = -1;
     GOsoba *kljucna = nullptr;
 
@@ -100,7 +86,7 @@ void GlavniProzor::napraviKljucnuOsobu()
             ui->statusBar->showMessage("Podaci moraju biti poznati za korenu osobu");
         if (novaSifra >= 0)
         {
-            qDebug() << "novaSifra";
+            //qDebug() << "novaSifra";
             kljucna = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             QPointF centar(pogled->viewport()->rect().center());
             kljucna->setPos(pogled->mapToScene(centar.x(), centar.y()));
@@ -109,8 +95,9 @@ void GlavniProzor::napraviKljucnuOsobu()
             _pozicijeOsoba[kljucna->Sifra()] = kljucna->pos();
             _osobe[kljucna->Sifra()] = kljucna;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), kljucna, SLOT(skloniSeSaScene(short)));
-
-            ui->aKljucna->setDisabled(true);
+            kljucna->dodajStil((pol!=QChar('M'))?GOsoba::ZENSKA:GOsoba::MUSKA);
+            kljucna->dodajStil(GOsoba::KORENA);
+            tbBratSestra->setDisabled(true);
         }
     }
     delete d;
@@ -180,12 +167,11 @@ void GlavniProzor::kreirajOpcije()
     connect(ui->aZatvori, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->aUgasi, SIGNAL(triggered()),qApp, SLOT(closeAllWindows()));
     connect(ui->aSacuvaj, SIGNAL(triggered()), this, SLOT(sacuvaj()));
-    connect(ui->aIzvezi, SIGNAL(triggered()), this, SLOT(sacuvajKao()));//?
+    connect(ui->aIzvezi, SIGNAL(triggered()), this, SLOT(sacuvajKao()));
     connect(ui->aEngleski,SIGNAL(triggered()),this,SLOT(promeniJezikE()));
     connect(ui->aNemacki,SIGNAL(triggered()),this,SLOT(promeniJezikN()));
     connect(ui->aSrpski,SIGNAL(triggered()),this,SLOT(promeniJezikS()));
-    connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikSpanski()));//--------------------ZA SPANSKIIIIII
-    connect(ui->aSamoKrv, SIGNAL(triggered()), this, SLOT(prikaziSakrijTudje()));
+    connect(ui->aSpanski,SIGNAL(triggered()),this,SLOT(promeniJezikSpanski()));
     connect(ui->actionPretraga, SIGNAL(triggered()), this, SLOT(izvrsiPretragu()));
 
     for (int i = 0; i < maxSkoroOtvaranih; ++i)
@@ -205,33 +191,39 @@ void GlavniProzor::kreirajToolbar()
 
     tbMuzZena=kreirajJedanAlat(tbMuzZena,"RelacijaSupruznici","Dodajte u stablo supruznika nekoj od osoba");
     tbRoditeljDete=kreirajJedanAlat(tbRoditeljDete,"RelacijaDete","Dodajte u neku vezu novo dete");
-    tbBratSestra=kreirajJedanAlat(tbBratSestra,"RelacijaBratSestra","Dodajte u stablo brata ili sestru nekoj osobi");
+    tbBratSestra=kreirajJedanAlat(tbBratSestra,"NovaOsoba","Kreiraj osobu koja je koren porodicnog stabla");
     tbPomeranje=kreirajJedanAlat(tbPomeranje,"Pomeri","Pomerite rucicom odabranu osobu ili relaciju na crtezu");
     tbDetalji=kreirajJedanAlat(tbDetalji,"Informacija","Detalji o odabranoj osobi ili odnosu");
     tbMenjaj=kreirajJedanAlat(tbMenjaj,"Menjaj","Izmenite podatke o odabranoj osobi ili odnosu");
     tbBrisi=kreirajJedanAlat(tbBrisi,"Ukloni","Obrisite osobu ili relaciju iz stabla");
     tbUredi=kreirajJedanAlat(tbUredi,"UrediStablo","Rasporedite cvorove stabla automatski");
-
+    tbSrodstvo=kreirajJedanAlat(tbSrodstvo,"Srodstvo","Odredite tip srodstva izmedju dve odabrane osobe");
     tbUredi->setCheckable(false);
+    tbBratSestra->setCheckable(false);
 
     grpToolBar->addButton(tbRoditeljDete);
     grpToolBar->addButton(tbMuzZena);
-    grpToolBar->addButton(tbBratSestra);
     grpToolBar->addButton(tbPomeranje);
     grpToolBar->addButton(tbDetalji);
     grpToolBar->addButton(tbMenjaj);
     grpToolBar->addButton(tbBrisi);
+    grpToolBar->addButton(tbSrodstvo);
 
+    toolbar->addWidget(tbBratSestra);
+    toolbar->addSeparator();
     toolbar->addWidget(tbMuzZena);
     toolbar->addWidget(tbRoditeljDete);
-    toolbar->addWidget(tbBratSestra);
+
     toolbar->addSeparator();
     toolbar->addWidget(tbPomeranje);
     toolbar->addWidget(tbMenjaj);
     toolbar->addWidget(tbBrisi);
     toolbar->addSeparator();
     toolbar->addWidget(tbUredi);
+    toolbar->addSeparator();
+    toolbar->addWidget(tbSrodstvo);
     toolbar->addWidget(tbDetalji);
+
 
     tbDetalji->setChecked(true);
 
@@ -253,7 +245,7 @@ void GlavniProzor::kreirajMestoZaInfo()
     info = new QDockWidget(tr("Informacije"));
     /** bilo bi lepo da je malo uzi :) **/
     info->setWidget(ui->zaInformacije);
-    ui->zaInformacije->setPlaceholderText("Informacije");
+    ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     info->setAllowedAreas(Qt::RightDockWidgetArea
                           | Qt::LeftDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, info);
@@ -270,20 +262,26 @@ GOsoba *GlavniProzor::dodajNovuOsobu(QPoint pozicija, bool krvniSrodnik)
         QString ime, prezime;
         QDate rodjenje, smrt;
         QString pol;
-
+        bool jeNN=false;
         if (d->popuniPodatke(ime, prezime, pol, rodjenje, smrt))
+        {jeNN=false;
             novaSifra = stablo->DodajOsobu(ime, prezime, pol, rodjenje, smrt, krvniSrodnik);
-        else
+        }
+        else{
             novaSifra = stablo->DodajNNLice(krvniSrodnik);
+            jeNN=true;
+        }
         if (novaSifra >= 0)
-        {          
+        {
             novaOsoba = new GOsoba(novaSifra, (stablo->NadjiOsobuSifrom(novaSifra)->ImePrezime()));
             novaOsoba->setPos(pogled->mapToScene(pozicija));
             novaOsoba->setZValue(3);
+            novaOsoba->dodajStil((pol!=QChar('M'))?GOsoba::ZENSKA:GOsoba::MUSKA);
+            if(jeNN)novaOsoba->dodajStil(GOsoba::NEPOZNATA);
             _pozicijeOsoba[novaSifra] = novaOsoba->pos();
             _osobe[novaSifra] = novaOsoba;
             connect(stablo, SIGNAL(obrisanaOsoba(short)), novaOsoba, SLOT(skloniSeSaScene(short)));
-        }   
+        }
     }
     delete d;
     return novaOsoba;
@@ -314,6 +312,7 @@ short GlavniProzor::ukloniOsobu(short sifra)
     poruka->exec();
     if (poruka->clickedButton() == da)
     {
+        if(sifra==stablo->KljucnaOsoba()->Sifra())tbBratSestra->setEnabled(true);
         stablo->UkloniOsobuSifrom(sifra);
         ui->statusBar->showMessage(tr("Uspesno izvrseno uklanjanje izabrane osobe."), 2000);
         uredjeno = false;
@@ -347,6 +346,9 @@ short GlavniProzor::dodajNovoDete(GRelacija *brak, GOsoba *dete)
             connect(dete, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaDete(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
+
+
+
     }
     delete d;
     return novaSifra;
@@ -378,10 +380,15 @@ short GlavniProzor::dodajNoviBrak(GOsoba *prva, GOsoba *druga)
             connect(druga, SIGNAL(pomerilaSe(QPointF)), novaRelacija, SLOT(pomeriDrugu(QPointF)));
             connect(stablo, SIGNAL(obrisanaVezaBrak(short)), novaRelacija, SLOT(ukloniSeSaScene(short)));
         }
-        //TrazenjePuta t(stablo);
-        //t.OsveziMatricuPuteva();
 
-        //qDebug()<<t.tipSrodstva(0,1);//moram da nastavim posle, neka ostane ovde
+        for(auto i=_brakovi.begin();i!=_brakovi.end();++i)
+        {
+            std::cout<<(*i).first<<' '<<(*i).second<<std::endl;
+        }
+
+
+
+
 
     }
     delete d;
@@ -454,8 +461,8 @@ void GlavniProzor::obnoviSkoroOtvarane()
         if (j < GlavniProzor::skoroOtvarani.count())
         {
             QString text = tr("&%1 %2")
-                           .arg(j + 1)
-                           .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());
+                    .arg(j + 1)
+                    .arg(QFileInfo(GlavniProzor::skoroOtvarani[j]).fileName());
             skoroOtvaraniAkcije[j]->setText(text);
             skoroOtvaraniAkcije[j]->setData(GlavniProzor::skoroOtvarani[j]);
             skoroOtvaraniAkcije[j]->setVisible(true);
@@ -482,7 +489,7 @@ bool GlavniProzor::otvoriFajl(const QString &imeFajla)
     return true;
 }
 
-//Jos ne radi sve sto treba, ali se cini da je na dobrom putu
+
 void GlavniProzor::RekonstruisiStablo()
 {
     _pozicijeOsoba.clear();
@@ -494,8 +501,11 @@ void GlavniProzor::RekonstruisiStablo()
     for (auto a : stablo->Osobe())
     {
         GOsoba *g = new GOsoba(a.first, a.second->ImePrezime());
+        g->dodajStil((a.second->Pol()=='M')?GOsoba::MUSKA:GOsoba::ZENSKA);
+        if(a.second->JeNepoznata())g->dodajStil(GOsoba::NEPOZNATA);
         scena->addItem(g);
         g->setPos(_pozicijeOsoba.at(g->Sifra()));
+        if(a.first==stablo->KljucnaOsoba()->Sifra())g->dodajStil(GOsoba::KORENA);
         g->setZValue(2);
         _osobe[a.first] = g;
         connect(stablo, SIGNAL(obrisanaOsoba(short)), g, SLOT(skloniSeSaScene(short)));
@@ -531,6 +541,7 @@ void GlavniProzor::RekonstruisiStablo()
         connect(_osobe.at(dete->SifraOsobe()), SIGNAL(pomerilaSe(QPointF)), g, SLOT(pomeriDrugu(QPointF)));
         connect(stablo, SIGNAL(obrisanaVezaDete(short)), g, SLOT(ukloniSeSaScene(short)));
     }
+    tbBratSestra->setEnabled(true);
 }
 
 void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
@@ -541,7 +552,7 @@ void GlavniProzor::postaviTrenutniFajl(const QString &imeFajla)
     {
         skoroOtvarani.removeAll(otvoreniFajl);
         skoroOtvarani.prepend(otvoreniFajl);
-        //qDebug() << "uneo fajl u skoroOtvarane";
+        ////qDebug() << "uneo fajl u skoroOtvarane";
         foreach (QWidget *win, QApplication::topLevelWidgets())
         {
             if (GlavniProzor  *glavni = qobject_cast<GlavniProzor*>(win))
@@ -616,27 +627,23 @@ void GlavniProzor::kreirajPogledZaStablo()
 
 void GlavniProzor::novoStablo()
 {
-    //TO DO
-//    if (nastaviti())
-//        qDebug() << "treba otvoriti novi fajl";
-//    else
-//        qDebug() << "ne otvarati";
+
     GlavniProzor *w = new GlavniProzor();
     w->show();
 }
 
 void GlavniProzor::otvoriPostojeceStablo()
 {
-    //TO DO
+
     if (nastaviti())
     {
-        //qDebug() << "treba otvoriti postojeci fajl";
+        ////qDebug() << "treba otvoriti postojeci fajl";
         QString imeFajla = QFileDialog::getOpenFileName(this,
                                                         tr("Otvorite postojece stablo."),
-                                                        tr("ProjectAlmond (*.alm)")); //sta su nam ekstenzije?
+                                                        tr("ProjectAlmond (*.alm)"),QString("*.alm"));
         if (!imeFajla.isEmpty())
         {
-            //qDebug() << "nasli fajl i treba  ga otvoriti";
+            ////qDebug() << "nasli fajl i treba  ga otvoriti";
             otvoriFajl(imeFajla);
         }
     }
@@ -647,12 +654,12 @@ void GlavniProzor::closeEvent(QCloseEvent *event)
     if (nastaviti())
     {
         writeSettings();
-        //qDebug() << "Zatvaramo fajl";
+        ////qDebug() << "Zatvaramo fajl";
         event->accept();
     }
     else
     {
-        //qDebug() << "Otkazano izlazenje";
+        ////qDebug() << "Otkazano izlazenje";
         event->ignore();
     }
 }
@@ -666,8 +673,9 @@ bool GlavniProzor::sacuvaj()
 
 bool GlavniProzor::sacuvajKao()
 {
+    QString ekst("*.alm");
     QString ime = QFileDialog::getSaveFileName(this, tr("Sacuvajte stablo."),
-                                               ".", tr("Project Almond (*.alm)")); //EKSTENZIJE
+                                               ".", tr("Project Almond (*.alm)"),&ekst);
     if (ime.isEmpty())
         return false;
     return snimiIzmene(ime);
@@ -681,7 +689,7 @@ void GlavniProzor::otvoriSkoroOtvaraniFajl()
         if (akcija)
         {
             otvoriFajl(akcija->data().toString());
-            //qDebug() << "Otvoriti fajl";
+            ////qDebug() << "Otvoriti fajl";
         }
     }
 }
@@ -689,51 +697,51 @@ void GlavniProzor::promeniJezikE()
 {
     if(ui->aEngleski->isChecked()){
 
-             bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
-             qDebug("translation %d", ok);
-              qApp->installTranslator(translator);
-                ui->retranslateUi(this);
-                 retranslate();
-                qDebug() << "English";
-                ui->aNemacki->setChecked(false);
-                 ui->aSrpski->setChecked(false);
-                  ui->aSpanski->setChecked(false);
+        translator->load(":/jezici/ProjectAlmond_en.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        //qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
     }
     else if(ui->aNemacki->isChecked()){
-        bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-           qDebug() << "Deutsch";
+        translator->load(":/jezici/ProjectAlmond_de.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Deutsch";
 
     }
     else if (ui->aSpanski->isChecked()){
-        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-           qDebug() << "Espanol";
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        //qDebug() << "Espanol";
 
     }
     else {
         ui->aSrpski->setChecked(true);
-        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-          retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Srpski";
     }
 
 }
@@ -741,54 +749,54 @@ void GlavniProzor::promeniJezikE()
 void GlavniProzor::promeniJezikN()
 {
     if(ui->aNemacki->isChecked()){
-            bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-            qDebug("translation %d", ok);
-             qApp->installTranslator(translator);
-               ui->retranslateUi(this);
-                retranslate();
-               ui->aEngleski->setChecked(false);
-                ui->aSrpski->setChecked(false);
-                 ui->aSpanski->setChecked(false);
-               qDebug() << "Deutsch";
+        translator->load(":/jezici/ProjectAlmond_de.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Deutsch";
 
-        }
+    }
 
     else if(ui->aEngleski->isChecked()){
 
-        bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-            retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
+        translator->load(":/jezici/ProjectAlmond_en.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        //qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
     }
-            else if (ui->aSpanski->isChecked()){
-                bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-                qDebug("translation %d", ok);
-                 qApp->installTranslator(translator);
-                   ui->retranslateUi(this);
-                   retranslate();
-                   ui->aEngleski->setChecked(false);
-                   ui->aNemacki->setChecked(false);
-                    ui->aSrpski->setChecked(false);
-                   qDebug() << "Espanol";
+    else if (ui->aSpanski->isChecked()){
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        //qDebug() << "Espanol";
 
-            }
+    }
 
     else {
         ui->aSrpski->setChecked(true);
-        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //  qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Srpski";
     }
 
 }
@@ -797,121 +805,121 @@ void GlavniProzor::promeniJezikS()
 
     if(ui->aSrpski->isChecked())
     {
-        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-             ui->aSpanski->setChecked(false);
-          qDebug() << "Srpski";
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //  qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Srpski";
     }
     else if(ui->aEngleski->isChecked()){
 
-        bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-}
+        translator->load(":/jezici/ProjectAlmond_en.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        //qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+    }
     else if(ui->aNemacki->isChecked()){
-            bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-            qDebug("translation %d", ok);
-             qApp->installTranslator(translator);
-               ui->retranslateUi(this);
-                retranslate();
-               ui->aEngleski->setChecked(false);
-                ui->aSrpski->setChecked(false);
-                 ui->aSpanski->setChecked(false);
-               qDebug() << "Deutsch";
+        translator->load(":/jezici/ProjectAlmond_de.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Deutsch";
 
-        }
+    }
     else if (ui->aSpanski->isChecked()){
-        bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           ui->aEngleski->setChecked(false);
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-           qDebug() << "Espanol";
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        //qDebug() << "Espanol";
 
     }
     else{
         ui->aSrpski->setChecked(true);
-        bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-            retranslate();
-           ui->aEngleski->setChecked(false);
-            ui->aNemacki->setChecked(false);
-          qDebug() << "Srpski";
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        //qDebug() << "Srpski";
     }
 }
 void GlavniProzor::promeniJezikSpanski(){
     if (ui->aSpanski->isChecked()){
-               bool ok=translator->load(":/jezici/ProjectAlmond_es.qm");
-               qDebug("translation %d", ok);
-                qApp->installTranslator(translator);
-                  ui->retranslateUi(this);
-                  retranslate();
-                  ui->aEngleski->setChecked(false);
-                  ui->aNemacki->setChecked(false);
-                   ui->aSrpski->setChecked(false);
-                  qDebug() << "Espanol";
+        translator->load(":/jezici/ProjectAlmond_es.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        //qDebug() << "Espanol";
 
-           }
+    }
 
-       else if(ui->aNemacki->isChecked()){
-               bool ok=translator->load(":/jezici/ProjectAlmond_gr.qm");
-               qDebug("translation %d", ok);
-                qApp->installTranslator(translator);
-                  ui->retranslateUi(this);
-                   retranslate();
-                  ui->aEngleski->setChecked(false);
-                   ui->aSrpski->setChecked(false);
-                    ui->aSpanski->setChecked(false);
-                  qDebug() << "Deutsch";
+    else if(ui->aNemacki->isChecked()){
+        translator->load(":/jezici/ProjectAlmond_de.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Deutsch";
 
-           }
-       else if(ui->aEngleski->isChecked()){
+    }
+    else if(ui->aEngleski->isChecked()){
 
-        bool ok=translator->load(":/jezici/ProjectAlmond_en.qm");
-        qDebug("translation %d", ok);
-         qApp->installTranslator(translator);
-           ui->retranslateUi(this);
-           retranslate();
-           qDebug() << "English";
-           ui->aNemacki->setChecked(false);
-            ui->aSrpski->setChecked(false);
-             ui->aSpanski->setChecked(false);
-}
-       else{
-           ui->aSrpski->setChecked(true);
-           bool ok=translator->load(":/jezici/ProjectAlmond_sr.qm");
-           qDebug("translation %d", ok);
-            qApp->installTranslator(translator);
-              ui->retranslateUi(this);
-               retranslate();
-              ui->aEngleski->setChecked(false);
-               ui->aNemacki->setChecked(false);
-                ui->aSpanski->setChecked(false);
-             qDebug() << "Srpski";
-       }
+        translator->load(":/jezici/ProjectAlmond_en.qm");
+        // qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        //qDebug() << "English";
+        ui->aNemacki->setChecked(false);
+        ui->aSrpski->setChecked(false);
+        ui->aSpanski->setChecked(false);
+    }
+    else{
+        ui->aSrpski->setChecked(true);
+        translator->load(":/jezici/ProjectAlmond_sr.qm");
+        //qDebug("translation %d", ok);
+        qApp->installTranslator(translator);
+        ui->retranslateUi(this);
+        retranslate();
+        ui->aEngleski->setChecked(false);
+        ui->aNemacki->setChecked(false);
+        ui->aSpanski->setChecked(false);
+        //qDebug() << "Srpski";
+    }
 }
 
 void GlavniProzor::retranslate()
 {
 
 
-  alati->setWindowTitle(tr("Alati"));
+    alati->setWindowTitle(tr("Alati"));
 
     info ->setWindowTitle(tr("Informacije"));
 
@@ -919,17 +927,17 @@ void GlavniProzor::retranslate()
 
     ui->zaInformacije->setPlaceholderText(tr("Informacije"));
     ui->zaInformacije->setToolTip(tr("Ovde mozete pronaci informacije o trenutno aktivnoj osobi"));
-       this->setWindowTitle(tr("Project Almond[*]"));
+    this->setWindowTitle(tr("Project Almond[*]"));
 
-     tbMuzZena->setToolTip(tr("Dodajte u stablo supruznika nekoj od osoba"));
-     tbRoditeljDete->setToolTip(tr("Dodajte u neku vezu novo dete"));
-     tbBratSestra->setToolTip(tr("Dodajte u stablo brata ili sestru nekoj osobi"));
-     tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
-     tbDetalji->setToolTip(tr("Detalji o odabranoj osobi ili odnosu"));
-     tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili odnosu"));
-     tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
-     tbUredi->setToolTip(tr("Rasporedite cvorove stabla automatski"));
-
+    tbMuzZena->setToolTip(tr("Dodajte u stablo supruznika nekoj od osoba"));
+    tbRoditeljDete->setToolTip(tr("Dodajte u neku vezu novo dete"));
+    tbBratSestra->setToolTip(tr("Dodajte osobu koja ce biti koren stabla"));
+    tbPomeranje->setToolTip(tr("Pomerite rucicom odabranu osobu ili relaciju na crtezu"));
+    tbDetalji->setToolTip(tr("Detalji o odabranoj osobi ili odnosu"));
+    tbMenjaj->setToolTip(tr("Izmenite podatke o odabranoj osobi ili odnosu"));
+    tbBrisi->setToolTip(tr("Obrisite osobu ili relaciju iz stabla"));
+    tbUredi->setToolTip(tr("Rasporedite cvorove stabla automatski"));
+    tbSrodstvo->setToolTip(tr("Odredite tip srodstva izmedju dve odabrane osobe"));
 }
 
 void GlavniProzor::osveziPrikazAlata(bool Vidljivost)
@@ -944,6 +952,8 @@ void GlavniProzor::osveziPrikazInformacija(bool Vidljivost)
 
 void GlavniProzor::kliknutoStablo(QPoint pozicija)
 {
+    for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
+
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText("Informacije");
     if (tbDetalji->isChecked())
@@ -956,7 +966,10 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             return;
         }
         if (osoba)
+        {
             popuniInformacije(osoba->Sifra(), INFO_OSOBA);
+            osoba->dodajStil(GOsoba::ODABRANA);
+        }
         if (relacija)
         {
             if (relacija->BrakJe())
@@ -973,7 +986,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             tbDetalji->setChecked(true);
             return;
         }
-        item->promeniStil(GOsoba::SELEKTOVANA);
+        item->dodajStil(GOsoba::SELEKTOVANA);
         if (ukloniOsobu(item->Sifra()) == item->Sifra())
         {
             _pozicijeOsoba.erase(item->Sifra());
@@ -981,7 +994,7 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
             setWindowModified(true);
         }
         else
-            item->promeniStil(GOsoba::OBICNA);
+            item->oduzmiStil(GOsoba::SELEKTOVANA);
     }
     if (tbMenjaj->isChecked())
     {
@@ -1002,9 +1015,11 @@ void GlavniProzor::kliknutoStablo(QPoint pozicija)
 
 void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
 {
+    for(auto o:_osobe){o.second->oduzmiStil(GOsoba::ODABRANA);o.second->oduzmiStil(GOsoba::SELEKTOVANA);}
+
     ui->zaInformacije->clear();
     ui->zaInformacije->setPlaceholderText(tr("Informacije"));
-    if (tbMuzZena->isChecked())// || tbBratSestra->isChecked()
+    if (tbMuzZena->isChecked())
     {
         GOsoba *novaOsoba;
         GOsoba *staraOsoba = qgraphicsitem_cast<GOsoba*>(scena->itemAt(pogled->mapToScene(prva), QTransform()));
@@ -1016,7 +1031,7 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         if (!stablo->NadjiOsobuSifrom(staraOsoba->Sifra())->JeKrvniSrodnik())
         {
             tbDetalji->setChecked(true);
-            ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);//??!
+            ui->statusBar->showMessage(tr("Moguce je dodati supruznika samo krvnim srodnicima."), 2000);
             return;
         }
         if ((novaOsoba = dodajNovuOsobu(druga, false)) != nullptr)
@@ -1085,27 +1100,46 @@ void GlavniProzor::vucenoStablo(QPoint prva, QPoint druga)
         item->obavestiRelacije();
         //azuriramo pozicije
         _pozicijeOsoba[item->Sifra()] = item->pos();
-        //i moze ovo efikasnije al da vidim da li radi
+
         for(auto brak:_pozicijeBrakova)
             _pozicijeBrakova[brak.first] = _brakovi.at(brak.first)->pos();
         setWindowModified(true);
     }
+    if(tbSrodstvo->isChecked())
+    {
+        GOsoba *item = qgraphicsitem_cast<GOsoba*>(pogled->itemAt(prva));
+        if (item == nullptr)
+        {
+            tbDetalji->setChecked(true);
+            return;
+        }
+        GOsoba *item2 = qgraphicsitem_cast<GOsoba*>(pogled->itemAt(druga));
+        if (item2 == nullptr)
+        {
+            tbDetalji->setChecked(true);
+            return;
+        }
+        if(item->Sifra()==item2->Sifra()){
+
+            tbDetalji->setChecked(true);return;
+        }
+        TrazenjePuta t(stablo);
+        t.OsveziMatricuPuteva();
+        ui->zaInformacije->clear();
+        ui->zaInformacije->append(stablo->NadjiOsobuSifrom(item2->Sifra())->ImePrezime() +tr(" je ")+t.tipSrodstva(item->Sifra(),item2->Sifra())+
+                                  tr(" od osobe ")+stablo->NadjiOsobuSifrom(item->Sifra())->ImePrezime());
+
+    }
     tbDetalji->setChecked(true);
+    pogled->update(pogled->geometry());
 }
 
 void GlavniProzor::urediStablo()
 {
-    if (uredjeno)//popravice se ovo
+    if (uredjeno)
         return;
-    //idemo po nivoima
-    //osoba crta sebe i svoje supruznike (ZASTO smo dozvolili poligamiju!?)
-    //
-    //na osnovu toga im preracunavam koordinate
-    if (ui->aPreciGore->isChecked())
-        qDebug() <<"uredi preci gore";
-    else{
-        qDebug() << "uredi preci dole";
-    }
+
+
     std::vector<int> nivoi(stablo->Nivoi());
     uredjivanje u;
     sirine = u.IzracunajSirinuCelije(nivoi, stablo->maxBrakova()+1);
@@ -1119,7 +1153,7 @@ void GlavniProzor::urediStablo()
 
     pomeriOsobu(sifraKljucne, pozicija, 0);
 
-    //i moze ovo efikasnije al da vidim da li radi
+
     for(auto brak:_pozicijeBrakova)
         _pozicijeBrakova[brak.first] = _brakovi.at(brak.first)->pos();
 
@@ -1161,30 +1195,6 @@ void GlavniProzor::pomeriOsobu(short sifra, QPointF pocetak, int nivo)
 }
 
 
-void GlavniProzor::prikaziSlavljenike(const QDate &datum)
-{
-    //ovde sam mislila da uvedemo korisniku mogucnost da izabere datum, ne samo danasnji datum da bude
-    std::vector<short> *v = stablo->KomeJeSveRodjendan(datum);
-    for (short sifra : *v)
-        qDebug() << sifra;
-    //idemo po sifri i postavljamo im poseban stil
-    delete v;
-}
-
-void GlavniProzor::prikaziSakrijTudje()
-{
-    std::vector<short> *zaSakrivanje = stablo->NisuKrvniSrodnici();
-    for (short sifra: *zaSakrivanje)
-        _osobe[sifra]->setVisible(!ui->aSamoKrv->isChecked());
-//koliko ovo ima smisla ja ne znam
-
-//    if (ui->aSamoKrv->isChecked())
-//        qDebug() << "sakriti tudje";
-//    else
-//        qDebug() << "vratiti tudje";
-
-}
-
 void GlavniProzor::izvrsiPretragu()
 {
     DijalogPretrage *d = new DijalogPretrage(this);
@@ -1194,10 +1204,10 @@ void GlavniProzor::izvrsiPretragu()
         int opcija;
         QString podatak;
         d->procitajPodatke(opcija, kriterijum, podatak);
-//        qDebug() << "pretrazi";
-//        qDebug() << opcija;
-//        qDebug() << kriterijum;
-//        qDebug() << podatak;
+        //        //qDebug() << "pretrazi";
+        //        //qDebug() << opcija;
+        //        //qDebug() << kriterijum;
+        //        //qDebug() << podatak;
         std::vector<short> *trazene;
         switch(opcija)
         {
@@ -1232,7 +1242,7 @@ void GlavniProzor::izvrsiPretragu()
                 for (short sifra : *trazene)
                 {
                     ui->zaInformacije->append(stablo->NadjiOsobuSifrom(sifra)->ImePrezime());
-                    _osobe.at(sifra)->promeniStil(GOsoba::SELEKTOVANA);//necemo ovako, samo da se vidi za sad nesto
+                    _osobe.at(sifra)->dodajStil(GOsoba::ODABRANA);
                 }
             }
             delete trazene;

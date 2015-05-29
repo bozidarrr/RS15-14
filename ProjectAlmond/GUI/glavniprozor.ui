@@ -107,45 +107,27 @@
      <addaction name="aNemacki"/>
      <addaction name="aSpanski"/>
     </widget>
-    <addaction name="aMreza"/>
-    <addaction name="aSamoKrv"/>
     <addaction name="aPreciGore"/>
     <addaction name="separator"/>
     <addaction name="mJezik"/>
-    <addaction name="separator"/>
-    <addaction name="aAnimacije"/>
    </widget>
    <widget class="QMenu" name="mPrikaz">
     <property name="title">
      <string>Prikaz</string>
     </property>
-    <addaction name="aTema"/>
     <addaction name="aAlati"/>
     <addaction name="aInformacije"/>
     <addaction name="actionPretraga"/>
-   </widget>
-   <widget class="QMenu" name="mPomoc">
-    <property name="title">
-     <string>Pomoc</string>
-    </property>
    </widget>
    <widget class="QMenu" name="mOProgramu">
     <property name="title">
      <string>O programu</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuSamo_test">
-    <property name="title">
-     <string>Samo test</string>
-    </property>
-    <addaction name="aKljucna"/>
-   </widget>
    <addaction name="mFajlovi"/>
    <addaction name="mPodesavanja"/>
    <addaction name="mPrikaz"/>
    <addaction name="mOProgramu"/>
-   <addaction name="mPomoc"/>
-   <addaction name="menuSamo_test"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="aNovoStablo">

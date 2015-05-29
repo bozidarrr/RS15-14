@@ -59,7 +59,7 @@ const QString &Osoba::Prezime() const
     return _prezime;
 }
 
-//vraca vezano ime i prezime, moze biti korisno za GUI
+
 const QString Osoba::ImePrezime() const
 {
     QString novi(_ime);
@@ -121,21 +121,18 @@ void Osoba::PromeniDatumSmrti(const QDate &datum)
 
 void Osoba::PostaviRoditeljskuSifru(const short sifra)
 {
-    //>if _sifraRoditeljskeVeze vec >= 0 da ne menjamo, ne znam, videcemo
+
     _sifraRoditeljskeVeze = sifra;
+}
+
+bool Osoba::JeNepoznata()
+{
+    return _nepoznata;
 }
 
 void Osoba::postaviSledecuSifru(int sifra)
 {
     _sledecaSifra=sifra;
-}
-
-void Osoba::PretvoriUNepoznatu()
-{
-    _ime="N.";
-    _prezime="N.";
-    _pol='?';
-    _nepoznata=true;
 }
 
 bool Osoba::VecSeBrisem()

@@ -10,7 +10,7 @@ GRelacija::GRelacija(short sifra, QPointF prva, QPointF druga, bool brak)
 GRelacija::~GRelacija()
 {}
 
-QPainterPath GRelacija::shape() const//pojma nemam da li je ovo dobro
+QPainterPath GRelacija::shape() const
 {
     QPainterPath putanja;
     putanja.addRect(-30, -30, 60, 60);
@@ -20,10 +20,6 @@ QPainterPath GRelacija::shape() const//pojma nemam da li je ovo dobro
 QRectF GRelacija::boundingRect() const
 {
     qreal d = 1;
-//    qreal x = std::min(_prva.x(), _druga.x());
-//    qreal y = std::min(_prva.y(), _druga.y());
-//    qreal w = std::abs(_prva.x() - _druga.x());
-//    qreal h = std::abs(_prva.y() - _druga.y());
     return QRectF(-30-d, -30-d, 60+d, 60+d);
 }
 
