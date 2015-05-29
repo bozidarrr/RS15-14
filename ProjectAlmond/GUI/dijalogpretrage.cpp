@@ -2,6 +2,8 @@
 #include "ui_dijalogpretrage.h"
 #include <QPushButton>
 #include <QDebug>
+#include <QRegExp>
+#include <QRegExpValidator>
 
 DijalogPretrage::DijalogPretrage(QWidget *parent) :
     QDialog(parent),
@@ -10,6 +12,7 @@ DijalogPretrage::DijalogPretrage(QWidget *parent) :
     ui->setupUi(this);
     popuniDugmice();
     ui->unosDatum->setHidden(true);
+    ui->unosText->setValidator(new QRegExpValidator(QRegExp("[A-Z][A-Za-z ]*")));
     connect(ui->IzaberiOpciju, SIGNAL(currentIndexChanged(int)), this, SLOT(tekstIliDatum()));
 }
 
@@ -30,10 +33,13 @@ void DijalogPretrage::procitajPodatke(int &opcija, int &kriterijum, QString &pod
 
 void DijalogPretrage::tekstIliDatum()
 {
+    QRegExp ime("[A-Z][A-Za-z ]*");
+    QRegExp pol(("M|Z|F"));
+
     int k = ui->IzaberiOpciju->currentIndex();
-    //qDebug() << k;
     ui->unosDatum->setVisible(k == 3 || k == 2);
     ui->unosText->setVisible(k == 0 || k == 1 || k == 4);
+    ui->unosText->setValidator(new QRegExpValidator((k == 4)?pol:ime));
 }
 
 void DijalogPretrage::popuniDugmice()
